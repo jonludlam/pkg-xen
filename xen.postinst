@@ -1,0 +1,25 @@
+#!/bin/sh
+set -e
+
+mkdir -p /var/lib/xenstored /var/run/xenstored /var/lib/xen/save /var/lock/subsys
+
+if [ -x /usr/sbin/invoke-rc.d ]; then
+	invoke() {
+		script=$1
+		shift
+		invoke-rc.d $script "$@"
+	}
+else
+	invoke() {
+		script=$1
+		shift
+		/etc/init.d/$script "$@"
+	}
+fi
+
+update-rc.d xend start 20 2 3 4 5 . stop 21 0 1 6 .
+invoke xend start
+update-rc.d xendomains start 21 2 3 4 5 . stop 20 0 1 6 .
+invoke xendomains start
+
+#DEBHELPER#

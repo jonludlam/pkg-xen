@@ -1,0 +1,20 @@
+#!/bin/sh
+set -e
+if [ -x /usr/sbin/invoke-rc.d ]; then
+	invoke() {
+		script=$1
+		shift
+		invoke-rc.d $script "$@"
+	}
+else
+	invoke() {
+		script=$1
+		shift
+		/etc/init.d/$script "$@"
+	}
+fi
+
+invoke xend stop
+invoke xendomains stop
+
+#DEBHELPER#

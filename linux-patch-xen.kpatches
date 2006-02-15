@@ -1,0 +1,11 @@
+Patch-name: xen kernel patch
+Patch-id: xen
+Path-strip-level: 1
+
+Patch-file: linux-2.6.12-xen.patch
+Architecture: i386
+Kernel-version: 2.6.12
+
+Patch-file: linux-2.6.12-xen.patch
+Architecture: amd64
+Kernel-version: 2.6.12

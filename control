@@ -1,0 +1,64 @@
+Source: xen
+Maintainer: Ralph Passgang <ralph@debianbase.de>
+Section: misc
+Priority: extra
+Standards-Version: 3.6.1.0
+Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), gcc, transfig, wget, libncurses5-dev, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, hotplug, bash, bcc
+
+Package: xen
+Section: misc
+Architecture: i386 amd64
+Depends: python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
+Recommends: bridge-utils
+Suggests: linux-xen0-2.6
+Description: a Virtual Machine Monitor like VMWare or plex86
+ XEN is a Virtual Machine Monitor (VMM) originally developed by the
+ Systems Research Group of the University of Cambridge Computer
+ Laboratory, as part of the UK-EPSRC funded XenoServers project.
+ .
+ Xen enables multiple operating system images to execute concurrently
+ on the same hardware with very low performance overhead --- much lower
+ than commercial offerings for the same x86 platform.
+
+Package: libxen3.0
+Section: libs
+Architecture: i386 amd64
+Depends: ${shlibs:Depends}
+Conflicts: xen-docs (<= 1.2), libxen2.0
+Description: control library for XEN, a Virtual Machine Monitor
+ Library to control the XEN microkernel.  Contains functions for creating,
+ starting, stopping, saving, virtual instances.
+
+Package: libxen-dev
+Section: libdevel
+Architecture: i386 amd64
+Depends: libxen3.0 (= ${Source-Version})
+Description: development files for the control library for XEN
+ Users wishing to develop their own tools for interfaces to the underlying
+ XEN kernel should install this package.
+
+Package: xen-docs
+Section: misc
+Architecture: all
+Description: documentation for XEN, a Virtual Machine Monitor
+ This package contains all the large documentation files for XEN.  This
+ includes a description interface(both the api, and a nice explanation of
+ how XEN works).  It also contains the VBD and Xeno howtos.
+
+Package: libxen-python
+Section: python
+Architecture: i386 amd64
+Depends: ${shlibs:Depends}, ${python:Depends}
+Description: python wrapper around libxc, the control library for XEN
+ This python library wraps the C library, and provides a nice OO interface
+ to the low-level system calls.  It also provides some higher-level config
+ file parsing.
+
+Package: linux-patch-xen
+Section: misc
+Architecture: i386 amd64
+Depends: ${kpatch:Depends}
+Conflicts: xen-docs (<= 1.2)
+Description: patch to linux for the XEN sub-arch
+ This kernel patch modifies linux, so that it can run inside XEN, a
+ Virtual Machine Monitor.

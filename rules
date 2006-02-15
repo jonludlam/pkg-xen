@@ -1,0 +1,103 @@
+#!/usr/bin/make -f
+
+CC		:= gcc
+KERNELS		:=
+LINUX_VERSIONS	:= 2.6.12
+ALLSPARSETREES	:= $(patsubst %,linux-%,$(LINUX_VERSIONS))
+PAE		:= n
+OLDEXTRAVERSION := $(shell cat patches/linux-$(LINUX_VERSIONS)/*.patch |grep "+EXTRAVERSION" | sed s/+//)\$$(XENGUEST)
+#ALLSPARSETREES	:= linux-2.4.29 linux-2.6.10
+#DH_VERBOSE	:= -v
+
+export KERNELS ALLSPARSETREES DH_VERBOSE
+export DH_VERBOSE
+export CC
+
+DEB_VERSION	:= $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
+DEB_REVISION	:= $(shell echo "$(DEB_VERSION)" | sed 's/.*-//')
+UP_VERSION	:= $(shell echo "$(DEB_VERSION)" | sed 's/-[^-]*$$//')
+DEB_BUILD_ARCH  := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+
+clean:
+	$(MAKE) mrproper
+	rm debian/install debian/stamps debian/linux-source linux-$(LINUX_VERSIONS)-xen linux-${LINUX_VERSIONS}-xen-sparse linux-${LINUX_VERSIONS}.tar.bz2 linux-$(LINUX_VERSIONS)-xen.patch -rf
+	dh_clean
+
+build: debian/stamps/build $(addsuffix -xen.patch,$(ALLSPARSETREES))
+debian/stamps/build:
+	mkdir -p $(@D)
+	rm -rf debian/install
+	$(MAKE) all DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=$(PAE)
+	touch $@
+
+install: debian/stamps/build
+	rm -rf debian/install
+	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=$(PAE)
+	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
+	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
+	mkdir -p debian/install/etc/xen/sv debian/install/etc/xen/xend/server
+	mv debian/install/usr/lib/python2.3/site-packages/xen/xend/server/params.py debian/install/etc/xen/xend/params.py
+	ln -s /etc/xen/xend/params.py debian/install/usr/lib/python2.3/site-packages/xen/xend/server/params.py
+#	mv debian/install/usr/lib/python2.3/site-packages/xen/sv/params.py  debian/install/etc/xen/sv/params.py
+#	ln -s /etc/xen/sv/params.py debian/install/usr/lib/python2.3/site-packages/xen/sv/params.py
+	mkdir -p debian/install/usr/share/doc/xen/examples
+	mv debian/install/etc/xen/xmexample* debian/install/usr/share/doc/xen/examples
+	chmod +x \
+		debian/install/usr/lib/python2.3/site-packages/xen/xend/XendClient.py \
+		debian/install/usr/lib/python2.3/site-packages/xen/xend/server/SrvServer.py \
+		debian/install/usr/lib/python2.3/site-packages/xen/xend/sxp.py \
+#		debian/install/usr/lib/python2.3/site-packages/xen/util/console_client.py
+
+$(patsubst %,linux-%-xen.patch,$(LINUX_VERSIONS)): linux-%-xen.patch: debian/linux-source/linux/%.unpatched
+$(patsubst %,debian/linux-source/linux/%.patched,$(LINUX_VERSIONS)): debian/linux-source/linux/%.patched: debian/linux-source/linux/%.extracted
+
+$(patsubst %,debian/linux-source/linux/%.extracted,$(LINUX_VERSIONS)): debian/linux-source/linux/%.extracted: 
+	rm -rf $(@D)
+	mkdir -p $(@D)
+#	bzcat $< | tar -C $(@D) -x
+	touch $@
+
+$(patsubst %,debian/linux-source/linux/%.unpatched,$(LINUX_VERSIONS)): debian/linux-source/linux/%.unpatched: debian/linux-source/linux/%.extracted
+	rm -f pristine-linux-$*
+#	cd $(@D)/linux-source-$*; if ! /usr/src/kernel-patches/all/$*/unpatch/debian; then rm -f $<; exit 1; fi
+#	touch $(@D)/linux-source-$*/.valid-pristine
+#	mv $(@D)/linux-source-$* pristine-linux-$*
+#	touch linux-$*.tar.bz2
+	touch $@
+
+
+kernel-patches: $(addsuffix -xen.patch,$(ALLSPARSETREES))
+$(addsuffix -xen.patch,$(ALLSPARSETREES)):
+#	wget ftp://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-${LINUX_VERSIONS}.tar.bz2
+#	ln -s linux-2.6-xen-sparse linux-${LINUX_VERSIONS}-xen-sparse
+	$(MAKE) linux-2.6-xen-config CONFIGMODE=oldconfig XEN_TARGET_X86_PAE=$(PAE)
+	cp linux-$(LINUX_VERSIONS)-xen/Makefile Makefile.sav
+	cat Makefile.sav | sed "s/$(OLDEXTRAVERSION)/EXTRAVERSION =/" >linux-$(LINUX_VERSIONS)-xen/Makefile
+	diff -Nurp pristine-linux-$(LINUX_VERSIONS)/ linux-$(LINUX_VERSIONS)-xen/ >linux-$(LINUX_VERSIONS)-xen.patch ; \
+	mv Makefile.sav linux-$(LINUX_VERSIONS)-xen/Makefile
+
+binary: install $(addsuffix -xen.patch,$(ALLSPARSETREES))
+	@echo "DEB_VERSION='$(DEB_VERSION)' DEB_REVISION='$(DEB_REVISION)' UP_VERSION='$(UP_VERSION)' DEB_BUILD_ARCH='$(DEB_BUILD_ARCH)'"
+	dh_clean -k
+	dh_testdir
+	dh_testroot
+	(if [ "$(DEB_BUILD_ARCH)" == "amd64" ]; then \
+		cp -a $(CURDIR)/debian/install/usr/lib64/* $(CURDIR)/debian/install/usr/lib/; \
+		rm -rf $(CURDIR)/debian/install/usr/lib64 ;\
+	fi)
+	dh_install -N xen-docs --sourcedir=$(CURDIR)/debian/install --list-missing 
+	dh_install -p xen-docs -X examples --sourcedir=$(CURDIR)/debian/install
+	dh_installdocs
+	dh_installchangelogs
+	dh_installkpatches
+	dh_installman
+	dh_python
+	dh_strip
+	dh_compress
+	dh_makeshlibs -V 'libxen3.0 (>= $(UP_VERSION))'
+	dh_shlibdeps -l$(CURDIR)/debian/install/usr/lib -Llibxen3.0 ; \
+	dh_fixperms
+	dh_md5sums
+	dh_installdeb
+	dh_gencontrol
+	dh_builddeb

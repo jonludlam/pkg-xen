@@ -1,0 +1,7 @@
+debian/install/usr/share/man/man1/xm.1
+debian/install/usr/share/man/man1/xentop.1
+debian/install/usr/share/man/man1/xentrace_format.1
+debian/install/usr/share/man/man5/xmdomain.cfg.5
+debian/install/usr/share/man/man5/xend-config.sxp.5
+debian/install/usr/share/man/man8/xentrace.8
+
