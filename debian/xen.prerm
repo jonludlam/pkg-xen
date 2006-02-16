@@ -14,7 +14,7 @@ else
 	}
 fi
 
-invoke xend stop
 invoke xendomains stop
+invoke xend stop
 
 #DEBHELPER#

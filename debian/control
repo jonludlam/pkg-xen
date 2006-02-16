@@ -4,12 +4,12 @@ Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>,
 Section: misc
 Priority: extra
 Standards-Version: 3.6.1.0
-Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), gcc, transfig, wget, libncurses5-dev, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, hotplug, bash, bcc, dpatch
+Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), gcc, transfig, wget, libncurses5-dev, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, hotplug, bcc, dpatch
 
 Package: xen
 Section: misc
 Architecture: i386 amd64
-Depends: python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
+Depends: python-twisted, python, libxen-python, iproute, hotplug | udev (>= 0.059), bash, ${shlibs:Depends}
 Recommends: bridge-utils
 Suggests: linux-xen0-2.6
 Description: a Virtual Machine Monitor like VMWare or plex86

@@ -5,8 +5,29 @@ xen (3.0.1-1) unstable; urgency=low
      - Change maintainer and add uploaders field
   * Guido Trotter <ultrotter@debian.org>
      - Add dpatch structure to the package
+  * Ralph Passgang <ralph@debianbase.de>
+     - Added changes from 3.0.1-0tha3
 
- -- Guido Trotter <ultrotter@debian.org>  Thu, 16 Feb 2006 16:59:29 +0100
+ -- Ralph Passgang <ralph@debianbase.de>  Thu, 16 Feb 2006 23:28:00 +0100
+
+xen (3.0.1-0tha3) unstable; urgency=low
+
+  * updated to testing changeset 8743 (xen 3.0.1 + some patches)
+  * added bash to dependencies, because some scripts actually needs it
+    (even if only "/bin/sh" is set as interpreter in those scripts, so a
+    better solution would be if upstream removes the bashisms at all).
+    thx for the report by Paul Wagland <xen+paul@kungfoocoder.org>.
+  * changed hotplug/udev dependency to: "hotplug | udev (>=0.059)", because
+    older udev versions doesn't work with xen and then hotplug is needed.
+  * changed debian/libxen3.0.install a bit, so that it will install
+    the svmloader (for amd's pacifica) in future. so when svm support is
+    available in the stable xen upstream (most likely in 3.0.2) it will gets
+    installed without further changes needed in the install-file.
+  * xendomains should get stopped before xend, even in a .prerm file ;-P
+    (but maybe there is a better solution, because the domUs doesn't really
+    needed to be stopped on an upgrade).
+
+ -- Ralph Passgang <ralph@debianbase.de>  Wed, 15 Feb 2006 22:00:00 +0100
 
 xen (3.0.1-0tha2) unstable; urgency=low
 

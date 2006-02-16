@@ -8,4 +8,4 @@ usr/lib/libxenguest.so.3.0
 usr/lib/libxenguest.so.3.0.0
 usr/lib/libxenstore.so
 usr/lib/xen/bin
-usr/lib/xen/boot/vmxloader
+usr/lib/xen/boot
