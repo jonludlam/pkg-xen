@@ -7,8 +7,13 @@ xen (3.0.1-1) unstable; urgency=low
      - Add dpatch structure to the package
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
+     - Removed patch generation from kernel source in debian/rules
+     - added the static file debian/linux-2.6.12-xen.patch (which
+       patches a vanilla 2.6.12 to 2.6.12.6-xen, but still with the
+       extraversion stripped off)
+     - Changed debian/linux-patch-xen.kpatches
 
- -- Ralph Passgang <ralph@debianbase.de>  Thu, 16 Feb 2006 23:28:00 +0100
+ -- Ralph Passgang <ralph@debianbase.de>  Fri, 17 Feb 2006 00:55:00 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 

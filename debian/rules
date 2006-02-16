@@ -5,8 +5,6 @@ KERNELS		:=
 LINUX_VERSIONS	:= 2.6.12
 ALLSPARSETREES	:= $(patsubst %,linux-%,$(LINUX_VERSIONS))
 PAE		:= n
-OLDEXTRAVERSION := $(shell cat patches/linux-$(LINUX_VERSIONS)/*.patch |grep "+EXTRAVERSION" | sed s/+//)\$$(XENGUEST)
-#ALLSPARSETREES	:= linux-2.4.29 linux-2.6.10
 #DH_VERBOSE	:= -v
 
 export KERNELS ALLSPARSETREES DH_VERBOSE
@@ -24,10 +22,10 @@ clean: really-clean unpatch
 
 really-clean:
 	$(MAKE) mrproper
-	rm debian/install debian/stamps debian/linux-source linux-$(LINUX_VERSIONS)-xen linux-${LINUX_VERSIONS}-xen-sparse linux-${LINUX_VERSIONS}.tar.bz2 linux-$(LINUX_VERSIONS)-xen.patch -rf
+	rm debian/install debian/stamps -rf
 	dh_clean
 
-build: patch-stamp debian/stamps/build $(addsuffix -xen.patch,$(ALLSPARSETREES))
+build: patch-stamp debian/stamps/build
 
 debian/stamps/build:
 	mkdir -p $(@D)
@@ -53,35 +51,7 @@ install: debian/stamps/build
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/sxp.py \
 #		debian/install/usr/lib/python2.3/site-packages/xen/util/console_client.py
 
-$(patsubst %,linux-%-xen.patch,$(LINUX_VERSIONS)): linux-%-xen.patch: debian/linux-source/linux/%.unpatched
-$(patsubst %,debian/linux-source/linux/%.patched,$(LINUX_VERSIONS)): debian/linux-source/linux/%.patched: debian/linux-source/linux/%.extracted
-
-$(patsubst %,debian/linux-source/linux/%.extracted,$(LINUX_VERSIONS)): debian/linux-source/linux/%.extracted: 
-	rm -rf $(@D)
-	mkdir -p $(@D)
-#	bzcat $< | tar -C $(@D) -x
-	touch $@
-
-$(patsubst %,debian/linux-source/linux/%.unpatched,$(LINUX_VERSIONS)): debian/linux-source/linux/%.unpatched: debian/linux-source/linux/%.extracted
-	rm -f pristine-linux-$*
-#	cd $(@D)/linux-source-$*; if ! /usr/src/kernel-patches/all/$*/unpatch/debian; then rm -f $<; exit 1; fi
-#	touch $(@D)/linux-source-$*/.valid-pristine
-#	mv $(@D)/linux-source-$* pristine-linux-$*
-#	touch linux-$*.tar.bz2
-	touch $@
-
-
-kernel-patches: $(addsuffix -xen.patch,$(ALLSPARSETREES))
-$(addsuffix -xen.patch,$(ALLSPARSETREES)):
-#	wget ftp://ftp.de.kernel.org/pub/linux/kernel/v2.6/linux-${LINUX_VERSIONS}.tar.bz2
-#	ln -s linux-2.6-xen-sparse linux-${LINUX_VERSIONS}-xen-sparse
-	$(MAKE) linux-2.6-xen-config CONFIGMODE=oldconfig XEN_TARGET_X86_PAE=$(PAE)
-	cp linux-$(LINUX_VERSIONS)-xen/Makefile Makefile.sav
-	cat Makefile.sav | sed "s/$(OLDEXTRAVERSION)/EXTRAVERSION =/" >linux-$(LINUX_VERSIONS)-xen/Makefile
-	diff -Nurp pristine-linux-$(LINUX_VERSIONS)/ linux-$(LINUX_VERSIONS)-xen/ >linux-$(LINUX_VERSIONS)-xen.patch ; \
-	mv Makefile.sav linux-$(LINUX_VERSIONS)-xen/Makefile
-
-binary: install $(addsuffix -xen.patch,$(ALLSPARSETREES))
+binary: install
 	@echo "DEB_VERSION='$(DEB_VERSION)' DEB_REVISION='$(DEB_REVISION)' UP_VERSION='$(UP_VERSION)' DEB_BUILD_ARCH='$(DEB_BUILD_ARCH)'"
 	dh_clean -k
 	dh_testdir
