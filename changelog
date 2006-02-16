@@ -1,10 +1,12 @@
 xen (3.0.1-1) unstable; urgency=low
 
-  * New upstream release 
+  * New upstream release
   * Julien Danjou <acid@debian.org>
      - Change maintainer and add uploaders field
+  * Guido Trotter <ultrotter@debian.org>
+     - Add dpatch structure to the package
 
- -- Julien Danjou <acid@debian.org>  Thu, 16 Feb 2006 11:43:41 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Thu, 16 Feb 2006 16:59:29 +0100
 
 xen (3.0.1-0tha2) unstable; urgency=low
 
