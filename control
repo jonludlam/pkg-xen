@@ -1,5 +1,6 @@
 Source: xen
-Maintainer: Ralph Passgang <ralph@debianbase.de>
+Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>
 Section: misc
 Priority: extra
 Standards-Version: 3.6.1.0

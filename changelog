@@ -1,3 +1,11 @@
+xen (3.0.1-1) unstable; urgency=low
+
+  * New upstream release 
+  * Julien Danjou <acid@debian.org>
+     - Change maintainer and add uploaders field
+
+ -- Julien Danjou <acid@debian.org>  Thu, 16 Feb 2006 11:43:41 +0100
+
 xen (3.0.1-0tha2) unstable; urgency=low
 
   * added bcc to build-dependencies.it's needed for VMX, otherwise
