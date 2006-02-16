@@ -18,12 +18,17 @@ DEB_REVISION	:= $(shell echo "$(DEB_VERSION)" | sed 's/.*-//')
 UP_VERSION	:= $(shell echo "$(DEB_VERSION)" | sed 's/-[^-]*$$//')
 DEB_BUILD_ARCH  := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 
-clean:
+include /usr/share/dpatch/dpatch.make
+
+clean: really-clean unpatch
+
+really-clean:
 	$(MAKE) mrproper
 	rm debian/install debian/stamps debian/linux-source linux-$(LINUX_VERSIONS)-xen linux-${LINUX_VERSIONS}-xen-sparse linux-${LINUX_VERSIONS}.tar.bz2 linux-$(LINUX_VERSIONS)-xen.patch -rf
 	dh_clean
 
-build: debian/stamps/build $(addsuffix -xen.patch,$(ALLSPARSETREES))
+build: patch-stamp debian/stamps/build $(addsuffix -xen.patch,$(ALLSPARSETREES))
+
 debian/stamps/build:
 	mkdir -p $(@D)
 	rm -rf debian/install
