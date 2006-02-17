@@ -1,7 +1,0 @@
-ignore-files:
- foo.patch
- Makefile.save
- .*\.patch
-ignore-filenames:
- xen/include/xen/banner.h
-

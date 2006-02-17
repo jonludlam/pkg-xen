@@ -1,11 +1,4 @@
-usr/lib/libxenctrl.a
-usr/lib/libxenctrl.so
-usr/lib/libxenctrl.so.3.0
-usr/lib/libxenctrl.so.3.0.0
-usr/lib/libxenguest.a
-usr/lib/libxenguest.so
-usr/lib/libxenguest.so.3.0
-usr/lib/libxenguest.so.3.0.0
-usr/lib/libxenstore.so
+usr/lib/*.so.3.0
+usr/lib/*.so.3.0.0
 usr/lib/xen/bin
 usr/lib/xen/boot

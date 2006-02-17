@@ -2,4 +2,6 @@ usr/include/*.h
 usr/include/xen/*.h
 usr/include/xen/io/*.h
 usr/include/xen/linux/*.h
+usr/lib/*.a
+usr/lib/*.so
 usr/include/xen/COPYING
