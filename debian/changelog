@@ -1,8 +1,6 @@
 xen (3.0.1+hg8743-0+1) unstable; urgency=low
 
   * New upstream release (closes: #32749, #342249)
-  * No need to force xen to be out of testing anymore
-    (as we want it to release with etch) (closes: #271051)
   * Build depend on transfig (closes: #321157)
   * Julien Danjou <acid@debian.org>
      - Change maintainer and add uploaders field
