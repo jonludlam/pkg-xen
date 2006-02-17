@@ -24,7 +24,6 @@ Section: misc
 Architecture: i386 amd64
 Depends: ${shlibs:Depends}
 Conflicts: xen-hypervisor-pae
-Suggests: linux-xen0-2.6
 Description: The Xen Hypervisor
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
@@ -43,7 +42,6 @@ Section: misc
 Architecture: i386
 Depends: ${shlibs:Depends}
 Conflicts: xen-hypervisor
-Suggests: linux-xen0-2.6
 Description: The Xen Hypervisor
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
