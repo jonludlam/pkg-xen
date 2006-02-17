@@ -42,6 +42,7 @@ Section: misc
 Architecture: i386
 Depends: ${shlibs:Depends}
 Conflicts: xen-hypervisor
+Provides: xen-hypervisor
 Description: The Xen Hypervisor
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
