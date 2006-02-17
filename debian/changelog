@@ -1,10 +1,14 @@
-xen (3.0.1-1) unstable; urgency=low
+xen (3.0.1+hg8743-0+1) unstable; urgency=low
 
-  * New upstream release
+  * New upstream release (closes: #32749, #342249)
+  * No need to force xen to be out of testing anymore
+    (as we want it to release with etch) (closes: #271051)
+  * Build depend on transfig (closes: #321157)
   * Julien Danjou <acid@debian.org>
      - Change maintainer and add uploaders field
   * Guido Trotter <ultrotter@debian.org>
      - Add dpatch structure to the package
+     - Remove build-dependency on gcc (it's build essential anyway)
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
      - Removed patch generation from kernel source in debian/rules
@@ -13,7 +17,7 @@ xen (3.0.1-1) unstable; urgency=low
        extraversion stripped off)
      - Changed debian/linux-patch-xen.kpatches
 
- -- Ralph Passgang <ralph@debianbase.de>  Fri, 17 Feb 2006 00:55:00 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Fri, 17 Feb 2006 07:47:34 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 
