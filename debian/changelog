@@ -2,6 +2,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
 
   * New upstream release (closes: #32749, #342249)
   * Build depend on transfig (closes: #321157)
+  * Use gcc rather than gcc-3.4 to compile (closes: #323698)
   * Julien Danjou <acid@debian.org>
      - Change maintainer and add uploaders field
   * Guido Trotter <ultrotter@debian.org>
@@ -15,7 +16,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
        extraversion stripped off)
      - Changed debian/linux-patch-xen.kpatches
 
- -- Guido Trotter <ultrotter@debian.org>  Fri, 17 Feb 2006 07:47:34 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Fri, 17 Feb 2006 10:27:01 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 
