@@ -35,6 +35,10 @@ debian/stamps/build:
 install: debian/stamps/build
 	rm -rf debian/install
 	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC)
+ifeq ($(DEB_BUILD_ARCH),i386)
+	$(MAKE) mrproper
+	$(MAKE) xen DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=y
+endif
 	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
 	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
 	mkdir -p debian/install/etc/xen/sv debian/install/etc/xen/xend/server

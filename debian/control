@@ -9,7 +9,7 @@ Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev
 Package: xen
 Section: misc
 Architecture: i386 amd64
-Depends: xen-utils, xen-hypervisor
+Depends: xen-utils, xen-hypervisor | xen-hypervisor-pae
 Description: a Virtual Machine Monitor like VMWare or plex86
  XEN is a Virtual Machine Monitor (VMM) originally developed by the
  Systems Research Group of the University of Cambridge Computer
@@ -23,7 +23,6 @@ Package: xen-hypervisor
 Section: misc
 Architecture: i386 amd64
 Depends: ${shlibs:Depends}
-Conflicts: xen-hypervisor-pae
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
 Description: The Xen Hypervisor
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
@@ -42,10 +41,8 @@ Package: xen-hypervisor-pae
 Section: misc
 Architecture: i386
 Depends: ${shlibs:Depends}
-Conflicts: xen-hypervisor
-Provides: xen-hypervisor
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
-Description: The Xen Hypervisor
+Description: The Xen Hypervisor (pae enabled version)
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
  (Domain 0) and the virtual guest systems.
@@ -62,7 +59,7 @@ Description: The Xen Hypervisor
 Package: xen-utils
 Section: misc
 Architecture: i386 amd64
-Depends: xen-hypervisor, python-twisted, python, libxen-python, iproute, hotplug | udev (>= 0.059), bash, ${shlibs:Depends}
+Depends: xen-hypervisor | xen-hypervisor-pae, python-twisted, python, libxen-python, iproute, hotplug | udev (>= 0.059), bash, ${shlibs:Depends}
 Recommends: bridge-utils
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
