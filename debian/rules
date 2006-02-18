@@ -55,10 +55,6 @@ binary: install
 	dh_clean -k
 	dh_testdir
 	dh_testroot
-	(if [ "$(DEB_BUILD_ARCH)" == "amd64" ]; then \
-		cp -a $(CURDIR)/debian/install/usr/lib64/* $(CURDIR)/debian/install/usr/lib/; \
-		rm -rf $(CURDIR)/debian/install/usr/lib64 ;\
-	fi)
 	dh_install -N xen-docs --sourcedir=$(CURDIR)/debian/install --list-missing 
 	dh_install -p xen-docs -X examples --sourcedir=$(CURDIR)/debian/install
 	dh_installdocs

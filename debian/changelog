@@ -3,6 +3,8 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
   * New upstream release (closes: #32749, #342249)
   * Build depend on transfig (closes: #321157)
   * Use gcc rather than gcc-3.4 to compile (closes: #323698)
+  * Split xen-hypervisor and xen-utils
+  * Build both xen-hypervisor and xen-hypervisor-pae packages
   * Julien Danjou <acid@debian.org>
      - Change maintainer and add uploaders field
   * Guido Trotter <ultrotter@debian.org>

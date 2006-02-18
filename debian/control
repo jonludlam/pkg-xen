@@ -9,7 +9,7 @@ Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev
 Package: xen
 Section: misc
 Architecture: i386 amd64
-Depends: xen-utils, xen-hypervisor | xen-hypervisor-pae
+Depends: xen-utils, xen-hypervisor
 Description: a Virtual Machine Monitor like VMWare or plex86
  XEN is a Virtual Machine Monitor (VMM) originally developed by the
  Systems Research Group of the University of Cambridge Computer
