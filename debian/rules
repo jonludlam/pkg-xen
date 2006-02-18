@@ -4,7 +4,6 @@ CC		:= gcc
 KERNELS		:=
 LINUX_VERSIONS	:= 2.6.12
 ALLSPARSETREES	:= $(patsubst %,linux-%,$(LINUX_VERSIONS))
-PAE		:= n
 #DH_VERBOSE	:= -v
 
 export KERNELS ALLSPARSETREES DH_VERBOSE
@@ -30,12 +29,12 @@ build: patch-stamp debian/stamps/build
 debian/stamps/build:
 	mkdir -p $(@D)
 	rm -rf debian/install
-	$(MAKE) all DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=$(PAE)
+	$(MAKE) all DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC)
 	touch $@
 
 install: debian/stamps/build
 	rm -rf debian/install
-	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=$(PAE)
+	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC)
 	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
 	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
 	mkdir -p debian/install/etc/xen/sv debian/install/etc/xen/xend/server
