@@ -1,5 +1,6 @@
 xen (3.0.1+hg8743-0+1) unstable; urgency=low
 
+  * Now cooperatively maintained by the Debian Xen Team
   * New upstream release (closes: #32749, #342249)
   * Build depend on transfig (closes: #321157)
   * Use gcc rather than gcc-3.4 to compile (closes: #323698)
@@ -10,6 +11,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
   * Guido Trotter <ultrotter@debian.org>
      - Add dpatch structure to the package
      - Remove build-dependency on gcc (it's build essential anyway)
+     - Suggest xen-tools in the xen metapackage
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
      - Removed patch generation from kernel source in debian/rules
