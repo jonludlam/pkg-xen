@@ -2,7 +2,7 @@
 ## 10sysconfig.dpatch by Ralph Passgang <ralph@debianbase.de>
 ##
 ## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
+## DP: Move xendomains init script config file from /etc/sysconfig to /etc/default
 
 @DPATCH@
 diff -Naur a/Makefile b/Makefile
