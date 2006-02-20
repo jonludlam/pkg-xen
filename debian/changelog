@@ -10,6 +10,8 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
   * Julien Danjou <acid@debian.org>
      - Change maintainer and add uploaders field
      - Add force-reload support for init script xendomains
+     - Remove dependancy against bash
+     - Bump standards version to 3.6.2.2
   * Guido Trotter <ultrotter@debian.org>
      - Add dpatch structure to the package
      - Remove build-dependency on gcc (it's build essential anyway)
