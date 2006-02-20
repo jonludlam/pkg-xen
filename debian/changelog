@@ -12,6 +12,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
      - Add force-reload support for init script xendomains
      - Remove dependancy against bash
      - Bump standards version to 3.6.2.2
+     - Remove COPYING file from libxen-dev
   * Guido Trotter <ultrotter@debian.org>
      - Add dpatch structure to the package
      - Remove build-dependency on gcc (it's build essential anyway)
@@ -24,7 +25,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
        extraversion stripped off)
      - Changed debian/linux-patch-xen.kpatches
 
- -- Julien Danjou <acid@debian.org>  Mon, 20 Feb 2006 14:19:25 +0100
+ -- Julien Danjou <acid@debian.org>  Mon, 20 Feb 2006 15:34:37 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 
