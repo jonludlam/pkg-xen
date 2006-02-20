@@ -7,7 +7,6 @@ ALLSPARSETREES	:= $(patsubst %,linux-%,$(LINUX_VERSIONS))
 #DH_VERBOSE	:= -v
 
 export KERNELS ALLSPARSETREES DH_VERBOSE
-export DH_VERBOSE
 export CC
 
 DEB_VERSION	:= $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
