@@ -15,8 +15,6 @@ DEB_REVISION	:= $(shell echo "$(DEB_VERSION)" | sed 's/.*-//')
 UP_VERSION	:= $(shell echo "$(DEB_VERSION)" | sed 's/-[^-]*$$//')
 DEB_BUILD_ARCH  := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 
-XEN_CHANGESET	:= "Thu Feb  2 12:28:53 2006 +0100 8743:2804be3661ba"
-
 include /usr/share/dpatch/dpatch.make
 
 clean: really-clean unpatch
@@ -36,10 +34,10 @@ debian/stamps/build:
 
 install: debian/stamps/build
 	rm -rf debian/install
-	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC) XEN_CHANGESET=$(XEN_CHANGESET)
+	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC)
 ifeq ($(DEB_BUILD_ARCH),i386)
 	$(MAKE) mrproper
-	$(MAKE) xen DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae XEN_CHANGESET=$(XEN_CHANGESET)
+	$(MAKE) xen DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae
 endif
 	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
 	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
