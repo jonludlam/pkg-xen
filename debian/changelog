@@ -1,5 +1,6 @@
 xen (3.0.1+hg8743-0+1) unstable; urgency=low
 
+  * The "preserve our homes" release
   * Now cooperatively maintained by the Debian Xen Team
   * New upstream release (closes: #32749, #342249)
   * Build depend on transfig (closes: #321157)
