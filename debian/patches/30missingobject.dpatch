@@ -1,0 +1,16 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## 30missingobject.dpatch by Guido Trotter <ultrotter@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Remove an upstream leftover that prevents successive compilations
+
+@DPATCH@
+diff -urNad xen-3.0-1+hg8743/tools/firmware/vmxassist/Makefile /tmp/dpep.C8i9Ax/xen-3.0-1+hg8743/tools/firmware/vmxassist/Makefile
+--- xen-3.0-1+hg8743/tools/firmware/vmxassist/Makefile	2006-02-20 10:54:29.034345216 +0100
++++ /tmp/dpep.C8i9Ax/xen-3.0-1+hg8743/tools/firmware/vmxassist/Makefile	2006-02-20 11:14:26.000000000 +0100
+@@ -87,4 +87,5 @@
+ 	rm -f vmxassist vmxassist.tmp vmxassist.bin vmxassist.run vmxassist.sym head.s roms.h acpi.h
+ 	rm -f vmxloader vmxloader.tmp vmxloader.o $(OBJECTS)
+ 	rm -f gen gen.o offsets.h
++	rm -f acpi_madt.o
+ 
