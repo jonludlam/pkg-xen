@@ -4,7 +4,7 @@ Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>,
 Section: misc
 Priority: extra
 Standards-Version: 3.6.2.2
-Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, hotplug, bcc, dpatch
+Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
 
 Package: xen
 Section: misc
@@ -60,7 +60,7 @@ Description: The Xen Hypervisor (pae enabled version)
 Package: xen-utils
 Section: misc
 Architecture: i386 amd64
-Depends: xen-hypervisor | xen-hypervisor-pae, python-twisted, python, libxen-python, iproute, hotplug | udev (>= 0.059), ${shlibs:Depends}
+Depends: xen-hypervisor | xen-hypervisor-pae, python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
 Recommends: bridge-utils
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual

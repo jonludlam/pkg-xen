@@ -68,8 +68,8 @@ install-arch:
 	dh_installdirs -s
 	$(MAKE) install-tools XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/install
 	$(MAKE) install-xen DESTDIR=$(CURDIR)/debian/install
-	# This should probably be install-hotplug when building for sarge...
 	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
+	$(MAKE) -C tools/examples install-hotplug DESTDIR=$(CURDIR)/debian/install
 	cp -dR $(CURDIR)/docs/man1 $(CURDIR)/debian/install/usr/share/man # Needed, otherwise dpkg-buildpackage -B fails
 	cp -dR $(CURDIR)/docs/man5 $(CURDIR)/debian/install/usr/share/man # Needed, otherwise dpkg-buildpackage -B fails
 	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
