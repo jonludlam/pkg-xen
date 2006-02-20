@@ -23,24 +23,55 @@ include /usr/share/dpatch/dpatch.make
 clean: really-clean unpatch
 
 really-clean:
-	$(MAKE) mrproper
-	rm debian/install debian/stamps -rf
+	dh_testdir
+	dh_testroot
+	$(MAKE) distclean
+	rm -f build-arch-stamp build-indep-stamp
+	rm -rf debian/install
 	dh_clean
 
-build: patch-stamp debian/stamps/build
+build: patch-stamp build-indep build-arch
 
-debian/stamps/build:
-	mkdir -p $(@D)
-	rm -rf debian/install
-	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC)
+build-arch: build-arch-stamp
+build-arch-stamp:
 ifeq ($(DEB_BUILD_ARCH),i386)
-	$(MAKE) mrproper
-	$(MAKE) xen DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae
+	# This actually installs the PAE hypervisor rather than just building it!
+	# Unfortunately it's the only way to build it without losing it later on, when cleaning for the real thing!
+	$(MAKE) install-xen XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae DESTDIR=$(CURDIR)/debian/install
+	$(MAKE) -C xen clean
 endif
-	touch $@
+	$(MAKE) -C xen build
+	$(MAKE) -C tools all XEN_PYTHON_NATIVE_INSTALL=1
+	$(MAKE) -C docs man-pages # Needed, otherwise dpkg-buildpackage -B fails
+	touch build-arch-stamp
 
-install: debian/stamps/build
+build-indep: build-indep-stamp
+build-indep-stamp:
+	$(MAKE) -C docs all
+	touch build-indep-stamp
+
+install: install-indep install-arch
+install-indep:
+	dh_testdir
+	dh_testroot
+	dh_clean -k -i
+	dh_installdirs -i
+	
+	$(MAKE) install-docs DESTDIR=$(CURDIR)/debian/install
+	
+	dh_install -i --sourcedir=$(CURDIR)/debian/install
+
+install-arch:
+	dh_testdir
+	dh_testroot
+	dh_clean -k -s
+	dh_installdirs -s
+	$(MAKE) install-tools XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/install
+	$(MAKE) install-xen DESTDIR=$(CURDIR)/debian/install
+	# This should probably be install-hotplug when building for sarge...
 	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
+	cp -dR $(CURDIR)/docs/man1 $(CURDIR)/debian/install/usr/share/man # Needed, otherwise dpkg-buildpackage -B fails
+	cp -dR $(CURDIR)/docs/man5 $(CURDIR)/debian/install/usr/share/man # Needed, otherwise dpkg-buildpackage -B fails
 	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
 	mkdir -p debian/install/etc/xen/xend/server
 	mv debian/install/usr/lib/python2.3/site-packages/xen/xend/server/params.py debian/install/etc/xen/xend/params.py
@@ -51,14 +82,13 @@ install: debian/stamps/build
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/XendClient.py \
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/server/SrvServer.py \
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/sxp.py
+	
+	dh_install -s --sourcedir=$(CURDIR)/debian/install
 
-binary: install
+binary-common:
 	@echo "DEB_VERSION='$(DEB_VERSION)' DEB_REVISION='$(DEB_REVISION)' UP_VERSION='$(UP_VERSION)' DEB_BUILD_ARCH='$(DEB_BUILD_ARCH)'"
-	dh_clean -k
 	dh_testdir
 	dh_testroot
-	dh_install -N xen-docs --sourcedir=$(CURDIR)/debian/install --list-missing 
-	dh_install -p xen-docs -X examples --sourcedir=$(CURDIR)/debian/install
 	dh_installdocs
 	dh_installchangelogs
 	dh_installkpatches
@@ -73,3 +103,15 @@ binary: install
 	dh_installdeb
 	dh_gencontrol
 	dh_builddeb
+
+# Build architecture independant packages using the common target.
+binary-indep: build-indep install-indep
+	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+
+# Build architecture dependant packages using the common target.
+binary-arch: build-arch install-arch
+	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install install-indep install-arch configure
+

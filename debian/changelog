@@ -17,6 +17,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
      - Add dpatch structure to the package
      - Remove build-dependency on gcc (it's build essential anyway)
      - Suggest xen-tools in the xen metapackage
+     - Make debian/rules policy compliant 
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
      - Removed patch generation from kernel source in debian/rules
@@ -25,7 +26,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
        extraversion stripped off)
      - Changed debian/linux-patch-xen.kpatches
 
- -- Julien Danjou <acid@debian.org>  Mon, 20 Feb 2006 15:34:37 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Mon, 20 Feb 2006 18:29:10 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 
