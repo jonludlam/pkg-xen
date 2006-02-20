@@ -1,0 +1,28 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## force-reload.dpatch by Julien Danjou <acid@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: add force-reload supports to xendomains init script
+
+@DPATCH@
+diff -Naur xen-3.0.1.orig xen-3.0.1
+--- xen-3.0.1.orig/tools/examples/init.d/xendomains	2006-01-31 17:09:20.000000000 +0100
++++ xen-3.0.1/tools/examples/init.d/xendomains	2006-02-20 14:05:23.000000000 +0100
+@@ -474,7 +474,7 @@
+     restart)
+ 	restart
+ 	;;
+-    reload)
++    reload|force-reload)
+ 	reload
+ 	;;
+ 
+@@ -492,7 +492,7 @@
+ 	;;
+ 
+     *)
+-	echo "Usage: $0 {start|stop|restart|reload|status}"
++	echo "Usage: $0 {start|stop|restart|reload|force-reload|status}"
+ 	rc_failed 3
+ 	rc_status -v
+ 	;;
