@@ -37,7 +37,7 @@ build-arch-stamp:
 ifeq ($(DEB_BUILD_ARCH),i386)
 	# This actually installs the PAE hypervisor rather than just building it!
 	# Unfortunately it's the only way to build it without losing it later on, when cleaning for the real thing!
-	$(MAKE) install-xen XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae DESTDIR=$(CURDIR)/debian/install
+	$(MAKE) install-xen XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae DESTDIR=$(CURDIR)/dist
 	$(MAKE) -C xen clean
 endif
 	$(MAKE) -C xen build
@@ -68,6 +68,9 @@ install-arch:
 	dh_installdirs -s
 	$(MAKE) install-tools XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/install
 	$(MAKE) install-xen DESTDIR=$(CURDIR)/debian/install
+ifeq ($(DEB_BUILD_ARCH),i386)
+	cp -dR $(CURDIR)/dist/boot/* $(CURDIR)/debian/install/boot/
+endif	
 	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
 	$(MAKE) -C tools/examples install-hotplug DESTDIR=$(CURDIR)/debian/install
 	cp -dR $(CURDIR)/docs/man1 $(CURDIR)/debian/install/usr/share/man # Needed, otherwise dpkg-buildpackage -B fails
