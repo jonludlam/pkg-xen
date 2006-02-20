@@ -1,18 +1,15 @@
 #!/usr/bin/make -f
 
 CC		:= gcc
-KERNELS		:=
-LINUX_VERSIONS	:= 2.6.12
-ALLSPARSETREES	:= $(patsubst %,linux-%,$(LINUX_VERSIONS))
 #DH_VERBOSE	:= -v
-
-export KERNELS ALLSPARSETREES DH_VERBOSE
-export CC
 
 DEB_VERSION	:= $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
 DEB_REVISION	:= $(shell echo "$(DEB_VERSION)" | sed 's/.*-//')
 UP_VERSION	:= $(shell echo "$(DEB_VERSION)" | sed 's/-[^-]*$$//')
 DEB_BUILD_ARCH  := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+
+export DH_VERBOSE
+export CC
 
 include /usr/share/dpatch/dpatch.make
 
@@ -28,30 +25,25 @@ build: patch-stamp debian/stamps/build
 debian/stamps/build:
 	mkdir -p $(@D)
 	rm -rf debian/install
-	$(MAKE) all DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC)
-	touch $@
-
-install: debian/stamps/build
-	rm -rf debian/install
 	$(MAKE) dist DESTDIR=$(CURDIR)/debian/install KERNELS= XEN_PYTHON_NATIVE_INSTALL=1 CC=$(CC) GCC=$(CC) HOSTCC=$(CC)
 ifeq ($(DEB_BUILD_ARCH),i386)
 	$(MAKE) mrproper
 	$(MAKE) xen DESTDIR=$(CURDIR)/debian/install KERNELS= GCC=$(CC) CC=$(CC) HOSTCC=$(CC) XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae
 endif
+	touch $@
+
+install: debian/stamps/build
 	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
 	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
-	mkdir -p debian/install/etc/xen/sv debian/install/etc/xen/xend/server
+	mkdir -p debian/install/etc/xen/xend/server
 	mv debian/install/usr/lib/python2.3/site-packages/xen/xend/server/params.py debian/install/etc/xen/xend/params.py
 	ln -s /etc/xen/xend/params.py debian/install/usr/lib/python2.3/site-packages/xen/xend/server/params.py
-#	mv debian/install/usr/lib/python2.3/site-packages/xen/sv/params.py  debian/install/etc/xen/sv/params.py
-#	ln -s /etc/xen/sv/params.py debian/install/usr/lib/python2.3/site-packages/xen/sv/params.py
 	mkdir -p debian/install/usr/share/doc/xen/examples
 	mv debian/install/etc/xen/xmexample* debian/install/usr/share/doc/xen/examples
 	chmod +x \
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/XendClient.py \
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/server/SrvServer.py \
-		debian/install/usr/lib/python2.3/site-packages/xen/xend/sxp.py \
-#		debian/install/usr/lib/python2.3/site-packages/xen/util/console_client.py
+		debian/install/usr/lib/python2.3/site-packages/xen/xend/sxp.py
 
 binary: install
 	@echo "DEB_VERSION='$(DEB_VERSION)' DEB_REVISION='$(DEB_REVISION)' UP_VERSION='$(UP_VERSION)' DEB_BUILD_ARCH='$(DEB_BUILD_ARCH)'"
