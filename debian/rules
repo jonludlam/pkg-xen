@@ -80,7 +80,6 @@ install-arch:
 	mv debian/install/etc/xen/xmexample* debian/install/usr/share/doc/xen/examples
 	chmod +x \
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/XendClient.py \
-		debian/install/usr/lib/python2.3/site-packages/xen/xend/server/SrvServer.py \
 		debian/install/usr/lib/python2.3/site-packages/xen/xend/sxp.py
 	
 	dh_install -s --sourcedir=$(CURDIR)/debian/install

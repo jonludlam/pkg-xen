@@ -18,6 +18,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
      - Remove build-dependency on gcc (it's build essential anyway)
      - Suggest xen-tools in the xen metapackage
      - Make debian/rules policy compliant 
+     - Make SrvServer.py not executable
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
      - Removed patch generation from kernel source in debian/rules
