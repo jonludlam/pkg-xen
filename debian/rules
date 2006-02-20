@@ -1,6 +1,7 @@
 #!/usr/bin/make -f
 
 CC		:= gcc
+CFLAGS		:= -Wall -g
 #DH_VERBOSE	:= -v
 
 DEB_VERSION	:= $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
@@ -8,8 +9,14 @@ DEB_REVISION	:= $(shell echo "$(DEB_VERSION)" | sed 's/.*-//')
 UP_VERSION	:= $(shell echo "$(DEB_VERSION)" | sed 's/-[^-]*$$//')
 DEB_BUILD_ARCH  := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 
+ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
+        CFLAGS += -O0
+else
+        CFLAGS += -O2
+endif
+
 export DH_VERBOSE
-export CC
+export CC CFLAGS
 
 include /usr/share/dpatch/dpatch.make
 
