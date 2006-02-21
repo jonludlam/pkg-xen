@@ -4,7 +4,7 @@ Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>,
 Section: misc
 Priority: extra
 Standards-Version: 3.6.2.2
-Build-Depends: tetex-bin, tetex-extra, latex2html, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
+Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
 
 Package: xen
 Section: misc
