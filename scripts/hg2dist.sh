@@ -15,10 +15,19 @@ fi
 
 
 CHANGESET=$( (cd $HGDIR; $HG log | head -1 ) | sed -e 's/ //g;' | cut -d: -f2)
-RELEASE=$( (cd $HGDIR; $HG log | grep "tag:.*RELEASE" | head -1) | sed -e 's/ //g; s/tag:RELEASE-//')
 
-DESTDIR="xen-${RELEASE}+hg${CHANGESET}"
-DESTTAR="xen_${RELEASE}+hg${CHANGESET}.orig.tar.gz"
+RELEASE_LG=$( (cd $HGDIR; $HG log | grep -B 1 "tag:.*RELEASE" | head -2) | sed -e 's/ //g')
+REL_VER=$( echo $RELEASE_LG | cut -d: -f2 )
+REL_CHG=$( echo $RELEASE_LG | cut -d- -f2 )
+
+if [ $REL_CHG = $CHANGESET ]; then
+	DESTDIR="xen-${REL_VER}"
+	DESTTAR="xen_${REL_VER}.orig.tar.gz"
+else
+	DESTDIR="xen-${REL_VER}+hg${CHANGESET}"
+	DESTTAR="xen_${REL_VER}+hg${CHANGESET}.orig.tar.gz"
+fi
+
 
 if [ -d $DESTDIR ]; then
 	echo "Destination directory $DESTDIR already exists"
