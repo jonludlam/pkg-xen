@@ -1,0 +1,62 @@
+Xen for Debian
+--------------
+
+* About /lib/tls:
+
+   Since Xen guest machines have to work in non-contiguous areas of memory,
+   they cannot support a segmented glibc efficiently.  If your glibc is
+   segmented Xen will have to emulate the support, with a high performance
+   penalty. To solve this problem you just have to execute this command:
+
+   mv /lib/tls /lib/tls.disabled
+
+   Unfortunately we cannot do this ourselves when you install Xen or at any
+   other time, without breaking the Debian Policy and thus provoke the Wrath of
+   the Gods. We know that this solution is not optimal, especially because
+   every time you upgrade the glibc package /lib/tls will be restored, and
+   you'll have to
+
+   rm -rf /lib/tls.disabled
+   mv /lib/tls /lib/tls.disabled
+
+   again. We'll be working towards a better solution, but for now this is it.
+   Please remember to always keep your system tls disabled.
+
+
+* About the kernel:
+   
+   Unfortunately for now we cannot provide precompiled Linux Kernels with the
+   xen patch applied and configured to work in a Domain 0 or in an unprivileged
+   domain. The only thing we can give you is the patch, which is included in
+   the linux-patch-xen package.  You are expected to install this package,
+   download a 2.6.12 kernel from kernel.org (this is the version supported by
+   xen right now. The patch will make it a 2.6.12.6+xen kernel) and roll your
+   own kernel.
+
+   After you've done so you can add a section similar to this one to your
+   /boot/grub/menu.lst file in order to boot your xen system. (Only grub is
+   supported on Xen systems, if you're a LILO fan we're sorry, there's no way
+   you can use Xen without switching, and probably there will never be)
+
+   title           Debian Xen+GNU/Linux
+   root            (hd0,0)
+   kernel          /boot/xen.gz dom0_mem=256M
+   module          /boot/xen-linux-2.6.12.6xeno003 root=/dev/sda1 ro console=tty0 mem=256M
+   boot
+   
+   Of course you can choose how much of your memory you want to give to your
+   Domain 0 (the value in the kernel field gets used, the one in the module
+   field can be larger, just in case you want to increase the amount, without
+   rebooting, later) and you have to supply your kernel path and root device in
+   the module line. 
+
+   We will provide a "roll your own xen kernel" manual and example config files
+   later on. We also hope to be able to provide complete Xen kernels, sooner or
+   later, so don't despair! (Well, do, since in the meantime you have to do it
+   yourself anyway, if you want to try Xen... But don't give up now, compiling
+   a kernel is not hard, and trying Xen is worth learning how to do it!)
+
+Kindly yours,
+
+Guido Trotter, for the Debian Xen Team.
+
