@@ -17,10 +17,11 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
      - Add dpatch structure to the package
      - Remove build-dependency on gcc (it's build essential anyway)
      - Suggest xen-tools in the xen metapackage
-     - Make debian/rules policy compliant 
+     - Make debian/rules policy compliant
      - Make SrvServer.py not executable
      - Make bugtool.py executable
      - Create NEWS.Debian file with important upgrade notices
+     - Update copyright file
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
      - Removed patch generation from kernel source in debian/rules
@@ -29,7 +30,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
        extraversion stripped off)
      - Changed debian/linux-patch-xen.kpatches
 
- -- Guido Trotter <ultrotter@debian.org>  Tue, 21 Feb 2006 09:14:18 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Fri, 24 Feb 2006 07:37:38 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 
