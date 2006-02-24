@@ -1,6 +1,6 @@
 diff -Nurp pristine-linux-2.6.12/arch/i386/Kconfig linux-2.6.12-xen/arch/i386/Kconfig
 --- pristine-linux-2.6.12/arch/i386/Kconfig	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/Kconfig	2006-02-17 00:45:18.271515652 +0100
++++ linux-2.6.12-xen/arch/i386/Kconfig	2006-02-25 00:12:33.828985656 +0100
 @@ -487,6 +487,19 @@ config SMP
  
  	  If you don't know what to do here, say N.
@@ -39,7 +39,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/Kconfig linux-2.6.12-xen/arch/i386/Kc
  source "drivers/pci/hotplug/Kconfig"
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/apic.c linux-2.6.12-xen/arch/i386/kernel/apic.c
 --- pristine-linux-2.6.12/arch/i386/kernel/apic.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/apic.c	2006-02-17 00:45:18.250518852 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/apic.c	2006-02-25 00:12:33.792991082 +0100
 @@ -26,6 +26,7 @@
  #include <linux/mc146818rtc.h>
  #include <linux/kernel_stat.h>
@@ -59,7 +59,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/apic.c linux-2.6.12-xen/arch/i
  		unsigned long v;
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/cpu/cpufreq/powernow-k8.c linux-2.6.12-xen/arch/i386/kernel/cpu/cpufreq/powernow-k8.c
 --- pristine-linux-2.6.12/arch/i386/kernel/cpu/cpufreq/powernow-k8.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/cpu/cpufreq/powernow-k8.c	2006-02-17 00:45:18.197526926 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/cpu/cpufreq/powernow-k8.c	2006-02-25 00:12:30.020559696 +0100
 @@ -44,7 +44,7 @@
  
  #define PFX "powernow-k8: "
@@ -91,7 +91,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/cpu/cpufreq/powernow-k8.c linu
  
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/io_apic.c linux-2.6.12-xen/arch/i386/kernel/io_apic.c
 --- pristine-linux-2.6.12/arch/i386/kernel/io_apic.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/io_apic.c	2006-02-17 00:45:18.252518547 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/io_apic.c	2006-02-25 00:12:33.793990931 +0100
 @@ -576,9 +576,11 @@ static int balanced_irq(void *unused)
  		try_to_freeze(PF_FREEZE);
  		if (time_after(jiffies,
@@ -106,7 +106,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/io_apic.c linux-2.6.12-xen/arc
  	return 0;
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/irq.c linux-2.6.12-xen/arch/i386/kernel/irq.c
 --- pristine-linux-2.6.12/arch/i386/kernel/irq.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/irq.c	2006-02-17 00:45:18.252518547 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/irq.c	2006-02-25 00:12:33.793990931 +0100
 @@ -15,6 +15,9 @@
  #include <linux/seq_file.h>
  #include <linux/interrupt.h>
@@ -210,7 +210,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/irq.c linux-2.6.12-xen/arch/i3
 +
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/Makefile linux-2.6.12-xen/arch/i386/kernel/Makefile
 --- pristine-linux-2.6.12/arch/i386/kernel/Makefile	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/Makefile	2006-02-17 00:45:18.272515500 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/Makefile	2006-02-25 00:12:33.829985506 +0100
 @@ -33,6 +33,7 @@ obj-$(CONFIG_ACPI_SRAT) 	+= srat.o
  obj-$(CONFIG_HPET_TIMER) 	+= time_hpet.o
  obj-$(CONFIG_EFI) 		+= efi.o efi_stub.o
@@ -221,7 +221,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/Makefile linux-2.6.12-xen/arch
  
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/msr.c linux-2.6.12-xen/arch/i386/kernel/msr.c
 --- pristine-linux-2.6.12/arch/i386/kernel/msr.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/msr.c	2006-02-17 00:45:18.253518395 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/msr.c	2006-02-25 00:12:33.809988520 +0100
 @@ -260,7 +260,7 @@ static struct file_operations msr_fops =
  	.open = msr_open,
  };
@@ -233,7 +233,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/msr.c linux-2.6.12-xen/arch/i3
  	struct class_device *class_err;
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/process.c linux-2.6.12-xen/arch/i386/kernel/process.c
 --- pristine-linux-2.6.12/arch/i386/kernel/process.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/process.c	2006-02-17 00:45:18.253518395 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/process.c	2006-02-25 00:12:33.810988369 +0100
 @@ -13,6 +13,7 @@
  
  #include <stdarg.h>
@@ -308,7 +308,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/process.c linux-2.6.12-xen/arc
  	info.entry_number = idx;
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smpalts.c linux-2.6.12-xen/arch/i386/kernel/smpalts.c
 --- pristine-linux-2.6.12/arch/i386/kernel/smpalts.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/arch/i386/kernel/smpalts.c	2006-02-17 00:45:18.272515500 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/smpalts.c	2006-02-25 00:12:33.830985355 +0100
 @@ -0,0 +1,85 @@
 +#include <linux/kernel.h>
 +#include <asm/system.h>
@@ -397,7 +397,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smpalts.c linux-2.6.12-xen/arc
 +}
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smpboot.c linux-2.6.12-xen/arch/i386/kernel/smpboot.c
 --- pristine-linux-2.6.12/arch/i386/kernel/smpboot.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/smpboot.c	2006-02-17 00:45:18.274515195 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/smpboot.c	2006-02-25 00:12:33.831985204 +0100
 @@ -44,6 +44,9 @@
  #include <linux/smp_lock.h>
  #include <linux/irq.h>
@@ -552,7 +552,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smpboot.c linux-2.6.12-xen/arc
  	cpu_set(cpu, smp_commenced_mask);
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smpboot.c.orig linux-2.6.12-xen/arch/i386/kernel/smpboot.c.orig
 --- pristine-linux-2.6.12/arch/i386/kernel/smpboot.c.orig	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/arch/i386/kernel/smpboot.c.orig	2006-02-17 00:45:18.254518242 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/smpboot.c.orig	2006-02-25 00:12:33.811988218 +0100
 @@ -0,0 +1,1260 @@
 +/*
 + *	x86 SMP booting functions
@@ -1816,7 +1816,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smpboot.c.orig linux-2.6.12-xe
 +}
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smp.c linux-2.6.12-xen/arch/i386/kernel/smp.c
 --- pristine-linux-2.6.12/arch/i386/kernel/smp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/smp.c	2006-02-17 00:45:18.255518090 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/smp.c	2006-02-25 00:12:33.811988218 +0100
 @@ -19,6 +19,7 @@
  #include <linux/mc146818rtc.h>
  #include <linux/cache.h>
@@ -1898,7 +1898,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/smp.c linux-2.6.12-xen/arch/i3
  	
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/traps.c linux-2.6.12-xen/arch/i386/kernel/traps.c
 --- pristine-linux-2.6.12/arch/i386/kernel/traps.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/traps.c	2006-02-17 00:45:18.261517176 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/traps.c	2006-02-25 00:12:33.817987314 +0100
 @@ -521,18 +521,11 @@ static void mem_parity_error(unsigned ch
  
  static void io_check_error(unsigned char reason, struct pt_regs * regs)
@@ -1936,7 +1936,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/traps.c linux-2.6.12-xen/arch/
  	if (!nmi_callback(regs, cpu))
 diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/vmlinux.lds.S linux-2.6.12-xen/arch/i386/kernel/vmlinux.lds.S
 --- pristine-linux-2.6.12/arch/i386/kernel/vmlinux.lds.S	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/kernel/vmlinux.lds.S	2006-02-17 00:45:18.274515195 +0100
++++ linux-2.6.12-xen/arch/i386/kernel/vmlinux.lds.S	2006-02-25 00:12:33.831985204 +0100
 @@ -30,6 +30,13 @@ SECTIONS
    __ex_table : { *(__ex_table) }
    __stop___ex_table = .;
@@ -1953,7 +1953,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/kernel/vmlinux.lds.S linux-2.6.12-xen
    /* writeable */
 diff -Nurp pristine-linux-2.6.12/arch/i386/mm/pageattr.c linux-2.6.12-xen/arch/i386/mm/pageattr.c
 --- pristine-linux-2.6.12/arch/i386/mm/pageattr.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/mm/pageattr.c	2006-02-17 00:45:18.266516414 +0100
++++ linux-2.6.12-xen/arch/i386/mm/pageattr.c	2006-02-25 00:12:33.823986410 +0100
 @@ -75,7 +75,7 @@ static void set_pmd_pte(pte_t *kpte, uns
  	unsigned long flags;
  
@@ -1965,7 +1965,7 @@ diff -Nurp pristine-linux-2.6.12/arch/i386/mm/pageattr.c linux-2.6.12-xen/arch/i
  	spin_lock_irqsave(&pgd_lock, flags);
 diff -Nurp pristine-linux-2.6.12/arch/i386/mm/pgtable.c linux-2.6.12-xen/arch/i386/mm/pgtable.c
 --- pristine-linux-2.6.12/arch/i386/mm/pgtable.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/i386/mm/pgtable.c	2006-02-17 00:45:18.267516262 +0100
++++ linux-2.6.12-xen/arch/i386/mm/pgtable.c	2006-02-25 00:12:33.824986259 +0100
 @@ -199,19 +199,20 @@ void pgd_ctor(void *pgd, kmem_cache_t *c
  {
  	unsigned long flags;
@@ -2290,7 +2290,7 @@ diff -Nurp pristine-linux-2.6.12/arch/ia64/kernel/pal.S linux-2.6.12-xen/arch/ia
   * Make a PAL call using the stacked registers calling convention.
 diff -Nurp pristine-linux-2.6.12/arch/ia64/kernel/ptrace.c linux-2.6.12-xen/arch/ia64/kernel/ptrace.c
 --- pristine-linux-2.6.12/arch/ia64/kernel/ptrace.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/ia64/kernel/ptrace.c	2006-02-17 00:45:18.199526621 +0100
++++ linux-2.6.12-xen/arch/ia64/kernel/ptrace.c	2006-02-25 00:12:30.022559394 +0100
 @@ -945,6 +945,13 @@ access_uarea (struct task_struct *child,
  				*data = (pt->cr_ipsr & IPSR_MASK);
  			return 0;
@@ -2356,7 +2356,7 @@ diff -Nurp pristine-linux-2.6.12/arch/ia64/kernel/setup.c linux-2.6.12-xen/arch/
  		extern int sn_serial_console_early_setup(void);
 diff -Nurp pristine-linux-2.6.12/arch/ia64/kernel/signal.c linux-2.6.12-xen/arch/ia64/kernel/signal.c
 --- pristine-linux-2.6.12/arch/ia64/kernel/signal.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/ia64/kernel/signal.c	2006-02-17 00:45:18.199526621 +0100
++++ linux-2.6.12-xen/arch/ia64/kernel/signal.c	2006-02-25 00:12:30.022559394 +0100
 @@ -94,7 +94,7 @@ sys_sigaltstack (const stack_t __user *u
  static long
  restore_sigcontext (struct sigcontext __user *sc, struct sigscratch *scr)
@@ -6870,7 +6870,7 @@ diff -Nurp pristine-linux-2.6.12/arch/ia64/xen-mkbuildtree-pre linux-2.6.12-xen/
 +#cd ../..
 diff -Nurp pristine-linux-2.6.12/arch/ppc/kernel/time.c linux-2.6.12-xen/arch/ppc/kernel/time.c
 --- pristine-linux-2.6.12/arch/ppc/kernel/time.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/ppc/kernel/time.c	2006-02-17 00:45:18.200526469 +0100
++++ linux-2.6.12-xen/arch/ppc/kernel/time.c	2006-02-25 00:12:30.023559244 +0100
 @@ -89,6 +89,9 @@ unsigned long tb_to_ns_scale;
  
  extern unsigned long wall_jiffies;
@@ -6915,7 +6915,7 @@ diff -Nurp pristine-linux-2.6.12/arch/ppc/kernel/time.c linux-2.6.12-xen/arch/pp
                                  -xtime.tv_sec, -xtime.tv_nsec);
 diff -Nurp pristine-linux-2.6.12/arch/ppc64/boot/zlib.c linux-2.6.12-xen/arch/ppc64/boot/zlib.c
 --- pristine-linux-2.6.12/arch/ppc64/boot/zlib.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/ppc64/boot/zlib.c	2006-02-17 00:45:18.201526317 +0100
++++ linux-2.6.12-xen/arch/ppc64/boot/zlib.c	2006-02-25 00:12:30.024559093 +0100
 @@ -1307,7 +1307,7 @@ local int huft_build(
    {
      *t = (inflate_huft *)Z_NULL;
@@ -6935,7 +6935,7 @@ diff -Nurp pristine-linux-2.6.12/arch/ppc64/boot/zlib.c linux-2.6.12-xen/arch/pp
    /* Generate the Huffman codes and for each, make the table entries */
 diff -Nurp pristine-linux-2.6.12/arch/ppc64/kernel/pSeries_smp.c linux-2.6.12-xen/arch/ppc64/kernel/pSeries_smp.c
 --- pristine-linux-2.6.12/arch/ppc64/kernel/pSeries_smp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/ppc64/kernel/pSeries_smp.c	2006-02-17 00:45:18.256517937 +0100
++++ linux-2.6.12-xen/arch/ppc64/kernel/pSeries_smp.c	2006-02-25 00:12:33.813987917 +0100
 @@ -92,10 +92,13 @@ static int query_cpu_stopped(unsigned in
  
  int pSeries_cpu_disable(void)
@@ -6953,7 +6953,7 @@ diff -Nurp pristine-linux-2.6.12/arch/ppc64/kernel/pSeries_smp.c linux-2.6.12-xe
  	/* FIXME: abstract this to not be platform specific later on */
 diff -Nurp pristine-linux-2.6.12/arch/s390/kernel/smp.c linux-2.6.12-xen/arch/s390/kernel/smp.c
 --- pristine-linux-2.6.12/arch/s390/kernel/smp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/s390/kernel/smp.c	2006-02-17 00:45:18.257517785 +0100
++++ linux-2.6.12-xen/arch/s390/kernel/smp.c	2006-02-25 00:12:33.813987917 +0100
 @@ -679,12 +679,14 @@ __cpu_disable(void)
  {
  	unsigned long flags;
@@ -6972,7 +6972,7 @@ diff -Nurp pristine-linux-2.6.12/arch/s390/kernel/smp.c linux-2.6.12-xen/arch/s3
  	/* Disable pfault pseudo page faults on this cpu. */
 diff -Nurp pristine-linux-2.6.12/arch/um/kernel/process.c linux-2.6.12-xen/arch/um/kernel/process.c
 --- pristine-linux-2.6.12/arch/um/kernel/process.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/um/kernel/process.c	2006-02-17 00:45:18.202526164 +0100
++++ linux-2.6.12-xen/arch/um/kernel/process.c	2006-02-25 00:12:30.025558942 +0100
 @@ -130,7 +130,7 @@ int start_fork_tramp(void *thread_arg, u
  	return(arg.pid);
  }
@@ -7144,7 +7144,7 @@ diff -Nurp pristine-linux-2.6.12/arch/um/kernel/process.c linux-2.6.12-xen/arch/
  }
 diff -Nurp pristine-linux-2.6.12/arch/x86_64/ia32/syscall32.c linux-2.6.12-xen/arch/x86_64/ia32/syscall32.c
 --- pristine-linux-2.6.12/arch/x86_64/ia32/syscall32.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/x86_64/ia32/syscall32.c	2006-02-17 00:45:18.202526164 +0100
++++ linux-2.6.12-xen/arch/x86_64/ia32/syscall32.c	2006-02-25 00:12:30.025558942 +0100
 @@ -57,6 +57,7 @@ int syscall32_setup_pages(struct linux_b
  	int npages = (VSYSCALL32_END - VSYSCALL32_BASE) >> PAGE_SHIFT;
  	struct vm_area_struct *vma;
@@ -7168,7 +7168,7 @@ diff -Nurp pristine-linux-2.6.12/arch/x86_64/ia32/syscall32.c linux-2.6.12-xen/a
  	return 0;
 diff -Nurp pristine-linux-2.6.12/arch/x86_64/kernel/i387.c linux-2.6.12-xen/arch/x86_64/kernel/i387.c
 --- pristine-linux-2.6.12/arch/x86_64/kernel/i387.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/x86_64/kernel/i387.c	2006-02-17 00:45:18.247519309 +0100
++++ linux-2.6.12-xen/arch/x86_64/kernel/i387.c	2006-02-25 00:12:33.788991685 +0100
 @@ -42,7 +42,7 @@ void mxcsr_feature_mask_init(void)
   * Called at bootup to set up the initial FPU state that is later cloned
   * into all processes.
@@ -7180,7 +7180,7 @@ diff -Nurp pristine-linux-2.6.12/arch/x86_64/kernel/i387.c linux-2.6.12-xen/arch
  	extern void __bad_fxsave_alignment(void);
 diff -Nurp pristine-linux-2.6.12/arch/x86_64/kernel/setup.c linux-2.6.12-xen/arch/x86_64/kernel/setup.c
 --- pristine-linux-2.6.12/arch/x86_64/kernel/setup.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/x86_64/kernel/setup.c	2006-02-17 00:45:18.203526012 +0100
++++ linux-2.6.12-xen/arch/x86_64/kernel/setup.c	2006-02-25 00:12:30.026558792 +0100
 @@ -729,8 +729,6 @@ static void __init amd_detect_cmp(struct
  	int cpu = smp_processor_id();
  	int node = 0;
@@ -7192,7 +7192,7 @@ diff -Nurp pristine-linux-2.6.12/arch/x86_64/kernel/setup.c linux-2.6.12-xen/arc
  	while ((1 << bits) < c->x86_num_cores)
 diff -Nurp pristine-linux-2.6.12/arch/x86_64/kernel/smpboot.c linux-2.6.12-xen/arch/x86_64/kernel/smpboot.c
 --- pristine-linux-2.6.12/arch/x86_64/kernel/smpboot.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/x86_64/kernel/smpboot.c	2006-02-17 00:45:18.205525707 +0100
++++ linux-2.6.12-xen/arch/x86_64/kernel/smpboot.c	2006-02-25 00:12:30.027558641 +0100
 @@ -202,9 +202,6 @@ static __cpuinit void sync_master(void *
  {
  	unsigned long flags, i;
@@ -7252,7 +7252,7 @@ diff -Nurp pristine-linux-2.6.12/arch/x86_64/kernel/smpboot.c linux-2.6.12-xen/a
  static __init int notscsync_setup(char *s)
 diff -Nurp pristine-linux-2.6.12/arch/x86_64/kernel/smp.c linux-2.6.12-xen/arch/x86_64/kernel/smp.c
 --- pristine-linux-2.6.12/arch/x86_64/kernel/smp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/arch/x86_64/kernel/smp.c	2006-02-17 00:45:18.204525860 +0100
++++ linux-2.6.12-xen/arch/x86_64/kernel/smp.c	2006-02-25 00:12:30.027558641 +0100
 @@ -284,6 +284,71 @@ struct call_data_struct {
  static struct call_data_struct * call_data;
  
@@ -36612,7 +36612,7 @@ diff -Nurp pristine-linux-2.6.12/arch/xen/i386/mm/hypervisor.c linux-2.6.12-xen/
 + */
 diff -Nurp pristine-linux-2.6.12/arch/xen/i386/mm/init.c linux-2.6.12-xen/arch/xen/i386/mm/init.c
 --- pristine-linux-2.6.12/arch/xen/i386/mm/init.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/arch/xen/i386/mm/init.c	2006-02-16 23:44:08.000000000 +0100
++++ linux-2.6.12-xen/arch/xen/i386/mm/init.c	2006-02-25 00:05:34.156176000 +0100
 @@ -0,0 +1,780 @@
 +/*
 + *  linux/arch/i386/mm/init.c
@@ -37334,7 +37334,7 @@ diff -Nurp pristine-linux-2.6.12/arch/xen/i386/mm/init.c linux-2.6.12-xen/arch/x
 +#endif
 +				0,
 +				pgd_ctor,
-+				PTRS_PER_PMD == 1 ? pgd_dtor : NULL);
++				pgd_dtor);
 +	if (!pgd_cache)
 +		panic("pgtable_cache_init(): Cannot create pgd cache");
 +}
@@ -37898,8 +37898,8 @@ diff -Nurp pristine-linux-2.6.12/arch/xen/i386/mm/Makefile linux-2.6.12-xen/arch
 +clean-files += $(patsubst %.o,%.c,$(c-obj-y) $(c-obj-) $(c-link))
 diff -Nurp pristine-linux-2.6.12/arch/xen/i386/mm/pgtable.c linux-2.6.12-xen/arch/xen/i386/mm/pgtable.c
 --- pristine-linux-2.6.12/arch/xen/i386/mm/pgtable.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/arch/xen/i386/mm/pgtable.c	2006-02-16 23:44:08.000000000 +0100
-@@ -0,0 +1,619 @@
++++ linux-2.6.12-xen/arch/xen/i386/mm/pgtable.c	2006-02-25 00:05:34.159175000 +0100
+@@ -0,0 +1,622 @@
 +/*
 + *  linux/arch/i386/mm/pgtable.c
 + */
@@ -38200,16 +38200,19 @@ diff -Nurp pristine-linux-2.6.12/arch/xen/i386/mm/pgtable.c linux-2.6.12-xen/arc
 +	}
 +}
 +
-+/* never called when PTRS_PER_PMD > 1 */
 +void pgd_dtor(void *pgd, kmem_cache_t *cache, unsigned long unused)
 +{
 +	unsigned long flags; /* can be called from interrupt context */
 +
-+	spin_lock_irqsave(&pgd_lock, flags);
-+	pgd_list_del(pgd);
-+	spin_unlock_irqrestore(&pgd_lock, flags);
++	if (PTRS_PER_PMD > 1) {
++		xen_destroy_contiguous_region((unsigned long)pgd, 0);
++	} else {
++		spin_lock_irqsave(&pgd_lock, flags);
++		pgd_list_del(pgd);
++		spin_unlock_irqrestore(&pgd_lock, flags);
 +
-+	pgd_test_and_unpin(pgd);
++		pgd_test_and_unpin(pgd);
++	}
 +}
 +
 +pgd_t *pgd_alloc(struct mm_struct *mm)
@@ -58034,12 +58037,12 @@ diff -Nurp pristine-linux-2.6.12/arch/xen/x86_64/pci/Makefile-BUS linux-2.6.12-x
 +i386-y  += ../../i386/pci/i386.o
 diff -Nurp pristine-linux-2.6.12/.config linux-2.6.12-xen/.config
 --- pristine-linux-2.6.12/.config	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/.config	2006-02-17 00:45:49.956687745 +0100
++++ linux-2.6.12-xen/.config	2006-02-25 00:12:57.401432383 +0100
 @@ -0,0 +1,2966 @@
 +#
 +# Automatically generated make config: don't edit
 +# Linux kernel version: 2.6.12.6-xen
-+# Fri Feb 17 00:45:49 2006
++# Sat Feb 25 00:12:55 2006
 +#
 +CONFIG_XEN=y
 +CONFIG_ARCH_XEN=y
@@ -61004,7 +61007,7 @@ diff -Nurp pristine-linux-2.6.12/.config linux-2.6.12-xen/.config
 +CONFIG_X86_MPPARSE=y
 diff -Nurp pristine-linux-2.6.12/.config.cmd linux-2.6.12-xen/.config.cmd
 --- pristine-linux-2.6.12/.config.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/.config.cmd	2006-02-17 00:45:49.957687592 +0100
++++ linux-2.6.12-xen/.config.cmd	2006-02-25 00:12:57.492418667 +0100
 @@ -0,0 +1,191 @@
 +deps_config := \
 +	lib/Kconfig.debug \
@@ -61199,12 +61202,12 @@ diff -Nurp pristine-linux-2.6.12/.config.cmd linux-2.6.12-xen/.config.cmd
 +$(deps_config):
 diff -Nurp pristine-linux-2.6.12/.config.old linux-2.6.12-xen/.config.old
 --- pristine-linux-2.6.12/.config.old	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/.config.old	2006-02-17 00:45:48.444918094 +0100
++++ linux-2.6.12-xen/.config.old	2006-02-25 00:12:55.054786131 +0100
 @@ -0,0 +1,2966 @@
 +#
 +# Automatically generated make config: don't edit
 +# Linux kernel version: 2.6.12.6-xen
-+# Fri Feb 17 00:45:48 2006
++# Sat Feb 25 00:12:55 2006
 +#
 +CONFIG_XEN=y
 +CONFIG_ARCH_XEN=y
@@ -64169,7 +64172,7 @@ diff -Nurp pristine-linux-2.6.12/.config.old linux-2.6.12-xen/.config.old
 +CONFIG_X86_MPPARSE=y
 diff -Nurp pristine-linux-2.6.12/drivers/acpi/pci_irq.c linux-2.6.12-xen/drivers/acpi/pci_irq.c
 --- pristine-linux-2.6.12/drivers/acpi/pci_irq.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/acpi/pci_irq.c	2006-02-17 00:45:18.205525707 +0100
++++ linux-2.6.12-xen/drivers/acpi/pci_irq.c	2006-02-25 00:12:30.028558490 +0100
 @@ -433,8 +433,9 @@ acpi_pci_irq_enable (
  		printk(KERN_WARNING PREFIX "PCI Interrupt %s[%c]: no GSI",
  			pci_name(dev), ('A' + pin));
@@ -64244,7 +64247,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/char/mem.c linux-2.6.12-xen/drivers/cha
  	.llseek		= memory_lseek,
 diff -Nurp pristine-linux-2.6.12/drivers/char/rocket.c linux-2.6.12-xen/drivers/char/rocket.c
 --- pristine-linux-2.6.12/drivers/char/rocket.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/char/rocket.c	2006-02-17 00:45:18.207525403 +0100
++++ linux-2.6.12-xen/drivers/char/rocket.c	2006-02-25 00:12:30.030558189 +0100
 @@ -277,7 +277,7 @@ static void rp_do_receive(struct r_port 
  		ToRecv = space;
  
@@ -66474,7 +66477,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/char/tty_io.c linux-2.6.12-xen/drivers/
  }
 diff -Nurp pristine-linux-2.6.12/drivers/char/tty_ioctl.c linux-2.6.12-xen/drivers/char/tty_ioctl.c
 --- pristine-linux-2.6.12/drivers/char/tty_ioctl.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/char/tty_ioctl.c	2006-02-17 00:45:18.210524946 +0100
++++ linux-2.6.12-xen/drivers/char/tty_ioctl.c	2006-02-25 00:12:30.032557887 +0100
 @@ -476,11 +476,11 @@ int n_tty_ioctl(struct tty_struct * tty,
  			ld = tty_ldisc_ref(tty);
  			switch (arg) {
@@ -66502,7 +66505,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/Makefile linux-2.6.12-xen/drivers/Makef
  obj-$(CONFIG_SCSI)		+= scsi/
 diff -Nurp pristine-linux-2.6.12/drivers/media/video/cx88/cx88-video.c linux-2.6.12-xen/drivers/media/video/cx88/cx88-video.c
 --- pristine-linux-2.6.12/drivers/media/video/cx88/cx88-video.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/media/video/cx88/cx88-video.c	2006-02-17 00:45:18.211524793 +0100
++++ linux-2.6.12-xen/drivers/media/video/cx88/cx88-video.c	2006-02-25 00:12:30.034557586 +0100
 @@ -261,7 +261,7 @@ static struct cx88_ctrl cx8800_ctls[] = 
  			.default_value = 0,
  			.type          = V4L2_CTRL_TYPE_INTEGER,
@@ -66514,7 +66517,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/media/video/cx88/cx88-video.c linux-2.6
  		.shift                 = 0,
 diff -Nurp pristine-linux-2.6.12/drivers/net/e1000/e1000_main.c linux-2.6.12-xen/drivers/net/e1000/e1000_main.c
 --- pristine-linux-2.6.12/drivers/net/e1000/e1000_main.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/net/e1000/e1000_main.c	2006-02-17 00:45:18.212524641 +0100
++++ linux-2.6.12-xen/drivers/net/e1000/e1000_main.c	2006-02-25 00:12:30.035557435 +0100
 @@ -2307,6 +2307,7 @@ e1000_xmit_frame(struct sk_buff *skb, st
  	tso = e1000_tso(adapter, skb);
  	if (tso < 0) {
@@ -66525,7 +66528,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/net/e1000/e1000_main.c linux-2.6.12-xen
  
 diff -Nurp pristine-linux-2.6.12/drivers/net/hamradio/Kconfig linux-2.6.12-xen/drivers/net/hamradio/Kconfig
 --- pristine-linux-2.6.12/drivers/net/hamradio/Kconfig	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/net/hamradio/Kconfig	2006-02-17 00:45:18.213524488 +0100
++++ linux-2.6.12-xen/drivers/net/hamradio/Kconfig	2006-02-25 00:12:30.255524280 +0100
 @@ -17,7 +17,7 @@ config MKISS
  
  config 6PACK
@@ -66537,7 +66540,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/net/hamradio/Kconfig linux-2.6.12-xen/d
  	  PC and your TNC (the Terminal Node Controller acts as a kind of
 diff -Nurp pristine-linux-2.6.12/drivers/net/shaper.c linux-2.6.12-xen/drivers/net/shaper.c
 --- pristine-linux-2.6.12/drivers/net/shaper.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/net/shaper.c	2006-02-17 00:45:18.214524336 +0100
++++ linux-2.6.12-xen/drivers/net/shaper.c	2006-02-25 00:12:31.528332432 +0100
 @@ -135,10 +135,8 @@ static int shaper_start_xmit(struct sk_b
  {
  	struct shaper *shaper = dev->priv;
@@ -66623,7 +66626,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/net/shaper.c linux-2.6.12-xen/drivers/n
  /*
 diff -Nurp pristine-linux-2.6.12/drivers/pci/pci-driver.c linux-2.6.12-xen/drivers/pci/pci-driver.c
 --- pristine-linux-2.6.12/drivers/pci/pci-driver.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/pci/pci-driver.c	2006-02-17 00:45:18.214524336 +0100
++++ linux-2.6.12-xen/drivers/pci/pci-driver.c	2006-02-25 00:12:32.328211868 +0100
 @@ -396,7 +396,7 @@ int pci_register_driver(struct pci_drive
  	/* FIXME, once all of the existing PCI drivers have been fixed to set
  	 * the pci shutdown function, this test can go away. */
@@ -66635,7 +66638,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/pci/pci-driver.c linux-2.6.12-xen/drive
  	pci_init_dynids(&drv->dynids);
 diff -Nurp pristine-linux-2.6.12/drivers/scsi/qla2xxx/qla_init.c linux-2.6.12-xen/drivers/scsi/qla2xxx/qla_init.c
 --- pristine-linux-2.6.12/drivers/scsi/qla2xxx/qla_init.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/scsi/qla2xxx/qla_init.c	2006-02-17 00:45:18.216524031 +0100
++++ linux-2.6.12-xen/drivers/scsi/qla2xxx/qla_init.c	2006-02-25 00:12:33.372054530 +0100
 @@ -1914,9 +1914,11 @@ qla2x00_reg_remote_port(scsi_qla_host_t 
  		rport_ids.roles |= FC_RPORT_ROLE_FCP_TARGET;
  
@@ -66651,7 +66654,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/scsi/qla2xxx/qla_init.c linux-2.6.12-xe
  		fcport->os_target_id = rport->scsi_target_id;
 diff -Nurp pristine-linux-2.6.12/drivers/scsi/qla2xxx/qla_os.c linux-2.6.12-xen/drivers/scsi/qla2xxx/qla_os.c
 --- pristine-linux-2.6.12/drivers/scsi/qla2xxx/qla_os.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/scsi/qla2xxx/qla_os.c	2006-02-17 00:45:18.217523879 +0100
++++ linux-2.6.12-xen/drivers/scsi/qla2xxx/qla_os.c	2006-02-25 00:12:33.374054228 +0100
 @@ -1150,7 +1150,7 @@ iospace_error_exit:
   */
  int qla2x00_probe_one(struct pci_dev *pdev, struct qla_board_info *brd_info)
@@ -66790,7 +66793,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/scsi/qla2xxx/qla_os.c linux-2.6.12-xen/
  
 diff -Nurp pristine-linux-2.6.12/drivers/scsi/sg.c linux-2.6.12-xen/drivers/scsi/sg.c
 --- pristine-linux-2.6.12/drivers/scsi/sg.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/scsi/sg.c	2006-02-17 00:45:18.219523574 +0100
++++ linux-2.6.12-xen/drivers/scsi/sg.c	2006-02-25 00:12:33.375054078 +0100
 @@ -2969,23 +2969,22 @@ static void * dev_seq_start(struct seq_f
  {
  	struct sg_proc_deviter * it = kmalloc(sizeof(*it), GFP_KERNEL);
@@ -66833,7 +66836,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/scsi/sg.c linux-2.6.12-xen/drivers/scsi
  static int sg_proc_open_dev(struct inode *inode, struct file *file)
 diff -Nurp pristine-linux-2.6.12/drivers/usb/net/usbnet.c linux-2.6.12-xen/drivers/usb/net/usbnet.c
 --- pristine-linux-2.6.12/drivers/usb/net/usbnet.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/drivers/usb/net/usbnet.c	2006-02-17 00:45:18.221523270 +0100
++++ linux-2.6.12-xen/drivers/usb/net/usbnet.c	2006-02-25 00:12:33.377053776 +0100
 @@ -1922,7 +1922,7 @@ static int genelink_rx_fixup (struct usb
  
  			// copy the packet data to the new skb
@@ -81980,7 +81983,7 @@ diff -Nurp pristine-linux-2.6.12/drivers/xen/xenbus/xenbus_xs.c linux-2.6.12-xen
 + */
 diff -Nurp pristine-linux-2.6.12/fs/bio.c linux-2.6.12-xen/fs/bio.c
 --- pristine-linux-2.6.12/fs/bio.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/fs/bio.c	2006-02-17 00:45:18.222523117 +0100
++++ linux-2.6.12-xen/fs/bio.c	2006-02-25 00:12:33.378053625 +0100
 @@ -261,6 +261,7 @@ inline void __bio_clone(struct bio *bio,
  	 */
  	bio->bi_vcnt = bio_src->bi_vcnt;
@@ -81991,7 +81994,7 @@ diff -Nurp pristine-linux-2.6.12/fs/bio.c linux-2.6.12-xen/fs/bio.c
  }
 diff -Nurp pristine-linux-2.6.12/fs/char_dev.c linux-2.6.12-xen/fs/char_dev.c
 --- pristine-linux-2.6.12/fs/char_dev.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/fs/char_dev.c	2006-02-17 00:45:18.223522965 +0100
++++ linux-2.6.12-xen/fs/char_dev.c	2006-02-25 00:12:33.764995302 +0100
 @@ -139,7 +139,7 @@ __unregister_chrdev_region(unsigned majo
  	struct char_device_struct *cd = NULL, **cp;
  	int i = major_to_index(major);
@@ -82003,7 +82006,7 @@ diff -Nurp pristine-linux-2.6.12/fs/char_dev.c linux-2.6.12-xen/fs/char_dev.c
  		    (*cp)->baseminor == baseminor &&
 diff -Nurp pristine-linux-2.6.12/fs/exec.c linux-2.6.12-xen/fs/exec.c
 --- pristine-linux-2.6.12/fs/exec.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/fs/exec.c	2006-02-17 00:45:18.224522813 +0100
++++ linux-2.6.12-xen/fs/exec.c	2006-02-25 00:12:33.765995151 +0100
 @@ -649,6 +649,7 @@ static inline int de_thread(struct task_
  	}
  	sig->group_exit_task = NULL;
@@ -82014,7 +82017,7 @@ diff -Nurp pristine-linux-2.6.12/fs/exec.c linux-2.6.12-xen/fs/exec.c
  	/*
 diff -Nurp pristine-linux-2.6.12/fs/isofs/compress.c linux-2.6.12-xen/fs/isofs/compress.c
 --- pristine-linux-2.6.12/fs/isofs/compress.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/fs/isofs/compress.c	2006-02-17 00:45:18.224522813 +0100
++++ linux-2.6.12-xen/fs/isofs/compress.c	2006-02-25 00:12:33.765995151 +0100
 @@ -129,8 +129,14 @@ static int zisofs_readpage(struct file *
  	cend = le32_to_cpu(*(__le32 *)(bh->b_data + (blockendptr & bufmask)));
  	brelse(bh);
@@ -82032,7 +82035,7 @@ diff -Nurp pristine-linux-2.6.12/fs/isofs/compress.c linux-2.6.12-xen/fs/isofs/c
  	   release the pages.  If the pages are NULL the decompressed data
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/atomic.h linux-2.6.12-xen/include/asm-i386/atomic.h
 --- pristine-linux-2.6.12/include/asm-i386/atomic.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/atomic.h	2006-02-17 00:45:18.275515043 +0100
++++ linux-2.6.12-xen/include/asm-i386/atomic.h	2006-02-25 00:12:33.832985054 +0100
 @@ -4,18 +4,13 @@
  #include <linux/config.h>
  #include <linux/compiler.h>
@@ -82055,7 +82058,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/atomic.h linux-2.6.12-xen/incl
   * on us. We need to use _exactly_ the address the user gave us,
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/bitops.h linux-2.6.12-xen/include/asm-i386/bitops.h
 --- pristine-linux-2.6.12/include/asm-i386/bitops.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/bitops.h	2006-02-17 00:45:18.275515043 +0100
++++ linux-2.6.12-xen/include/asm-i386/bitops.h	2006-02-25 00:12:33.832985054 +0100
 @@ -7,6 +7,7 @@
  
  #include <linux/config.h>
@@ -82133,7 +82136,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/bitops.h linux-2.6.12-xen/incl
  		:"Ir" (nr) : "memory");
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/cpu.h linux-2.6.12-xen/include/asm-i386/cpu.h
 --- pristine-linux-2.6.12/include/asm-i386/cpu.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/cpu.h	2006-02-17 00:45:18.257517785 +0100
++++ linux-2.6.12-xen/include/asm-i386/cpu.h	2006-02-25 00:12:33.814987766 +0100
 @@ -5,6 +5,7 @@
  #include <linux/cpu.h>
  #include <linux/topology.h>
@@ -82150,7 +82153,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/cpu.h linux-2.6.12-xen/include
  #endif /* _ASM_I386_CPU_H_ */
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/irq.h linux-2.6.12-xen/include/asm-i386/irq.h
 --- pristine-linux-2.6.12/include/asm-i386/irq.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/irq.h	2006-02-17 00:45:18.258517633 +0100
++++ linux-2.6.12-xen/include/asm-i386/irq.h	2006-02-25 00:12:33.814987766 +0100
 @@ -38,4 +38,8 @@ extern void release_vm86_irqs(struct tas
  extern int irqbalance_disable(char *str);
  #endif
@@ -82162,7 +82165,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/irq.h linux-2.6.12-xen/include
  #endif /* _ASM_IRQ_H */
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/mach-default/mach_traps.h linux-2.6.12-xen/include/asm-i386/mach-default/mach_traps.h
 --- pristine-linux-2.6.12/include/asm-i386/mach-default/mach_traps.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/mach-default/mach_traps.h	2006-02-17 00:45:18.261517176 +0100
++++ linux-2.6.12-xen/include/asm-i386/mach-default/mach_traps.h	2006-02-25 00:12:33.819987013 +0100
 @@ -15,6 +15,18 @@ static inline void clear_mem_error(unsig
  	outb(reason, 0x61);
  }
@@ -82184,7 +82187,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/mach-default/mach_traps.h linu
  	return inb(0x61);
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/pgtable-2level-defs.h linux-2.6.12-xen/include/asm-i386/pgtable-2level-defs.h
 --- pristine-linux-2.6.12/include/asm-i386/pgtable-2level-defs.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/pgtable-2level-defs.h	2006-02-17 00:45:18.267516262 +0100
++++ linux-2.6.12-xen/include/asm-i386/pgtable-2level-defs.h	2006-02-25 00:12:33.824986259 +0100
 @@ -1,6 +1,8 @@
  #ifndef _I386_PGTABLE_2LEVEL_DEFS_H
  #define _I386_PGTABLE_2LEVEL_DEFS_H
@@ -82196,7 +82199,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/pgtable-2level-defs.h linux-2.
   */
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/pgtable-3level-defs.h linux-2.6.12-xen/include/asm-i386/pgtable-3level-defs.h
 --- pristine-linux-2.6.12/include/asm-i386/pgtable-3level-defs.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/pgtable-3level-defs.h	2006-02-17 00:45:18.267516262 +0100
++++ linux-2.6.12-xen/include/asm-i386/pgtable-3level-defs.h	2006-02-25 00:12:33.825986109 +0100
 @@ -1,6 +1,8 @@
  #ifndef _I386_PGTABLE_3LEVEL_DEFS_H
  #define _I386_PGTABLE_3LEVEL_DEFS_H
@@ -82208,7 +82211,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/pgtable-3level-defs.h linux-2.
   */
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/rwsem.h linux-2.6.12-xen/include/asm-i386/rwsem.h
 --- pristine-linux-2.6.12/include/asm-i386/rwsem.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/rwsem.h	2006-02-17 00:45:18.276514891 +0100
++++ linux-2.6.12-xen/include/asm-i386/rwsem.h	2006-02-25 00:12:33.833984903 +0100
 @@ -40,6 +40,7 @@
  
  #include <linux/list.h>
@@ -82291,7 +82294,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/rwsem.h linux-2.6.12-xen/inclu
  		: "memory");
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/smp_alt.h linux-2.6.12-xen/include/asm-i386/smp_alt.h
 --- pristine-linux-2.6.12/include/asm-i386/smp_alt.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/include/asm-i386/smp_alt.h	2006-02-17 00:45:18.276514891 +0100
++++ linux-2.6.12-xen/include/asm-i386/smp_alt.h	2006-02-25 00:12:33.833984903 +0100
 @@ -0,0 +1,32 @@
 +#ifndef __ASM_SMP_ALT_H__
 +#define __ASM_SMP_ALT_H__
@@ -82327,7 +82330,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/smp_alt.h linux-2.6.12-xen/inc
 +#endif /* __ASM_SMP_ALT_H__ */
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/smp.h linux-2.6.12-xen/include/asm-i386/smp.h
 --- pristine-linux-2.6.12/include/asm-i386/smp.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/smp.h	2006-02-17 00:45:18.258517633 +0100
++++ linux-2.6.12-xen/include/asm-i386/smp.h	2006-02-25 00:12:33.814987766 +0100
 @@ -83,6 +83,9 @@ static __inline int logical_smp_processo
  }
  
@@ -82340,7 +82343,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/smp.h linux-2.6.12-xen/include
  #define NO_PROC_ID		0xFF		/* No processor magic marker */
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/spinlock.h linux-2.6.12-xen/include/asm-i386/spinlock.h
 --- pristine-linux-2.6.12/include/asm-i386/spinlock.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/spinlock.h	2006-02-17 00:45:18.277514738 +0100
++++ linux-2.6.12-xen/include/asm-i386/spinlock.h	2006-02-25 00:12:33.834984752 +0100
 @@ -6,6 +6,7 @@
  #include <asm/page.h>
  #include <linux/config.h>
@@ -82422,7 +82425,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/spinlock.h linux-2.6.12-xen/in
  {
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/string.h linux-2.6.12-xen/include/asm-i386/string.h
 --- pristine-linux-2.6.12/include/asm-i386/string.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/string.h	2006-02-17 00:45:18.225522660 +0100
++++ linux-2.6.12-xen/include/asm-i386/string.h	2006-02-25 00:12:33.766995000 +0100
 @@ -116,7 +116,8 @@ __asm__ __volatile__(
  	"orb $1,%%al\n"
  	"3:"
@@ -82520,7 +82523,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-i386/string.h linux-2.6.12-xen/incl
  
 diff -Nurp pristine-linux-2.6.12/include/asm-i386/system.h linux-2.6.12-xen/include/asm-i386/system.h
 --- pristine-linux-2.6.12/include/asm-i386/system.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-i386/system.h	2006-02-17 00:45:18.277514738 +0100
++++ linux-2.6.12-xen/include/asm-i386/system.h	2006-02-25 00:12:33.834984752 +0100
 @@ -5,7 +5,7 @@
  #include <linux/kernel.h>
  #include <asm/segment.h>
@@ -83313,7 +83316,7 @@ diff -Nurp pristine-linux-2.6.12/include/asm-ia64/xen/privop.h linux-2.6.12-xen/
 +#endif /* _ASM_IA64_XEN_PRIVOP_H */
 diff -Nurp pristine-linux-2.6.12/include/asm-x86_64/smp.h linux-2.6.12-xen/include/asm-x86_64/smp.h
 --- pristine-linux-2.6.12/include/asm-x86_64/smp.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/asm-x86_64/smp.h	2006-02-17 00:45:18.225522660 +0100
++++ linux-2.6.12-xen/include/asm-x86_64/smp.h	2006-02-25 00:12:33.766995000 +0100
 @@ -46,6 +46,8 @@ extern int pic_mode;
  extern int smp_num_siblings;
  extern void smp_flush_tlb(void);
@@ -100003,12 +100006,12 @@ diff -Nurp pristine-linux-2.6.12/include/asm-xen/xen-public/xen.h linux-2.6.12-x
 + */
 diff -Nurp pristine-linux-2.6.12/include/linux/autoconf.h linux-2.6.12-xen/include/linux/autoconf.h
 --- pristine-linux-2.6.12/include/linux/autoconf.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/include/linux/autoconf.h	2006-02-17 00:45:49.957687592 +0100
++++ linux-2.6.12-xen/include/linux/autoconf.h	2006-02-25 00:12:57.401432383 +0100
 @@ -0,0 +1,2967 @@
 +/*
 + * Automatically generated C config: don't edit
 + * Linux kernel version: 2.6.12.6-xen
-+ * Fri Feb 17 00:45:49 2006
++ * Sat Feb 25 00:12:55 2006
 + */
 +#define AUTOCONF_INCLUDED
 +#define CONFIG_XEN 1
@@ -103007,7 +103010,7 @@ diff -Nurp pristine-linux-2.6.12/include/linux/highmem.h linux-2.6.12-xen/includ
  {
 diff -Nurp pristine-linux-2.6.12/include/linux/if_shaper.h linux-2.6.12-xen/include/linux/if_shaper.h
 --- pristine-linux-2.6.12/include/linux/if_shaper.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/linux/if_shaper.h	2006-02-17 00:45:18.225522660 +0100
++++ linux-2.6.12-xen/include/linux/if_shaper.h	2006-02-25 00:12:33.767994850 +0100
 @@ -23,7 +23,7 @@ struct shaper
  	__u32 shapeclock;
  	unsigned long recovery;	/* Time we can next clock a packet out on
@@ -103019,7 +103022,7 @@ diff -Nurp pristine-linux-2.6.12/include/linux/if_shaper.h linux-2.6.12-xen/incl
  	int  (*hard_start_xmit) (struct sk_buff *skb,
 diff -Nurp pristine-linux-2.6.12/include/linux/init.h linux-2.6.12-xen/include/linux/init.h
 --- pristine-linux-2.6.12/include/linux/init.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/linux/init.h	2006-02-17 00:45:18.247519309 +0100
++++ linux-2.6.12-xen/include/linux/init.h	2006-02-25 00:12:33.788991685 +0100
 @@ -229,6 +229,18 @@ void __init parse_early_param(void);
  #define __devexitdata __exitdata
  #endif
@@ -103097,7 +103100,7 @@ diff -Nurp pristine-linux-2.6.12/include/linux/skbuff.h linux-2.6.12-xen/include
  	__u32			priority;
 diff -Nurp pristine-linux-2.6.12/include/linux/zlib.h linux-2.6.12-xen/include/linux/zlib.h
 --- pristine-linux-2.6.12/include/linux/zlib.h	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/include/linux/zlib.h	2006-02-17 00:45:18.227522356 +0100
++++ linux-2.6.12-xen/include/linux/zlib.h	2006-02-25 00:12:33.768994699 +0100
 @@ -506,6 +506,11 @@ extern int zlib_deflateReset (z_streamp 
     stream state was inconsistent (such as zalloc or state being NULL).
  */
@@ -103112,7 +103115,7 @@ diff -Nurp pristine-linux-2.6.12/include/linux/zlib.h linux-2.6.12-xen/include/l
       Dynamically update the compression level and compression strategy.  The
 diff -Nurp pristine-linux-2.6.12/kernel/cpu.c linux-2.6.12-xen/kernel/cpu.c
 --- pristine-linux-2.6.12/kernel/cpu.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/kernel/cpu.c	2006-02-17 00:45:18.259517480 +0100
++++ linux-2.6.12-xen/kernel/cpu.c	2006-02-25 00:12:33.815987616 +0100
 @@ -63,19 +63,15 @@ static int take_cpu_down(void *unused)
  {
  	int err;
@@ -103267,7 +103270,7 @@ diff -Nurp pristine-linux-2.6.12/kernel/irq/manage.c linux-2.6.12-xen/kernel/irq
  EXPORT_SYMBOL(free_irq);
 diff -Nurp pristine-linux-2.6.12/kernel/module.c linux-2.6.12-xen/kernel/module.c
 --- pristine-linux-2.6.12/kernel/module.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/kernel/module.c	2006-02-17 00:45:18.228522203 +0100
++++ linux-2.6.12-xen/kernel/module.c	2006-02-25 00:12:33.769994548 +0100
 @@ -249,13 +249,18 @@ static inline unsigned int block_size(in
  /* Created by linker magic */
  extern char __per_cpu_start[], __per_cpu_end[];
@@ -103311,7 +103314,7 @@ diff -Nurp pristine-linux-2.6.12/kernel/module.c linux-2.6.12-xen/kernel/module.
  			goto free_mod;
 diff -Nurp pristine-linux-2.6.12/kernel/rcupdate.c linux-2.6.12-xen/kernel/rcupdate.c
 --- pristine-linux-2.6.12/kernel/rcupdate.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/kernel/rcupdate.c	2006-02-17 00:45:18.269515957 +0100
++++ linux-2.6.12-xen/kernel/rcupdate.c	2006-02-25 00:12:33.826985958 +0100
 @@ -202,8 +202,11 @@ static void rcu_start_batch(struct rcu_c
   */
  static void cpu_quiet(int cpu, struct rcu_ctrlblk *rcp, struct rcu_state *rsp)
@@ -103327,7 +103330,7 @@ diff -Nurp pristine-linux-2.6.12/kernel/rcupdate.c linux-2.6.12-xen/kernel/rcupd
  		rcu_start_batch(rcp, rsp, 0);
 diff -Nurp pristine-linux-2.6.12/kernel/signal.c linux-2.6.12-xen/kernel/signal.c
 --- pristine-linux-2.6.12/kernel/signal.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/kernel/signal.c	2006-02-17 00:45:18.230521899 +0100
++++ linux-2.6.12-xen/kernel/signal.c	2006-02-25 00:12:33.771994247 +0100
 @@ -686,7 +686,7 @@ static void handle_stop_signal(int sig, 
  {
  	struct task_struct *t;
@@ -103339,7 +103342,7 @@ diff -Nurp pristine-linux-2.6.12/kernel/signal.c linux-2.6.12-xen/kernel/signal.
  		 */
 diff -Nurp pristine-linux-2.6.12/lib/inflate.c linux-2.6.12-xen/lib/inflate.c
 --- pristine-linux-2.6.12/lib/inflate.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/lib/inflate.c	2006-02-17 00:45:18.231521746 +0100
++++ linux-2.6.12-xen/lib/inflate.c	2006-02-25 00:12:33.772994096 +0100
 @@ -326,7 +326,7 @@ DEBG("huft1 ");
    {
      *t = (struct huft *)NULL;
@@ -103379,7 +103382,7 @@ diff -Nurp pristine-linux-2.6.12/lib/inflate.c linux-2.6.12-xen/lib/inflate.c
          z = 1 << j;             /* table entries for j-bit table */
 diff -Nurp pristine-linux-2.6.12/Makefile linux-2.6.12-xen/Makefile
 --- pristine-linux-2.6.12/Makefile	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/Makefile	2006-02-17 00:45:49.968685916 +0100
++++ linux-2.6.12-xen/Makefile	2006-02-25 00:12:57.503417009 +0100
 @@ -2,6 +2,7 @@ VERSION = 2
  PATCHLEVEL = 6
  SUBLEVEL = 12
@@ -103593,7 +103596,7 @@ diff -Nurp pristine-linux-2.6.12/mm/memory.c linux-2.6.12-xen/mm/memory.c
  	 * Re-check the pte - we dropped the lock
 diff -Nurp pristine-linux-2.6.12/mm/mempolicy.c linux-2.6.12-xen/mm/mempolicy.c
 --- pristine-linux-2.6.12/mm/mempolicy.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/mm/mempolicy.c	2006-02-17 00:45:18.233521442 +0100
++++ linux-2.6.12-xen/mm/mempolicy.c	2006-02-25 00:12:33.774993795 +0100
 @@ -409,7 +409,7 @@ asmlinkage long sys_set_mempolicy(int mo
  	struct mempolicy *new;
  	DECLARE_BITMAP(nodes, MAX_NUMNODES);
@@ -103642,7 +103645,7 @@ diff -Nurp pristine-linux-2.6.12/mm/page_alloc.c linux-2.6.12-xen/mm/page_alloc.
  	inc_page_state(pgfree);
 diff -Nurp pristine-linux-2.6.12/net/8021q/vlan.c linux-2.6.12-xen/net/8021q/vlan.c
 --- pristine-linux-2.6.12/net/8021q/vlan.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/8021q/vlan.c	2006-02-17 00:45:18.233521442 +0100
++++ linux-2.6.12-xen/net/8021q/vlan.c	2006-02-25 00:12:33.775993644 +0100
 @@ -578,6 +578,14 @@ static int vlan_device_event(struct noti
  			if (!vlandev)
  				continue;
@@ -103757,7 +103760,7 @@ diff -Nurp pristine-linux-2.6.12/net/core/skbuff.c linux-2.6.12-xen/net/core/skb
  	C(priority);
 diff -Nurp pristine-linux-2.6.12/net/ipv4/icmp.c linux-2.6.12-xen/net/ipv4/icmp.c
 --- pristine-linux-2.6.12/net/ipv4/icmp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/icmp.c	2006-02-17 00:45:18.234521289 +0100
++++ linux-2.6.12-xen/net/ipv4/icmp.c	2006-02-25 00:12:33.776993493 +0100
 @@ -349,12 +349,12 @@ static void icmp_push_reply(struct icmp_
  {
  	struct sk_buff *skb;
@@ -103779,7 +103782,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/icmp.c linux-2.6.12-xen/net/ipv4/icmp.
  		struct sk_buff *skb1;
 diff -Nurp pristine-linux-2.6.12/net/ipv4/ip_output.c linux-2.6.12-xen/net/ipv4/ip_output.c
 --- pristine-linux-2.6.12/net/ipv4/ip_output.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/ip_output.c	2006-02-17 00:45:18.235521137 +0100
++++ linux-2.6.12-xen/net/ipv4/ip_output.c	2006-02-25 00:12:33.777993342 +0100
 @@ -111,7 +111,6 @@ static int ip_dev_loopback_xmit(struct s
  #ifdef CONFIG_NETFILTER_DEBUG
  	nf_debug_ip_loopback_xmit(newskb);
@@ -103799,7 +103802,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/ip_output.c linux-2.6.12-xen/net/ipv4/
  
 diff -Nurp pristine-linux-2.6.12/net/ipv4/ip_sockglue.c linux-2.6.12-xen/net/ipv4/ip_sockglue.c
 --- pristine-linux-2.6.12/net/ipv4/ip_sockglue.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/ip_sockglue.c	2006-02-17 00:45:18.235521137 +0100
++++ linux-2.6.12-xen/net/ipv4/ip_sockglue.c	2006-02-25 00:12:33.777993342 +0100
 @@ -848,6 +848,9 @@ mc_msf_out:
   
  		case IP_IPSEC_POLICY:
@@ -103812,7 +103815,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/ip_sockglue.c linux-2.6.12-xen/net/ipv
  
 diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_core.c linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_core.c
 --- pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_core.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_core.c	2006-02-17 00:45:18.236520984 +0100
++++ linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_core.c	2006-02-25 00:12:33.778993192 +0100
 @@ -1124,6 +1124,9 @@ void ip_conntrack_cleanup(void)
  		schedule();
  		goto i_see_dead_people;
@@ -103825,7 +103828,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_core.c linux-2.
  	kmem_cache_destroy(ip_conntrack_expect_cachep);
 diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_proto_udp.c linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_proto_udp.c
 --- pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_proto_udp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_proto_udp.c	2006-02-17 00:45:18.263516871 +0100
++++ linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_proto_udp.c	2006-02-25 00:12:33.820986862 +0100
 @@ -120,6 +120,7 @@ static int udp_error(struct sk_buff *skb
  	 * and moreover root might send raw packets.
  	 * FIXME: Source route IP option packets --RR */
@@ -103836,7 +103839,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_proto_udp.c lin
  			      	 : skb_checksum(skb, iph->ihl*4, udplen, 0))) {
 diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_standalone.c linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_standalone.c
 --- pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_standalone.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_standalone.c	2006-02-17 00:45:18.237520832 +0100
++++ linux-2.6.12-xen/net/ipv4/netfilter/ip_conntrack_standalone.c	2006-02-25 00:12:33.779993041 +0100
 @@ -432,6 +432,13 @@ static unsigned int ip_conntrack_defrag(
  				        const struct net_device *out,
  				        int (*okfn)(struct sk_buff *))
@@ -103853,7 +103856,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_conntrack_standalone.c li
  		*pskb = ip_ct_gather_frags(*pskb,
 diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_tcp.c linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_tcp.c
 --- pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_tcp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_tcp.c	2006-02-17 00:45:18.264516719 +0100
++++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_tcp.c	2006-02-25 00:12:33.822986561 +0100
 @@ -40,7 +40,8 @@ tcp_unique_tuple(struct ip_conntrack_tup
  		 enum ip_nat_manip_type maniptype,
  		 const struct ip_conntrack *conntrack)
@@ -103884,7 +103887,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_tcp.c linux-2.6
  
 diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_tcp.c.orig linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_tcp.c.orig
 --- pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_tcp.c.orig	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_tcp.c.orig	2006-02-17 00:45:18.237520832 +0100
++++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_tcp.c.orig	2006-02-25 00:12:33.779993041 +0100
 @@ -0,0 +1,179 @@
 +/* (C) 1999-2001 Paul `Rusty' Russell
 + * (C) 2002-2004 Netfilter Core Team <coreteam@netfilter.org>
@@ -104067,7 +104070,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_tcp.c.orig linu
 +};
 diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_udp.c linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_udp.c
 --- pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_udp.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_udp.c	2006-02-17 00:45:18.264516719 +0100
++++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_udp.c	2006-02-25 00:12:33.821986711 +0100
 @@ -41,7 +41,8 @@ udp_unique_tuple(struct ip_conntrack_tup
  		 enum ip_nat_manip_type maniptype,
  		 const struct ip_conntrack *conntrack)
@@ -104102,7 +104105,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_udp.c linux-2.6
  }
 diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_udp.c.orig linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_udp.c.orig
 --- pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_udp.c.orig	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_udp.c.orig	2006-02-17 00:45:18.238520680 +0100
++++ linux-2.6.12-xen/net/ipv4/netfilter/ip_nat_proto_udp.c.orig	2006-02-25 00:12:33.780992890 +0100
 @@ -0,0 +1,166 @@
 +/* (C) 1999-2001 Paul `Rusty' Russell
 + * (C) 2002-2004 Netfilter Core Team <coreteam@netfilter.org>
@@ -104272,7 +104275,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv4/netfilter/ip_nat_proto_udp.c.orig linu
 +};
 diff -Nurp pristine-linux-2.6.12/net/ipv6/ip6_input.c linux-2.6.12-xen/net/ipv6/ip6_input.c
 --- pristine-linux-2.6.12/net/ipv6/ip6_input.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv6/ip6_input.c	2006-02-17 00:45:18.238520680 +0100
++++ linux-2.6.12-xen/net/ipv6/ip6_input.c	2006-02-25 00:12:33.780992890 +0100
 @@ -198,12 +198,13 @@ resubmit:
  		if (!raw_sk) {
  			if (xfrm6_policy_check(NULL, XFRM_POLICY_IN, skb)) {
@@ -104293,7 +104296,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv6/ip6_input.c linux-2.6.12-xen/net/ipv6/
  	return 0;
 diff -Nurp pristine-linux-2.6.12/net/ipv6/ipv6_sockglue.c linux-2.6.12-xen/net/ipv6/ipv6_sockglue.c
 --- pristine-linux-2.6.12/net/ipv6/ipv6_sockglue.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv6/ipv6_sockglue.c	2006-02-17 00:45:18.239520527 +0100
++++ linux-2.6.12-xen/net/ipv6/ipv6_sockglue.c	2006-02-25 00:12:33.781992740 +0100
 @@ -503,6 +503,9 @@ done:
  		break;
  	case IPV6_IPSEC_POLICY:
@@ -104306,7 +104309,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv6/ipv6_sockglue.c linux-2.6.12-xen/net/i
  
 diff -Nurp pristine-linux-2.6.12/net/ipv6/netfilter/ip6_queue.c linux-2.6.12-xen/net/ipv6/netfilter/ip6_queue.c
 --- pristine-linux-2.6.12/net/ipv6/netfilter/ip6_queue.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/ipv6/netfilter/ip6_queue.c	2006-02-17 00:45:18.239520527 +0100
++++ linux-2.6.12-xen/net/ipv6/netfilter/ip6_queue.c	2006-02-25 00:12:33.781992740 +0100
 @@ -76,7 +76,9 @@ static DECLARE_MUTEX(ipqnl_sem);
  static void
  ipq_issue_verdict(struct ipq_queue_entry *entry, int verdict)
@@ -104319,7 +104322,7 @@ diff -Nurp pristine-linux-2.6.12/net/ipv6/netfilter/ip6_queue.c linux-2.6.12-xen
  
 diff -Nurp pristine-linux-2.6.12/net/netlink/af_netlink.c linux-2.6.12-xen/net/netlink/af_netlink.c
 --- pristine-linux-2.6.12/net/netlink/af_netlink.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/netlink/af_netlink.c	2006-02-17 00:45:18.241520223 +0100
++++ linux-2.6.12-xen/net/netlink/af_netlink.c	2006-02-25 00:12:33.782992589 +0100
 @@ -315,8 +315,8 @@ err:
  static void netlink_remove(struct sock *sk)
  {
@@ -104347,7 +104350,7 @@ diff -Nurp pristine-linux-2.6.12/net/netlink/af_netlink.c linux-2.6.12-xen/net/n
  static inline int netlink_capable(struct socket *sock, unsigned int flag) 
 diff -Nurp pristine-linux-2.6.12/net/packet/af_packet.c linux-2.6.12-xen/net/packet/af_packet.c
 --- pristine-linux-2.6.12/net/packet/af_packet.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/packet/af_packet.c	2006-02-17 00:45:18.243519918 +0100
++++ linux-2.6.12-xen/net/packet/af_packet.c	2006-02-25 00:12:33.783992438 +0100
 @@ -274,6 +274,9 @@ static int packet_rcv_spkt(struct sk_buf
  	dst_release(skb->dst);
  	skb->dst = NULL;
@@ -104370,7 +104373,7 @@ diff -Nurp pristine-linux-2.6.12/net/packet/af_packet.c linux-2.6.12-xen/net/pac
  	__skb_queue_tail(&sk->sk_receive_queue, skb);
 diff -Nurp pristine-linux-2.6.12/net/xfrm/xfrm_user.c linux-2.6.12-xen/net/xfrm/xfrm_user.c
 --- pristine-linux-2.6.12/net/xfrm/xfrm_user.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/net/xfrm/xfrm_user.c	2006-02-17 00:45:18.243519918 +0100
++++ linux-2.6.12-xen/net/xfrm/xfrm_user.c	2006-02-25 00:12:33.784992288 +0100
 @@ -1180,6 +1180,9 @@ static struct xfrm_policy *xfrm_compile_
  	if (nr > XFRM_MAX_DEPTH)
  		return NULL;
@@ -104384,7 +104387,7 @@ diff -Nurp pristine-linux-2.6.12/net/xfrm/xfrm_user.c linux-2.6.12-xen/net/xfrm/
 Binärdateien pristine-linux-2.6.12/scripts/basic/docproc and linux-2.6.12-xen/scripts/basic/docproc sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/basic/.docproc.cmd linux-2.6.12-xen/scripts/basic/.docproc.cmd
 --- pristine-linux-2.6.12/scripts/basic/.docproc.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/basic/.docproc.cmd	2006-02-17 00:45:40.478131999 +0100
++++ linux-2.6.12-xen/scripts/basic/.docproc.cmd	2006-02-25 00:12:50.113530992 +0100
 @@ -0,0 +1,68 @@
 +cmd_scripts/basic/docproc := gcc -Wp,-MD,scripts/basic/.docproc.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer        -o scripts/basic/docproc scripts/basic/docproc.c
 +
@@ -104457,7 +104460,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/basic/.docproc.cmd linux-2.6.12-xen/scr
 Binärdateien pristine-linux-2.6.12/scripts/basic/fixdep and linux-2.6.12-xen/scripts/basic/fixdep sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/basic/.fixdep.cmd linux-2.6.12-xen/scripts/basic/.fixdep.cmd
 --- pristine-linux-2.6.12/scripts/basic/.fixdep.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/basic/.fixdep.cmd	2006-02-17 00:45:39.266316644 +0100
++++ linux-2.6.12-xen/scripts/basic/.fixdep.cmd	2006-02-25 00:12:49.405637701 +0100
 @@ -0,0 +1,78 @@
 +cmd_scripts/basic/fixdep := gcc -Wp,-MD,scripts/basic/.fixdep.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer        -o scripts/basic/fixdep scripts/basic/fixdep.c
 +
@@ -104540,7 +104543,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/basic/.fixdep.cmd linux-2.6.12-xen/scri
 Binärdateien pristine-linux-2.6.12/scripts/basic/split-include and linux-2.6.12-xen/scripts/basic/split-include sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/basic/.split-include.cmd linux-2.6.12-xen/scripts/basic/.split-include.cmd
 --- pristine-linux-2.6.12/scripts/basic/.split-include.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/basic/.split-include.cmd	2006-02-17 00:45:39.731245802 +0100
++++ linux-2.6.12-xen/scripts/basic/.split-include.cmd	2006-02-25 00:12:49.723589773 +0100
 @@ -0,0 +1,58 @@
 +cmd_scripts/basic/split-include := gcc -Wp,-MD,scripts/basic/.split-include.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer        -o scripts/basic/split-include scripts/basic/split-include.c
 +
@@ -104603,13 +104606,13 @@ diff -Nurp pristine-linux-2.6.12/scripts/basic/.split-include.cmd linux-2.6.12-x
 Binärdateien pristine-linux-2.6.12/scripts/kconfig/conf and linux-2.6.12-xen/scripts/kconfig/conf sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.conf.cmd linux-2.6.12-xen/scripts/kconfig/.conf.cmd
 --- pristine-linux-2.6.12/scripts/kconfig/.conf.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/.conf.cmd	2006-02-17 00:45:47.505061300 +0100
++++ linux-2.6.12-xen/scripts/kconfig/.conf.cmd	2006-02-25 00:12:54.495870385 +0100
 @@ -0,0 +1 @@
 +cmd_scripts/kconfig/conf := gcc  -o scripts/kconfig/conf scripts/kconfig/conf.o scripts/kconfig/zconf.tab.o  
 Binärdateien pristine-linux-2.6.12/scripts/kconfig/conf.o and linux-2.6.12-xen/scripts/kconfig/conf.o sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.conf.o.cmd linux-2.6.12-xen/scripts/kconfig/.conf.o.cmd
 --- pristine-linux-2.6.12/scripts/kconfig/.conf.o.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/.conf.o.cmd	2006-02-17 00:45:41.273010882 +0100
++++ linux-2.6.12-xen/scripts/kconfig/.conf.o.cmd	2006-02-25 00:12:50.559463772 +0100
 @@ -0,0 +1,55 @@
 +cmd_scripts/kconfig/conf.o := gcc -Wp,-MD,scripts/kconfig/.conf.o.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer       -c -o scripts/kconfig/conf.o scripts/kconfig/conf.c
 +
@@ -104669,7 +104672,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.conf.o.cmd linux-2.6.12-xen/sc
 Binärdateien pristine-linux-2.6.12/scripts/kconfig/kxgettext.o and linux-2.6.12-xen/scripts/kconfig/kxgettext.o sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.kxgettext.o.cmd linux-2.6.12-xen/scripts/kconfig/.kxgettext.o.cmd
 --- pristine-linux-2.6.12/scripts/kconfig/.kxgettext.o.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/.kxgettext.o.cmd	2006-02-17 00:45:41.481979042 +0100
++++ linux-2.6.12-xen/scripts/kconfig/.kxgettext.o.cmd	2006-02-25 00:12:51.373341086 +0100
 @@ -0,0 +1,48 @@
 +cmd_scripts/kconfig/kxgettext.o := gcc -Wp,-MD,scripts/kconfig/.kxgettext.o.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer       -c -o scripts/kconfig/kxgettext.o scripts/kconfig/kxgettext.c
 +
@@ -104721,7 +104724,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.kxgettext.o.cmd linux-2.6.12-x
 +$(deps_scripts/kconfig/kxgettext.o):
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/lex.zconf.c linux-2.6.12-xen/scripts/kconfig/lex.zconf.c
 --- pristine-linux-2.6.12/scripts/kconfig/lex.zconf.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/lex.zconf.c	2006-02-17 00:45:43.400686686 +0100
++++ linux-2.6.12-xen/scripts/kconfig/lex.zconf.c	2006-02-25 00:12:52.353193381 +0100
 @@ -0,0 +1,3688 @@
 +
 +#line 3 "lex.zconf.c"
@@ -108414,7 +108417,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/kconfig/lex.zconf.c linux-2.6.12-xen/sc
 Binärdateien pristine-linux-2.6.12/scripts/kconfig/mconf.o and linux-2.6.12-xen/scripts/kconfig/mconf.o sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.mconf.o.cmd linux-2.6.12-xen/scripts/kconfig/.mconf.o.cmd
 --- pristine-linux-2.6.12/scripts/kconfig/.mconf.o.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/.mconf.o.cmd	2006-02-17 00:45:43.283704511 +0100
++++ linux-2.6.12-xen/scripts/kconfig/.mconf.o.cmd	2006-02-25 00:12:52.335196094 +0100
 @@ -0,0 +1,96 @@
 +cmd_scripts/kconfig/mconf.o := gcc -Wp,-MD,scripts/kconfig/.mconf.o.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer       -c -o scripts/kconfig/mconf.o scripts/kconfig/mconf.c
 +
@@ -108514,7 +108517,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.mconf.o.cmd linux-2.6.12-xen/s
 +$(deps_scripts/kconfig/mconf.o):
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/zconf.tab.c linux-2.6.12-xen/scripts/kconfig/zconf.tab.c
 --- pristine-linux-2.6.12/scripts/kconfig/zconf.tab.c	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/zconf.tab.c	2006-02-17 00:45:43.293702988 +0100
++++ linux-2.6.12-xen/scripts/kconfig/zconf.tab.c	2006-02-25 00:12:52.345194586 +0100
 @@ -0,0 +1,2130 @@
 +/* A Bison parser, made by GNU Bison 1.875a.  */
 +
@@ -110648,7 +110651,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/kconfig/zconf.tab.c linux-2.6.12-xen/sc
 +
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/zconf.tab.h linux-2.6.12-xen/scripts/kconfig/zconf.tab.h
 --- pristine-linux-2.6.12/scripts/kconfig/zconf.tab.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/zconf.tab.h	2006-02-17 00:45:40.615111127 +0100
++++ linux-2.6.12-xen/scripts/kconfig/zconf.tab.h	2006-02-25 00:12:50.150525416 +0100
 @@ -0,0 +1,125 @@
 +/* A Bison parser, made from zconf.y, by GNU bison 1.75.  */
 +
@@ -110778,7 +110781,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/kconfig/zconf.tab.h linux-2.6.12-xen/sc
 Binärdateien pristine-linux-2.6.12/scripts/kconfig/zconf.tab.o and linux-2.6.12-xen/scripts/kconfig/zconf.tab.o sind verschieden.
 diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.zconf.tab.o.cmd linux-2.6.12-xen/scripts/kconfig/.zconf.tab.o.cmd
 --- pristine-linux-2.6.12/scripts/kconfig/.zconf.tab.o.cmd	1970-01-01 01:00:00.000000000 +0100
-+++ linux-2.6.12-xen/scripts/kconfig/.zconf.tab.o.cmd	2006-02-17 00:45:47.324088875 +0100
++++ linux-2.6.12-xen/scripts/kconfig/.zconf.tab.o.cmd	2006-02-25 00:12:54.450877167 +0100
 @@ -0,0 +1,80 @@
 +cmd_scripts/kconfig/zconf.tab.o := gcc -Wp,-MD,scripts/kconfig/.zconf.tab.o.d -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer      -Iscripts/kconfig -c -o scripts/kconfig/zconf.tab.o scripts/kconfig/zconf.tab.c
 +
@@ -110862,7 +110865,7 @@ diff -Nurp pristine-linux-2.6.12/scripts/kconfig/.zconf.tab.o.cmd linux-2.6.12-x
 +$(deps_scripts/kconfig/zconf.tab.o):
 diff -Nurp pristine-linux-2.6.12/security/keys/keyring.c linux-2.6.12-xen/security/keys/keyring.c
 --- pristine-linux-2.6.12/security/keys/keyring.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/security/keys/keyring.c	2006-02-17 00:45:18.244519766 +0100
++++ linux-2.6.12-xen/security/keys/keyring.c	2006-02-25 00:12:33.785992137 +0100
 @@ -188,7 +188,11 @@ static void keyring_destroy(struct key *
  
  	if (keyring->description) {
@@ -110878,7 +110881,7 @@ diff -Nurp pristine-linux-2.6.12/security/keys/keyring.c linux-2.6.12-xen/securi
  
 diff -Nurp pristine-linux-2.6.12/security/keys/process_keys.c linux-2.6.12-xen/security/keys/process_keys.c
 --- pristine-linux-2.6.12/security/keys/process_keys.c	2005-06-17 21:48:29.000000000 +0200
-+++ linux-2.6.12-xen/security/keys/process_keys.c	2006-02-17 00:45:18.245519613 +0100
++++ linux-2.6.12-xen/security/keys/process_keys.c	2006-02-25 00:12:33.786991986 +0100
 @@ -641,7 +641,7 @@ long join_session_keyring(const char *na
  		keyring = keyring_alloc(name, tsk->uid, tsk->gid, 0, NULL);
  		if (IS_ERR(keyring)) {

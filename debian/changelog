@@ -24,11 +24,14 @@ xen (3.0.1+hg8744-0+1) unstable; urgency=low
      - Update copyright file
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
-     - Removed patch generation from kernel source in debian/rules
+     - Removed patch generation from kernel sources in debian/rules
      - added the static file debian/linux-2.6.12-xen.patch (which
        patches a vanilla 2.6.12 to 2.6.12.6-xen, but still with the
-       extraversion stripped off)
+       extraversion stripped off). use make-kpkg with "--arch xen" & 
+       "--append-to-version .6-xen" to add the extraversion again.
      - Changed debian/linux-patch-xen.kpatches
+     - removed useless build-dependencies: libncurses5-dev, wget.
+     - changed xendomains config path to /etc/default.
 
  -- Guido Trotter <ultrotter@debian.org>  Fri, 24 Feb 2006 18:09:01 +0100
 

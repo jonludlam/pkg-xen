@@ -25,6 +25,7 @@ Section: misc
 Architecture: i386 amd64
 Depends: ${shlibs:Depends}
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
+Recommends: grub
 Description: The Xen Hypervisor
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
@@ -43,6 +44,7 @@ Section: misc
 Architecture: i386
 Depends: ${shlibs:Depends}
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
+Recommends: grub
 Description: The Xen Hypervisor (pae enabled version)
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain

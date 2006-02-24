@@ -48,7 +48,12 @@ Xen for Debian
    Domain 0 (the value in the kernel field gets used, the one in the module
    field can be larger, just in case you want to increase the amount, without
    rebooting, later) and you have to supply your kernel path and root device in
-   the module line. 
+   the module line.
+
+   NEW: With xen 3 you can also let xen handle the amount of memory that dom0 can
+   use. For that just remove the "dom0_mem=" and "mem=" option from the grub
+   example shown above. Xen will balloon out memory to new domU's up to the minimal
+   memory limit configured for dom0 in /etc/xen/xend-config.sxp.
 
    We will provide a "roll your own xen kernel" manual and example config files
    later on. We also hope to be able to provide complete Xen kernels, sooner or
@@ -59,4 +64,4 @@ Xen for Debian
 Kindly yours,
 
 Guido Trotter, for the Debian Xen Team.
-
+(with a litte help from Ralph Passgang)
