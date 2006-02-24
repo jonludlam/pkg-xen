@@ -18,8 +18,7 @@ Copyright:
 
    You should have received a copy of the GNU General Public License
    along with this package; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
-   02111-1307, USA.
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
 
 This is the header of Xen 3.0 upstream COPYING file which clarifies a bit how
 the licence is meant to be applied. The file continues with the complete text
