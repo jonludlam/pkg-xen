@@ -1,4 +1,4 @@
-xen (3.0.1+hg8743-0+1) unstable; urgency=low
+xen (3.0.1+hg8744-0+1) unstable; urgency=low
 
   * The "preserve our homes" release
   * Now cooperatively maintained by the Debian Xen Team
@@ -30,7 +30,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
        extraversion stripped off)
      - Changed debian/linux-patch-xen.kpatches
 
- -- Guido Trotter <ultrotter@debian.org>  Fri, 24 Feb 2006 07:37:38 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Fri, 24 Feb 2006 18:09:01 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 
