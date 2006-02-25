@@ -44,8 +44,9 @@ Xen for Debian
    module          /boot/xen-linux-2.6.12.6xeno003 root=/dev/sda1 ro console=tty0
    boot
    
-   Of course you have to supply your kernel path and root device in the module
-   line for this to work when you reboot.
+   Of course you have this example supplying your own kernel path and root
+   device in the module line in order to have a working Xen system after a
+   reboot.
 
    We will provide a "roll your own xen kernel" manual and example config files
    later on. We also hope to be able to provide complete Xen kernels, sooner or
