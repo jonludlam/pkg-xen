@@ -8,7 +8,7 @@ if [ ! -x $HG ]; then
 	exit 1
 fi
 
-if [ ! \( -d $HGDIR -a -d $HGDIR/.hg \) ]; then
+if [ ! \( -d "$HGDIR" -a -d "$HGDIR/.hg" \) ]; then
 	echo "Usage: $0 <xen-hg-dir>"
 	exit 1
 fi
@@ -47,7 +47,7 @@ cp -R $HGDIR/* $DESTDIR/ # This skips everything starting with a ., which is wha
 
 echo "Creating orig file $DESTTAR..."
 
-tar -zc $DESTDIR -f $DESTTAR || exit 1;
+tar zcf $DESTTAR $DESTDIR || exit 1;
 
 echo "DONE"
 echo "Now please svn export your debian directory in $DESTDIR and check that the changelog version matches"
