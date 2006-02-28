@@ -102,11 +102,3 @@ Description: python wrapper around libxc, the control library for XEN
  to the low-level system calls.  It also provides some higher-level config
  file parsing.
 
-Package: linux-patch-xen
-Section: misc
-Architecture: i386 amd64
-Depends: ${kpatch:Depends}
-Conflicts: xen-docs (<= 1.2)
-Description: patch to linux for the XEN sub-arch
- This kernel patch modifies linux, so that it can run inside XEN, a
- Virtual Machine Monitor.

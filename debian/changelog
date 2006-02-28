@@ -22,6 +22,7 @@ xen (3.0.1+hg8746-0+1) unstable; urgency=low
      - Make bugtool.py executable
      - Create NEWS.Debian file with important upgrade notices
      - Update copyright file
+     - Remove the linux-patch-xen package
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
      - Removed patch generation from kernel sources in debian/rules
