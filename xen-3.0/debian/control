@@ -1,6 +1,6 @@
 Source: xen
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
-Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Section: misc
 Priority: extra
 Standards-Version: 3.6.2.2
@@ -20,7 +20,7 @@ Description: a Virtual Machine Monitor like VMWare or plex86
  on the same hardware with very low performance overhead --- much lower
  than commercial offerings for the same x86 platform.
 
-Package: xen-hypervisor
+Package: xen-hypervisor-3.0
 Section: misc
 Architecture: i386 amd64
 Depends: ${shlibs:Depends}
@@ -39,11 +39,12 @@ Description: The Xen Hypervisor
  If you have an i386 system with more than 4GB of memory you should choose the
  xen-hypervisor-pae package
 
-Package: xen-hypervisor-pae
+Package: xen-hypervisor-3.0-i386-pae
 Section: misc
 Architecture: i386
 Depends: ${shlibs:Depends}
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
+Provides: xen-hypervisor-3.0
 Recommends: grub
 Description: The Xen Hypervisor (pae enabled version)
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
@@ -59,10 +60,10 @@ Description: The Xen Hypervisor (pae enabled version)
  memory.
 
 
-Package: xen-utils
+Package: xen-utils-3.0
 Section: misc
 Architecture: i386 amd64
-Depends: xen-hypervisor | xen-hypervisor-pae, python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
+Depends: xen-hypervisor-3.0,  python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
 Recommends: bridge-utils
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
