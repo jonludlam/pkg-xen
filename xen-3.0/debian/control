@@ -25,6 +25,7 @@ Section: misc
 Architecture: i386 amd64
 Depends: ${shlibs:Depends}
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
+Provides: xen-hypervisor
 Recommends: grub
 Description: The Xen Hypervisor
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
@@ -44,7 +45,7 @@ Section: misc
 Architecture: i386
 Depends: ${shlibs:Depends}
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
-Provides: xen-hypervisor-3.0
+Provides: xen-hypervisor-3.0, xen-hypervisor
 Recommends: grub
 Description: The Xen Hypervisor (pae enabled version)
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
@@ -65,6 +66,8 @@ Section: misc
 Architecture: i386 amd64
 Depends: xen-hypervisor-3.0,  python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
 Recommends: bridge-utils
+Provides: xen-utils
+Conflicts: udev (< 0.059)
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.

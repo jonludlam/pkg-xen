@@ -27,13 +27,16 @@ xen (3.0.1+hg8746-0+1) unstable; urgency=low
   * Ralph Passgang <ralph@debianbase.de>
      - Added changes from 3.0.1-0tha3
      - Removed patch generation from kernel sources in debian/rules
-     - added the static file debian/linux-2.6.12-xen.patch (which
+     - Added the static file debian/linux-2.6.12-xen.patch (which
        patches a vanilla 2.6.12 to 2.6.12.6-xen, but still with the
        extraversion stripped off). use make-kpkg with "--arch xen" &
        "--append-to-version .6-xen" to add the extraversion again.
      - Changed debian/linux-patch-xen.kpatches
-     - removed useless build-dependencies: libncurses5-dev, wget.
-     - changed xendomains config path to /etc/default.
+     - Removed useless build-dependencies: libncurses5-dev, wget
+     - Changed xendomains config path to /etc/default
+     - Added "Conflicts: udev (< 0.059)" for xen-utils-3.0
+     - xen-utils-3.0 now provides xen-utils and xen-hypervisor-3.0 &
+       xen-hypervisor-3.0-i386-pae now provides xen-hypervisor
   * Jeremy T. Bouse <jbouse@debian.org>
      - Renamed xen-hypervisor -> xen-hypervisor-3.0
      - Renamed xen-hypervisor-pae -> xen-hypervisor-3.0-i386-pae
