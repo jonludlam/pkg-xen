@@ -37,6 +37,9 @@ xen (3.0.1+hg8746-0+1) unstable; urgency=low
      - Added "Conflicts: udev (< 0.059)" for xen-utils-3.0
      - xen-utils-3.0 now provides xen-utils and xen-hypervisor-3.0 &
        xen-hypervisor-3.0-i386-pae now provides xen-hypervisor
+     - Made xen-utils-3.0.postinst more fault-tolerant, so that upgrading
+       xen2 -> xen3 don't fail because of a running xen2 hypervisor
+     - Updated the "Replaces & Conflicts" to a versioned conflict.
   * Jeremy T. Bouse <jbouse@debian.org>
      - Renamed xen-hypervisor -> xen-hypervisor-3.0
      - Renamed xen-hypervisor-pae -> xen-hypervisor-3.0-i386-pae

@@ -6,13 +6,27 @@ Priority: extra
 Standards-Version: 3.6.2.2
 Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
 
+Package: xen 
+Section: misc 
+Architecture: i386 amd64 
+Depends: xen-utils, xen-hypervisor
+Suggests: xen-tools 
+Description: a Virtual Machine Monitor like VMWare or plex86 
+ XEN is a Virtual Machine Monitor (VMM) originally developed by the 
+ Systems Research Group of the University of Cambridge Computer 
+ Laboratory, as part of the UK-EPSRC funded XenoServers project. 
+ . 
+ Xen enables multiple operating system images to execute concurrently 
+ on the same hardware with very low performance overhead --- much lower 
+ than commercial offerings for the same x86 platform. 
+
 Package: xen-hypervisor-3.0
 Section: misc
 Architecture: i386 amd64
 Depends: ${shlibs:Depends}
-Suggests: linux-xen0-2.6 | kernel-xen0-2.6
+Suggests: linux-xen0-2.6
 Provides: xen-hypervisor
-Conflicts: xen
+Conflicts: xen (<< 3.0.1)
 Replaces: xen
 Recommends: grub
 Description: The Xen Hypervisor
@@ -32,9 +46,9 @@ Package: xen-hypervisor-3.0-i386-pae
 Section: misc
 Architecture: i386
 Depends: ${shlibs:Depends}
-Suggests: linux-xen0-2.6 | kernel-xen0-2.6
+Suggests: linux-xen0-2.6
 Provides: xen-hypervisor-3.0, xen-hypervisor
-Conflicts: xen
+Conflicts: xen (<< 3.0.1)
 Replaces: xen
 Recommends: grub
 Description: The Xen Hypervisor (pae enabled version)
@@ -57,7 +71,7 @@ Architecture: i386 amd64
 Depends: xen-hypervisor-3.0,  python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
 Recommends: bridge-utils
 Provides: xen-utils
-Conflicts: udev (< 0.059)
+Conflicts: udev (<< 0.059)
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
@@ -95,4 +109,3 @@ Description: python wrapper around libxc, the control library for XEN
  This python library wraps the C library, and provides a nice OO interface
  to the low-level system calls.  It also provides some higher-level config
  file parsing.
-
