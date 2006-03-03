@@ -12,6 +12,8 @@ Architecture: i386 amd64
 Depends: ${shlibs:Depends}
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
 Provides: xen-hypervisor
+Conflicts: xen
+Replaces: xen
 Recommends: grub
 Description: The Xen Hypervisor
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
@@ -32,6 +34,8 @@ Architecture: i386
 Depends: ${shlibs:Depends}
 Suggests: linux-xen0-2.6 | kernel-xen0-2.6
 Provides: xen-hypervisor-3.0, xen-hypervisor
+Conflicts: xen
+Replaces: xen
 Recommends: grub
 Description: The Xen Hypervisor (pae enabled version)
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
