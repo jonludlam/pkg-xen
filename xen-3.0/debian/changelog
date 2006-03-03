@@ -13,7 +13,7 @@ xen (3.0.1+hg8746-0+1) unstable; urgency=low
      - Remove dependancy against bash
      - Bump standards version to 3.6.2.2
      - Remove COPYING file from libxen-dev
-     - Hypervizors conflict and replace xen
+     - Hypervisors conflict and replace xen
   * Guido Trotter <ultrotter@debian.org>
      - Add dpatch structure to the package
      - Remove build-dependency on gcc (it's build essential anyway)
