@@ -6,20 +6,6 @@ Priority: extra
 Standards-Version: 3.6.2.2
 Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
 
-Package: xen
-Section: misc
-Architecture: i386 amd64
-Depends: xen-utils, xen-hypervisor | xen-hypervisor-pae
-Suggests: xen-tools
-Description: a Virtual Machine Monitor like VMWare or plex86
- XEN is a Virtual Machine Monitor (VMM) originally developed by the
- Systems Research Group of the University of Cambridge Computer
- Laboratory, as part of the UK-EPSRC funded XenoServers project.
- .
- Xen enables multiple operating system images to execute concurrently
- on the same hardware with very low performance overhead --- much lower
- than commercial offerings for the same x86 platform.
-
 Package: xen-hypervisor-3.0
 Section: misc
 Architecture: i386 amd64
