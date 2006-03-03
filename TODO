@@ -7,10 +7,6 @@
 2. Contact glibc team:
 	Ask if it's possible to build a non-segmented glibc for xen
 
-3. Remove xen-kernel-patch:
-	The release manager said that's NOT ok... We should probably distribute
-	the file on alioth, and point people to it in our docs.
-	
 4. Distribute xen unstable too?
 
 5. Kernel team:
