@@ -1,4 +1,4 @@
-xen (3.0.1+hg8746-0+1) unstable; urgency=low
+xen-3.0 (3.0.1+hg8746-0+1) unstable; urgency=low
 
   * The "preserve our homes" release
   * Now cooperatively maintained by the Debian Xen Team

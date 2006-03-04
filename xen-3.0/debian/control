@@ -1,4 +1,4 @@
-Source: xen
+Source: xen-3.0
 Section: misc
 Priority: extra
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
