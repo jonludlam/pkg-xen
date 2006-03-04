@@ -1,119 +1,175 @@
 #!/usr/bin/make -f
 
-CC		:= gcc
-CFLAGS		:= -Wall -g
-#DH_VERBOSE	:= -v
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
 
-DEB_VERSION	:= $(shell dpkg-parsechangelog | sed -n 's/^Version: //p')
-DEB_REVISION	:= $(shell echo "$(DEB_VERSION)" | sed 's/.*-//')
-UP_VERSION	:= $(shell echo "$(DEB_VERSION)" | sed 's/-[^-]*$$//')
-DEB_BUILD_ARCH  := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+DEB_HOST_ARCH  := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+srcver   := $(shell dpkg-parsechangelog | awk '/^Version:/ {print $$2}')
+VERSION  := $(shell echo $(srcver) | sed -e 's,-[^-]*$$,,')
+MAJOR    := 3.0
+BUILD_DIR = debian/build
+STAMPS_DIR = debian/stamps
 
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-        CFLAGS += -O0
-else
-        CFLAGS += -O2
+setup: $(STAMPS_DIR)/setup
+$(STAMPS_DIR)/setup: $(BUILD_DIR) $(STAMPS_DIR) setup-docs setup-hypervisor setup-tools
+	dh_testdir
+	touch $@
+
+srcfiles := $(filter-out debian, $(wildcard * .[^.]*))
+$(STAMPS_DIR)/setup-patch:
+	@rm -rf $(BUILD_DIR)/source
+	mkdir $(BUILD_DIR)/source
+	cp -a $(srcfiles) $(BUILD_DIR)/source
+	touch $@
+
+$(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/setup-patch
+	@rm -rf $(BUILD_DIR)/build-docs
+	cp -a $(BUILD_DIR)/source/ $(BUILD_DIR)/build-docs
+	touch $@
+
+$(STAMPS_DIR)/setup-hypervisor-%: $(STAMPS_DIR)/setup-patch
+	@rm -rf $(BUILD_DIR)/build-hypervisor-$*
+	cp -a $(BUILD_DIR)/source/ $(BUILD_DIR)/build-hypervisor-$*
+	touch $@
+
+$(STAMPS_DIR)/setup-tools: $(STAMPS_DIR)/setup-patch
+	@rm -rf $(BUILD_DIR)/build-tools
+	cp -a $(BUILD_DIR)/source/ $(BUILD_DIR)/build-tools
+	touch $@
+
+build: $(STAMPS_DIR)/build
+$(STAMPS_DIR)/build: $(BUILD_DIR) $(STAMPS_DIR) $(STAMPS_DIR)/setup build-hypervisor build-tools
+	dh_testdir
+	touch $@
+
+build-indep:
+
+$(STAMPS_DIR)/build-%: DIR=$(BUILD_DIR)/$(@F)
+
+$(STAMPS_DIR)/build-hypervisor-amd64: $(STAMPS_DIR)/setup-hypervisor-amd64
+	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_64
+	touch $@
+
+$(STAMPS_DIR)/build-hypervisor-i386: $(STAMPS_DIR)/setup-hypervisor-i386
+	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_32
+	touch $@
+
+$(STAMPS_DIR)/build-hypervisor-i386-pae: $(STAMPS_DIR)/setup-hypervisor-i386-pae
+	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_32 XEN_TARGET_X86_PAE=y
+	touch $@
+
+$(STAMPS_DIR)/build-tools: $(STAMPS_DIR)/setup-tools
+	$(MAKE) -C $(DIR)/tools
+	touch $@
+
+setup-docs:: $(STAMPS_DIR)/setup-docs
+ifneq (,$(filter amd64 i386, $(DEB_HOST_ARCH)))
+build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-amd64
+install-hypervisor:: install-hypervisor-amd64
+setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-amd64
+ifneq (,$(filter i386, $(DEB_HOST_ARCH)))
+build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-i386
+install-hypervisor:: install-hypervisor-i386
+setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-i386
+build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-i386-pae
+install-hypervisor:: install-hypervisor-i386-pae
+setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-i386-pae
+endif
+build-tools:: $(STAMPS_DIR)/build-tools
+install-tools-check:: install-tools
+setup-tools:: $(STAMPS_DIR)/setup-tools
 endif
 
-export DH_VERBOSE
-export CC CFLAGS
+$(BUILD_DIR) $(STAMPS_DIR):
+	@[ -d $@ ] || mkdir $@
 
-include /usr/share/dpatch/dpatch.make
+orig: ../orig/xen-$(MAJOR)-$(VERSION)
+	rsync --delete --exclude debian --exclude .svn --link-dest=../orig/xen-$(MAJOR)-$(VERSION)/ -av ../orig/xen-$(MAJOR)-$(VERSION)/ .
 
-clean: really-clean unpatch
+../orig/xen-$(MAJOR)-$(VERSION):
+	if [ -f "../xen-$(MAJOR)_$(VERSION).orig.tar.gz" ]; then \
+	        mkdir -p ../orig; \
+	        tar -C ../orig -xzf ../xen-$(MAJOR)_$(VERSION).orig.tar.gz; \
+	else \
+	        echo "Can't find orig tarball." >&2; \
+	        exit 1; \
+	fi
 
-really-clean:
+maintainerclean:
+	rm -rf $(filter-out .svn debian, $(wildcard * .[^.]*))
+
+clean:
 	dh_testdir
-	dh_testroot
-	$(MAKE) distclean
-	rm -f build-arch-stamp build-indep-stamp
-	rm -rf debian/install
+	rm -rf $(BUILD_DIR) $(STAMPS_DIR)
 	dh_clean
 
-build: patch-stamp build-indep build-arch
-
-build-arch: build-arch-stamp
-build-arch-stamp:
-ifeq ($(DEB_BUILD_ARCH),i386)
-	# This actually installs the PAE hypervisor rather than just building it!
-	# Unfortunately it's the only way to build it without losing it later on, when cleaning for the real thing!
-	$(MAKE) install-xen XEN_TARGET_X86_PAE=y TARGET=$(CURDIR)/xen/xen_pae DESTDIR=$(CURDIR)/dist
-	$(MAKE) -C xen clean
-endif
-	$(MAKE) -C xen build
-	$(MAKE) -C tools all XEN_PYTHON_NATIVE_INSTALL=1
-	$(MAKE) -C docs man-pages # Needed, otherwise dpkg-buildpackage -B fails
-	touch build-arch-stamp
-
-build-indep: build-indep-stamp
-build-indep-stamp:
-	$(MAKE) -C docs all
-	touch build-indep-stamp
-
-install: install-indep install-arch
-install-indep:
+install-arch: install-hypervisor install-tools-check
 	dh_testdir
 	dh_testroot
-	dh_clean -k -i
-	dh_installdirs -i
-	
-	$(MAKE) install-docs DESTDIR=$(CURDIR)/debian/install
-	
-	dh_install -i --sourcedir=$(CURDIR)/debian/install
+	dh_installdirs
 
-install-arch:
+install-indep: install-docs
+
+install-docs:
+	$(MAKE) -C debian/build/build-docs/docs
+
+install-hypervisor-%:
 	dh_testdir
 	dh_testroot
-	dh_clean -k -s
-	dh_installdirs -s
-	$(MAKE) install-tools XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/install
-	$(MAKE) install-xen DESTDIR=$(CURDIR)/debian/install
-ifeq ($(DEB_BUILD_ARCH),i386)
-	cp -dR $(CURDIR)/dist/boot/* $(CURDIR)/debian/install/boot/
-endif	
-	$(MAKE) -C tools/examples install-udev DESTDIR=$(CURDIR)/debian/install
-	$(MAKE) -C tools/examples install-hotplug DESTDIR=$(CURDIR)/debian/install
-	cp -dR $(CURDIR)/docs/man1 $(CURDIR)/debian/install/usr/share/man # Needed, otherwise dpkg-buildpackage -B fails
-	cp -dR $(CURDIR)/docs/man5 $(CURDIR)/debian/install/usr/share/man # Needed, otherwise dpkg-buildpackage -B fails
-	find $(CURDIR)/debian/install -name '*.pyc' | xargs rm
-	mkdir -p debian/install/etc/xen/xend/server
-	mv debian/install/usr/lib/python2.3/site-packages/xen/xend/server/params.py debian/install/etc/xen/xend/params.py
-	ln -s /etc/xen/xend/params.py debian/install/usr/lib/python2.3/site-packages/xen/xend/server/params.py
-	mkdir -p debian/install/usr/share/doc/xen/examples
-	mv debian/install/etc/xen/xmexample* debian/install/usr/share/doc/xen/examples
-	chmod +x \
-		debian/install/usr/lib/python2.3/site-packages/xen/xend/XendClient.py \
-		debian/install/usr/lib/python2.3/site-packages/xen/util/bugtool.py \
-		debian/install/usr/lib/python2.3/site-packages/xen/xend/sxp.py
-	
-	dh_install -s --sourcedir=$(CURDIR)/debian/install
+	dh_clean -k -pxen-hypervisor-$(MAJOR)-$*
 
-binary-common:
-	@echo "DEB_VERSION='$(DEB_VERSION)' DEB_REVISION='$(DEB_REVISION)' UP_VERSION='$(UP_VERSION)' DEB_BUILD_ARCH='$(DEB_BUILD_ARCH)'"
+	mkdir debian/xen-hypervisor-$(MAJOR)-$*/boot -p
+	cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen.gz debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
+	#cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen-syms debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
+
+install-tools: export DH_OPTIONS = -plibxen3.0 -plibxen3.0-dev -plibxen3.0-python -pxen-utils-3.0
+install-tools:
 	dh_testdir
 	dh_testroot
-	dh_installdocs
-	dh_installchangelogs
-	dh_installman
-	dh_python
-	dh_strip
-	dh_compress
-	dh_makeshlibs -V 'libxen3.0 (>= $(UP_VERSION))'
-	dh_shlibdeps -l$(CURDIR)/debian/install/usr/lib -Llibxen3.0 ; \
-	dh_fixperms
-	dh_md5sums
-	dh_installdeb
-	dh_gencontrol
-	dh_builddeb
+	dh_clean
 
-# Build architecture independant packages using the common target.
-binary-indep: build-indep install-indep
-	$(MAKE) -f debian/rules DH_OPTIONS=-i binary-common
+	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp LIBDIR=lib
+	dh_install --sourcedir=debian/tmp
 
-# Build architecture dependant packages using the common target.
-binary-arch: build-arch install-arch
-	$(MAKE) -f debian/rules DH_OPTIONS=-a binary-common
+# Build architecture-independent files here.
+binary-indep: install-indep
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -i
+	dh_installdocs -i
+	dh_installexamples -i
+	dh_link -i
+	dh_strip -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
+
+# Build architecture-dependent files here.
+binary-arch: install-arch
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -s
+	dh_installdocs -s
+	dh_installexamples -s
+	dh_installinit -p xen-utils-$(MAJOR) --name xend -- 21 20
+	dh_installinit -p xen-utils-$(MAJOR) --name xendomains -- 20 21
+	dh_installman -s
+	dh_link -s
+	dh_strip -s
+	dh_compress -s
+	dh_fixperms -s
+	dh_python -s
+	dh_makeshlibs -s
+	dh_installdeb -s
+	dh_shlibdeps -s -L libxen$(MAJOR)
+	dh_gencontrol -s
+	dh_md5sums -s
+	dh_builddeb -s
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install install-indep install-arch configure
-
+.PHONY: build clean binary-indep binary-arch binary install
