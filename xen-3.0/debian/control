@@ -1,35 +1,15 @@
 Source: xen
-Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
-Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Section: misc
 Priority: extra
+Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Standards-Version: 3.6.2.2
 Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
 
-Package: xen 
-Section: misc 
-Architecture: i386 amd64 
-Depends: xen-utils, xen-hypervisor
-Suggests: xen-tools 
-Description: a Virtual Machine Monitor like VMWare or plex86 
- XEN is a Virtual Machine Monitor (VMM) originally developed by the 
- Systems Research Group of the University of Cambridge Computer 
- Laboratory, as part of the UK-EPSRC funded XenoServers project. 
- . 
- Xen enables multiple operating system images to execute concurrently 
- on the same hardware with very low performance overhead --- much lower 
- than commercial offerings for the same x86 platform. 
-
-Package: xen-hypervisor-3.0
-Section: misc
-Architecture: i386 amd64
-Depends: ${shlibs:Depends}
-Suggests: linux-xen0-2.6
-Provides: xen-hypervisor
-Conflicts: xen (<< 3.0.1)
-Replaces: xen
-Recommends: grub
-Description: The Xen Hypervisor
+Package: xen-hypervisor-3.0-amd64
+Architecture: amd64 i386
+Provides: xen-hypervisor, xen-hypervisor-3.0, xen-hypervisor-amd64
+Description: The Xen Hypervisor for amd64
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
  (Domain 0) and the virtual guest systems.
@@ -38,20 +18,26 @@ Description: The Xen Hypervisor
  specifically crafted to work as the Domain 0, mediating hardware access for
  XEN itself. An example config file for this kernel and documentation on how
  to build it can be found in the xen-docs package.
+
+Package: xen-hypervisor-3.0-i386
+Section: misc
+Architecture: i386
+Provides: xen-hypervisor, xen-hypervisor-3.0, xen-hypervisor-i386
+Description: The Xen Hypervisor for i386
+ The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
+ and controls cpu and memory, sharing them between your administrative domain
+ (Domain 0) and the virtual guest systems.
  .
- If you have an i386 system with more than 4GB of memory you should choose the
- xen-hypervisor-pae package
+ In order to boot a XEN system along with this package you also need a kernel
+ specifically crafted to work as the Domain 0, mediating hardware access for
+ XEN itself. An example config file for this kernel and documentation on how
+ to build it can be found in the xen-docs package.
 
 Package: xen-hypervisor-3.0-i386-pae
 Section: misc
 Architecture: i386
-Depends: ${shlibs:Depends}
-Suggests: linux-xen0-2.6
-Provides: xen-hypervisor-3.0, xen-hypervisor
-Conflicts: xen (<< 3.0.1)
-Replaces: xen
-Recommends: grub
-Description: The Xen Hypervisor (pae enabled version)
+Provides: xen-hypervisor, xen-hypervisor-3.0, xen-hypervisor-i386-pae
+Description: The Xen Hypervisor for i386 (pae enabled version)
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
  (Domain 0) and the virtual guest systems.
@@ -60,10 +46,17 @@ Description: The Xen Hypervisor (pae enabled version)
  specifically crafted to work as the Domain 0, mediating hardware access for
  XEN itself. An example config file for this kernel and documentation on how
  to build it can be found in the xen-docs package.
- .
- This version of the hypervisor is built for i386 systems with more than 4GB of
- memory.
 
+Package: xen-utils-3.0
+Section: misc
+Architecture: amd64 i386
+Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-3.0, libxen3.0-python, iproute, udev
+Recommends: bridge-utils
+Provides: xen-utils
+Conflicts: xen-utils
+Description: XEN administrative tools
+ The userspace tools to manage a system virtualized through the XEN virtual
+ machine monitor.
 
 Package: xen-utils-3.0
 Section: misc
