@@ -1,4 +1,4 @@
-xen-3.0 (3.0.1+hg8746-0+1) unstable; urgency=low
+xen-3.0 (3.0.1-2) unstable; urgency=low
 
   * The "preserve our homes" release
   * Now cooperatively maintained by the Debian Xen Team
@@ -44,13 +44,13 @@ xen-3.0 (3.0.1+hg8746-0+1) unstable; urgency=low
      - Renamed xen-hypervisor -> xen-hypervisor-3.0
      - Renamed xen-hypervisor-pae -> xen-hypervisor-3.0-i386-pae
      - Renamed xen-utils -> xen-utils-3.0
-     - Added "Provides: xen-hypervisor-3.0" to 
+     - Added "Provides: xen-hypervisor-3.0" to
        xen-hypervisor-3.0-i386-pae
-     - Set dependency for hypervisor in xen-utils-3.0 to 
-       xen-hypervisor-3.0 rather than "xen-hypervisor | 
+     - Set dependency for hypervisor in xen-utils-3.0 to
+       xen-hypervisor-3.0 rather than "xen-hypervisor |
        xen-hypervisor-pae"
 
- -- Jeremy T. Bouse <jbouse@debian.org>  Tue, 28 Feb 2006 15:36:01 -0800
+ -- Julien Danjou <acid@debian.org>  Sat,  4 Mar 2006 12:59:13 +0100
 
 xen (3.0.1-0tha3) unstable; urgency=low
 
