@@ -49,19 +49,8 @@ Description: The Xen Hypervisor for i386 (pae enabled version)
 
 Package: xen-utils-3.0
 Section: misc
-Architecture: amd64 i386
-Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-3.0, libxen3.0-python, iproute, udev
-Recommends: bridge-utils
-Provides: xen-utils
-Conflicts: xen-utils
-Description: XEN administrative tools
- The userspace tools to manage a system virtualized through the XEN virtual
- machine monitor.
-
-Package: xen-utils-3.0
-Section: misc
 Architecture: i386 amd64
-Depends: xen-hypervisor-3.0,  python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}
+Depends: xen-hypervisor-3.0, python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}, ${python:Depends}
 Recommends: bridge-utils
 Provides: xen-utils
 Conflicts: udev (<< 0.059)
