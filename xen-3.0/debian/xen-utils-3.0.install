@@ -1,4 +1,4 @@
+etc/xen
 usr/bin
 usr/sbin
 usr/share/xen/qemu/keymaps
-etc

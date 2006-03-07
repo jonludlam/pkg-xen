@@ -7,7 +7,7 @@ Standards-Version: 3.6.2.2
 Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, dh-kpatches, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
 
 Package: xen-hypervisor-3.0-amd64
-Architecture: amd64 i386
+Architecture: amd64
 Provides: xen-hypervisor, xen-hypervisor-3.0, xen-hypervisor-amd64
 Description: The Xen Hypervisor for amd64
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
