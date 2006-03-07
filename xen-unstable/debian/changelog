@@ -1,0 +1,5 @@
+xen-unstable (head.8954-1) UNRELEASED; urgency=low
+
+  * Initial release.
+
+ -- Bastian Blank <waldi@debian.org>  Thu, 23 Feb 2006 22:39:01 +0100

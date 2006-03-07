@@ -1,0 +1,6 @@
+etc/xen/auto
+etc/xen/scripts
+etc/xen/xend*
+usr/bin/xen*
+usr/sbin/xen*
+usr/sbin/xm

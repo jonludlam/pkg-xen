@@ -1,0 +1,4 @@
+usr/lib/*.so.*
+usr/lib/libxenstore.so
+usr/lib/xen/bin
+usr/lib/xen/boot
