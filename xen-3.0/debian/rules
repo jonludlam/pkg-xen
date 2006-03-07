@@ -64,10 +64,12 @@ $(STAMPS_DIR)/build-tools: $(STAMPS_DIR)/setup-tools
 	touch $@
 
 setup-docs:: $(STAMPS_DIR)/setup-docs
-ifneq (,$(filter amd64 i386, $(DEB_HOST_ARCH)))
+build-docs:: $(STAMPS_DIR)/build-docs
+ifneq (,$(filter amd64, $(DEB_HOST_ARCH)))
 build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-amd64
 install-hypervisor:: install-hypervisor-amd64
 setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-amd64
+endif
 ifneq (,$(filter i386, $(DEB_HOST_ARCH)))
 build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-i386
 install-hypervisor:: install-hypervisor-i386
@@ -76,6 +78,7 @@ build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-i386-pae
 install-hypervisor:: install-hypervisor-i386-pae
 setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-i386-pae
 endif
+ifneq (,$(filter amd64 i386 ia64, $(DEB_HOST_ARCH)))
 build-tools:: $(STAMPS_DIR)/build-tools
 install-tools-check:: install-tools
 setup-tools:: $(STAMPS_DIR)/setup-tools

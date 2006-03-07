@@ -75,7 +75,7 @@ Description: development files for the control library for XEN
  Users wishing to develop their own tools for interfaces to the underlying
  XEN kernel should install this package.
 
-Package: xen-docs
+Package: xen-docs-3.0
 Section: misc
 Architecture: all
 Description: documentation for XEN, a Virtual Machine Monitor
