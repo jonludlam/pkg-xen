@@ -1,3 +1,4 @@
+etc/udev/*.rules
 etc/xen
 usr/bin
 usr/sbin

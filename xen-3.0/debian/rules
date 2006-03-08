@@ -21,6 +21,7 @@ $(STAMPS_DIR)/setup-patch:
 	@rm -rf $(BUILD_DIR)/source
 	mkdir $(BUILD_DIR)/source
 	cp -a $(srcfiles) $(BUILD_DIR)/source
+	dpatch -d $(BUILD_DIR)/source apply-all
 	touch $@
 
 $(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/setup-patch
@@ -132,7 +133,7 @@ install-tools:
 	dh_testroot
 	dh_clean
 
-	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp LIBDIR=lib
+	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp LIBDIR=lib
 	dh_install --sourcedir=debian/tmp
 
 # Build architecture-independent files here.
