@@ -11,6 +11,8 @@ MAJOR    := 3.0
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
 
+export DH_OPTIONS
+
 setup: $(STAMPS_DIR)/setup
 $(STAMPS_DIR)/setup: $(BUILD_DIR) $(STAMPS_DIR) setup-docs setup-hypervisor setup-tools
 	dh_testdir
@@ -127,7 +129,7 @@ install-hypervisor-%:
 	cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen.gz debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 	#cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen-syms debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 
-install-tools: export DH_OPTIONS = -plibxen3.0 -plibxen3.0-dev -plibxen3.0-python -pxen-utils-3.0
+install-tools: DH_OPTIONS = -plibxen3.0 -plibxen3.0-dev -plibxen3.0-python -pxen-utils-3.0
 install-tools:
 	dh_testdir
 	dh_testroot
