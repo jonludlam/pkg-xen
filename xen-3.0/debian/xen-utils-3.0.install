@@ -8,3 +8,4 @@ usr/lib/xen/bin/xc*
 usr/lib/xen/bin/xen*
 usr/lib/xen/*.so
 usr/sbin
+usr/share/man

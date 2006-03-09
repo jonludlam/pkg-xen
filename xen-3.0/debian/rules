@@ -42,13 +42,17 @@ $(STAMPS_DIR)/setup-tools: $(STAMPS_DIR)/setup-patch
 	touch $@
 
 build: $(STAMPS_DIR)/build
-$(STAMPS_DIR)/build: $(BUILD_DIR) $(STAMPS_DIR) $(STAMPS_DIR)/setup build-hypervisor build-tools
+$(STAMPS_DIR)/build: $(BUILD_DIR) $(STAMPS_DIR) $(STAMPS_DIR)/setup build-docs build-hypervisor build-tools
 	dh_testdir
 	touch $@
 
 build-indep:
 
 $(STAMPS_DIR)/build-%: DIR=$(BUILD_DIR)/$(@F)
+
+$(STAMPS_DIR)/build-docs: $(STAMPS_DIR)/setup-docs
+	$(MAKE) -C $(DIR)/docs
+	touch $@
 
 $(STAMPS_DIR)/build-hypervisor-amd64: $(STAMPS_DIR)/setup-hypervisor-amd64
 	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_64
@@ -111,14 +115,17 @@ clean:
 	dh_clean
 
 install-arch: install-hypervisor install-tools-check
-	dh_testdir
-	dh_testroot
-	dh_installdirs
 
 install-indep: install-docs
 
+install-docs: DH_OPTIONS = -pxen-docs-$(MAJOR)
 install-docs:
-	$(MAKE) -C debian/build/build-docs/docs
+	dh_testdir
+	dh_testroot
+	dh_clean
+
+	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
+	dh_install --sourcedir=debian/tmp
 
 install-hypervisor-%:
 	dh_testdir
@@ -135,6 +142,7 @@ install-tools:
 	dh_testroot
 	dh_clean
 
+	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
 	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
 	dh_install --sourcedir=debian/tmp
 
