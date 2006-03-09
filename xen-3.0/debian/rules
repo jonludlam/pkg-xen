@@ -129,13 +129,13 @@ install-hypervisor-%:
 	cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen.gz debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 	#cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen-syms debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 
-install-tools: DH_OPTIONS = -plibxen3.0 -plibxen3.0-dev -plibxen3.0-python -pxen-utils-3.0
+install-tools: DH_OPTIONS = -pxen-utils-$(MAJOR)
 install-tools:
 	dh_testdir
 	dh_testroot
 	dh_clean
 
-	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp LIBDIR=lib
+	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
 	dh_install --sourcedir=debian/tmp
 
 # Build architecture-independent files here.
@@ -172,7 +172,7 @@ binary-arch: install-arch
 	dh_python -s
 	dh_makeshlibs -s
 	dh_installdeb -s
-	dh_shlibdeps -s -L libxen$(MAJOR)
+	dh_shlibdeps -s
 	dh_gencontrol -s
 	dh_md5sums -s
 	dh_builddeb -s

@@ -1,5 +1,10 @@
 etc/udev/*.rules
-etc/xen
+etc/xen/auto
+etc/xen/scripts
+etc/xen/xend*
 usr/bin
+usr/lib/python2.3
+usr/lib/xen/bin/xc*
+usr/lib/xen/bin/xen*
+usr/lib/xen/*.so
 usr/sbin
-usr/share/xen/qemu/keymaps

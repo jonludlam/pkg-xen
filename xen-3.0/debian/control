@@ -50,30 +50,13 @@ Description: The Xen Hypervisor for i386 (pae enabled version)
 Package: xen-utils-3.0
 Section: misc
 Architecture: i386 amd64
-Depends: xen-hypervisor-3.0, python-twisted, python, libxen-python, iproute, hotplug | udev, ${shlibs:Depends}, ${python:Depends}
+Depends: xen-hypervisor-3.0, python-twisted, iproute, hotplug | udev, ${shlibs:Depends}, ${python:Depends}
 Recommends: bridge-utils
 Provides: xen-utils
 Conflicts: udev (<< 0.059)
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
-
-Package: libxen3.0
-Section: libs
-Architecture: i386 amd64
-Depends: ${shlibs:Depends}
-Conflicts: xen-docs (<= 1.2), libxen2.0
-Description: control library for XEN, a Virtual Machine Monitor
- Library to control the XEN microkernel.  Contains functions for creating,
- starting, stopping, saving, virtual instances.
-
-Package: libxen-dev
-Section: libdevel
-Architecture: i386 amd64
-Depends: libxen3.0 (= ${Source-Version})
-Description: development files for the control library for XEN
- Users wishing to develop their own tools for interfaces to the underlying
- XEN kernel should install this package.
 
 Package: xen-docs-3.0
 Section: misc
@@ -83,11 +66,3 @@ Description: documentation for XEN, a Virtual Machine Monitor
  includes a description interface(both the api, and a nice explanation of
  how XEN works).  It also contains the VBD and Xeno howtos.
 
-Package: libxen-python
-Section: python
-Architecture: i386 amd64
-Depends: ${shlibs:Depends}, ${python:Depends}
-Description: python wrapper around libxc, the control library for XEN
- This python library wraps the C library, and provides a nice OO interface
- to the low-level system calls.  It also provides some higher-level config
- file parsing.
