@@ -7,7 +7,7 @@
 @DPATCH@
 diff -urNad xen-3.0~/Config.mk xen-3.0/Config.mk
 --- xen-3.0~/Config.mk	2006-02-23 22:07:46.000000000 +0100
-+++ xen-3.0/Config.mk	2006-03-09 20:40:48.760540852 +0100
++++ xen-3.0/Config.mk	2006-03-09 20:45:55.400115561 +0100
 @@ -27,11 +27,7 @@
  INSTALL_DATA = $(INSTALL) -m0644
  INSTALL_PROG = $(INSTALL) -m0755
@@ -23,7 +23,7 @@ diff -urNad xen-3.0~/Config.mk xen-3.0/Config.mk
  EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
 diff -urNad xen-3.0~/tools/Rules.mk xen-3.0/tools/Rules.mk
 --- xen-3.0~/tools/Rules.mk	2006-02-23 22:07:47.000000000 +0100
-+++ xen-3.0/tools/Rules.mk	2006-03-09 20:40:48.760540852 +0100
++++ xen-3.0/tools/Rules.mk	2006-03-09 20:45:55.400115561 +0100
 @@ -20,6 +20,9 @@
  LDFLAGS += -m64
  endif
@@ -36,7 +36,7 @@ diff -urNad xen-3.0~/tools/Rules.mk xen-3.0/tools/Rules.mk
  %.opic: %.c
 diff -urNad xen-3.0~/tools/console/Makefile xen-3.0/tools/console/Makefile
 --- xen-3.0~/tools/console/Makefile	2006-02-23 22:07:47.000000000 +0100
-+++ xen-3.0/tools/console/Makefile	2006-03-09 20:40:48.760540852 +0100
++++ xen-3.0/tools/console/Makefile	2006-03-09 20:45:55.401115422 +0100
 @@ -23,11 +23,11 @@
  	$(RM) client/*.o daemon/*.o
  
@@ -53,19 +53,19 @@ diff -urNad xen-3.0~/tools/console/Makefile xen-3.0/tools/console/Makefile
  install: $(BIN)
 diff -urNad xen-3.0~/tools/ioemu/target-i386-dm/Makefile xen-3.0/tools/ioemu/target-i386-dm/Makefile
 --- xen-3.0~/tools/ioemu/target-i386-dm/Makefile	2006-02-23 22:07:48.000000000 +0100
-+++ xen-3.0/tools/ioemu/target-i386-dm/Makefile	2006-03-09 20:40:48.761540714 +0100
++++ xen-3.0/tools/ioemu/target-i386-dm/Makefile	2006-03-09 20:52:33.980969681 +0100
 @@ -188,7 +188,7 @@
  #########################################################
  
  DEFINES+=-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
 -LIBS+=-lm -L../../libxc -lxenctrl -lxenguest -L../../xenstore -lxenstore
-+LIBS+=-lm $(RPATH_PATH) -L../../libxc -lxenctrl -lxenguest -L../../xenstore -lxenstore
++LIBS+=-lm $(RPATH_ARG) -L../../libxc -lxenctrl -lxenguest -L../../xenstore -lxenstore
  ifndef CONFIG_USER_ONLY
  LIBS+=-lz
  endif
 diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
 --- xen-3.0~/tools/libxc/Makefile	2006-02-23 22:07:48.000000000 +0100
-+++ xen-3.0/tools/libxc/Makefile	2006-03-09 20:40:48.761540714 +0100
++++ xen-3.0/tools/libxc/Makefile	2006-03-09 20:45:55.401115422 +0100
 @@ -4,9 +4,6 @@
  INSTALL_DATA	= $(INSTALL) -m0644
  INSTALL_DIR	= $(INSTALL) -d -m0755
@@ -141,7 +141,7 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
  -include $(DEPS)
 diff -urNad xen-3.0~/tools/misc/Makefile xen-3.0/tools/misc/Makefile
 --- xen-3.0~/tools/misc/Makefile	2006-02-23 22:07:48.000000000 +0100
-+++ xen-3.0/tools/misc/Makefile	2006-03-09 20:40:48.761540714 +0100
++++ xen-3.0/tools/misc/Makefile	2006-03-09 20:45:55.402115284 +0100
 @@ -50,4 +50,4 @@
  	$(CC) -c $(CFLAGS) -o $@ $<
  
@@ -150,7 +150,7 @@ diff -urNad xen-3.0~/tools/misc/Makefile xen-3.0/tools/misc/Makefile
 +	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl
 diff -urNad xen-3.0~/tools/misc/cpuperf/Makefile xen-3.0/tools/misc/cpuperf/Makefile
 --- xen-3.0~/tools/misc/cpuperf/Makefile	2006-02-23 22:07:48.000000000 +0100
-+++ xen-3.0/tools/misc/cpuperf/Makefile	2006-03-09 20:40:48.761540714 +0100
++++ xen-3.0/tools/misc/cpuperf/Makefile	2006-03-09 20:45:55.402115284 +0100
 @@ -37,7 +37,7 @@
  	$(CC) $(CFLAGS) -o $@ $<
  
@@ -162,7 +162,7 @@ diff -urNad xen-3.0~/tools/misc/cpuperf/Makefile xen-3.0/tools/misc/cpuperf/Make
  	$(CC) $(CFLAGS) -DPERFCNTR -o $@ $<
 diff -urNad xen-3.0~/tools/python/Makefile xen-3.0/tools/python/Makefile
 --- xen-3.0~/tools/python/Makefile	2006-02-23 22:07:48.000000000 +0100
-+++ xen-3.0/tools/python/Makefile	2006-03-09 20:40:48.762540576 +0100
++++ xen-3.0/tools/python/Makefile	2006-03-09 20:45:55.402115284 +0100
 @@ -5,7 +5,7 @@
  
  all: build
@@ -174,7 +174,7 @@ diff -urNad xen-3.0~/tools/python/Makefile xen-3.0/tools/python/Makefile
  install: all
 diff -urNad xen-3.0~/tools/python/setup.py xen-3.0/tools/python/setup.py
 --- xen-3.0~/tools/python/setup.py	2006-02-23 22:07:48.000000000 +0100
-+++ xen-3.0/tools/python/setup.py	2006-03-09 20:40:48.762540576 +0100
++++ xen-3.0/tools/python/setup.py	2006-03-09 20:45:55.402115284 +0100
 @@ -1,10 +1,12 @@
  
 +import sys
@@ -206,7 +206,7 @@ diff -urNad xen-3.0~/tools/python/setup.py xen-3.0/tools/python/setup.py
                 libraries          = libraries,
 diff -urNad xen-3.0~/tools/xentrace/Makefile xen-3.0/tools/xentrace/Makefile
 --- xen-3.0~/tools/xentrace/Makefile	2006-02-23 22:07:49.000000000 +0100
-+++ xen-3.0/tools/xentrace/Makefile	2006-03-09 20:40:48.762540576 +0100
++++ xen-3.0/tools/xentrace/Makefile	2006-03-09 20:45:55.402115284 +0100
 @@ -48,4 +48,4 @@
  	$(RM) *.a *.so *.o *.rpm $(BIN) $(LIBBIN)
  
