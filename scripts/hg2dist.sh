@@ -19,13 +19,14 @@ CHANGESET=$( (cd $HGDIR; $HG log | head -1 ) | sed -e 's/ //g;' | cut -d: -f2)
 RELEASE_LG=$( (cd $HGDIR; $HG log | grep -B 1 "tag:.*RELEASE" | head -2) | sed -e 's/ //g')
 REL_CHG=$( echo $RELEASE_LG | cut -d: -f2 )
 REL_VER=$( echo $RELEASE_LG | cut -d- -f2 )
+REL_MAJ=$( echo $REL_VER | sed -r -e 's/([0-9]+\.[0-9]+)\.[0-9]+/\1/' )
 
 if [ $REL_CHG = $CHANGESET ]; then
-	DESTDIR="xen-${REL_VER}"
-	DESTTAR="xen_${REL_VER}.orig.tar.gz"
+	DESTDIR="xen-${REL_MAJ}-${REL_VER}"
+	DESTTAR="xen-${REL_MAJ}_${REL_VER}.orig.tar.gz"
 else
-	DESTDIR="xen-${REL_VER}+hg${CHANGESET}"
-	DESTTAR="xen_${REL_VER}+hg${CHANGESET}.orig.tar.gz"
+	DESTDIR="xen-${REL_MAJ}-${REL_VER}+hg${CHANGESET}"
+	DESTTAR="xen-${REL_MAJ}_${REL_VER}+hg${CHANGESET}.orig.tar.gz"
 fi
 
 
