@@ -1,0 +1,253 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## libdir.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-unstable~/Config.mk xen-unstable/Config.mk
+--- xen-unstable~/Config.mk	2006-03-11 16:54:33.000000000 +0100
++++ xen-unstable/Config.mk	2006-03-11 17:18:57.685333810 +0100
+@@ -46,11 +46,7 @@
+ CFLAGS  += -m64
+ endif
+ 
+-ifeq ($(XEN_TARGET_ARCH),x86_64)
+-LIBDIR = lib64
+-else
+ LIBDIR = lib
+-endif
+ 
+ ifneq ($(EXTRA_PREFIX),)
+ EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
+diff -urNad xen-unstable~/tools/Rules.mk xen-unstable/tools/Rules.mk
+--- xen-unstable~/tools/Rules.mk	2006-03-11 16:54:34.000000000 +0100
++++ xen-unstable/tools/Rules.mk	2006-03-11 17:18:57.685333810 +0100
+@@ -10,6 +10,9 @@
+ XEN_XENSTORE       = $(XEN_ROOT)/tools/xenstore
+ XEN_LIBXENSTAT     = $(XEN_ROOT)/tools/xenstat/libxenstat/src
+ 
++RPATH_ARG := -Wl,-rpath,/usr/$(LIBDIR)/xen
++LDFLAGS += $(RPATH_ARG)
++
+ X11_LDPATH = -L/usr/X11R6/$(LIBDIR)
+ 
+ %.opic: %.c
+diff -urNad xen-unstable~/tools/console/Makefile xen-unstable/tools/console/Makefile
+--- xen-unstable~/tools/console/Makefile	2006-03-11 16:54:34.000000000 +0100
++++ xen-unstable/tools/console/Makefile	2006-03-11 17:18:57.685333810 +0100
+@@ -23,11 +23,11 @@
+ 	$(RM) client/*.o daemon/*.o
+ 
+ xenconsoled: $(patsubst %.c,%.o,$(wildcard daemon/*.c))
+-	$(CC) $(CFLAGS) $^ -o $@ -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
++	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
+               -lxenctrl -lxenstore
+ 
+ xenconsole: $(patsubst %.c,%.o,$(wildcard client/*.c))
+-	$(CC) $(CFLAGS) $^ -o $@ -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
++	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
+ 	      -lxenctrl -lxenstore
+ 
+ install: $(BIN)
+diff -urNad xen-unstable~/tools/ioemu/target-i386-dm/Makefile xen-unstable/tools/ioemu/target-i386-dm/Makefile
+--- xen-unstable~/tools/ioemu/target-i386-dm/Makefile	2006-03-11 16:54:35.000000000 +0100
++++ xen-unstable/tools/ioemu/target-i386-dm/Makefile	2006-03-11 17:18:57.686333671 +0100
+@@ -188,7 +188,7 @@
+ #########################################################
+ 
+ DEFINES+=-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
+-LIBS+=-lm -L../../libxc -lxenctrl -lxenguest -L../../xenstore -lxenstore
++LIBS+=-lm $(RPATH_ARG) -L../../libxc -lxenctrl -lxenguest -L../../xenstore -lxenstore
+ ifndef CONFIG_USER_ONLY
+ LIBS+=-lz
+ endif
+diff -urNad xen-unstable~/tools/libxc/Makefile xen-unstable/tools/libxc/Makefile
+--- xen-unstable~/tools/libxc/Makefile	2006-03-11 16:54:35.000000000 +0100
++++ xen-unstable/tools/libxc/Makefile	2006-03-11 17:19:07.711946572 +0100
+@@ -4,9 +4,6 @@
+ INSTALL_DATA	= $(INSTALL) -m0644
+ INSTALL_DIR	= $(INSTALL) -d -m0755
+ 
+-MAJOR    = 3.0
+-MINOR    = 0
+-
+ XEN_ROOT = ../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+@@ -65,11 +62,9 @@
+ LIB_BUILD_OBJS := $(patsubst %.c,%.o,$(BUILD_SRCS))
+ PIC_BUILD_OBJS := $(patsubst %.c,%.opic,$(BUILD_SRCS))
+ 
+-LIB := libxenctrl.a
+-LIB += libxenctrl.so libxenctrl.so.$(MAJOR) libxenctrl.so.$(MAJOR).$(MINOR)
++LIB += libxenctrl.so
+ 
+-LIB += libxenguest.a
+-LIB += libxenguest.so libxenguest.so.$(MAJOR) libxenguest.so.$(MAJOR).$(MINOR)
++LIB += libxenguest.so
+ 
+ all: build
+ build: check-for-zlib mk-symlinks
+@@ -84,18 +79,12 @@
+ 	fi
+ 
+ install: build
+-	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
++	[ -d $(DESTDIR)/usr/$(LIBDIR)/xen ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)/xen
+ 	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
+-	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so.$(MAJOR)
+-	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so
++	$(INSTALL_PROG) libxenctrl.so $(DESTDIR)/usr/$(LIBDIR)/xen
+ 	$(INSTALL_DATA) xenctrl.h $(DESTDIR)/usr/include
+ 
+-	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_DATA) libxenguest.a $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so.$(MAJOR)
+-	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so
++	$(INSTALL_PROG) libxenguest.so $(DESTDIR)/usr/$(LIBDIR)/xen
+ 	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include
+ 
+ .PHONY: TAGS clean rpm install all
+@@ -120,25 +109,15 @@
+ libxenctrl.a: $(LIB_OBJS)
+ 	$(AR) rc $@ $^
+ 
+-libxenctrl.so: libxenctrl.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenctrl.so.$(MAJOR): libxenctrl.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenctrl.so.$(MAJOR).$(MINOR): $(PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenctrl.so.$(MAJOR) -shared -o $@ $^
++libxenctrl.so: $(PIC_OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenctrl.so -shared -o $@ $^
+ 
+ # libxenguest
+ 
+ libxenguest.a: $(LIB_BUILD_OBJS)
+ 	$(AR) rc $@ $^
+ 
+-libxenguest.so: libxenguest.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenguest.so.$(MAJOR): libxenguest.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenguest.so.$(MAJOR).$(MINOR): $(PIC_BUILD_OBJS) libxenctrl.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenguest.so.$(MAJOR) -shared -o $@ $^ -lz -lxenctrl
++libxenguest.so: $(PIC_BUILD_OBJS) libxenctrl.so
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenguest.so -shared -o $@ $^ -lz -lxenctrl
+ 
+ -include $(DEPS)
+diff -urNad xen-unstable~/tools/misc/Makefile xen-unstable/tools/misc/Makefile
+--- xen-unstable~/tools/misc/Makefile	2006-03-11 16:54:35.000000000 +0100
++++ xen-unstable/tools/misc/Makefile	2006-03-11 17:18:57.686333671 +0100
+@@ -50,4 +50,4 @@
+ 	$(CC) -c $(CFLAGS) -o $@ $<
+ 
+ $(TARGETS): %: %.o Makefile
+-	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl
+diff -urNad xen-unstable~/tools/misc/cpuperf/Makefile xen-unstable/tools/misc/cpuperf/Makefile
+--- xen-unstable~/tools/misc/cpuperf/Makefile	2006-03-11 16:54:35.000000000 +0100
++++ xen-unstable/tools/misc/cpuperf/Makefile	2006-03-11 17:18:57.687333533 +0100
+@@ -35,7 +35,7 @@
+ 	$(CC) $(CFLAGS) -o $@ $<
+ 
+ cpuperf-xen: cpuperf.c $(HDRS) Makefile
+-	$(CC) $(CFLAGS) -I $(XEN_LIBXC) -L$(XEN_LIBXC) -lxenctrl -DXENO -o $@ $<
++	$(CC) $(CFLAGS) -I $(XEN_LIBXC) $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl -DXENO -o $@ $<
+ 
+ cpuperf-perfcntr: cpuperf.c $(HDRS) Makefile
+ 	$(CC) $(CFLAGS) -DPERFCNTR -o $@ $<
+diff -urNad xen-unstable~/tools/python/setup.py xen-unstable/tools/python/setup.py
+--- xen-unstable~/tools/python/setup.py	2006-03-11 16:54:35.000000000 +0100
++++ xen-unstable/tools/python/setup.py	2006-03-11 17:18:57.687333533 +0100
+@@ -5,6 +5,7 @@
+ XEN_ROOT = "../.."
+ 
+ extra_compile_args  = [ "-fno-strict-aliasing", "-Wall", "-Werror" ]
++extra_link_args = [ "-Wl,-rpath,/usr/lib/xen" ]
+ 
+ 
+ include_dirs = [ XEN_ROOT + "/tools/libxc",
+@@ -19,6 +20,7 @@
+ 
+ xc = Extension("xc",
+                extra_compile_args = extra_compile_args,
++               extra_link_args    = extra_link_args,
+                include_dirs       = include_dirs + [ "xen/lowlevel/xc" ],
+                library_dirs       = library_dirs,
+                libraries          = libraries,
+@@ -26,6 +28,7 @@
+ 
+ xs = Extension("xs",
+                extra_compile_args = extra_compile_args,
++               extra_link_args    = extra_link_args,
+                include_dirs       = include_dirs + [ "xen/lowlevel/xs" ],
+                library_dirs       = library_dirs,
+                libraries          = libraries,
+diff -urNad xen-unstable~/tools/python/xen/util/auxbin.py xen-unstable/tools/python/xen/util/auxbin.py
+--- xen-unstable~/tools/python/xen/util/auxbin.py	2006-03-11 16:54:35.000000000 +0100
++++ xen-unstable/tools/python/xen/util/auxbin.py	2006-03-11 17:18:57.687333533 +0100
+@@ -16,12 +16,7 @@
+ #============================================================================
+ 
+ 
+-LIB_BIN_32 = "/usr/lib/xen/bin"
+-LIB_BIN_64 = "/usr/lib64/xen/bin"
+-
+-## The architectures on which the LIB_BIN_64 directory is used.  This
+-# deliberately excludes ia64.
+-LIB_64_ARCHS = [ 'x86_64', 'ppc64', 's390x', 'sparc64']
++LIB_BIN = "/usr/lib/xen/bin"
+ 
+ 
+ import os
+@@ -29,20 +24,10 @@
+ 
+ 
+ def execute(exe, args = None):
+-    exepath = pathTo(exe)
++    exepath = os.path.join(LIB_BIN, exe)
+     a = [ exepath ]
+     if args:
+         a.extend(args)
+     os.execv(exepath, a)
+ 
+ 
+-def pathTo(exe):
+-    return os.path.join(path(), exe)
+-
+-
+-def path():
+-    machine = os.uname()[4]
+-    if machine in LIB_64_ARCHS and os.path.exists(LIB_BIN_64):
+-        return LIB_BIN_64
+-    else:
+-        return LIB_BIN_32
+diff -urNad xen-unstable~/tools/xenstore/Makefile xen-unstable/tools/xenstore/Makefile
+--- xen-unstable~/tools/xenstore/Makefile	2006-03-11 16:54:36.000000000 +0100
++++ xen-unstable/tools/xenstore/Makefile	2006-03-11 17:18:57.687333533 +0100
+@@ -146,8 +146,8 @@
+ 	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)/usr/bin
+ 	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/bin
+ 	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/bin
+-	$(INSTALL_DIR) -p $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_DATA) libxenstore.so $(DESTDIR)/usr/$(LIBDIR)
++	$(INSTALL_DIR) -p $(DESTDIR)/usr/$(LIBDIR)/xen
++	$(INSTALL_DATA) libxenstore.so $(DESTDIR)/usr/$(LIBDIR)/xen
+ 	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
+ 
+diff -urNad xen-unstable~/tools/xentrace/Makefile xen-unstable/tools/xentrace/Makefile
+--- xen-unstable~/tools/xentrace/Makefile	2006-03-11 16:54:36.000000000 +0100
++++ xen-unstable/tools/xentrace/Makefile	2006-03-11 17:18:57.688333395 +0100
+@@ -48,4 +48,4 @@
+ 	$(RM) *.a *.so *.o *.rpm $(BIN) $(LIBBIN)
+ 
+ %: %.c $(HDRS) Makefile
+-	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl

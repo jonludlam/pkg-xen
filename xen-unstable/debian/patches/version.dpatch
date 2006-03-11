@@ -1,0 +1,67 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## version.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/xen/Makefile xen-3.0/xen/Makefile
+--- xen-3.0~/xen/Makefile	2006-02-23 22:07:49.000000000 +0100
++++ xen-3.0/xen/Makefile	2006-03-10 23:44:24.978464943 +0100
+@@ -96,6 +96,9 @@
+ 	    -e 's/@@subversion@@/$(XEN_SUBVERSION)/g' \
+ 	    -e 's/@@extraversion@@/$(XEN_EXTRAVERSION)/g' \
+ 	    -e 's!@@changeset@@!$(shell ((hg parents || head -n 7 ../ChangeLog || echo date: unavailable) | awk '{FS="changeset:[ ]+"}/^changeset/{CS=$$2};{FS="date:[ ]+"}/^date/{D=$$2}; END {print D, CS}') 2>/dev/null)!g' \
++	    -e 's/@@system_distribution@@/$(shell lsb_release -is)/g' \
++	    -e 's/@@system_maintainer@@/$(shell cd ../../../..; dpkg-parsechangelog | sed -ne 's,^Maintainer: .[^<]*<\([^>]*\)>,\1,p')/g' \
++	    -e 's/@@system_version@@/$(shell cd ../../../..; dpkg-parsechangelog | awk '/^Version:/ {print $$2}')/g' \
+ 	    < include/xen/compile.h.in > $@.new
+ 	@cat include/xen/banner.h >> $@.new
+ 	@mv -f $@.new $@
+diff -urNad xen-3.0~/xen/common/kernel.c xen-3.0/xen/common/kernel.c
+--- xen-3.0~/xen/common/kernel.c	2006-02-23 22:07:50.000000000 +0100
++++ xen-3.0/xen/common/kernel.c	2006-03-10 23:44:02.932515123 +0100
+@@ -104,7 +104,7 @@
+     {
+         struct xen_compile_info info;
+         safe_strcpy(info.compiler,       XEN_COMPILER);
+-        safe_strcpy(info.compile_by,     XEN_COMPILE_BY);
++        safe_strcpy(info.compile_by,     XEN_COMPILE_SYSTEM_MAINTAINER);
+         safe_strcpy(info.compile_domain, XEN_COMPILE_DOMAIN);
+         safe_strcpy(info.compile_date,   XEN_COMPILE_DATE);
+         if ( copy_to_user(arg, &info, sizeof(info)) )
+diff -urNad xen-3.0~/xen/drivers/char/console.c xen-3.0/xen/drivers/char/console.c
+--- xen-3.0~/xen/drivers/char/console.c	2006-02-23 22:07:50.000000000 +0100
++++ xen-3.0/xen/drivers/char/console.c	2006-03-10 23:44:02.933514984 +0100
+@@ -463,15 +463,11 @@
+ 
+     serial_set_rx_handler(sercon_handle, serial_rx);
+ 
+-    /* HELLO WORLD --- start-of-day banner text. */
+-    printk(XEN_BANNER);
+-    printk(" http://www.cl.cam.ac.uk/netos/xen\n");
+-    printk(" University of Cambridge Computer Laboratory\n\n");
+-    printk(" Xen version %d.%d%s (%s@%s) (%s) %s\n",
++    printk(" Xen version %d.%d%s (%s %s) (%s) (%s) %s\n",
+            XEN_VERSION, XEN_SUBVERSION, XEN_EXTRAVERSION,
+-           XEN_COMPILE_BY, XEN_COMPILE_DOMAIN,
++           XEN_COMPILE_SYSTEM_DISTRIBUTION, XEN_COMPILE_SYSTEM_VERSION,
++           XEN_COMPILE_SYSTEM_MAINTAINER,
+            XEN_COMPILER, XEN_COMPILE_DATE);
+-    printk(" Latest ChangeSet: %s\n\n", XEN_CHANGESET);
+     set_printk_prefix("(XEN) ");
+ 
+     if ( opt_sync_console )
+diff -urNad xen-3.0~/xen/include/xen/compile.h.in xen-3.0/xen/include/xen/compile.h.in
+--- xen-3.0~/xen/include/xen/compile.h.in	2006-02-23 22:07:51.000000000 +0100
++++ xen-3.0/xen/include/xen/compile.h.in	2006-03-10 23:44:02.933514984 +0100
+@@ -3,6 +3,9 @@
+ #define XEN_COMPILE_BY		"@@whoami@@"
+ #define XEN_COMPILE_DOMAIN	"@@domain@@"
+ #define XEN_COMPILE_HOST	"@@hostname@@"
++#define XEN_COMPILE_SYSTEM_DISTRIBUTION "@@system_distribution@@"
++#define XEN_COMPILE_SYSTEM_VERSION      "@@system_version@@"
++#define XEN_COMPILE_SYSTEM_MAINTAINER   "@@system_maintainer@@"
+ #define XEN_COMPILER		"@@compiler@@"
+ 
+ #define XEN_VERSION		@@version@@

@@ -1,4 +1,4 @@
-xen-unstable (head.8954-1) UNRELEASED; urgency=low
+xen-unstable (hg9211-1) UNRELEASED; urgency=low
 
   * Initial release.
 

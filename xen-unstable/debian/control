@@ -1,18 +1,15 @@
 Source: xen-unstable
 Section: misc
 Priority: extra
-Maintainer: Debian Kernel Team <debian-kernel@lists.debian.org>
-Uploaders: Bastian Blank <waldi@debian.org>
-Build-Depends: debhelper (>= 4), libncurses5-dev, libz-dev, python-dev
-Build-Depends-Indep: gs-common, perl, tetex-extra
+Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
+Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch, lsb-release
 Standards-Version: 3.6.2.2
 
 Package: xen-hypervisor-unstable-amd64
-Section: misc
-Architecture: amd64 i386
-Depends: ${shlibs:Depends}
+Architecture: amd64
 Provides: xen-hypervisor, xen-hypervisor-unstable, xen-hypervisor-amd64
-Description: The Xen Hypervisor (x86_64)
+Description: The Xen Hypervisor for amd64
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
  (Domain 0) and the virtual guest systems.
@@ -23,11 +20,9 @@ Description: The Xen Hypervisor (x86_64)
  to build it can be found in the xen-docs package.
 
 Package: xen-hypervisor-unstable-i386
-Section: misc
 Architecture: i386
-Depends: ${shlibs:Depends}
 Provides: xen-hypervisor, xen-hypervisor-unstable, xen-hypervisor-i386
-Description: The Xen Hypervisor
+Description: The Xen Hypervisor for i386
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
  (Domain 0) and the virtual guest systems.
@@ -38,11 +33,9 @@ Description: The Xen Hypervisor
  to build it can be found in the xen-docs package.
 
 Package: xen-hypervisor-unstable-i386-pae
-Section: misc
 Architecture: i386
-Depends: ${shlibs:Depends}
 Provides: xen-hypervisor, xen-hypervisor-unstable, xen-hypervisor-i386-pae
-Description: The Xen Hypervisor (pae enabled version)
+Description: The Xen Hypervisor for i386 (pae enabled version)
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader
  and controls cpu and memory, sharing them between your administrative domain
  (Domain 0) and the virtual guest systems.
@@ -53,9 +46,8 @@ Description: The Xen Hypervisor (pae enabled version)
  to build it can be found in the xen-docs package.
 
 Package: xen-utils-unstable
-Section: misc
 Architecture: amd64 i386
-Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-unstable, libxen3.0-unstable-python, iproute, udev
+Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-unstable, iproute, udev (>> 0.060), python-twisted
 Recommends: bridge-utils
 Provides: xen-utils
 Conflicts: xen-utils
@@ -63,31 +55,10 @@ Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
 
-Package: libxen3.0-unstable
-Section: libs
-Architecture: amd64 i386
-Depends: ${shlibs:Depends}
-Conflicts: xen-docs (<= 1.2), libxen2.0, libxen3.0
-Description: control library for XEN, a Virtual Machine Monitor
- Library to control the XEN microkernel.  Contains functions for creating,
- starting, stopping, saving, virtual instances.
-
-Package: libxen3.0-unstable-dev
-Section: libdevel
-Architecture: amd64 i386
-Depends: libxen3.0-unstable (= ${Source-Version})
-Conflicts: libxen3.0-dev
-Description: development files for the control library for XEN
- Users wishing to develop their own tools for interfaces to the underlying
- XEN kernel should install this package.
-
-Package: libxen3.0-unstable-python
-Section: python
-Architecture: amd64 i386
-Depends: ${shlibs:Depends}, ${python:Depends}
-Conflicts: libxen3.0-python
-Description: python wrapper around libxc, the control library for XEN
- This python library wraps the C library, and provides a nice OO interface
- to the low-level system calls.  It also provides some higher-level config
- file parsing.
+Package: xen-docs-unstable
+Architecture: all
+Description: documentation for XEN, a Virtual Machine Monitor
+ This package contains all the large documentation files for XEN.  This
+ includes a description interface(both the api, and a nice explanation of
+ how XEN works).  It also contains the VBD and Xeno howtos.
 

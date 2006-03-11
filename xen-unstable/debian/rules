@@ -11,41 +11,50 @@ MAJOR    := unstable
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
 
-srcfiles := $(filter-out debian, $(wildcard * .[^.]*))
-$(STAMPS_DIR)/source:
-	@rm -rf $(BUILD_DIR)/source
-	mkdir $(BUILD_DIR)/source
-	cp -a $(srcfiles) $(BUILD_DIR)/source
-	touch $@
+export DH_OPTIONS
+
+unpatch:
 
 setup: $(STAMPS_DIR)/setup
-$(STAMPS_DIR)/setup: $(BUILD_DIR) $(STAMPS_DIR) setup-hypervisor setup-tools
+$(STAMPS_DIR)/setup: $(BUILD_DIR) $(STAMPS_DIR) setup-docs setup-hypervisor setup-tools
 	dh_testdir
 	touch $@
 
-$(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/source
+srcfiles := $(filter-out debian, $(wildcard * .[^.]*))
+$(STAMPS_DIR)/setup-patch:
+	@rm -rf $(BUILD_DIR)/source
+	mkdir $(BUILD_DIR)/source
+	cp -a $(srcfiles) $(BUILD_DIR)/source
+	dpatch -d $(BUILD_DIR)/source apply-all
+	touch $@
+
+$(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/setup-patch
 	@rm -rf $(BUILD_DIR)/build-docs
-	cp -a $(BUILD_DIR)/source $(BUILD_DIR)/build-docs
+	cp -a $(BUILD_DIR)/source/ $(BUILD_DIR)/build-docs
 	touch $@
 
-$(STAMPS_DIR)/setup-hypervisor-%: $(STAMPS_DIR)/source
+$(STAMPS_DIR)/setup-hypervisor-%: $(STAMPS_DIR)/setup-patch
 	@rm -rf $(BUILD_DIR)/build-hypervisor-$*
-	cp -a $(BUILD_DIR)/source $(BUILD_DIR)/build-hypervisor-$*
+	cp -a $(BUILD_DIR)/source/ $(BUILD_DIR)/build-hypervisor-$*
 	touch $@
 
-$(STAMPS_DIR)/setup-tools: $(STAMPS_DIR)/source
+$(STAMPS_DIR)/setup-tools: $(STAMPS_DIR)/setup-patch
 	@rm -rf $(BUILD_DIR)/build-tools
-	cp -a $(BUILD_DIR)/source $(BUILD_DIR)/build-tools
+	cp -a $(BUILD_DIR)/source/ $(BUILD_DIR)/build-tools
 	touch $@
 
 build: $(STAMPS_DIR)/build
-$(STAMPS_DIR)/build: $(BUILD_DIR) $(STAMPS_DIR) $(STAMPS_DIR)/setup build-hypervisor build-tools
+$(STAMPS_DIR)/build: $(BUILD_DIR) $(STAMPS_DIR) $(STAMPS_DIR)/setup build-docs build-hypervisor build-tools
 	dh_testdir
 	touch $@
 
 build-indep:
 
 $(STAMPS_DIR)/build-%: DIR=$(BUILD_DIR)/$(@F)
+
+$(STAMPS_DIR)/build-docs: $(STAMPS_DIR)/setup-docs
+	$(MAKE) -C $(DIR)/docs
+	touch $@
 
 $(STAMPS_DIR)/build-hypervisor-amd64: $(STAMPS_DIR)/setup-hypervisor-amd64
 	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_64
@@ -64,10 +73,12 @@ $(STAMPS_DIR)/build-tools: $(STAMPS_DIR)/setup-tools
 	touch $@
 
 setup-docs:: $(STAMPS_DIR)/setup-docs
-ifneq (,$(filter amd64 i386, $(DEB_HOST_ARCH)))
+build-docs:: $(STAMPS_DIR)/build-docs
+ifneq (,$(filter amd64, $(DEB_HOST_ARCH)))
 build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-amd64
 install-hypervisor:: install-hypervisor-amd64
 setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-amd64
+endif
 ifneq (,$(filter i386, $(DEB_HOST_ARCH)))
 build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-i386
 install-hypervisor:: install-hypervisor-i386
@@ -76,6 +87,7 @@ build-hypervisor:: $(STAMPS_DIR)/build-hypervisor-i386-pae
 install-hypervisor:: install-hypervisor-i386-pae
 setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-i386-pae
 endif
+ifneq (,$(filter amd64 i386 ia64, $(DEB_HOST_ARCH)))
 build-tools:: $(STAMPS_DIR)/build-tools
 install-tools-check:: install-tools
 setup-tools:: $(STAMPS_DIR)/setup-tools
@@ -105,14 +117,17 @@ clean:
 	dh_clean
 
 install-arch: install-hypervisor install-tools-check
-	dh_testdir
-	dh_testroot
-	dh_installdirs
 
 install-indep: install-docs
 
+install-docs: DH_OPTIONS = -pxen-docs-$(MAJOR)
 install-docs:
-	$(MAKE) -C debian/build/build-docs/docs
+	dh_testdir
+	dh_testroot
+	dh_clean
+
+	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
+	dh_install --sourcedir=debian/tmp
 
 install-hypervisor-%:
 	dh_testdir
@@ -123,27 +138,42 @@ install-hypervisor-%:
 	cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen.gz debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 	#cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen-syms debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 
-install-tools: export DH_OPTIONS = -plibxen3.0-unstable -plibxen3.0-unstable-dev -plibxen3.0-unstable-python -pxen-utils-unstable
+install-tools: DH_OPTIONS = -pxen-utils-$(MAJOR)
 install-tools:
 	dh_testdir
 	dh_testroot
 	dh_clean
 
-	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp LIBDIR=lib
+	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
 	dh_install --sourcedir=debian/tmp
 
 # Build architecture-independent files here.
-binary-indep:
+binary-indep: install-indep
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs -i
+	dh_installdocs -i
+	dh_installexamples -i
+	dh_link -i
+	dh_strip -i
+	dh_compress -i
+	dh_fixperms -i
+	dh_installdeb -i
+	dh_shlibdeps -i
+	dh_gencontrol -i
+	dh_md5sums -i
+	dh_builddeb -i
 
 # Build architecture-dependent files here.
-binary-arch: build install-arch
+binary-arch: install-arch
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs -s
 	dh_installdocs -s
 	dh_installexamples -s
-	dh_installinit -p xen-utils-$(MAJOR) --name xend -- defaults 20 21
-	dh_installinit -p xen-utils-$(MAJOR) --name xendomains -- defaults 21 20
+	dh_installinit -p xen-utils-$(MAJOR) --name xend -- 21 20
+	dh_installinit -p xen-utils-$(MAJOR) --name xendomains -- 20 21
 	dh_installman -s
 	dh_link -s
 	dh_strip -s
@@ -152,7 +182,7 @@ binary-arch: build install-arch
 	dh_python -s
 	dh_makeshlibs -s
 	dh_installdeb -s
-	dh_shlibdeps -s -L libxen3.0-unstable
+	dh_shlibdeps -s
 	dh_gencontrol -s
 	dh_md5sums -s
 	dh_builddeb -s

@@ -1,4 +1,0 @@
-usr/include
-usr/lib/*.a
-usr/lib/libxenctrl.so
-usr/lib/libxenguest.so
