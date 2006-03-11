@@ -47,7 +47,7 @@ Description: The Xen Hypervisor for i386 (pae enabled version)
 
 Package: xen-utils-unstable
 Architecture: amd64 i386
-Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-unstable, iproute, udev (>> 0.060), python-twisted
+Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-unstable, iproute, udev (>> 0.060)
 Recommends: bridge-utils
 Provides: xen-utils
 Conflicts: xen-utils
