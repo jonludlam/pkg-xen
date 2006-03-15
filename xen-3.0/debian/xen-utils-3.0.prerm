@@ -1,0 +1,14 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+purge)
+	# Remove udev rules symlink
+	L="/etc/udev/rules.d/z60_alsa-utils.rules"
+	[ -L "$L" ] && rm -f "$L"
+	;;
+
+esac
+
+#DEBHELPER#
