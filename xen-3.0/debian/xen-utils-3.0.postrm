@@ -5,7 +5,7 @@ set -e
 case "$1" in
 purge)
 	# Remove udev rules symlink
-	L="/etc/udev/rules.d/z60_alsa-utils.rules"
+	L="/etc/udev/rules.d/xen-backend.rules"
 	[ -L "$L" ] && rm -f "$L"
 
 	XENSTORED_DIR="/var/lib/xenstored"
