@@ -7,6 +7,10 @@ configure)
 	# Set up udev rules symlink
 	L="/etc/udev/rules.d/xen-backend.rules"
 	[ -e "$L" ] || [ -L "$L" ] || ln -s ../xen-backend.rules "$L"
+
+	XENSTORED_DIR="/var/lib/xenstored"
+	[ ! -d "${XENSTORED_DIR}" ] && install -d -m 0700 "${XENSTORED_DIR}" 
+
 	;;
 # abort-upgrade|abort-remove|abort-deconfigure)
 	# Nothing to do because we didn't take any action in the prerm

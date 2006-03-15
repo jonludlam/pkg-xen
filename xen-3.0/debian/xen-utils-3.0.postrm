@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+purge)
+	# Remove udev rules symlink
+	L="/etc/udev/rules.d/z60_alsa-utils.rules"
+	[ -L "$L" ] && rm -f "$L"
+
+	XENSTORED_DIR="/var/lib/xenstored"
+	[ -d "${XENSTORED_DIR}" ] && rm -r "${XENSTORED_DIR}"
+
+	XENSTORED_RUNDIR="/var/run/xenstored"
+	[ -d "${XENSTORED_RUNDIR}" ] && rm -fr "${XENSTORED_RUNDIR}"
+	;;
+
+esac
+
+#DEBHELPER#
