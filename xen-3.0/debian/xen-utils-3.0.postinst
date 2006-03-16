@@ -6,7 +6,7 @@ case "$1" in
 configure)
 	# Set up udev rules symlink
 	L="/etc/udev/rules.d/z60_xen-backend.rules"
-	[ ! -z "$2"] || [ -e "$L" ] || [ -L "$L" ] || ln -s ../xen-backend.rules "$L"
+	[ ! -z "$2" ] || [ -e "$L" ] || [ -L "$L" ] || ln -s ../xen-backend.rules "$L"
 
 	XENSTORED_DIR="/var/lib/xenstored"
 	[ ! -d "${XENSTORED_DIR}" ] && install -d -m 0700 "${XENSTORED_DIR}" 
