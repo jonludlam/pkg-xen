@@ -12,9 +12,10 @@ configure)
 	[ ! -d "${XENSTORED_DIR}" ] && install -d -m 0700 "${XENSTORED_DIR}" 
 
 	;;
-# abort-upgrade|abort-remove|abort-deconfigure)
-	# Nothing to do because we didn't take any action in the prerm
-	# ;;
+
+abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+
 *)
 	echo "postinst called with unknown argument \`$1'" >&2
 	exit 1
@@ -23,3 +24,4 @@ esac
 
 #DEBHELPER#
 
+exit 0

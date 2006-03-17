@@ -167,7 +167,6 @@ binary-indep: install-indep
 binary-arch: install-arch
 	dh_testdir
 	dh_testroot
-	dh_installdirs -s
 	dh_installchangelogs -s
 	dh_installdocs -s
 	dh_installexamples -s
