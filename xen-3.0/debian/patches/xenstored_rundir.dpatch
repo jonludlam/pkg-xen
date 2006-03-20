@@ -1,0 +1,27 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## xenstored_rundir.dpatch by Julien Danjou <acid@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Create xenstored run directory. 
+
+@DPATCH@
+diff -ru xen-3.0.1.orig/tools/examples/init.d/xend xen-3.0.1/tools/examples/init.d/xend
+--- xen-3.0.1.orig/tools/examples/init.d/xend	2006-01-31 17:09:20.000000000 +0100
++++ xen-3.0.1/tools/examples/init.d/xend	2006-03-20 15:14:48.000000000 +0100
+@@ -7,6 +7,8 @@
+ # chkconfig: 2345 98 01
+ # description: Starts and stops the Xen control daemon.
+ 
++XENSTORED_RUN_DIR="/var/run/xenstored"
++
+ if ! [ -e /proc/xen/privcmd ]; then
+ 	exit 0
+ fi
+@@ -27,6 +29,7 @@
+ 
+ case "$1" in
+   start)
++	[ -d "$XENSTORED_RUN_DIR" ] || mkdir -p "$XENSTORED_RUN_DIR"
+ 	xend start
+ 	await_daemons_up
+ 	;;
