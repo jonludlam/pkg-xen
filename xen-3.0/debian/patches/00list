@@ -4,3 +4,4 @@ libdir
 manpages
 version
 compile_date
+xenstored_rundir
