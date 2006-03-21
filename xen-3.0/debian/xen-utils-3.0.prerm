@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+remove|deconfigure|upgrade)
+	invoke-rc.d xendomains stop || true
+	invoke-rc.d xend stop || true
+	;;
+failed-upgrade)
+	;;
+*)
+	echo "postrm called with unknown argument \`$1'" >&2
+	exit 
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
+
