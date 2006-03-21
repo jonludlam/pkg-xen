@@ -13,8 +13,8 @@ configure)
 
 	update-rc.d xend start 20 2 3 4 5 . stop 21 0 1 6 .
 	update-rc.d xendomains start 21 2 3 4 5 . stop 20 0 1 6 .
-	invoke xend start || true
-	invoke xendomains start || true
+	invoke-rc.d xend start || true
+	invoke-rc.d xendomains start || true
 	;;
 
 abort-upgrade|abort-remove|abort-deconfigure)
