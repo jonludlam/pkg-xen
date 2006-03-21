@@ -2,6 +2,8 @@ etc/udev/*.rules
 etc/xen/auto
 etc/xen/scripts
 etc/xen/xend*
+etc/init.d/xend
+etc/init.d/xendomains
 usr/bin/xenstore*
 usr/lib/python2.3
 usr/lib/xen/bin/xc*
