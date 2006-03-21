@@ -1,7 +1,6 @@
 10sysconfig
-40force-reload
 libdir
 manpages
 version
 compile_date
-xenstored_rundir
+init.d
