@@ -3,8 +3,12 @@
 set -e
 
 case "$1" in
-remove|deconfigure|upgrade)
+remove|deconfigure)
 	invoke-rc.d xendomains stop || true
+	invoke-rc.d xend stop || true
+	;;
+upgrade)
+	# On upgrade just restart xend, but don't touch the running domains...
 	invoke-rc.d xend stop || true
 	;;
 failed-upgrade)
