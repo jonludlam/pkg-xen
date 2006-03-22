@@ -1,314 +1,39 @@
-xen-3.0 (3.0.1-2) UNRELEASED; urgency=low
+xen-3.0 (3.0.1-1) UNRELEASED; urgency=low
 
   * The "preserve our homes" release
   * Now cooperatively maintained by the Debian Xen Team
   * New upstream release (closes: #32749, #342249)
   * Build depend on transfig (closes: #321157)
   * Use gcc rather than gcc-3.4 to compile (closes: #323698)
-  * Split xen-hypervisor and xen-utils
-  * Build both xen-hypervisor and xen-hypervisor-pae packages
-  * Julien Danjou <acid@debian.org>
-     - Change maintainer and add uploaders field
-     - Add force-reload support for init script xendomains
-     - Remove dependancy against bash
-     - Bump standards version to 3.6.2.2
-     - Remove COPYING file from libxen-dev
-     - Hypervisors conflict and replace xen
-  * Guido Trotter <ultrotter@debian.org>
-     - Add dpatch structure to the package
-     - Remove build-dependency on gcc (it's build essential anyway)
-     - Suggest xen-tools in the xen metapackage
-     - Make debian/rules policy compliant
-     - Make SrvServer.py not executable
-     - Make bugtool.py executable
-     - Create NEWS.Debian file with important upgrade notices
-     - Update copyright file
-     - Remove the linux-patch-xen package
-  * Ralph Passgang <ralph@debianbase.de>
-     - Added changes from 3.0.1-0tha3
-     - Removed patch generation from kernel sources in debian/rules
-     - Added the static file debian/linux-2.6.12-xen.patch (which
-       patches a vanilla 2.6.12 to 2.6.12.6-xen, but still with the
-       extraversion stripped off). use make-kpkg with "--arch xen" &
-       "--append-to-version .6-xen" to add the extraversion again.
-     - Changed debian/linux-patch-xen.kpatches
-     - Removed useless build-dependencies: libncurses5-dev, wget
-     - Changed xendomains config path to /etc/default
-     - Added "Conflicts: udev (< 0.059)" for xen-utils-3.0
-     - xen-utils-3.0 now provides xen-utils and xen-hypervisor-3.0 &
-       xen-hypervisor-3.0-i386-pae now provides xen-hypervisor
-     - Made xen-utils-3.0.postinst more fault-tolerant, so that upgrading
-       xen2 -> xen3 don't fail because of a running xen2 hypervisor
-     - Updated the "Replaces & Conflicts" to a versioned conflict.
-  * Jeremy T. Bouse <jbouse@debian.org>
-     - Renamed xen-hypervisor -> xen-hypervisor-3.0
-     - Renamed xen-hypervisor-pae -> xen-hypervisor-3.0-i386-pae
-     - Renamed xen-utils -> xen-utils-3.0
-     - Added "Provides: xen-hypervisor-3.0" to
-       xen-hypervisor-3.0-i386-pae
-     - Set dependency for hypervisor in xen-utils-3.0 to
-       xen-hypervisor-3.0 rather than "xen-hypervisor |
-       xen-hypervisor-pae"
+  * Split xen-hypervisor-3.0 and xen-utils-3.0
+  * Build both normal and pae hypervisor packages
+  * Change maintainer and add uploaders field
+  * Add force-reload support for init script xendomains
+  * Remove dependency against bash
+  * Bump standards version to 3.6.2.2
+  * xen-utils-3.0 conflicts and replaces xen
+  * Add dpatch structure to the package
+  * Remove build-dependency on gcc (it's build essential anyway)
+  * Make SrvServer.py not executable
+  * Create NEWS.Debian file with important upgrade notices
+  * Update copyright file
+  * Remove the linux-patch-xen package
+  * Removed useless build-dependencies: libncurses5-dev, wget
+  * Changed xendomains config path to /etc/default
+  * xen-utils-3.0 now provides xen-utils and xen-hypervisor-3.0-i386 &
+    xen-hypervisor-3.0-i386-pae & xen-hypervizor-amd64 now provide
+    xen-hypervisor
+  * Made xen-utils-3.0.postinst more fault-tolerant, so that upgrading
+    xen2 -> xen3 don't fail because of a running xen2 hypervisor
+  * Updated the "Replaces & Conflicts"
+  * Install only and correctly udev files
+  * Compile date is no more in current locale
+  * Add patch which add the debian version and maintainer in the version
+    string and removes the banner.
+  * Don't install unusable cruft in xen-utils
+  * Remove libxen packages (no stable API/ABI)
 
  -- Julien Danjou <acid@debian.org>  Sat,  4 Mar 2006 12:59:13 +0100
-
-xen (3.0.1-0tha3) unstable; urgency=low
-
-  * updated to testing changeset 8743 (xen 3.0.1 + some patches)
-  * added bash to dependencies, because some scripts actually needs it
-    (even if only "/bin/sh" is set as interpreter in those scripts, so a
-    better solution would be if upstream removes the bashisms at all).
-    thx for the report by Paul Wagland <xen+paul@kungfoocoder.org>.
-  * changed hotplug/udev dependency to: "hotplug | udev (>=0.059)", because
-    older udev versions doesn't work with xen and then hotplug is needed.
-  * changed debian/libxen3.0.install a bit, so that it will install
-    the svmloader (for amd's pacifica) in future. so when svm support is
-    available in the stable xen upstream (most likely in 3.0.2) it will gets
-    installed without further changes needed in the install-file.
-  * xendomains should get stopped before xend, even in a .prerm file ;-P
-    (but maybe there is a better solution, because the domUs doesn't really
-    needed to be stopped on an upgrade).
-
- -- Ralph Passgang <ralph@debianbase.de>  Wed, 15 Feb 2006 22:00:00 +0100
-
-xen (3.0.1-0tha2) unstable; urgency=low
-
-  * added bcc to build-dependencies.it's needed for VMX, otherwise
-    the vmxloader will not be compiled. The few people that are already
-    happy VT-owners will like that ;)
-
- -- Ralph Passgang <ralph@debianbase.de>  Wed, 01 Feb 2006 23:55:00 -0100
-
-xen (3.0.1-0tha1) unstable; urgency=low
-
-  * NEW UPSTREAM: xen-3.0.1 (in fact testing changeset 8738)
-  * changed all python2.3 dependencies to just python,
-    because this should help ubuntu users to use this package.
-  * removed /usr/local/sbin from xen.install, because now all binaries
-    are installed in /usr/sbin & /usr/bin instead (thx to upstream).
-  * added /usr/include/xen/linux/*.h in libxen-dev.install
-
- -- Ralph Passgang <ralph@debianbase.de>  Wed, 01 Feb 2006 18:45:00 -0100
-
-xen (3.0.0-0tha13) unstable; urgency=low
-
-  * NEW UPSTREAM: xen-3.0.0 + testing (changeset 8270)
-  * fixed a critical bug in this package for amd64. libraries are not
-    supposed to exist in /lib64 or /usr/lib64. Installing them in /lib or
-    /usr/lib is the correct location, even on amd64 machines.
-    Before -tha13 a libc6 upgrade will fail because of libraries in the
-    wrong location. This is a xen package issue as well as an libc6 issue,
-    but I can only fix the xen related ;-)
-  * removed the useless "sarge is not allowed to use udev" dependency,
-    because even if udev is too old in sarge, not allowing an installation 
-    of udev will make xen not installable with for example gnome at the same 
-    time. If udev is too old, xen will automaticly use hotplug, so this
-    dependency can safely be removed.
-
- -- Ralph Passgang <ralph@debianbase.de>  Sun, 22 Jan 2006 14:35:00 -0100
-
-xen (3.0.0-0tha12) unstable; urgency=low
-
-  * The "hmm, there is always something to fix" release...
-  * changed the depends for udev to udev (>=0.059), because udev on
-    sarge is too old for xen and if udev is installed it makes hotplug 
-    not working as fallback. So on sarge udev is not allowed to be installed
-    when xen is going to be installed anyway. (thx to Alvaro del Castillo for
-    the report!)
-  * Change the year in the changelog from 2005->2006 for entries from now on.
-  * changed the kernel mirror from http://www.kernel.org to 
-    ftp://ftp.de.kernel.org, because the main mirror is sometimes really slow 
-    for european users. If someone want's to change that again, please edit 
-    Config.mk
-  * removed debian/TODO, because it was very old and not up-to-date...
-
- -- Ralph Passgang <ralph@debianbase.de>  Thu, 17 Jan 2006 01:12:00 -0100
-
-xen (3.0.0-0tha11) unstable; urgency=low
-
-  * NEW UPSTREAM: xen-3.0.0 + testing (changeset 8269)
-    This should fix some minor problem of the 3.0.0 release, see upsream
-    changelog for details. Xen's project leader (Ian Pratt) advises to use
-    testing for production systems at the moment, so I switched my
-    xen3-stable release to testing for now.
-    If you have build your own kernels for xen, then please rebuild it
-    with the new linux-patch-xen to have the testing fixes in your kernel
-    and so that hypervisor and dom0/domU kernel matches the changeset.
-  * NEW: Binary images are available for dom0/domU kernels.
-    You don't have to (but still can) compile your own kernel.
-    Just install "linux-xen0-2.6" with apt-get from the same repository you
-    got this package from and follow the instructions that will get shown.
-    The kernel images are available for i386, i386-pae and amd64. They are
-    available at least in sid and sarge. etch might have a not working
-    "make-kpkg" at the moment, so there is probably no kernel image for etch
-    at the moment (should change in future of course).
-    The kernel images are not tested as well as the xen packages, so please
-    let me know if you have any problems with the new kernel images at all.
-  * xen now suggests: linux-xen0-2.6
-
- -- Ralph Passgang <ralph@debianbase.de>  Sat, 14 Jan 2005 14:00:00 -0100
-
-xen (3.0.0-0tha10) unstable; urgency=low
-
-  * /etc/udev & /etc/hotplug stuff is now installed. Hotplug works at
-    least on sarge & sid without problems, but maybe someone wants to
-    use udev instead of hotplug, so from now on udev config is
-    available as well.
-  * changed xen's depencies to "hotplug | udev".
-
- -- Ralph Passgang <ralph@debianbase.de>  Thu, 12 Jan 2005 01:30:00 -0100
-
-xen (3.0.0-0tha9) unstable; urgency=low
-
-  * moved all python libraries from xen to libxen-python.install, because
-    otherwise they will be installed in the wrong version since the last
-    change on debhelper/dh_install in sid/unstable. d'oh!
-  * added bash to build-depencies, because of some bashisms in configure
-    scripts in upstream (thx to Saku Ytti)
-  * changed the handling of excludes for amd64 a bit to include all python
-    files for amd64.
-  * bridge-utils is now recommend not only suggested.
-  * added libncurses5-dev to depencies as suggested by dpkg-shlibdeps
-    (needed for xenmon.py ?)
-  * the kernel-patch now will create a amd64 and i386 subdir and patch
-    script. the diff is the same for both architectures (thx to Saku Ytti
-    for pointing me on this).
-  * NEXT TARGET: PROVIDING KERNEL IMAGES VIA PACKAGES.DEBIANBASE.DE FOR
-    AT LEAST I386, I386-PAE AND AMD64 ON SARGE/SID/WOODY.
-
- -- Ralph Passgang <ralph@debianbase.de>  Mon, 09 Jan 2005 23:40:00 -0100
-
-xen (3.0.0-0tha8) unstable; urgency=low
-
-  * xen.postinst now creates /var/lock/subsys and /var/lib/xen/save (if not
-    already existing), because the xendomains init script tries to suspend
-    running domainUs in /var/lib/xen/save/. without this the xendomains
-    script is forced to shutdown each domainU when "xendomains stop" is
-    executed.
-
- -- Ralph Passgang <ralph@debianbase.de>  Wed, 21 Dec 2005 13:15:00 -0100
-
-xen (3.0.0-0tha7) unstable; urgency=low
-
-  * the linux-patch-xen package is now useable. The upstream version for
-    creating kernel-patches doesn't work, so I had to find my own solution.
-    The EXTRAVERSION (currently ".6-xen") gets stripped off, because 
-    dh_installkpatches doesn't like to handle kernel-patches with EXTRAVERSIONS.
-    But the linux-patch-xen patch patches a vanilla 2.6.12 kernel to 2.6.12.6-xen,
-    even if EXTRAVERSION doesn't reflect that correctly.
-    With make-kpkg you can add the EXTRAVERSION again with the flag: 
-      --append-to-version .6-xen
-  * make "XEN_TARGET_X86_PAE" an option in debian/rules, for easier switching
-    between both compile options. 
-
- -- Ralph Passgang <ralph@debianbase.de>  Sun, 19 Dec 2005 23:30:00 -0100
-
-xen (3.0.0-0tha6) unstable; urgency=low
-
-  * suggests "bridge-utils", because most people need it (bridge mode is std.)
-
- -- Ralph Passgang <ralph@debianbase.de>  Sun, 18 Dec 2005 23:30:00 -0100
-
-xen (3.0.0-0tha5) unstable; urgency=low
-
-  * The "AMD64"-Release
-  * updated control file for amd64 (works now with i386 & amd64).
-  * updated .install files (for new amd64 arch)
-  * updated rules file (for new amd64 arch)
-  * added manpages (they never were installed before)
-  * added qemu keytabs (I forgot them on the update for xen3)
-
- -- Ralph Passgang <ralph@debianbase.de>  Sun, 18 Dec 2005 16:30:00 -0100
-
-xen (3.0.0-0tha4) unstable; urgency=low
-
-  * updated to gcc as default cc, because gcc-3.4 is not longer needed
-
- -- Ralph Passgang <ralph@debianbase.de>  Fri, 16 Dec 2005 23:59:00 -0100
-
-xen (3.0.0-0tha3) unstable; urgency=low
-
-  * new, a pae version is also available! 
-    see: http://packages.debianbase.de/<distro>/i386/xen3-pae
-  * libxen3.0 now conflicts with libxen2.0, that was obviously although :)
-
- -- Ralph Passgang <ralph@debianbase.de>  Fri, 16 Dec 2005 23:30:00 -0100
-
-xen (3.0.0-0tha2) unstable; urgency=low
-
-  * added hotplug to depencies
- 
- -- Ralph Passgang <ralph@debianbase.de>  Mon, 15 Dec 2005 20:20:50 -0100
-
-xen (3.0.0-0tha1) unstable; urgency=low
-
-  * the first really useable release...
- 
- -- Ralph Passgang <ralph@debianbase.de>  Mon, 12 Dec 2005 23:20:50 -0100
-
-xen (2.99.1-3) unstable; urgency=low
-
-  * "the lost files" + "damn, I need some empty directories"-release
- 
- -- Ralph Passgang <ralph@debianbase.de>  Mon, 12 Dec 2005 22:20:50 -0100
-
-xen (2.99.1-2) unstable; urgency=low
-
-  * added bzip2 to build-depencies
- 
- -- Ralph Passgang <ralph@debianbase.de>  Mon, 12 Dec 2005 22:20:50 -0100
-
-xen (2.99.1-1) unstable; urgency=low
-
-  * fixed rules file, we don't need the debian kernel source package anymore
- 
- -- Ralph Passgang <ralph@debianbase.de>  Mon, 12 Dec 2005 20:40:50 -0100
-
-xen (2.99.1-0) unstable; urgency=low
-
-  * fixed .install files (to catch all new 3.0 files)
-  * removed the depency for debian's linux-source package
- 
- -- Ralph Passgang <ralph@debianbase.de>  Mon, 12 Dec 2005 20:40:50 -0100
-
-xen (2.99.0-1) unstable; urgency=low
-
-  * added linux-source-2.6.12 as Build-Depends.
-
- -- Ralph Passgang <ralph@debianbase.de>  Wed, 07 Dec 2005 11:50:50 -0100
-
-xen (2.99.0-0) unstable; urgency=low
-
-  * new upstream release: Xen 3.0 (07/12/2005)
-  * first test package, not for production use! 
-  * added linux-2.6.12-xen-sparse directory handling
-
- -- Ralph Passgang <ralph@debianbase.de>  Wed, 07 Dec 2005 00:50:50 -0100
-
-xen (2.90.0+daily20051001-0) unstable; urgency=low
-
-  * new upstream release: Xen Unstable (01/10/2005)
-  * added libsdl1.2-dev, libvncserver-dev, libjpeg-dev
-    to the build-depencies
-
- -- Ralph Passgang <ralph@debianbase.de>  Thu, 01 Oct 2005 22:25:50 -0100
-
-xen (2.0.7-0) unstable; urgency=low
-
-  * new upstream release: Xen 2.0.7 (04/08/2005)
-    - this release should fix some minor issues (for example save/restore)
-
- -- Ralph Passgang <ralph@debianbase.de>  Thu, 04 Aug 2005 10:05:50 -0100
-
-xen (2.0.6-1.1) unstable; urgency=low
-
-  * patched the xen package, so that it downloads the kernel from
-    ftp://ftp.de.kernel.org/...
-  * added patch to have xensv work correctly
-    (see: http://lists.xensource.com/archives/html/xen-users/
-     2005-05/msg00342.html)
-
- -- Ralph Passgang <ralph@debianbase.de>  Wed, 27 Jul 2005 19:05:50 -0100
 
 xen (2.0.6-1) unstable; urgency=low
 

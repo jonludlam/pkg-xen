@@ -1,4 +1,4 @@
-xen (3.0.1+hg8743-0+1) unstable; urgency=low
+xen-3.0 (3.0.1-1) unstable; urgency=low
 
   If you are upgrading from official xen 2.0.6 packages (or unofficial 2.0.7
   ones) be careful: manual intervention is needed before you can boot into your
