@@ -155,7 +155,7 @@ binary-indep: install-indep
 	dh_installexamples -i
 	dh_link -i
 	dh_strip -i
-	dh_compress -i
+	dh_compress -i -X.pdf
 	dh_fixperms -i
 	dh_installdeb -i
 	dh_shlibdeps -i
@@ -170,8 +170,8 @@ binary-arch: install-arch
 	dh_installchangelogs -s
 	dh_installdocs -s
 	dh_installexamples -s
-	dh_installinit -p xen-utils-$(MAJOR) --name xend -- 21 20
-	dh_installinit -p xen-utils-$(MAJOR) --name xendomains -- 20 21
+	dh_installinit -p xen-utils-$(MAJOR) --name xend -- defaults 20 21
+	dh_installinit -p xen-utils-$(MAJOR) --name xendomains -- defaults 21 20
 	dh_installman -s
 	dh_link -s
 	dh_strip -s

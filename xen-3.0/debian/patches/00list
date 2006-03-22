@@ -1,6 +1,4 @@
-10sysconfig
 libdir
 manpages
 version
 compile_date
-init.d

@@ -3,8 +3,8 @@ Section: misc
 Priority: extra
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
 Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
+Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch, lsb-release
 Standards-Version: 3.6.2.2
-Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch
 
 Package: xen-hypervisor-3.0-amd64
 Architecture: amd64
@@ -20,7 +20,6 @@ Description: The Xen Hypervisor for amd64
  to build it can be found in the xen-docs package.
 
 Package: xen-hypervisor-3.0-i386
-Section: misc
 Architecture: i386
 Provides: xen-hypervisor, xen-hypervisor-3.0, xen-hypervisor-i386
 Description: The Xen Hypervisor for i386
@@ -34,7 +33,6 @@ Description: The Xen Hypervisor for i386
  to build it can be found in the xen-docs package.
 
 Package: xen-hypervisor-3.0-i386-pae
-Section: misc
 Architecture: i386
 Provides: xen-hypervisor, xen-hypervisor-3.0, xen-hypervisor-i386-pae
 Description: The Xen Hypervisor for i386 (pae enabled version)
@@ -48,19 +46,16 @@ Description: The Xen Hypervisor for i386 (pae enabled version)
  to build it can be found in the xen-docs package.
 
 Package: xen-utils-3.0
-Section: misc
-Architecture: i386 amd64
-Depends: xen-hypervisor-3.0, python-twisted, iproute, udev (>> 0.060), ${shlibs:Depends}, ${python:Depends}
+Architecture: amd64 i386
+Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-3.0, iproute, udev (>> 0.060)
 Recommends: bridge-utils
 Provides: xen-utils
-Conflicts: xen, libxen-python, libxen2.0, libxen2.0-dev
-Replaces: xen, libxen-python, libxen2.0, libxen2.0-dev
+Conflicts: xen-utils, xen, libxen-python, libxen2.0, libxen2.0-dev
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
 
 Package: xen-docs-3.0
-Section: misc
 Architecture: all
 Description: documentation for XEN, a Virtual Machine Monitor
  This package contains all the large documentation files for XEN.  This
