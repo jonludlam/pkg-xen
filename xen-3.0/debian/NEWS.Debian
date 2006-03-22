@@ -18,7 +18,7 @@ xen (3.0.1+hg8743-0+1) unstable; urgency=low
   kernels, and only then start your new Xen 3.0 system.
 
   On the good news side: Xen 3.0 is able to automatically baloon down your
-  Domain 0 to the falue specified in /etc/xen/xend-config.sxp. For it to be
+  Domain 0 to the value specified in /etc/xen/xend-config.sxp. For it to be
   able to do so, just remove your "dom0_mem=" option from the xen kernel line in
   your grub.conf, and also the "mem=" option from your linux module line.
 
