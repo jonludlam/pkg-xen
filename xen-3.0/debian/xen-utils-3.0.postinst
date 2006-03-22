@@ -11,13 +11,6 @@ configure)
 	XENSTORED_DIR="/var/lib/xenstored"
 	[ ! -d "${XENSTORED_DIR}" ] && install -d -m 0700 "${XENSTORED_DIR}" 
 
-	update-rc.d xend start 20 2 3 4 5 . stop 21 0 1 6 .
-	update-rc.d xendomains start 21 2 3 4 5 . stop 20 0 1 6 .
-	invoke-rc.d xend start || true
-	# Only start xendomains if we're installing from scratch, not if we are upgrading an existing installation
-	if [ -z "$2" ]; then
-		invoke-rc.d xendomains start || true
-	fi
 	;;
 
 abort-upgrade|abort-remove|abort-deconfigure)

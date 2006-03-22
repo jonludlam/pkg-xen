@@ -10,9 +10,6 @@ purge)
 
 	XENSTORED_DIR="/var/lib/xenstored"
 	[ -d "${XENSTORED_DIR}" ] && rm -r "${XENSTORED_DIR}"
-
-	update-rc.d xend remove
-	update-rc.d xendomains remove
 	;;
 
 remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
