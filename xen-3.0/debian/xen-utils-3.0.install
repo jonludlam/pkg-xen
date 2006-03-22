@@ -16,5 +16,5 @@ usr/sbin/xenstored
 usr/sbin/xentop
 usr/sbin/xm
 usr/share/man/man5
-usr/share/man/man8/xentop.8
-usr/share/man/man8/xm.8
+usr/share/man/man8
+usr/share/xen/qemu

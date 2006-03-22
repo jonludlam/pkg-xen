@@ -23,4 +23,3 @@ xen-3.0 (3.0.1-1) unstable; urgency=low
   your grub.conf, and also the "mem=" option from your linux module line.
 
  -- Guido Trotter <ultrotter@debian.org>  Tue, 21 Feb 2006 09:07:26 +0100
-
