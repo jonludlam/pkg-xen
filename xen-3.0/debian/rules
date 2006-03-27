@@ -125,7 +125,7 @@ install-docs: DH_OPTIONS = -pxen-docs-$(MAJOR)
 install-docs:
 	dh_testdir
 	dh_testroot
-	dh_clean
+	dh_clean -k
 
 	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
 	dh_install --sourcedir=debian/tmp
@@ -143,7 +143,7 @@ install-tools: DH_OPTIONS = -pxen-utils-$(MAJOR)
 install-tools:
 	dh_testdir
 	dh_testroot
-	dh_clean
+	dh_clean -k
 
 	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
 	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
