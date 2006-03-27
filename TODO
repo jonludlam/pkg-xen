@@ -1,13 +1,8 @@
 
-1. Fix upgrading:
-	Don't shutdown xend/xendomains if upgrading to a minor new release
-	
 2. Contact glibc team:
 	Ask if it's possible to build a non-segmented glibc for xen
 
 	Test /etc/ld.so.hwnocap and maybe implement that in a init.d-script
-
-4. Distribute xen unstable too?
 
 5. Kernel team:
 	Coordinate to have working dom0/domu images for x86 and amd64
