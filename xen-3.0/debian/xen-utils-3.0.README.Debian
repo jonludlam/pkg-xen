@@ -54,6 +54,17 @@ Xen for Debian
    yourself anyway, if you want to try Xen... But don't give up now, compiling
    a kernel is not hard, and trying Xen is worth learning how to do it!)
 
+* About networking:
+   
+   By default Xen modifies your networking configuration, creating a bridge.
+   To avoid breaking a machine's connection to the network the debian package
+   doesn't touch the network configuration unless requested. On the other hand
+   xen needs to connect the guest domains somewhere, in order for them to have
+   networking, and expects that the xen bridge exists. You should hand-tune
+   your networking configuration by editing /etc/xen/xend-config.sxp and
+   possibly /etc/network/interfaces to decide how to connect your domains to
+   the network.
+
 Kindly yours,
 
 Guido Trotter, for the Debian Xen Team.
