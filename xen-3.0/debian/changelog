@@ -1,4 +1,4 @@
-xen-3.0 (3.0.1-1) UNRELEASED; urgency=low
+xen-3.0 (3.0.1+hg8762-1) UNRELEASED; urgency=low
 
   * The "preserve our homes" release
   * Now cooperatively maintained by the Debian Xen Team
@@ -32,8 +32,9 @@ xen-3.0 (3.0.1-1) UNRELEASED; urgency=low
     string and removes the banner.
   * Don't install unusable cruft in xen-utils
   * Remove libxen packages (no stable API/ABI)
+  * 
 
- -- Julien Danjou <acid@debian.org>  Sat,  4 Mar 2006 12:59:13 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Mon, 27 Mar 2006 12:34:53 +0200
 
 xen (2.0.6-1) unstable; urgency=low
 

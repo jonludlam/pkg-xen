@@ -106,6 +106,9 @@ orig: ../orig/xen-$(MAJOR)-$(VERSION)
 	        exit 1; \
 	fi
 
+# This is to make dpatch-edit-patch work
+unpatch: clean
+
 maintainerclean:
 	rm -rf $(filter-out .svn debian, $(wildcard * .[^.]*))
 
@@ -144,6 +147,7 @@ install-tools:
 
 	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
 	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
+	cp debian/scripts/network-dummy $(CURDIR)/debian/tmp/etc/xen/scripts
 	dh_install --sourcedir=debian/tmp
 
 # Build architecture-independent files here.
