@@ -2,7 +2,7 @@ xen-3.0 (3.0.1+hg8762-1) UNRELEASED; urgency=low
 
   * The "preserve our homes" release
   * Now cooperatively maintained by the Debian Xen Team
-  * New upstream release (closes: #32749, #342249)
+  * New upstream release (closes: #327493, #342249)
   * Build depend on transfig (closes: #321157)
   * Use gcc rather than gcc-3.4 to compile (closes: #323698)
   * Split xen-hypervisor-3.0 and xen-utils-3.0
