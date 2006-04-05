@@ -65,6 +65,30 @@ Xen for Debian
    possibly /etc/network/interfaces to decide how to connect your domains to
    the network.
 
+* About loop devices:
+
+   If you plan hosting virtual domains with file backed block devices (ie. the
+   ones xen-tools creates by default) be careful about two issues:
+
+   1. Maximum number of loop devices
+      By default the loop driver supports a maximum of 8 loop devices. Of
+      course since every xen domain uses at least two (one for the data and one
+      for the swap) this number is absolutely insufficient. You should increase
+      it by adding a file named local-loop in /etc/modprobe.d containing the
+      string "options loop max_loop=128", if the loop driver is compiled as a
+      module, or by appending the string max_loop=128 to your kernel parameters
+      if the driver is in-kernel. Of course you can increase or decrease the
+      number 128 as you see fit.
+
+   2. Driver loading (only if loop is compiled as a module)
+      Normally the loop driver gets loaded when the first loop device is
+      accessed. When using udev, though, the loop devices get created only
+      after the driver gets loaded. This means that xen will fail if the loop
+      driver is not already loaded when it tries to start a file-backed virtual
+      domain.  To fix this just add "loop" in your /etc/modules file, thus
+      forcing it to be loaded at boot time.
+   
+
 Kindly yours,
 
 Guido Trotter, for the Debian Xen Team.
