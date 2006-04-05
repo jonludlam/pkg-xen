@@ -1,3 +1,9 @@
+xen-3.0 (3.0.2+hg9583-1) UNRELEASED; urgency=low
+
+  * New upstream release
+
+ -- Guido Trotter <ultrotter@debian.org>  Wed,  5 Apr 2006 23:06:07 +0200
+
 xen-3.0 (3.0.1+hg8762-1) unstable; urgency=low
 
   * The "preserve our homes" release
