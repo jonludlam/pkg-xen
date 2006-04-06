@@ -8,7 +8,7 @@
 diff -urNad xen-3.0~/xen/Makefile xen-3.0/xen/Makefile
 --- xen-3.0~/xen/Makefile	2006-03-11 13:59:27.091532083 +0100
 +++ xen-3.0/xen/Makefile	2006-03-11 14:02:02.651009564 +0100
-@@ -86,8 +86,8 @@
+@@ -81,8 +81,8 @@
  # compile.h contains dynamic build info. Rebuilt on every 'make' invocation.
  include/xen/compile.h: LANG=C
  include/xen/compile.h: include/xen/compile.h.in include/xen/banner.h

@@ -8,7 +8,7 @@
 diff -urNad xen-3.0~/xen/Makefile xen-3.0/xen/Makefile
 --- xen-3.0~/xen/Makefile	2006-02-23 22:07:49.000000000 +0100
 +++ xen-3.0/xen/Makefile	2006-03-10 23:44:24.978464943 +0100
-@@ -96,6 +96,9 @@
+@@ -91,6 +91,9 @@
  	    -e 's/@@subversion@@/$(XEN_SUBVERSION)/g' \
  	    -e 's/@@extraversion@@/$(XEN_EXTRAVERSION)/g' \
  	    -e 's!@@changeset@@!$(shell ((hg parents || head -n 7 ../ChangeLog || echo date: unavailable) | awk '{FS="changeset:[ ]+"}/^changeset/{CS=$$2};{FS="date:[ ]+"}/^date/{D=$$2}; END {print D, CS}') 2>/dev/null)!g' \
@@ -21,7 +21,7 @@ diff -urNad xen-3.0~/xen/Makefile xen-3.0/xen/Makefile
 diff -urNad xen-3.0~/xen/common/kernel.c xen-3.0/xen/common/kernel.c
 --- xen-3.0~/xen/common/kernel.c	2006-02-23 22:07:50.000000000 +0100
 +++ xen-3.0/xen/common/kernel.c	2006-03-10 23:44:02.932515123 +0100
-@@ -104,7 +104,7 @@
+@@ -139,7 +139,7 @@
      {
          struct xen_compile_info info;
          safe_strcpy(info.compiler,       XEN_COMPILER);
@@ -29,11 +29,11 @@ diff -urNad xen-3.0~/xen/common/kernel.c xen-3.0/xen/common/kernel.c
 +        safe_strcpy(info.compile_by,     XEN_COMPILE_SYSTEM_MAINTAINER);
          safe_strcpy(info.compile_domain, XEN_COMPILE_DOMAIN);
          safe_strcpy(info.compile_date,   XEN_COMPILE_DATE);
-         if ( copy_to_user(arg, &info, sizeof(info)) )
+         if ( copy_to_guest(arg, &info, 1) )
 diff -urNad xen-3.0~/xen/drivers/char/console.c xen-3.0/xen/drivers/char/console.c
 --- xen-3.0~/xen/drivers/char/console.c	2006-02-23 22:07:50.000000000 +0100
 +++ xen-3.0/xen/drivers/char/console.c	2006-03-10 23:44:02.933514984 +0100
-@@ -463,15 +463,11 @@
+@@ -480,15 +480,11 @@
  
      serial_set_rx_handler(sercon_handle, serial_rx);
  
