@@ -5,10 +5,10 @@
 ## DP: Use dummy script rather than bridge one as default for xend
 
 @DPATCH@
-diff -urNad xen-3.0-3.0.1+hg8762/tools/examples/xend-config.sxp /tmp/dpep.lTdzeJ/xen-3.0-3.0.1+hg8762/tools/examples/xend-config.sxp
---- xen-3.0-3.0.1+hg8762/tools/examples/xend-config.sxp	2006-03-25 16:43:37.864766456 +0100
-+++ /tmp/dpep.lTdzeJ/xen-3.0-3.0.1+hg8762/tools/examples/xend-config.sxp	2006-03-27 12:24:47.000000000 +0200
-@@ -84,7 +84,7 @@
+diff -urNad xen-3.0-3.0.2+hg9583/tools/examples/xend-config.sxp /tmp/dpep.QATq8l/xen-3.0-3.0.2+hg9583/tools/examples/xend-config.sxp
+--- xen-3.0-3.0.2+hg9583/tools/examples/xend-config.sxp	2006-04-06 14:17:55.256393320 +0200
++++ /tmp/dpep.QATq8l/xen-3.0-3.0.2+hg9583/tools/examples/xend-config.sxp	2006-04-06 14:18:09.000000000 +0200
+@@ -86,7 +86,7 @@
  # two fake interfaces per guest domain.  To do things like this, write
  # yourself a wrapper script, and call network-bridge from it, as appropriate.
  #
