@@ -7,6 +7,7 @@ DESC=XEN
 
 test -x $DAEMON || exit 0
 test -e /proc/xen/privcmd || exit 0
+grep -q "control_d" /proc/xen/capabilities || exit 0
 
 # Wait for Xend to be up
 await_daemons_up () {
