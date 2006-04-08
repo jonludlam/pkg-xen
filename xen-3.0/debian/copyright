@@ -119,6 +119,28 @@ xen/include/public/version.h
 xen/include/public/xen.h
 
 =====================================================================
+There are other exceptions:
+=====================================================================
+
+The files under extras/mini-os are under a BSD licence.
+
+The following files are under the LGPL licence version 2.1, which on a Debian
+system resides in /usr/share/common-licenses/LGPL-2.1. Unless explicitely
+specified only version 2.1 of the licence can be used.
+
+tools/examples/block-common.sh
+tools/examples/locking.sh
+tools/examples/logging.sh
+tools/examples/vif-common.sh
+tools/examples/vtpm-hotplug-common.sh
+tools/examples/xen-hotplug-common.sh
+tools/examples/xen-network-common.sh
+tools/examples/xen-script-common.sh
+tools/firmware/rombios/apmbios.S
+tools/firmware/rombios/rombios.c
+all the files under tools/firmware/vgabios (licence v2.1 or above)
+
+=====================================================================
 xenstore license
 
     This library is free software; you can redistribute it and/or
@@ -172,3 +194,4 @@ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
 STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
 OF THE POSSIBILITY OF SUCH DAMAGE.
+
