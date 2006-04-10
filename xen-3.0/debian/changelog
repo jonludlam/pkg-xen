@@ -1,6 +1,13 @@
+xen-3.0 (3.0.2+hg9602-1) UNRELEASED; urgency=low
+
+  * Merge upstream bug fixes
+
+ -- Guido Trotter <ultrotter@debian.org>  Mon, 10 Apr 2006 21:14:35 +0200
+
 xen-3.0 (3.0.2+hg9598-1) unstable; urgency=low
 
   * New upstream release
+  * Fix copyright file
 
  -- Julien Danjou <acid@debian.org>  Mon, 10 Apr 2006 17:02:55 +0200
 
