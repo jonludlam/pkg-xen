@@ -48,7 +48,7 @@ Description: The Xen Hypervisor for i386 (pae enabled version)
 Package: xen-utils-3.0
 Architecture: amd64 i386
 Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-3.0, iproute, udev (>> 0.060)
-Recommends: bridge-utils
+Recommends: bridge-utils, libc6-xen
 Provides: xen-utils
 Conflicts: xen-utils, xen, libxen-python, libxen2.0, libxen2.0-dev
 Description: XEN administrative tools
