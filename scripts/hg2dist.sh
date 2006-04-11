@@ -18,7 +18,7 @@ fi
 HASH=$( cd $HGDIR; $HG id | awk '{ print $1}')
 CHANGESET=$( cd $HGDIR; $HG log -r $HASH | head -n 1 | sed -e 's/ //g;' | cut -d: -f2)
 
-RELEASE_LG=$( cd $HGDIR; $HG tags | perl -ne 'BEGIN { $done = 0; } /RELEASE-(\S+) +(\d+):/; if ($1 and $2 <= '$CHANGESET' and not $done) { print $2,":",$1,"\n"; $done = 1; }')
+RELEASE_LG=$( cd $HGDIR; $HG tags | perl -ne 'BEGIN { $done = 0; } /RELEASE-([0-9.]+) +(\d+):/; if ($1 and $2 <= '$CHANGESET' and not $done) { print $2,":",$1,"\n"; $done = 1; }')
 REL_CHG=$( echo $RELEASE_LG | cut -d: -f1 )
 REL_VER=$( echo $RELEASE_LG | cut -d: -f2 )
 
