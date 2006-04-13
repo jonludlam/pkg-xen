@@ -1,3 +1,9 @@
+xen-3.0 (3.0.2+hg9614-1) UNRELEASED; urgency=low
+
+  * Merge upstream fixes trunk
+
+ -- Guido Trotter <ultrotter@debian.org>  Thu, 13 Apr 2006 10:52:29 +0200
+
 xen-3.0 (3.0.2+hg9611-1) unstable; urgency=low
 
   * Merge upstream bug fixes
