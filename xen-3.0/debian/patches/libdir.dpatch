@@ -6,9 +6,9 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-3.0-3.0.2+hg9583/Config.mk /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/Config.mk
---- xen-3.0-3.0.2+hg9583/Config.mk	2006-04-06 14:50:25.617893304 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/Config.mk	2006-04-06 14:52:25.000000000 +0200
+diff -urNad xen-3.0~/Config.mk xen-3.0/Config.mk
+--- xen-3.0~/Config.mk	2006-04-11 14:47:46.000000000 +0200
++++ xen-3.0/Config.mk	2006-04-19 15:41:34.831050223 +0200
 @@ -46,11 +46,7 @@
  CFLAGS  += -m64
  endif
@@ -21,9 +21,22 @@ diff -urNad xen-3.0-3.0.2+hg9583/Config.mk /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583
  
  ifneq ($(EXTRA_PREFIX),)
  EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
-diff -urNad xen-3.0-3.0.2+hg9583/tools/console/Makefile /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/console/Makefile
---- xen-3.0-3.0.2+hg9583/tools/console/Makefile	2006-04-06 14:50:25.618893152 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/console/Makefile	2006-04-06 14:56:43.000000000 +0200
+diff -urNad xen-3.0~/tools/Rules.mk xen-3.0/tools/Rules.mk
+--- xen-3.0~/tools/Rules.mk	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/Rules.mk	2006-04-19 15:41:34.833049945 +0200
+@@ -10,6 +10,9 @@
+ XEN_XENSTORE       = $(XEN_ROOT)/tools/xenstore
+ XEN_LIBXENSTAT     = $(XEN_ROOT)/tools/xenstat/libxenstat/src
+ 
++RPATH_ARG := -Wl,-rpath,/usr/$(LIBDIR)/xen
++LDFLAGS += $(RPATH_ARG)
++
+ X11_LDPATH = -L/usr/X11R6/$(LIBDIR)
+ 
+ CFLAGS += -D__XEN_INTERFACE_VERSION__=0x00030101
+diff -urNad xen-3.0~/tools/console/Makefile xen-3.0/tools/console/Makefile
+--- xen-3.0~/tools/console/Makefile	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/console/Makefile	2006-04-19 15:41:34.831050223 +0200
 @@ -23,11 +23,11 @@
  	$(RM) client/*.o daemon/*.o
  
@@ -38,9 +51,9 @@ diff -urNad xen-3.0-3.0.2+hg9583/tools/console/Makefile /tmp/dpep.hX1OV7/xen-3.0
  	      -lxenctrl -lxenstore
  
  install: $(BIN)
-diff -urNad xen-3.0-3.0.2+hg9583/tools/ioemu/target-i386-dm/Makefile /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/ioemu/target-i386-dm/Makefile
---- xen-3.0-3.0.2+hg9583/tools/ioemu/target-i386-dm/Makefile	2006-04-06 14:50:25.619893000 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/ioemu/target-i386-dm/Makefile	2006-04-06 14:57:52.000000000 +0200
+diff -urNad xen-3.0~/tools/ioemu/target-i386-dm/Makefile xen-3.0/tools/ioemu/target-i386-dm/Makefile
+--- xen-3.0~/tools/ioemu/target-i386-dm/Makefile	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/ioemu/target-i386-dm/Makefile	2006-04-19 15:41:34.832050084 +0200
 @@ -195,7 +195,7 @@
  #########################################################
  
@@ -50,9 +63,9 @@ diff -urNad xen-3.0-3.0.2+hg9583/tools/ioemu/target-i386-dm/Makefile /tmp/dpep.h
  ifndef CONFIG_USER_ONLY
  LIBS+=-lz
  endif
-diff -urNad xen-3.0-3.0.2+hg9583/tools/libxc/Makefile /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/libxc/Makefile
---- xen-3.0-3.0.2+hg9583/tools/libxc/Makefile	2006-04-06 14:50:25.620892848 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/libxc/Makefile	2006-04-06 15:09:25.000000000 +0200
+diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
+--- xen-3.0~/tools/libxc/Makefile	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/libxc/Makefile	2006-04-19 15:41:34.832050084 +0200
 @@ -4,9 +4,6 @@
  INSTALL_DATA	= $(INSTALL) -m0644
  INSTALL_DIR	= $(INSTALL) -d -m0755
@@ -129,9 +142,18 @@ diff -urNad xen-3.0-3.0.2+hg9583/tools/libxc/Makefile /tmp/dpep.hX1OV7/xen-3.0-3
 +	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenguest.so -shared -o $@ $^ -lz -lxenctrl
  
  -include $(DEPS)
-diff -urNad xen-3.0-3.0.2+hg9583/tools/misc/cpuperf/Makefile /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/misc/cpuperf/Makefile
---- xen-3.0-3.0.2+hg9583/tools/misc/cpuperf/Makefile	2006-04-06 14:50:25.622892544 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/misc/cpuperf/Makefile	2006-04-06 15:11:15.000000000 +0200
+diff -urNad xen-3.0~/tools/misc/Makefile xen-3.0/tools/misc/Makefile
+--- xen-3.0~/tools/misc/Makefile	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/misc/Makefile	2006-04-19 15:41:34.833049945 +0200
+@@ -50,4 +50,4 @@
+ 	$(CC) -c $(CFLAGS) -o $@ $<
+ 
+ $(TARGETS): %: %.o Makefile
+-	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl
+diff -urNad xen-3.0~/tools/misc/cpuperf/Makefile xen-3.0/tools/misc/cpuperf/Makefile
+--- xen-3.0~/tools/misc/cpuperf/Makefile	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/misc/cpuperf/Makefile	2006-04-19 15:41:34.832050084 +0200
 @@ -35,7 +35,7 @@
  	$(CC) $(CFLAGS) -o $@ $<
  
@@ -141,18 +163,9 @@ diff -urNad xen-3.0-3.0.2+hg9583/tools/misc/cpuperf/Makefile /tmp/dpep.hX1OV7/xe
  
  cpuperf-perfcntr: cpuperf.c $(HDRS) Makefile
  	$(CC) $(CFLAGS) -DPERFCNTR -o $@ $<
-diff -urNad xen-3.0-3.0.2+hg9583/tools/misc/Makefile /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/misc/Makefile
---- xen-3.0-3.0.2+hg9583/tools/misc/Makefile	2006-04-06 14:50:25.622892544 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/misc/Makefile	2006-04-06 15:10:28.000000000 +0200
-@@ -50,4 +50,4 @@
- 	$(CC) -c $(CFLAGS) -o $@ $<
- 
- $(TARGETS): %: %.o Makefile
--	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
-+	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl
-diff -urNad xen-3.0-3.0.2+hg9583/tools/python/setup.py /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/python/setup.py
---- xen-3.0-3.0.2+hg9583/tools/python/setup.py	2006-04-06 14:50:25.623892392 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/python/setup.py	2006-04-06 15:12:28.000000000 +0200
+diff -urNad xen-3.0~/tools/python/setup.py xen-3.0/tools/python/setup.py
+--- xen-3.0~/tools/python/setup.py	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/python/setup.py	2006-04-19 15:41:34.833049945 +0200
 @@ -5,6 +5,8 @@
  XEN_ROOT = "../.."
  
@@ -178,10 +191,10 @@ diff -urNad xen-3.0-3.0.2+hg9583/tools/python/setup.py /tmp/dpep.hX1OV7/xen-3.0-
                 include_dirs       = include_dirs + [ "xen/lowlevel/xs" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
-diff -urNad xen-3.0-3.0.2+hg9583/tools/python/xen/util/auxbin.py /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/python/xen/util/auxbin.py
---- xen-3.0-3.0.2+hg9583/tools/python/xen/util/auxbin.py	2006-04-06 14:50:25.624892240 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/python/xen/util/auxbin.py	2006-04-06 15:13:38.000000000 +0200
-@@ -15,34 +15,16 @@
+diff -urNad xen-3.0~/tools/python/xen/util/auxbin.py xen-3.0/tools/python/xen/util/auxbin.py
+--- xen-3.0~/tools/python/xen/util/auxbin.py	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/python/xen/util/auxbin.py	2006-04-19 15:42:29.999371693 +0200
+@@ -15,14 +15,7 @@
  # Copyright (C) 2005 XenSource Ltd
  #============================================================================
  
@@ -197,43 +210,23 @@ diff -urNad xen-3.0-3.0.2+hg9583/tools/python/xen/util/auxbin.py /tmp/dpep.hX1OV
  
  import os
  import os.path
+@@ -37,12 +30,5 @@
  
  
- def execute(exe, args = None):
--    exepath = pathTo(exe)
-+    exepath = os.path.join(LIB_BIN, exe)
-     a = [ exepath ]
-     if args:
-         a.extend(args)
-     os.execv(exepath, a)
- 
--
--def pathTo(exe):
+ def pathTo(exe):
 -    return os.path.join(path(), exe)
 -
--
++    return os.path.join(LIB_BIN, exe)
+ 
 -def path():
 -    machine = os.uname()[4]
 -    if machine in LIB_64_ARCHS and os.path.exists(LIB_BIN_64):
 -        return LIB_BIN_64
 -    else:
 -        return LIB_BIN_32
-diff -urNad xen-3.0-3.0.2+hg9583/tools/Rules.mk /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/Rules.mk
---- xen-3.0-3.0.2+hg9583/tools/Rules.mk	2006-04-06 14:50:25.618893152 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/Rules.mk	2006-04-06 15:17:19.000000000 +0200
-@@ -10,6 +10,9 @@
- XEN_XENSTORE       = $(XEN_ROOT)/tools/xenstore
- XEN_LIBXENSTAT     = $(XEN_ROOT)/tools/xenstat/libxenstat/src
- 
-+RPATH_ARG := -Wl,-rpath,/usr/$(LIBDIR)/xen
-+LDFLAGS += $(RPATH_ARG)
-+
- X11_LDPATH = -L/usr/X11R6/$(LIBDIR)
- 
- CFLAGS += -D__XEN_INTERFACE_VERSION__=0x00030101
-diff -urNad xen-3.0-3.0.2+hg9583/tools/xenstore/Makefile /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/xenstore/Makefile
---- xen-3.0-3.0.2+hg9583/tools/xenstore/Makefile	2006-04-06 14:50:25.625892088 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/xenstore/Makefile	2006-04-06 15:15:32.000000000 +0200
+diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
+--- xen-3.0~/tools/xenstore/Makefile	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/xenstore/Makefile	2006-04-19 15:41:34.833049945 +0200
 @@ -146,8 +146,8 @@
  	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)/usr/bin
  	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/bin
@@ -245,9 +238,9 @@ diff -urNad xen-3.0-3.0.2+hg9583/tools/xenstore/Makefile /tmp/dpep.hX1OV7/xen-3.
  	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
  	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
  
-diff -urNad xen-3.0-3.0.2+hg9583/tools/xentrace/Makefile /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/xentrace/Makefile
---- xen-3.0-3.0.2+hg9583/tools/xentrace/Makefile	2006-04-06 14:50:25.626891936 +0200
-+++ /tmp/dpep.hX1OV7/xen-3.0-3.0.2+hg9583/tools/xentrace/Makefile	2006-04-06 15:16:07.000000000 +0200
+diff -urNad xen-3.0~/tools/xentrace/Makefile xen-3.0/tools/xentrace/Makefile
+--- xen-3.0~/tools/xentrace/Makefile	2006-04-11 14:47:47.000000000 +0200
++++ xen-3.0/tools/xentrace/Makefile	2006-04-19 15:41:34.834049806 +0200
 @@ -48,4 +48,4 @@
  	$(RM) *.a *.so *.o *.rpm $(BIN) $(LIBBIN)
  
