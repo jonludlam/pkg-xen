@@ -1,8 +1,12 @@
-xen-3.0 (3.0.2+hg9629-1) UNRELEASED; urgency=low
+xen-3.0 (3.0.2+hg9646-1) unstable; urgency=low
 
+  [ Guido Trotter ]
   * Merge upstream fixes trunk
 
- -- Guido Trotter <ultrotter@debian.org>  Tue, 18 Apr 2006 16:08:47 +0200
+  [ Bastian Blank ]
+  * debian/patches/libdir.dpatch: Update to make xm save work
+
+ -- Julien Danjou <acid@debian.org>  Mon, 24 Apr 2006 18:02:07 +0200
 
 xen-3.0 (3.0.2+hg9611-1) unstable; urgency=low
 
