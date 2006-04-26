@@ -63,7 +63,7 @@ $(STAMPS_DIR)/build-hypervisor-i386: $(STAMPS_DIR)/setup-hypervisor-i386
 	touch $@
 
 $(STAMPS_DIR)/build-hypervisor-i386-pae: $(STAMPS_DIR)/setup-hypervisor-i386-pae
-	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_32 XEN_TARGET_X86_PAE=y
+	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_32 XEN_TARGET_X86_PAE=y pae=y
 	touch $@
 
 $(STAMPS_DIR)/build-tools: $(STAMPS_DIR)/setup-tools
