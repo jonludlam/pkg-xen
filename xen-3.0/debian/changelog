@@ -1,3 +1,11 @@
+xen-3.0 (3.0.2+hg9656-2) unstable; urgency=low
+
+  * Update xen-hypervisor-3.0-i386 and xen-hypervisor-3.0-i386-pae
+    descriptions, specifying what the difference between the two packages is
+    (closes: #366019)
+
+ -- Guido Trotter <ultrotter@debian.org>  Thu,  4 May 2006 20:26:25 +0200
+
 xen-3.0 (3.0.2+hg9656-1) unstable; urgency=low
 
   * Merge upstream fixes trunk

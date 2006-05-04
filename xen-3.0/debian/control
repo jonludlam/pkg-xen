@@ -31,6 +31,9 @@ Description: The Xen Hypervisor for i386
  specifically crafted to work as the Domain 0, mediating hardware access for
  XEN itself. An example config file for this kernel and documentation on how
  to build it can be found in the xen-docs package.
+ .
+ This version of the hypervisor is built with support for systems with up to
+ 4GB of memory. If you have more please install the -pae version instead.
 
 Package: xen-hypervisor-3.0-i386-pae
 Architecture: i386
@@ -44,6 +47,10 @@ Description: The Xen Hypervisor for i386 (pae enabled version)
  specifically crafted to work as the Domain 0, mediating hardware access for
  XEN itself. An example config file for this kernel and documentation on how
  to build it can be found in the xen-docs package.
+ .
+ This version of the hypervisor is built with PAE enabled, in order to support
+ systems with more than 4GB of memory. If you have less than that you should
+ probably choose the non -pae version.
 
 Package: xen-utils-3.0
 Architecture: amd64 i386
