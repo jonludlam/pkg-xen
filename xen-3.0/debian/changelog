@@ -1,4 +1,4 @@
-xen-3.0 (3.0.2+hg9681-1) UNRELEASED; urgency=low
+xen-3.0 (3.0.2+hg9681-1) unstable; urgency=low
 
   * Update xen-hypervisor-3.0-i386 and xen-hypervisor-3.0-i386-pae
     descriptions, specifying what the difference between the two packages is
