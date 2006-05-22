@@ -1,6 +1,9 @@
 xen-3.0 (3.0.2+hg9681-2) UNRELEASED; urgency=low
 
-  * Update Standards Version
+  [ Guido Trotter ]
+    * Update Standards Version
+  [ Bastian Blanks ]
+    * Add xen-ioemu-3.0 package to support HVM guests
 
  -- Guido Trotter <ultrotter@debian.org>  Fri, 19 May 2006 10:46:12 +0200
 
