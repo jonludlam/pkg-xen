@@ -62,6 +62,13 @@ Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
 
+Package: xen-ioemu-3.0
+Architecture: amd64 i386
+Depends: ${shlibs:Depends}, xen-utils-3.0 (= ${Source-Version})
+Description: XEN administrative tools
+ The userspace tools to manage a system virtualized through the XEN virtual
+ machine monitor.
+
 Package: xen-docs-3.0
 Architecture: all
 Description: documentation for XEN, a Virtual Machine Monitor

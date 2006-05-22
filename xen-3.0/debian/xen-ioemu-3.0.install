@@ -1,0 +1,3 @@
+usr/lib/xen/bin/qemu-dm
+usr/lib/xen/boot
+usr/share/xen/qemu

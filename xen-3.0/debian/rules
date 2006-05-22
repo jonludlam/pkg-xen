@@ -139,7 +139,7 @@ install-hypervisor-%:
 	cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen.gz debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 	#cp $(BUILD_DIR)/build-hypervisor-$*/xen/xen-syms debian/xen-hypervisor-$(MAJOR)-$*/boot/xen-$(MAJOR)-$*.gz
 
-install-tools: DH_OPTIONS = -pxen-utils-$(MAJOR)
+install-tools: DH_OPTIONS = -pxen-utils-$(MAJOR) -pxen-ioemu-$(MAJOR)
 install-tools:
 	dh_testdir
 	dh_testroot
