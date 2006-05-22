@@ -68,6 +68,13 @@ Depends: ${shlibs:Depends}, xen-utils-3.0 (= ${Source-Version})
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
+ .
+ This package includes the utilities required to support HVM domains, which
+ allows full virtualization of unmodified operating systems, such as
+ Microsoft's Windows product line, and standard Linux kernels.
+ .
+ For this to work, you will need a CPU with hardware virtualization support,
+ such as Intel's CPU's with VT, or AMD's CPU's with Pacifica.
 
 Package: xen-docs-3.0
 Architecture: all
