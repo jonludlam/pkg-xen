@@ -74,7 +74,7 @@ Description: XEN administrative tools
  Microsoft's Windows product line, and standard Linux kernels.
  .
  For this to work, you will need a CPU with hardware virtualization support,
- such as Intel's CPU's with VT, or AMD's CPU's with Pacifica.
+ such as Intel's CPUs with VT, or AMD's CPUs with Pacifica.
 
 Package: xen-docs-3.0
 Architecture: all
