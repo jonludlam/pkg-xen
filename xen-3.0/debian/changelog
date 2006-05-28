@@ -1,8 +1,8 @@
-xen-3.0 (3.0.2+hg9687-1) UNRELEASED; urgency=low
+xen-3.0 (3.0.2+hg9696-1) UNRELEASED; urgency=low
 
   [ Guido Trotter ]
     * Update Standards Version
-    * Merge upstream fixes trunk
+    * Merge upstream fixes trunk (upstream 3.0.2-3 + a couple of fixes)
   [ Bastian Blank ]
     * Add xen-ioemu-3.0 package to support HVM guests (closes: #368496)
 
