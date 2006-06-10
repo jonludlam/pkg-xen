@@ -6,7 +6,11 @@ Xen for Debian
    Since Xen guest machines have to work in non-contiguous areas of memory,
    they cannot support a segmented glibc efficiently.  If your glibc is
    segmented Xen will have to emulate the support, with a high performance
-   penalty. To solve this problem you just have to execute this command:
+   penalty. Luckily the Debian GLibc Team has agreed to provide a non-segmented
+   version to be used with xen, which is available in the libc6-xen package,
+   recommended by this one. Should this package be not available for you (eg.
+   because you are using xen on Debian 3.1 - sarge) you can work around the
+   segmentation issue by just executing this command:
 
    mv /lib/tls /lib/tls.disabled
 
@@ -19,9 +23,9 @@ Xen for Debian
    rm -rf /lib/tls.disabled
    mv /lib/tls /lib/tls.disabled
 
-   again. We'll be working towards a better solution, but for now this is it.
-   Please remember to always keep your system tls disabled.
-
+   again. This of course is not necessary if you use the provided libc6-xen
+   package, which of course is the recommended course of action whenever
+   possible.  Anyway please remember to always keep your system tls disabled.
 
 * About the kernel:
    
