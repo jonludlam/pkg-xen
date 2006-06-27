@@ -29,14 +29,18 @@ Xen for Debian
 
 * About the kernel:
    
-   Unfortunately for now we cannot provide precompiled Linux Kernels with the
-   xen patch applied and configured to work in a Domain 0 or in an unprivileged
-   domain. The only thing we can give you is the patch, which is included in
-   the linux-patch-xen package.  You are expected to install this package,
-   download a 2.6.12 kernel from kernel.org (this is the version supported by
-   xen right now. The patch will make it a 2.6.12.6+xen kernel) and roll your
-   own kernel.
+   Debian provides a xen enabled kernel in the linux-image-xen-* packages,
+   available both in unstable/testing and, for sarge, in bpo. You can use the
+   same kernel for both your domain 0 and your unprivileged domains.
 
+   Should you want to roll your own kernel this is the way you do it. First
+   download from http://alioth.debian.org/projects/pkg-xen/ the kernel patch
+   for your version of xen.  Then download the relevant kernel from kernel.org,
+   apply the patch, configure and build your kernel in the standard way (with
+   kernel package). If you do it this way you can even build a different
+   lightweight kernel for your unprivileged domains, which is the standard xen
+   way to do things.
+   
    After you've done so you can add a section similar to this one to your
    /boot/grub/menu.lst file in order to boot your xen system. (Only grub is
    supported on Xen systems, if you're a LILO fan we're sorry, there's no way
@@ -51,12 +55,6 @@ Xen for Debian
    Of course you have this example supplying your own kernel path and root
    device in the module line in order to have a working Xen system after a
    reboot.
-
-   We will provide a "roll your own xen kernel" manual and example config files
-   later on. We also hope to be able to provide complete Xen kernels, sooner or
-   later, so don't despair! (Well, do, since in the meantime you have to do it
-   yourself anyway, if you want to try Xen... But don't give up now, compiling
-   a kernel is not hard, and trying Xen is worth learning how to do it!)
 
 * About networking:
    

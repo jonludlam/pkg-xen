@@ -1,3 +1,11 @@
+xen-3.0 (3.0.2+hg9758-1) unstable; urgency=low
+
+   [ Guido Trotter ]
+     * Update xen-utils' README.Debian (closes: #372524)
+     * Merge upstream fixes trunk
+
+ -- Guido Trotter <ultrotter@debian.org>  Tue, 27 Jun 2006 09:46:56 +0200
+
 xen-3.0 (3.0.2+hg9697-1) unstable; urgency=low
 
   [ Guido Trotter ]
