@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
 Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Build-Depends: tetex-bin, tetex-extra, gs-common, debhelper (>= 4), libcurl3-dev | libcurl-dev, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch, lsb-release
-Standards-Version: 3.6.2.2
+Standards-Version: 3.7.2.0
 
 Package: xen-hypervisor-unstable-amd64
 Architecture: amd64
@@ -31,6 +31,9 @@ Description: The Xen Hypervisor for i386
  specifically crafted to work as the Domain 0, mediating hardware access for
  XEN itself. An example config file for this kernel and documentation on how
  to build it can be found in the xen-docs package.
+ .
+ This version of the hypervisor is built with support for systems with up to
+ 4GB of memory. If you have more please install the -pae version instead.
 
 Package: xen-hypervisor-unstable-i386-pae
 Architecture: i386
@@ -44,16 +47,34 @@ Description: The Xen Hypervisor for i386 (pae enabled version)
  specifically crafted to work as the Domain 0, mediating hardware access for
  XEN itself. An example config file for this kernel and documentation on how
  to build it can be found in the xen-docs package.
+ .
+ This version of the hypervisor is built with PAE enabled, in order to support
+ systems with more than 4GB of memory. If you have less than that you should
+ probably choose the non -pae version.
 
 Package: xen-utils-unstable
 Architecture: amd64 i386
 Depends: ${shlibs:Depends}, ${python:Depends}, xen-hypervisor-unstable, iproute, udev (>> 0.060)
-Recommends: bridge-utils
+Recommends: bridge-utils, libc6-xen
 Provides: xen-utils
-Conflicts: xen-utils
+Conflicts: xen-utils, xen, libxen-python, libxen2.0, libxen2.0-dev
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
+
+Package: xen-ioemu-unstable
+Architecture: amd64 i386
+Depends: ${shlibs:Depends}, xen-utils-unstable (= ${Source-Version})
+Description: XEN administrative tools
+ The userspace tools to manage a system virtualized through the XEN virtual
+ machine monitor.
+ .
+ This package includes the utilities required to support HVM domains, which
+ allows full virtualization of unmodified operating systems, such as
+ Microsoft's Windows product line, and standard Linux kernels.
+ .
+ For this to work, you will need a CPU with hardware virtualization support,
+ such as Intel's CPUs with VT, or AMD's CPUs with Pacifica.
 
 Package: xen-docs-unstable
 Architecture: all
