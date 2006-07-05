@@ -4,9 +4,11 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/sbin/xend
 NAME=xend
 DESC=XEN
+XENSTORED_RUN_DIR="/var/run/xenstored"
 
 test -x $DAEMON || exit 0
 test -e /proc/xen/privcmd || exit 0
+grep -q "control_d" /proc/xen/capabilities || exit 0
 
 # Wait for Xend to be up
 await_daemons_up () {
@@ -27,6 +29,7 @@ set -e
 case "$1" in
   start)
 	echo -n "Starting $DESC: "
+	[ -d "$XENSTORED_RUN_DIR" ] || mkdir -p "$XENSTORED_RUN_DIR"
 	xend start
 	await_daemons_up
 	echo "$NAME."
