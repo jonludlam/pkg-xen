@@ -1,8 +1,8 @@
 xen-3.0 (3.0.2+hg9697-2) UNRELEASED; urgency=low
 
-   [ Guido Trotter ]
-     * Update xen-utils' README.Debian (closes: #372524)
-     * Merge upstream fixes trunk
+  [ Guido Trotter ]
+  * Update xen-utils' README.Debian (closes: #372524)
+  * Merge upstream fixes trunk
 
   [ Bastian Blank ]
   * Adopt new python policy. (closes: #380990) 
@@ -13,10 +13,11 @@ xen-3.0 (3.0.2+hg9697-2) UNRELEASED; urgency=low
 xen-3.0 (3.0.2+hg9697-1) unstable; urgency=low
 
   [ Guido Trotter ]
-    * Update Standards Version
-    * Merge upstream fixes trunk (upstream 3.0.2-3 + a couple of fixes)
+  * Update Standards Version
+  * Merge upstream fixes trunk (upstream 3.0.2-3 + a couple of fixes)
+
   [ Bastian Blank ]
-    * Add xen-ioemu-3.0 package to support HVM guests (closes: #368496)
+  * Add xen-ioemu-3.0 package to support HVM guests (closes: #368496)
 
  -- Guido Trotter <ultrotter@debian.org>  Wed, 31 May 2006 10:50:05 +0200
 
