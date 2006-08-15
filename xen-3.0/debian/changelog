@@ -1,13 +1,13 @@
-xen-3.0 (3.0.2+hg9697-2) UNRELEASED; urgency=low
+xen-3.0 (3.0.2+hg9697-2) unstable; urgency=low
 
   [ Guido Trotter ]
   * Update xen-utils' README.Debian (closes: #372524)
 
   [ Bastian Blank ]
-  * Adopt new python policy. (closes: #380990) 
+  * Adopt new python policy. (closes: #380990)
   * Add patch to make new kernels working on the hypervisor.
 
- -- Bastian Blank <waldi@debian.org>  Tue, 15 Aug 2006 17:00:33 +0000
+ -- Bastian Blank <waldi@debian.org>  Tue, 15 Aug 2006 19:20:08 +0000
 
 xen-3.0 (3.0.2+hg9697-1) unstable; urgency=low
 
