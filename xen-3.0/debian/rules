@@ -181,6 +181,7 @@ binary-arch: install-arch
 	dh_strip -s
 	dh_compress -s
 	dh_fixperms -s
+	dh_pycentral -s
 	dh_python -s
 	dh_makeshlibs -s
 	dh_installdeb -s

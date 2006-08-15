@@ -3,7 +3,7 @@ etc/xen/auto
 etc/xen/scripts
 etc/xen/xend*
 usr/bin/xenstore*
-usr/lib/python2.3
+usr/lib/python*
 usr/lib/xen/bin/xc*
 usr/lib/xen/bin/xen*
 usr/lib/xen/*.so
