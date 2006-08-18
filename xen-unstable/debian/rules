@@ -7,9 +7,9 @@ DEB_HOST_ARCH  := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 srcver   := $(shell dpkg-parsechangelog | awk '/^Version:/ {print $$2}')
 VERSION  := $(shell echo $(srcver) | sed -e 's,-[^-]*$$,,')
-MAJOR    := unstable
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
+include debian/rules.defs
 
 export DH_OPTIONS
 
@@ -66,8 +66,14 @@ $(STAMPS_DIR)/build-hypervisor-i386-pae: $(STAMPS_DIR)/setup-hypervisor-i386-pae
 	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=x86_32 XEN_TARGET_X86_PAE=y
 	touch $@
 
+ifneq (,$(filter amd64, $(DEB_HOST_ARCH)))
+$(STAMPS_DIR)/build-tools: XEN_TARGET_ARCH=x86_64
+endif
+ifneq (,$(filter i386, $(DEB_HOST_ARCH)))
+$(STAMPS_DIR)/build-tools: XEN_TARGET_ARCH=x86_32
+endif
 $(STAMPS_DIR)/build-tools: $(STAMPS_DIR)/setup-tools
-	$(MAKE) -C $(DIR)/tools
+	$(MAKE) -C $(DIR)/tools XEN_TARGET_ARCH=$(XEN_TARGET_ARCH)
 	touch $@
 
 setup-docs:: $(STAMPS_DIR)/setup-docs
@@ -181,6 +187,7 @@ binary-arch: install-arch
 	dh_strip -s
 	dh_compress -s
 	dh_fixperms -s
+	dh_pycentral -s
 	dh_python -s
 	dh_makeshlibs -s
 	dh_installdeb -s
