@@ -67,7 +67,7 @@ $(STAMPS_DIR)/build-hypervisor-i386-pae: $(STAMPS_DIR)/setup-hypervisor-i386-pae
 	touch $@
 
 $(STAMPS_DIR)/build-tools: $(STAMPS_DIR)/setup-tools
-	$(MAKE) -C $(DIR)/tools XEN_TARGET_ARCH=$(XEN_TARGET_ARCH)
+	$(MAKE) -C $(DIR)/tools XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH)
 	touch $@
 
 setup-docs:: $(STAMPS_DIR)/setup-docs
@@ -87,10 +87,10 @@ setup-hypervisor:: $(STAMPS_DIR)/setup-hypervisor-i386-pae
 endif
 ifneq (,$(filter amd64 i386 ia64, $(DEB_HOST_ARCH)))
 ifneq (,$(filter amd64, $(DEB_HOST_ARCH)))
-build-tools install-tools-check: XEN_TARGET_ARCH=x86_64
+build-tools install-tools-check: XEN_ARCH=x86_64
 endif
 ifneq (,$(filter i386, $(DEB_HOST_ARCH)))
-build-tools install-tools-check: XEN_TARGET_ARCH=x86_32
+build-tools install-tools-check: XEN_ARCH=x86_32
 endif
 build-tools:: $(STAMPS_DIR)/build-tools
 install-tools-check:: install-tools
@@ -152,7 +152,7 @@ install-tools:
 	dh_clean -k
 
 	$(MAKE) -C $(BUILD_DIR)/build-docs/docs install DESTDIR=$(CURDIR)/debian/tmp
-	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_TARGET_ARCH=$(XEN_TARGET_ARCH)
+	$(MAKE) -C $(BUILD_DIR)/build-tools/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH)
 	cp debian/scripts/network-dummy $(CURDIR)/debian/tmp/etc/xen/scripts
 	dh_install --sourcedir=debian/tmp
 
