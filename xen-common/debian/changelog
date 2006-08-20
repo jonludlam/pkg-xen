@@ -1,0 +1,5 @@
+xen-common (0.1) UNRELEASED; urgency=low
+
+  * Initial release.
+
+ -- Bastian Blank <waldi@debian.org>  Sun, 20 Aug 2006 20:55:29 +0000

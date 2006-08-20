@@ -1,0 +1,35 @@
+#!/usr/bin/make -f
+
+#export DH_VERBOSE=1
+
+build:
+
+clean:
+	dh_testdir
+	dh_testroot
+	dh_clean
+
+binary-indep:
+	dh_testdir
+	dh_testroot
+	dh_install
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_installman
+	dh_installinit -p xen-utils-common --name xend -- defaults 20 21
+	dh_installinit -p xen-utils-common --name xendomains --no-restart-on-upgrade -- defaults 21 20
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+binary-arch:
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary install #PHONY_CONFIGURE#
