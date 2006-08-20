@@ -1,0 +1,55 @@
+#! /bin/sh
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/sbin/xend
+NAME=xend
+DESC=XEN
+XENSTORED_RUN_DIR="/var/run/xenstored"
+
+test -x $DAEMON || exit 0
+test -e /proc/xen/privcmd || exit 0
+grep -q "control_d" /proc/xen/capabilities || exit 0
+
+# Wait for Xend to be up
+await_daemons_up () {
+	i=1
+	rets=10
+	xend status
+	while [ $? -ne 0 -a $i -lt $rets ]; do
+		sleep 1
+		echo -n .
+		i=$(($i + 1))
+		xend status
+	done
+}
+
+
+set -e
+
+case "$1" in
+  start)
+	echo -n "Starting $DESC: "
+	[ -d "$XENSTORED_RUN_DIR" ] || mkdir -p "$XENSTORED_RUN_DIR"
+	xend start
+	await_daemons_up
+	echo "$NAME."
+	;;
+  stop)
+	echo -n "Stopping $DESC: "
+	xend stop
+	echo "$NAME."
+	;;
+  restart|force-reload)
+	echo -n "Restarting $DESC: "
+	xend restart
+	await_daemons_up
+	echo "$NAME."
+	;;
+  *)
+	N=/etc/init.d/xen-utils
+	echo "Usage: $N {start|stop|restart|force-reload}" >&2
+	exit 1
+	;;
+esac
+
+exit 0
