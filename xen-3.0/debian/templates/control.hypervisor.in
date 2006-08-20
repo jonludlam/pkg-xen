@@ -10,4 +10,6 @@ Description: The Xen Hypervisor on @class@
  specifically crafted to work as the Domain 0, mediating hardware access for
  XEN itself. An example config file for this kernel and documentation on how
  to build it can be found in the xen-docs package.
+ .
+ @desc@
 

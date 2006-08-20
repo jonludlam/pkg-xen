@@ -72,6 +72,9 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
     def do_flavour_packages(self, packages, makefile, arch, subarch, flavour, vars, makeflags, extra):
         hypervisor = self.templates["control.hypervisor"]
 
+        if not vars.has_key('desc'):
+            vars['desc'] = ''
+
         packages_own = []
         packages_own.extend(self.process_packages(hypervisor, vars))
 
