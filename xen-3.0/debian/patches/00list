@@ -2,5 +2,4 @@ prefix-utils
 prefix-ioemu
 manpages
 version
-compile_date
 default-network
