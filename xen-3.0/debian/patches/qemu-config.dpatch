@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## qemu-config.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/tools/ioemu/configure xen-3.0/tools/ioemu/configure
+--- xen-3.0~/tools/ioemu/configure	2006-08-20 22:53:18.791876889 +0000
++++ xen-3.0/tools/ioemu/configure	2006-08-20 22:53:37.036073313 +0000
+@@ -364,7 +364,7 @@
+ datadir="$installroot/$prefix/share/xen-ioemu-$XEN_VERSION_IOEMU/qemu"
+ docdir="$installroot/$prefix/share/doc/qemu"
+ bindir="$installroot/$prefix/bin"
+-configdir="$installroot/etc/xen"
++configdir="$installroot/etc/xen/scripts"
+ fi
+ 
+ echo "Install prefix    $prefix"

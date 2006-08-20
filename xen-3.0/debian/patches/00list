@@ -3,3 +3,4 @@ prefix-ioemu
 manpages
 version
 default-network
+qemu-config
