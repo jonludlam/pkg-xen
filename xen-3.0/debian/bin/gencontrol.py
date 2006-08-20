@@ -44,10 +44,6 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
 
         package_utils_name = packages_utils[0]['Package']
 
-        # TODO: move to xen-common
-        for i in ('postinst', 'postrm'):
-            file("debian/%s.%s" % (package_utils_name, i), 'w').write(self.templates["xen-utils.%s" % i])
-
         cmds_binary_arch = []
         cmds_binary_arch.append(("$(MAKE) -f debian/rules.real binary-arch-arch %s" % makeflags))
         cmds_build = []
