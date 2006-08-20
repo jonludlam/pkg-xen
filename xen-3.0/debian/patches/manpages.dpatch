@@ -65,7 +65,7 @@ diff -urNad xen-3.0~/tools/xenstat/xentop/Makefile xen-3.0/tools/xenstat/xentop/
  mandir=$(prefix)/share/man
 -man1dir=$(mandir)/man1
 +man8dir=$(mandir)/man8
- sbindir=$(prefix)/sbin
+ sbindir=$(prefix)/$(SBINDIR)
  
  CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
 @@ -36,7 +36,7 @@

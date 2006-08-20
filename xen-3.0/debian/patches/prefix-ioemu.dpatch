@@ -1,0 +1,53 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## libdir.dpatch by Bastian Blank <waldi@debian.org>
+## Forward ported to xen 3.0.2 by Guido Trotter <ultrotter@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/tools/firmware/Makefile xen-3.0/tools/firmware/Makefile
+--- xen-3.0~/tools/firmware/Makefile	2006-08-18 16:42:49.000000000 +0000
++++ xen-3.0/tools/firmware/Makefile	2006-08-20 22:24:11.696970534 +0000
+@@ -4,7 +4,7 @@
+ # hvmloader is a 32-bit protected mode binary.
+ # It belongs in /usr/lib, not /usr/lib64.
+ TARGET      := hvmloader/hvmloader
+-INSTALL_DIR := $(DESTDIR)/usr/lib/xen/boot
++INSTALL_DIR := $(DESTDIR)/usr/lib/xen-ioemu-$(XEN_VERSION_IOEMU)/boot
+ 
+ SUBDIRS :=
+ SUBDIRS += rombios
+diff -urNad xen-3.0~/tools/ioemu/configure xen-3.0/tools/ioemu/configure
+--- xen-3.0~/tools/ioemu/configure	2006-08-18 16:42:49.000000000 +0000
++++ xen-3.0/tools/ioemu/configure	2006-08-20 22:23:53.005370924 +0000
+@@ -361,7 +361,7 @@
+     prefix="usr/local"
+ fi
+ mandir="$installroot/$prefix/share/man"
+-datadir="$installroot/$prefix/share/xen/qemu"
++datadir="$installroot/$prefix/share/xen-ioemu-$XEN_VERSION_IOEMU/qemu"
+ docdir="$installroot/$prefix/share/doc/qemu"
+ bindir="$installroot/$prefix/bin"
+ configdir="$installroot/etc/xen"
+diff -urNad xen-3.0~/tools/ioemu/target-i386-dm/Makefile xen-3.0/tools/ioemu/target-i386-dm/Makefile
+--- xen-3.0~/tools/ioemu/target-i386-dm/Makefile	2006-08-18 16:42:48.000000000 +0000
++++ xen-3.0/tools/ioemu/target-i386-dm/Makefile	2006-08-20 22:23:53.005370924 +0000
+@@ -4,7 +4,7 @@
+ XEN_ROOT=../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-INSTALL_DIR := $(DESTDIR)/usr/$(LIBDIR)/xen/bin
++INSTALL_DIR := $(DESTDIR)/usr/lib/xen-ioemu-$(XEN_VERSION_IOEMU)/bin
+ TARGET_PATH=$(SRC_PATH)/target-$(TARGET_ARCH)
+ VPATH=$(SRC_PATH):$(TARGET_PATH):$(SRC_PATH)/hw:$(SRC_PATH)/audio
+ DEFINES=-I. -I$(TARGET_PATH) -I$(SRC_PATH)
+@@ -195,7 +195,7 @@
+ #########################################################
+ 
+ DEFINES+=-D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
+-LIBS+=-lm -L../../libxc -lxenctrl -lxenguest -L../../xenstore -lxenstore
++LIBS+=-lm $(RPATH_ARG) -L../../libxc -lxenctrl -lxenguest -L../../xenstore -lxenstore
+ ifndef CONFIG_USER_ONLY
+ LIBS+=-lz
+ endif
