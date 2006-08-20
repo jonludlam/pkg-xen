@@ -1,5 +1,5 @@
 Package: xen-utils-@version@@abiname@
-Depends: ${shlibs:Depends}, ${python:Depends}, iproute, udev (>> 0.060)
+Depends: ${shlibs:Depends}, ${python:Depends}, xen-utils-common, iproute, udev (>> 0.060)
 Recommends: bridge-utils, libc6-xen [i386], xen-hypervisor-@version@
 Provides: xen-utils
 Conflicts: xen-utils, xen, libxen-python, libxen2.0, libxen2.0-dev
