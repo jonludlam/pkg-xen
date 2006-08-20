@@ -1,0 +1,138 @@
+include debian/rules.defs
+include /usr/src/linux-support-$(KERNELVERSION)/modules/rules.real.include
+
+binary-arch-arch: install-utils_$(ARCH)
+binary-arch-flavour: install-hypervisor_$(ARCH)_$(FLAVOUR)
+
+binary-indep: install-docs
+
+build-arch: $(STAMPS_DIR)/build-utils_$(ARCH)
+build-flavour: $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
+
+setup-arch: $(STAMPS_DIR)/setup-utils_$(ARCH)
+setup-flavour: $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR)
+
+srcfiles := $(filter-out debian, $(wildcard * .[^.]*))
+$(STAMPS_DIR)/source: DIR=$(BUILD_DIR)/source
+$(STAMPS_DIR)/source:
+	@rm -rf $(DIR)
+	mkdir $(DIR)
+	cp -a $(srcfiles) $(DIR)
+	dpatch -d $(DIR) apply-all
+	touch $@
+
+$(STAMPS_DIR)/setup-docs: SOURCE_DIR=$(BUILD_DIR)/source
+$(STAMPS_DIR)/setup-docs: DIR=$(BUILD_DIR)/build-docs
+$(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/source
+	@rm -rf $(DIR)
+	cp -a $(SOURCE_DIR) $(DIR)
+	touch $@
+
+$(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): SOURCE_DIR=$(BUILD_DIR)/source
+$(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
+$(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
+	@rm -rf $(DIR)
+	cp -a $(SOURCE_DIR) $(DIR)
+	touch $@
+
+$(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_DIR=$(BUILD_DIR)/source
+$(STAMPS_DIR)/setup-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
+$(STAMPS_DIR)/setup-utils_$(ARCH): $(STAMPS_DIR)/source
+	@rm -rf $(DIR)
+	cp -a $(SOURCE_DIR) $(DIR)
+	touch $@
+
+$(STAMPS_DIR)/build-docs: DIR=$(BUILD_DIR)/build-docs
+$(STAMPS_DIR)/build-docs: $(STAMPS_DIR)/setup-docs
+	$(MAKE) -C $(DIR)/docs
+	touch $@
+
+$(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
+$(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR)
+	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=$(XEN_ARCH) $(CONFIG)
+	touch $@
+
+$(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
+$(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
+	$(MAKE) -C $(DIR)/tools XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH)
+	touch $@
+
+install-base:
+	dh_installchangelogs
+	dh_installdocs
+	dh_compress
+	dh_fixperms
+	dh_installdeb
+	dh_gencontrol -- $(GENCONTROL_ARGS)
+	dh_md5sums
+	dh_builddeb
+
+install-docs: DIR=$(BUILD_DIR)/build-docs
+install-docs: PACKAGE_NAME = xen-docs-$(MAJOR)
+install-docs: DH_OPTIONS = -p$(PACKAGE_NAME)
+install-docs: $(STAMPS_DIR)/build-docs
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	$(MAKE) -C $(DIR)/docs install DESTDIR=$(CURDIR)/debian/tmp
+	dh_install --sourcedir=debian/tmp usr/share/doc/xen/pdf/* usr/share/doc/$(PACKAGE_NAME)
+	$(MAKE) -f debian/rules.real install-base
+
+install-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
+install-hypervisor_$(ARCH)_$(FLAVOUR): PACKAGE_NAME = xen-hypervisor-$(VERSION)$(ABINAME)-$(FLAVOUR)
+install-hypervisor_$(ARCH)_$(FLAVOUR): DH_OPTIONS = -p$(PACKAGE_NAME)
+install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs boot
+	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)-$(FLAVOUR).gz
+	$(MAKE) -f debian/rules.real install-base
+
+install-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
+install-utils_$(ARCH): PACKAGE_NAME_UTILS = xen-utils-$(VERSION)$(ABINAME)
+install-utils_$(ARCH): PACKAGE_NAME_IOEMU = xen-ioemu-$(VERSION)$(ABINAME)
+install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME_UTILS) -p$(PACKAGE_NAME_IOEMU)
+install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	install -D -m644 debian/xen-utils.NEWS debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/NEWS
+	install -D -m644 debian/xen-utils.README.Debian debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/README.Debian
+	# TODO: move to xen-common
+	install -D debian/scripts/network-dummy debian/$(PACKAGE_NAME_UTILS)/etc/xen/scripts/network-dummy
+	$(MAKE) -C $(DIR)/tools install XEN_PYTHON_NATIVE_INSTALL=1 DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH)
+	# TODO: move to xen-common
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp etc/udev/*.rules etc/udev
+	# TODO: move to xen-common
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp \
+etc/xen/auto \
+etc/xen/scripts \
+etc/xen/xend* \
+etc/xen
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp usr/bin/xenstore* usr/bin
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp usr/lib/python* usr/lib
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp \
+usr/lib/xen/bin/xc* \
+usr/lib/xen/bin/xen* \
+usr/lib/xen/bin
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp \
+usr/lib/xen/*.so \
+usr/lib/xen
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp \
+usr/sbin/xenconsoled \
+usr/sbin/xend \
+usr/sbin/xenstored \
+usr/sbin/xentop \
+usr/sbin/xm \
+usr/sbin
+	# TODO: move to xen-common and /etc/xen/scripts
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp etc/xen/qemu-ifup etc/xen
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/lib/xen/bin/qemu-dm usr/lib/xen/bin
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/lib/xen/boot usr/lib/xen
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/share/xen/qemu usr/share/xen
+	dh_pycentral
+	dh_python
+	$(MAKE) -f debian/rules.real install-base
+
+# vim: filetype=make

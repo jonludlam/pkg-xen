@@ -1,3 +1,9 @@
+xen-3.0 (3.0.2+hg9762-1) UNRELEASED; urgency=low
+
+  * 
+
+ -- Bastian Blank <waldi@debian.org>  Fri, 18 Aug 2006 18:08:57 +0000
+
 xen-3.0 (3.0.2+hg9697-2) unstable; urgency=low
 
   [ Guido Trotter ]
