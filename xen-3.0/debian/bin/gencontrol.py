@@ -16,6 +16,7 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
         makeflags.update({
             'MAJOR': self.version['xen']['major'],
             'VERSION': self.version['xen']['version'],
+            'SHORT_VERSION': self.version['xen']['short_version'],
             'ABINAME': self.abiname,
         })
 
@@ -105,6 +106,7 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
         self.vars = {
             'major': self.version['xen']['major'],
             'version': self.version['xen']['version'],
+            'short_version': self.version['xen']['short_version'],
             'abiname': self.abiname,
         }
 
@@ -115,7 +117,12 @@ def parse_version_xen(version):
     (?P<upstream>
         (?P<version>
             (?P<major>\d+\.\d+)
-            (\.\d+)?
+            (
+                (?P<minor>\.\d+)
+                -\d+
+                |
+                (?P<unstable>-unstable)
+            )
         )
         (?:
             \+hg
@@ -132,7 +139,14 @@ $
     match = re.match(version_re, version, re.X)
     if match is None:
         raise ValueError
-    return match.groupdict()
+    ret = match.groupdict()
+    if ret['unstable'] is not None:
+        ret['major'] = unstable
+        ret['short_version'] = ret['version']
+    else:
+        ret['version'] = ret['major'] + ret['minor']
+        ret['short_version'] = ret['major']
+    return ret
 
 if __name__ == '__main__':
     gencontrol()()

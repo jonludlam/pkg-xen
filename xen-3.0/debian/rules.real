@@ -54,7 +54,7 @@ $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/setup-hyperviso
 
 $(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
-	$(MAKE) -C $(DIR)/tools XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(MAJOR)
+	$(MAKE) -C $(DIR)/tools XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION_TOOLS=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(SHORT_VERSION)
 	touch $@
 
 install-base:
@@ -101,7 +101,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	install -D -m644 debian/xen-utils.README.Debian debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/README.Debian
 	# TODO: move to xen-common
 	install -D debian/scripts/network-dummy debian/$(PACKAGE_NAME_UTILS)/etc/xen/scripts/network-dummy
-	$(MAKE) -C $(DIR)/tools install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(MAJOR)
+	$(MAKE) -C $(DIR)/tools install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION_TOOLS=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(SHORT_VERSION)
 	# TODO: move to xen-common
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp etc/udev/*.rules etc/udev
 	# TODO: move to xen-common
