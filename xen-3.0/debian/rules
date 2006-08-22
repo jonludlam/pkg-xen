@@ -6,7 +6,7 @@
 include debian/rules.defs
 include /usr/src/linux-support-$(KERNELVERSION)/modules/rules.include
 
-VERSION := $(shell dpkg-parsechangelog | perl -ne '/^Version:\s+(\S+)-[^-]+$$/ {print $$1}')
+VERSION := $(shell dpkg-parsechangelog | perl -ne '/^Version:\s+(\S+)-[^-]+$$/ && print $$1;')
 
 GENCONTROL = debian/bin/gencontrol.py $(KERNELVERSION)
 
