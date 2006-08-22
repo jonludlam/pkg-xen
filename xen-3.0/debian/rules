@@ -6,8 +6,7 @@
 include debian/rules.defs
 include /usr/src/linux-support-$(KERNELVERSION)/modules/rules.include
 
-srcver   := $(shell dpkg-parsechangelog | awk '/^Version:/ {print $$2}')
-VERSION  := $(shell echo $(srcver) | sed -e 's,-[^-]*$$,,')
+VERSION := $(shell dpkg-parsechangelog | perl -ne '/^Version:\s+(\S+)-[^-]+$$/ {print $$1}')
 
 GENCONTROL = debian/bin/gencontrol.py $(KERNELVERSION)
 
@@ -20,7 +19,6 @@ $(STAMPS_DIR)/setup-base: debian/control $(BUILD_DIR) $(STAMPS_DIR)
 $(BUILD_STAMP): $(STAMPS_DIR)/setup-base
 
 DIR_ORIG = ../orig/xen-$(MAJOR)-$(VERSION)
-TAR_ORIG = ../xen-$(MAJOR)_$(VERSION).orig.tar.gz
 
 orig: $(DIR_ORIG)
 	rsync --delete --exclude debian --exclude .svn --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
