@@ -99,18 +99,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	dh_clean -k
 	install -D -m644 debian/xen-utils.NEWS debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/NEWS
 	install -D -m644 debian/xen-utils.README.Debian debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/README.Debian
-	# TODO: move to xen-common
-	install -D debian/scripts/network-dummy debian/$(PACKAGE_NAME_UTILS)/etc/xen/scripts/network-dummy
 	$(MAKE) -C $(DIR)/tools install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION_TOOLS=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(SHORT_VERSION)
-	# TODO: move to xen-common
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp etc/udev/*.rules etc/udev
-	# TODO: move to xen-common
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp \
-etc/xen/auto \
-etc/xen/scripts \
-etc/xen/xend* \
-etc/xen
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp usr/in/xenstore* usr/bin
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp usr/lib/xen-$(VERSION)$(ABINAME) usr/lib
 	# TODO: move to xen-common and /etc/xen/scripts
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp etc/xen/scripts/qemu-ifup etc/xen
@@ -118,6 +107,7 @@ etc/xen
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/share/xen-ioemu-$(MAJOR) usr/share
 	dh_pycentral
 	dh_python
+	dh_installchangelogs ChangeLog
 	$(MAKE) -f debian/rules.real install-base
 
 # vim: filetype=make
