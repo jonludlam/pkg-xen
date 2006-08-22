@@ -7,7 +7,7 @@
 @DPATCH@
 diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
 --- xen-unstable~/tools/misc/xend	2006-08-22 09:56:46.000000000 +0000
-+++ xen-unstable/tools/misc/xend	2006-08-22 11:29:33.980558849 +0000
++++ xen-unstable/tools/misc/xend	2006-08-22 12:18:23.600149518 +0000
 @@ -35,16 +35,7 @@
  
  AUXBIN = 'xen/util/auxbin.py'
@@ -50,7 +50,7 @@ diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
      try:
 diff -urNad xen-unstable~/tools/misc/xm xen-unstable/tools/misc/xm
 --- xen-unstable~/tools/misc/xm	2006-08-22 09:56:46.000000000 +0000
-+++ xen-unstable/tools/misc/xm	2006-08-22 11:28:55.692955234 +0000
++++ xen-unstable/tools/misc/xm	2006-08-22 12:18:23.600149518 +0000
 @@ -1,10 +1,7 @@
  #!/usr/bin/env python
  #  -*- mode: python; -*-
@@ -63,3 +63,49 @@ diff -urNad xen-unstable~/tools/misc/xm xen-unstable/tools/misc/xm
  from xen.xm import main
  
  main.main(sys.argv)
+diff -urNad xen-unstable~/tools/python/xen/util/auxbin.py xen-unstable/tools/python/xen/util/auxbin.py
+--- xen-unstable~/tools/python/xen/util/auxbin.py	2006-08-22 09:56:45.000000000 +0000
++++ xen-unstable/tools/python/xen/util/auxbin.py	2006-08-22 12:18:23.600149518 +0000
+@@ -16,17 +16,9 @@
+ #============================================================================
+ 
+ 
+-LIB_32 = "/usr/lib"
+-LIB_64 = "/usr/lib64"
+-LIB_BIN_SUFFIX = "xen/bin"
+-
+-## The architectures on which the LIB_64 directory is used.  This
+-# deliberately excludes ia64 and ppc64.
+-LIB_64_ARCHS = [ 'x86_64', 's390x', 'sparc64']
+-
+-
+ import os
+ import os.path
++import sys
+ 
+ 
+ def execute(exe, args = None):
+@@ -42,12 +34,8 @@
+ 
+ 
+ def path():
+-    return os.path.join(libpath(), LIB_BIN_SUFFIX)
++    return sys.path[0]
+ 
+ 
+ def libpath():
+-    machine = os.uname()[4]
+-    if machine in LIB_64_ARCHS and os.path.exists(LIB_64):
+-        return LIB_64
+-    else:
+-        return LIB_32
++    return os.path.join(path(), '../lib')
+diff -urNad xen-unstable~/tools/python/xen/xm/console.py xen-unstable/tools/python/xen/xm/console.py
+--- xen-unstable~/tools/python/xen/xm/console.py	2006-08-22 09:56:45.000000000 +0000
++++ xen-unstable/tools/python/xen/xm/console.py	2006-08-22 12:19:12.039201599 +0000
+@@ -23,4 +23,4 @@
+ 
+ 
+ def execConsole(domid):
+-    xen.util.auxbin.execute(XENCONSOLE, [str(domid)])
++    xen.util.auxbin.execute(xen.util.auxbin.pathTo(XENCONSOLE), [str(domid)])
