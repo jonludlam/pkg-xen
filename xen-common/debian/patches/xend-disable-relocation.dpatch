@@ -1,0 +1,26 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## xend-disable-relocation.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-common~/tools/examples/xend-config.sxp xen-common/tools/examples/xend-config.sxp
+--- xen-common~/tools/examples/xend-config.sxp	2006-08-18 13:34:02.000000000 +0000
++++ xen-common/tools/examples/xend-config.sxp	2006-08-22 09:37:17.323040927 +0000
+@@ -19,7 +19,6 @@
+ #(xend-tcp-xmlrpc-server no)
+ #(xend-unix-xmlrpc-server yes)
+ #(xend-relocation-server no)
+-(xend-relocation-server yes)
+ 
+ #(xend-unix-path /var/lib/xend/xend-socket)
+ 
+@@ -54,7 +53,6 @@
+ #  (xend-relocation-hosts-allow '^localhost$ ^.*\.example\.org$')
+ #
+ #(xend-relocation-hosts-allow '')
+-(xend-relocation-hosts-allow '^localhost$ ^localhost\\.localdomain$')
+ 
+ # The limit (in kilobytes) on the size of the console buffer
+ #(console-limit 1024)
