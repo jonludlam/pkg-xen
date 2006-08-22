@@ -8,7 +8,7 @@
 @DPATCH@
 diff -urNad xen-unstable~/Config.mk xen-unstable/Config.mk
 --- xen-unstable~/Config.mk	2006-08-22 09:56:42.000000000 +0000
-+++ xen-unstable/Config.mk	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/Config.mk	2006-08-22 11:36:28.691141802 +0000
 @@ -43,6 +43,11 @@
  
  include $(XEN_ROOT)/config/$(XEN_TARGET_ARCH).mk
@@ -23,7 +23,7 @@ diff -urNad xen-unstable~/Config.mk xen-unstable/Config.mk
  EXTRA_LIB += $(EXTRA_PREFIX)/$(LIBDIR)
 diff -urNad xen-unstable~/config/ia64.mk xen-unstable/config/ia64.mk
 --- xen-unstable~/config/ia64.mk	2006-08-22 09:56:42.000000000 +0000
-+++ xen-unstable/config/ia64.mk	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/config/ia64.mk	2006-08-22 11:36:28.691141802 +0000
 @@ -1,5 +1,3 @@
  CONFIG_IA64 := y
  CONFIG_IOEMU := y
@@ -32,7 +32,7 @@ diff -urNad xen-unstable~/config/ia64.mk xen-unstable/config/ia64.mk
 -LIBDIR := lib
 diff -urNad xen-unstable~/config/powerpc64.mk xen-unstable/config/powerpc64.mk
 --- xen-unstable~/config/powerpc64.mk	2006-08-22 09:56:42.000000000 +0000
-+++ xen-unstable/config/powerpc64.mk	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/config/powerpc64.mk	2006-08-22 11:36:28.691141802 +0000
 @@ -1,4 +1,3 @@
  CONFIG_POWERPC := y
  
@@ -40,7 +40,7 @@ diff -urNad xen-unstable~/config/powerpc64.mk xen-unstable/config/powerpc64.mk
 -LIBDIR := lib
 diff -urNad xen-unstable~/config/x86_32.mk xen-unstable/config/x86_32.mk
 --- xen-unstable~/config/x86_32.mk	2006-08-22 09:56:42.000000000 +0000
-+++ xen-unstable/config/x86_32.mk	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/config/x86_32.mk	2006-08-22 11:36:28.691141802 +0000
 @@ -6,4 +6,3 @@
  CONFIG_MBOOTPACK := y
  
@@ -48,7 +48,7 @@ diff -urNad xen-unstable~/config/x86_32.mk xen-unstable/config/x86_32.mk
 -LIBDIR := lib
 diff -urNad xen-unstable~/config/x86_64.mk xen-unstable/config/x86_64.mk
 --- xen-unstable~/config/x86_64.mk	2006-08-22 09:56:42.000000000 +0000
-+++ xen-unstable/config/x86_64.mk	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/config/x86_64.mk	2006-08-22 11:36:28.691141802 +0000
 @@ -6,4 +6,3 @@
  CONFIG_MBOOTPACK := y
  
@@ -56,7 +56,7 @@ diff -urNad xen-unstable~/config/x86_64.mk xen-unstable/config/x86_64.mk
 -LIBDIR = lib64
 diff -urNad xen-unstable~/tools/Rules.mk xen-unstable/tools/Rules.mk
 --- xen-unstable~/tools/Rules.mk	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/Rules.mk	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/Rules.mk	2006-08-22 11:36:28.691141802 +0000
 @@ -12,6 +12,9 @@
  XEN_XENSTORE       = $(XEN_ROOT)/tools/xenstore
  XEN_LIBXENSTAT     = $(XEN_ROOT)/tools/xenstat/libxenstat/src
@@ -69,7 +69,7 @@ diff -urNad xen-unstable~/tools/Rules.mk xen-unstable/tools/Rules.mk
  CFLAGS += -D__XEN_TOOLS__
 diff -urNad xen-unstable~/tools/blktap/drivers/Makefile xen-unstable/tools/blktap/drivers/Makefile
 --- xen-unstable~/tools/blktap/drivers/Makefile	2006-08-22 09:56:47.000000000 +0000
-+++ xen-unstable/tools/blktap/drivers/Makefile	2006-08-22 10:28:56.532976815 +0000
++++ xen-unstable/tools/blktap/drivers/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -7,7 +7,7 @@
  INSTALL_PROG = $(INSTALL) -m0755
  IBIN         = blktapctrl tapdisk
@@ -81,7 +81,7 @@ diff -urNad xen-unstable~/tools/blktap/drivers/Makefile xen-unstable/tools/blkta
  CFLAGS   += -fPIC
 diff -urNad xen-unstable~/tools/console/Makefile xen-unstable/tools/console/Makefile
 --- xen-unstable~/tools/console/Makefile	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/console/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/console/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -2,8 +2,8 @@
  XEN_ROOT=../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -109,7 +109,7 @@ diff -urNad xen-unstable~/tools/console/Makefile xen-unstable/tools/console/Make
  .PHONY: install
 diff -urNad xen-unstable~/tools/misc/Makefile xen-unstable/tools/misc/Makefile
 --- xen-unstable~/tools/misc/Makefile	2006-08-22 09:56:46.000000000 +0000
-+++ xen-unstable/tools/misc/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/misc/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -32,10 +32,10 @@
  
  .PHONY: install
@@ -133,7 +133,7 @@ diff -urNad xen-unstable~/tools/misc/Makefile xen-unstable/tools/misc/Makefile
 +	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl
 diff -urNad xen-unstable~/tools/misc/cpuperf/Makefile xen-unstable/tools/misc/cpuperf/Makefile
 --- xen-unstable~/tools/misc/cpuperf/Makefile	2006-08-22 09:56:46.000000000 +0000
-+++ xen-unstable/tools/misc/cpuperf/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/misc/cpuperf/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -37,14 +37,14 @@
  	$(CC) $(CFLAGS) -o $@ $<
  
@@ -153,7 +153,7 @@ diff -urNad xen-unstable~/tools/misc/cpuperf/Makefile xen-unstable/tools/misc/cp
  # End of $RCSfile: Makefile,v $
 diff -urNad xen-unstable~/tools/misc/lomount/Makefile xen-unstable/tools/misc/lomount/Makefile
 --- xen-unstable~/tools/misc/lomount/Makefile	2006-08-22 09:56:46.000000000 +0000
-+++ xen-unstable/tools/misc/lomount/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/misc/lomount/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -21,7 +21,7 @@
  
  .PHONY: install
@@ -165,7 +165,7 @@ diff -urNad xen-unstable~/tools/misc/lomount/Makefile xen-unstable/tools/misc/lo
  clean:
 diff -urNad xen-unstable~/tools/pygrub/Makefile xen-unstable/tools/pygrub/Makefile
 --- xen-unstable~/tools/pygrub/Makefile	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/pygrub/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/pygrub/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -11,7 +11,7 @@
  .PHONY: install
  ifndef XEN_PYTHON_NATIVE_INSTALL
@@ -177,7 +177,7 @@ diff -urNad xen-unstable~/tools/pygrub/Makefile xen-unstable/tools/pygrub/Makefi
  	CFLAGS="$(CFLAGS)" python setup.py install --root="$(DESTDIR)"
 diff -urNad xen-unstable~/tools/python/Makefile xen-unstable/tools/python/Makefile
 --- xen-unstable~/tools/python/Makefile	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/python/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/python/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -6,15 +6,15 @@
  
  .PHONY: build
@@ -199,7 +199,7 @@ diff -urNad xen-unstable~/tools/python/Makefile xen-unstable/tools/python/Makefi
  .PHONY: test
 diff -urNad xen-unstable~/tools/python/setup.py xen-unstable/tools/python/setup.py
 --- xen-unstable~/tools/python/setup.py	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/python/setup.py	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/python/setup.py	2006-08-22 11:38:17.514573082 +0000
 @@ -5,6 +5,8 @@
  XEN_ROOT = "../.."
  
@@ -213,7 +213,7 @@ diff -urNad xen-unstable~/tools/python/setup.py xen-unstable/tools/python/setup.
  
  xc = Extension("xc",
                 extra_compile_args = extra_compile_args,
-+	       extra_link_args    = extra_link_args,
++               extra_link_args    = extra_link_args,
                 include_dirs       = include_dirs + [ "xen/lowlevel/xc" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
@@ -221,13 +221,21 @@ diff -urNad xen-unstable~/tools/python/setup.py xen-unstable/tools/python/setup.
  
  xs = Extension("xs",
                 extra_compile_args = extra_compile_args,
-+	       extra_link_args    = extra_link_args,
++               extra_link_args    = extra_link_args,
                 include_dirs       = include_dirs + [ "xen/lowlevel/xs" ],
+                library_dirs       = library_dirs,
+                libraries          = libraries,
+@@ -33,6 +37,7 @@
+ 
+ acm = Extension("acm",
+                extra_compile_args = extra_compile_args,
++               extra_link_args    = extra_link_args,
+                include_dirs       = include_dirs + [ "xen/lowlevel/acm" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
 diff -urNad xen-unstable~/tools/xcutils/Makefile xen-unstable/tools/xcutils/Makefile
 --- xen-unstable~/tools/xcutils/Makefile	2006-08-22 09:56:47.000000000 +0000
-+++ xen-unstable/tools/xcutils/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/xcutils/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -15,7 +15,7 @@
  XEN_ROOT	= ../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -239,7 +247,7 @@ diff -urNad xen-unstable~/tools/xcutils/Makefile xen-unstable/tools/xcutils/Make
  
 diff -urNad xen-unstable~/tools/xenmon/Makefile xen-unstable/tools/xenmon/Makefile
 --- xen-unstable~/tools/xenmon/Makefile	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/xenmon/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/xenmon/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -15,8 +15,6 @@
  INSTALL_DIR     = $(INSTALL) -d -m0755
  INSTALL_DATA    = $(INSTALL) -m0644
@@ -266,7 +274,7 @@ diff -urNad xen-unstable~/tools/xenmon/Makefile xen-unstable/tools/xenmon/Makefi
  clean:
 diff -urNad xen-unstable~/tools/xenstat/xentop/Makefile xen-unstable/tools/xenstat/xentop/Makefile
 --- xen-unstable~/tools/xenstat/xentop/Makefile	2006-08-22 09:56:47.000000000 +0000
-+++ xen-unstable/tools/xenstat/xentop/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/xenstat/xentop/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -25,7 +25,7 @@
  prefix=/usr
  mandir=$(prefix)/share/man
@@ -278,7 +286,7 @@ diff -urNad xen-unstable~/tools/xenstat/xentop/Makefile xen-unstable/tools/xenst
  LDFLAGS += -L$(XEN_LIBXENSTAT)
 diff -urNad xen-unstable~/tools/xenstore/Makefile xen-unstable/tools/xenstore/Makefile
 --- xen-unstable~/tools/xenstore/Makefile	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/xenstore/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/xenstore/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -174,13 +174,13 @@
  install: all
  	$(INSTALL_DIR) -p $(DESTDIR)/var/run/xenstored
@@ -301,7 +309,7 @@ diff -urNad xen-unstable~/tools/xenstore/Makefile xen-unstable/tools/xenstore/Ma
  	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
 diff -urNad xen-unstable~/tools/xentrace/Makefile xen-unstable/tools/xentrace/Makefile
 --- xen-unstable~/tools/xentrace/Makefile	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/xentrace/Makefile	2006-08-22 10:28:30.708189063 +0000
++++ xen-unstable/tools/xentrace/Makefile	2006-08-22 11:36:28.691141802 +0000
 @@ -15,21 +15,20 @@
  OBJS     = $(patsubst %.c,%.o,$(wildcard *.c))
  
