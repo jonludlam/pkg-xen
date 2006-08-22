@@ -102,7 +102,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	$(MAKE) -C $(DIR)/tools install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION_TOOLS=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(SHORT_VERSION)
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp usr/lib/xen-$(VERSION)$(ABINAME) usr/lib
 	# TODO: move to xen-common and /etc/xen/scripts
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp etc/xen/scripts/qemu-ifup etc/xen
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp etc/xen/scripts/qemu-ifup etc/xen/scripts
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/lib/xen-ioemu-$(SHORT_VERSION) usr/lib
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/share/xen-ioemu-$(SHORT_VERSION) usr/share
 	dh_pycentral
