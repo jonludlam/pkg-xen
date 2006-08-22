@@ -1,0 +1,35 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## libdir.dpatch by Bastian Blank <waldi@debian.org>
+## Forward ported to xen 3.0.2 by Guido Trotter <ultrotter@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-unstable~/tools/firmware/Makefile xen-unstable/tools/firmware/Makefile
+--- xen-unstable~/tools/firmware/Makefile	2006-08-22 09:56:47.000000000 +0000
++++ xen-unstable/tools/firmware/Makefile	2006-08-22 10:47:23.727247679 +0000
+@@ -4,7 +4,7 @@
+ # hvmloader is a 32-bit protected mode binary.
+ # It belongs in /usr/lib, not /usr/lib64.
+ TARGET      := hvmloader/hvmloader
+-INSTALL_DIR := $(DESTDIR)/usr/lib/xen/boot
++INSTALL_DIR := $(DESTDIR)/usr/lib/xen-ioemu-$(XEN_VERSION_IOEMU)/boot
+ 
+ SUBDIRS :=
+ SUBDIRS += rombios
+diff -urNad xen-unstable~/tools/ioemu/configure xen-unstable/tools/ioemu/configure
+--- xen-unstable~/tools/ioemu/configure	2006-08-22 09:56:47.000000000 +0000
++++ xen-unstable/tools/ioemu/configure	2006-08-22 10:48:40.197691138 +0000
+@@ -514,9 +514,9 @@
+     prefix="/usr/local"
+ fi
+ mandir="$prefix/share/man"
+-datadir="$prefix/share/xen/qemu"
++datadir="$prefix/share/xen-ioemu-$XEN_VERSION_IOEMU/qemu"
+ docdir="$prefix/share/doc/qemu"
+-bindir="$prefix/$libdir/xen/bin"
++bindir="$prefix/lib/xen-ioemu-$XEN_VERSION_IOEMU/bin"
+ configdir="/etc/xen"
+ fi
+ 

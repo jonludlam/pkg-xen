@@ -1,4 +1,6 @@
-libdir
-manpages
+prefix-utils
+prefix-ioemu
 version
-default-network
+qemu-config
+libs
+qemu-arch

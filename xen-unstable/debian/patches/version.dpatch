@@ -5,63 +5,165 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-3.0~/xen/Makefile xen-3.0/xen/Makefile
---- xen-3.0~/xen/Makefile	2006-02-23 22:07:49.000000000 +0100
-+++ xen-3.0/xen/Makefile	2006-03-10 23:44:24.978464943 +0100
-@@ -96,6 +96,9 @@
+diff -urNad xen-unstable~/xen/Makefile xen-unstable/xen/Makefile
+--- xen-unstable~/xen/Makefile	2006-08-18 15:35:47.000000000 +0000
++++ xen-unstable/xen/Makefile	2006-08-18 16:22:45.830247330 +0000
+@@ -92,18 +92,18 @@
+ # compile.h contains dynamic build info. Rebuilt on every 'make' invocation.
+ include/xen/compile.h: LANG=C
+ include/xen/compile.h: include/xen/compile.h.in
+-	@sed -e 's/@@date@@/$(shell date)/g' \
+-	    -e 's/@@time@@/$(shell date +%T)/g' \
+-	    -e 's/@@whoami@@/$(shell whoami)/g' \
+-	    -e 's/@@domain@@/$(shell ([ -x /bin/dnsdomainname ] && /bin/dnsdomainname) || ([ -x /bin/domainname ] && /bin/domainname || echo [unknown]))/g' \
+-	    -e 's/@@hostname@@/$(shell hostname)/g' \
++	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
++	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
+ 	    -e 's|@@compiler@@|$(shell $(CC) $(CFLAGS) -v 2>&1 | tail -n 1 | sed -e "s;|;/;")|g' \
+ 	    -e 's/@@version@@/$(XEN_VERSION)/g' \
  	    -e 's/@@subversion@@/$(XEN_SUBVERSION)/g' \
  	    -e 's/@@extraversion@@/$(XEN_EXTRAVERSION)/g' \
  	    -e 's!@@changeset@@!$(shell ((hg parents || head -n 7 ../ChangeLog || echo date: unavailable) | awk '{FS="changeset:[ ]+"}/^changeset/{CS=$$2};{FS="date:[ ]+"}/^date/{D=$$2}; END {print D, CS}') 2>/dev/null)!g' \
 +	    -e 's/@@system_distribution@@/$(shell lsb_release -is)/g' \
-+	    -e 's/@@system_maintainer@@/$(shell cd ../../../..; dpkg-parsechangelog | sed -ne 's,^Maintainer: .[^<]*<\([^>]*\)>,\1,p')/g' \
++	    -e 's/@@system_maintainer_domain@@/$(shell cd ../../../..; dpkg-parsechangelog | sed -ne 's,^Maintainer: .[^<]*<[^@>]*@\([^>]*\)>,\1,p')/g' \
++	    -e 's/@@system_maintainer_local@@/$(shell cd ../../../..; dpkg-parsechangelog | sed -ne 's,^Maintainer: .[^<]*<\([^@>]*\)@.*>,\1,p')/g' \
 +	    -e 's/@@system_version@@/$(shell cd ../../../..; dpkg-parsechangelog | awk '/^Version:/ {print $$2}')/g' \
  	    < include/xen/compile.h.in > $@.new
- 	@cat include/xen/banner.h >> $@.new
+-	tools/figlet/figlet -d tools/figlet Xen $(XEN_FULLVERSION) >> $@.new
  	@mv -f $@.new $@
-diff -urNad xen-3.0~/xen/common/kernel.c xen-3.0/xen/common/kernel.c
---- xen-3.0~/xen/common/kernel.c	2006-02-23 22:07:50.000000000 +0100
-+++ xen-3.0/xen/common/kernel.c	2006-03-10 23:44:02.932515123 +0100
-@@ -104,7 +104,7 @@
+ 
+ include/asm-$(TARGET_ARCH)/asm-offsets.h: arch/$(TARGET_ARCH)/asm-offsets.s
+diff -urNad xen-unstable~/xen/arch/powerpc/boot_of.c xen-unstable/xen/arch/powerpc/boot_of.c
+--- xen-unstable~/xen/arch/powerpc/boot_of.c	2006-08-18 15:35:46.000000000 +0000
++++ xen-unstable/xen/arch/powerpc/boot_of.c	2006-08-18 16:22:24.124066693 +0000
+@@ -988,9 +988,10 @@
+     of_getprop(bof_chosen, "stdout", &of_out, sizeof (of_out));
+ 
+     of_printf("%s\n", "---------------------------------------------------");
+-    of_printf("OF: Xen/PPC version %d.%d%s (%s@%s) (%s) %s\n",
++    of_printf("OF: Xen/PPC version %d.%d%s (%s %s) (%s@%s) (%s) %s\n",
+               xen_major_version(), xen_minor_version(), xen_extra_version(),
+-              xen_compile_by(), xen_compile_domain(),
++              xen_compile_system_distribution(), xen_compile_system_version(),
++              xen_compile_system_maintainer_local(), xen_compile_system_maintainer_domain(),
+               xen_compiler(), xen_compile_date());
+ 
+     of_printf("%s args: 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx\n"
+diff -urNad xen-unstable~/xen/common/kernel.c xen-unstable/xen/common/kernel.c
+--- xen-unstable~/xen/common/kernel.c	2006-08-18 15:35:47.000000000 +0000
++++ xen-unstable/xen/common/kernel.c	2006-08-18 16:22:24.124066693 +0000
+@@ -141,8 +141,8 @@
      {
          struct xen_compile_info info;
-         safe_strcpy(info.compiler,       XEN_COMPILER);
--        safe_strcpy(info.compile_by,     XEN_COMPILE_BY);
-+        safe_strcpy(info.compile_by,     XEN_COMPILE_SYSTEM_MAINTAINER);
-         safe_strcpy(info.compile_domain, XEN_COMPILE_DOMAIN);
-         safe_strcpy(info.compile_date,   XEN_COMPILE_DATE);
-         if ( copy_to_user(arg, &info, sizeof(info)) )
-diff -urNad xen-3.0~/xen/drivers/char/console.c xen-3.0/xen/drivers/char/console.c
---- xen-3.0~/xen/drivers/char/console.c	2006-02-23 22:07:50.000000000 +0100
-+++ xen-3.0/xen/drivers/char/console.c	2006-03-10 23:44:02.933514984 +0100
-@@ -463,15 +463,11 @@
+         safe_strcpy(info.compiler,       xen_compiler());
+-        safe_strcpy(info.compile_by,     xen_compile_by());
+-        safe_strcpy(info.compile_domain, xen_compile_domain());
++        safe_strcpy(info.compile_by,     xen_compile_system_maintainer_local());
++        safe_strcpy(info.compile_domain, xen_compile_system_maintainer_domain());
+         safe_strcpy(info.compile_date,   xen_compile_date());
+         if ( copy_to_guest(arg, &info, 1) )
+             return -EFAULT;
+diff -urNad xen-unstable~/xen/common/version.c xen-unstable/xen/common/version.c
+--- xen-unstable~/xen/common/version.c	2006-08-18 15:35:47.000000000 +0000
++++ xen-unstable/xen/common/version.c	2006-08-18 16:22:24.124066693 +0000
+@@ -10,19 +10,24 @@
+     return XEN_COMPILE_TIME;
+ }
  
+-const char *xen_compile_by(void)
++const char *xen_compile_system_distribution(void)
+ {
+-    return XEN_COMPILE_BY;
++    return XEN_COMPILE_SYSTEM_DISTRIBUTION;
+ }
+ 
+-const char *xen_compile_domain(void)
++const char *xen_compile_system_maintainer_local(void)
+ {
+-    return XEN_COMPILE_DOMAIN;
++    return XEN_COMPILE_SYSTEM_MAINTAINER_LOCAL;
+ }
+ 
+-const char *xen_compile_host(void)
++const char *xen_compile_system_maintainer_domain(void)
+ {
+-    return XEN_COMPILE_HOST;
++    return XEN_COMPILE_SYSTEM_MAINTAINER_DOMAIN;
++}
++
++const char *xen_compile_system_version(void)
++{
++    return XEN_COMPILE_SYSTEM_VERSION;
+ }
+ 
+ const char *xen_compiler(void)
+@@ -50,7 +55,3 @@
+     return XEN_CHANGESET;
+ }
+ 
+-const char *xen_banner(void)
+-{
+-    return XEN_BANNER;
+-}
+diff -urNad xen-unstable~/xen/drivers/char/console.c xen-unstable/xen/drivers/char/console.c
+--- xen-unstable~/xen/drivers/char/console.c	2006-08-18 15:35:45.000000000 +0000
++++ xen-unstable/xen/drivers/char/console.c	2006-08-18 16:22:24.124066693 +0000
+@@ -463,12 +463,10 @@
      serial_set_rx_handler(sercon_handle, serial_rx);
  
--    /* HELLO WORLD --- start-of-day banner text. */
--    printk(XEN_BANNER);
+     /* HELLO WORLD --- start-of-day banner text. */
+-    printk(xen_banner());
 -    printk(" http://www.cl.cam.ac.uk/netos/xen\n");
 -    printk(" University of Cambridge Computer Laboratory\n\n");
 -    printk(" Xen version %d.%d%s (%s@%s) (%s) %s\n",
-+    printk(" Xen version %d.%d%s (%s %s) (%s) (%s) %s\n",
-            XEN_VERSION, XEN_SUBVERSION, XEN_EXTRAVERSION,
--           XEN_COMPILE_BY, XEN_COMPILE_DOMAIN,
-+           XEN_COMPILE_SYSTEM_DISTRIBUTION, XEN_COMPILE_SYSTEM_VERSION,
-+           XEN_COMPILE_SYSTEM_MAINTAINER,
-            XEN_COMPILER, XEN_COMPILE_DATE);
--    printk(" Latest ChangeSet: %s\n\n", XEN_CHANGESET);
++    printk(" Xen version %d.%d%s (%s %s) (%s@%s) (%s) %s\n",
+            xen_major_version(), xen_minor_version(), xen_extra_version(),
+-           xen_compile_by(), xen_compile_domain(),
++           xen_compile_system_distribution(), xen_compile_system_version(),
++           xen_compile_system_maintainer_local(), xen_compile_system_maintainer_domain(),
+            xen_compiler(), xen_compile_date());
+     printk(" Latest ChangeSet: %s\n\n", xen_changeset());
      set_printk_prefix("(XEN) ");
- 
-     if ( opt_sync_console )
-diff -urNad xen-3.0~/xen/include/xen/compile.h.in xen-3.0/xen/include/xen/compile.h.in
---- xen-3.0~/xen/include/xen/compile.h.in	2006-02-23 22:07:51.000000000 +0100
-+++ xen-3.0/xen/include/xen/compile.h.in	2006-03-10 23:44:02.933514984 +0100
-@@ -3,6 +3,9 @@
- #define XEN_COMPILE_BY		"@@whoami@@"
- #define XEN_COMPILE_DOMAIN	"@@domain@@"
- #define XEN_COMPILE_HOST	"@@hostname@@"
-+#define XEN_COMPILE_SYSTEM_DISTRIBUTION "@@system_distribution@@"
-+#define XEN_COMPILE_SYSTEM_VERSION      "@@system_version@@"
-+#define XEN_COMPILE_SYSTEM_MAINTAINER   "@@system_maintainer@@"
+diff -urNad xen-unstable~/xen/include/xen/compile.h.in xen-unstable/xen/include/xen/compile.h.in
+--- xen-unstable~/xen/include/xen/compile.h.in	2006-08-18 15:35:50.000000000 +0000
++++ xen-unstable/xen/include/xen/compile.h.in	2006-08-18 16:22:54.278450533 +0000
+@@ -1,8 +1,9 @@
+ #define XEN_COMPILE_DATE	"@@date@@"
+ #define XEN_COMPILE_TIME	"@@time@@"
+-#define XEN_COMPILE_BY		"@@whoami@@"
+-#define XEN_COMPILE_DOMAIN	"@@domain@@"
+-#define XEN_COMPILE_HOST	"@@hostname@@"
++#define XEN_COMPILE_SYSTEM_DISTRIBUTION		"@@system_distribution@@"
++#define XEN_COMPILE_SYSTEM_MAINTAINER_DOMAIN	"@@system_maintainer_domain@@"
++#define XEN_COMPILE_SYSTEM_MAINTAINER_LOCAL	"@@system_maintainer_local@@"
++#define XEN_COMPILE_SYSTEM_VERSION		"@@system_version@@"
  #define XEN_COMPILER		"@@compiler@@"
  
  #define XEN_VERSION		@@version@@
+@@ -10,4 +11,3 @@
+ #define XEN_EXTRAVERSION	"@@extraversion@@"
+ 
+ #define XEN_CHANGESET		"@@changeset@@"
+-#define XEN_BANNER		\
+diff -urNad xen-unstable~/xen/include/xen/version.h xen-unstable/xen/include/xen/version.h
+--- xen-unstable~/xen/include/xen/version.h	2006-08-18 15:35:49.000000000 +0000
++++ xen-unstable/xen/include/xen/version.h	2006-08-18 16:22:24.124066693 +0000
+@@ -3,14 +3,14 @@
+ 
+ const char *xen_compile_date(void);
+ const char *xen_compile_time(void);
+-const char *xen_compile_by(void);
+-const char *xen_compile_domain(void);
+-const char *xen_compile_host(void);
++const char *xen_compile_system_distribution(void);
++const char *xen_compile_system_maintainer_domain(void);
++const char *xen_compile_system_maintainer_local(void);
++const char *xen_compile_system_version(void);
+ const char *xen_compiler(void);
+ unsigned int xen_major_version(void);
+ unsigned int xen_minor_version(void);
+ const char *xen_extra_version(void);
+ const char *xen_changeset(void);
+-const char *xen_banner(void);
+ 
+ #endif /* __XEN_VERSION_H__ */

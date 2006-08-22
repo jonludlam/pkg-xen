@@ -1,0 +1,97 @@
+Xen for Debian
+--------------
+
+* About /lib/tls:
+
+   Since Xen guest machines have to work in non-contiguous areas of memory,
+   they cannot support a segmented glibc efficiently.  If your glibc is
+   segmented Xen will have to emulate the support, with a high performance
+   penalty. Luckily the Debian GLibc Team has agreed to provide a non-segmented
+   version to be used with xen, which is available in the libc6-xen package,
+   recommended by this one. Should this package be not available for you (eg.
+   because you are using xen on Debian 3.1 - sarge) you can work around the
+   segmentation issue by just executing this command:
+
+   mv /lib/tls /lib/tls.disabled
+
+   Unfortunately we cannot do this ourselves when you install Xen or at any
+   other time, without breaking the Debian Policy and thus provoke the Wrath of
+   the Gods. We know that this solution is not optimal, especially because
+   every time you upgrade the glibc package /lib/tls will be restored, and
+   you'll have to
+
+   rm -rf /lib/tls.disabled
+   mv /lib/tls /lib/tls.disabled
+
+   again. This of course is not necessary if you use the provided libc6-xen
+   package, which of course is the recommended course of action whenever
+   possible.  Anyway please remember to always keep your system tls disabled.
+
+* About the kernel:
+   
+   Debian provides a xen enabled kernel in the linux-image-xen-* packages,
+   available both in unstable/testing and, for sarge, in bpo. You can use the
+   same kernel for both your domain 0 and your unprivileged domains.
+
+   Should you want to roll your own kernel this is the way you do it. First
+   download from http://alioth.debian.org/projects/pkg-xen/ the kernel patch
+   for your version of xen.  Then download the relevant kernel from kernel.org,
+   apply the patch, configure and build your kernel in the standard way (with
+   kernel package). If you do it this way you can even build a different
+   lightweight kernel for your unprivileged domains, which is the standard xen
+   way to do things.
+   
+   After you've done so you can add a section similar to this one to your
+   /boot/grub/menu.lst file in order to boot your xen system. (Only grub is
+   supported on Xen systems, if you're a LILO fan we're sorry, there's no way
+   you can use Xen without switching, and probably there will never be)
+
+   title           Debian Xen+GNU/Linux
+   root            (hd0,0)
+   kernel          /boot/xen.gz
+   module          /boot/xen-linux-2.6.12.6xeno003 root=/dev/sda1 ro console=tty0
+   boot
+   
+   Of course you have this example supplying your own kernel path and root
+   device in the module line in order to have a working Xen system after a
+   reboot.
+
+* About networking:
+   
+   By default Xen modifies your networking configuration, creating a bridge.
+   To avoid breaking a machine's connection to the network the debian package
+   doesn't touch the network configuration unless requested. On the other hand
+   xen needs to connect the guest domains somewhere, in order for them to have
+   networking, and expects that the xen bridge exists. You should hand-tune
+   your networking configuration by editing /etc/xen/xend-config.sxp and
+   possibly /etc/network/interfaces to decide how to connect your domains to
+   the network.
+
+* About loop devices:
+
+   If you plan hosting virtual domains with file backed block devices (ie. the
+   ones xen-tools creates by default) be careful about two issues:
+
+   1. Maximum number of loop devices
+      By default the loop driver supports a maximum of 8 loop devices. Of
+      course since every xen domain uses at least two (one for the data and one
+      for the swap) this number is absolutely insufficient. You should increase
+      it by adding a file named local-loop in /etc/modprobe.d containing the
+      string "options loop max_loop=128", if the loop driver is compiled as a
+      module, or by appending the string max_loop=128 to your kernel parameters
+      if the driver is in-kernel. Of course you can increase or decrease the
+      number 128 as you see fit.
+
+   2. Driver loading (only if loop is compiled as a module)
+      Normally the loop driver gets loaded when the first loop device is
+      accessed. When using udev, though, the loop devices get created only
+      after the driver gets loaded. This means that xen will fail if the loop
+      driver is not already loaded when it tries to start a file-backed virtual
+      domain.  To fix this just add "loop" in your /etc/modules file, thus
+      forcing it to be loaded at boot time.
+   
+
+Kindly yours,
+
+Guido Trotter, for the Debian Xen Team.
+(with a litte help from Ralph Passgang)

@@ -1,0 +1,7 @@
+[abi]
+abiname: 1
+
+[base]
+arches:
+ amd64
+ i386

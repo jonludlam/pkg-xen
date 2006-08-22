@@ -1,0 +1,9 @@
+Source: xen-@major@
+Section: misc
+Priority: extra
+Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
+Build-Depends: debhelper (>= 5.0.37.2), libcurl3-dev | libcurl-dev, python-dev, python (>= 2.2), transfig, libsdl1.2-dev, libvncserver-dev, libjpeg-dev, bzip2, bcc, dpatch, lsb-release, python-central (>= 0.5), tetex-bin, tetex-extra, gs-common
+Standards-Version: 3.7.2.0
+XS-Python-Version: current
+
