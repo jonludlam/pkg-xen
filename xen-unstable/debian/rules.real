@@ -86,7 +86,7 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 	dh_testroot
 	dh_clean -k
 	dh_installdirs boot
-	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)-$(FLAVOUR).gz
+	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)$(ABINAME)-$(FLAVOUR).gz
 	$(MAKE) -f debian/rules.real install-base
 
 install-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
