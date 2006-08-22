@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.4
 import sys
-sys.path.append(sys.argv[1]+ "/lib/python")
+sys.path.append(sys.argv[2]+ "/lib/python")
 import debian_linux.gencontrol
 from debian_linux.config import *
 from debian_linux.debian import *
@@ -22,6 +22,8 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
 
     def do_main_packages(self, packages, extra):
         packages.extend(self.process_packages(self.templates["control.main"], self.vars))
+
+        packages['source']['Build-Depends'].append('linux-support-%s' % sys.argv[1])
 
     def do_arch_setup(self, vars, makeflags, arch, extra):
         for i in (

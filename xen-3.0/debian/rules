@@ -9,7 +9,7 @@ include /usr/src/linux-support-$(KERNELVERSION)/modules/rules.include
 srcver   := $(shell dpkg-parsechangelog | awk '/^Version:/ {print $$2}')
 VERSION  := $(shell echo $(srcver) | sed -e 's,-[^-]*$$,,')
 
-GENCONTROL = debian/bin/gencontrol.py
+GENCONTROL = debian/bin/gencontrol.py $(KERNELVERSION)
 
 setup: $(STAMPS_DIR)/setup-base
 $(STAMPS_DIR)/setup-base: debian/control $(BUILD_DIR) $(STAMPS_DIR)
