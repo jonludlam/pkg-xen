@@ -4,11 +4,28 @@
 
 VERSION := $(shell dpkg-parsechangelog | perl -ne '/^Version:\s+(\S+)-[^-]+$$/ && print $$1;')
 
-build:
+BUILD_DIR = debian/build
+STAMPS_DIR = debian/stamps
+
+srcfiles := $(filter-out debian, $(wildcard * .[^.]*))
+source: $(STAMPS_DIR)/source
+$(STAMPS_DIR)/source: $(STAMPS_DIR)
+	dh_testdir
+	@rm -rf $(BUILD_DIR)
+	mkdir $(BUILD_DIR)
+	cp -a $(srcfiles) $(BUILD_DIR)
+	dpatch -d $(BUILD_DIR) apply-all
+	touch $@
+
+build: $(STAMPS_DIR)/source
 
 clean:
 	dh_testdir
+	rm -rf $(BUILD_DIR) $(STAMPS_DIR)
 	dh_clean
+
+$(BUILD_DIR) $(STAMPS_DIR):
+	@[ -d $@ ] || mkdir $@
 
 DIR_ORIG = ../orig/xen-common-$(VERSION)
 
@@ -21,11 +38,11 @@ unpatch: clean
 maintainerclean:
 	rm -rf $(filter-out .svn debian, $(wildcard * .[^.]*))
 
-install:
+install: $(STAMPS_DIR)/source
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	$(MAKE) -C tools/examples install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) -C $(BUILD_DIR)/tools/examples install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
 
 binary-indep: install
 	dh_testdir
