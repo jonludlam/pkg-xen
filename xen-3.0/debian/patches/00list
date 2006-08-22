@@ -2,6 +2,5 @@ prefix-utils
 prefix-ioemu
 manpages
 version
-default-network
 qemu-config
 libs
