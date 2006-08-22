@@ -2,21 +2,38 @@
 
 #export DH_VERBOSE=1
 
+VERSION := $(shell dpkg-parsechangelog | perl -ne '/^Version:\s+(\S+)-[^-]+$$/ && print $$1;')
+
 build:
 
 clean:
 	dh_testdir
-	dh_testroot
 	dh_clean
 
-binary-indep:
+DIR_ORIG = ../orig/xen-common-$(VERSION)
+
+orig: $(DIR_ORIG)
+	rsync --delete --exclude debian --exclude .svn --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
+
+# This is to make dpatch-edit-patch work
+unpatch: clean
+
+maintainerclean:
+	rm -rf $(filter-out .svn debian, $(wildcard * .[^.]*))
+
+install:
 	dh_testdir
 	dh_testroot
-	dh_install
+	dh_clean -k
+	$(MAKE) -C tools/examples install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
+
+binary-indep: install
+	dh_testdir
+	dh_testroot
+	dh_install --sourcedir=debian/tmp
 	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
-	dh_installman
 	dh_installinit -p xen-utils-common --name xend -- defaults 20 21
 	dh_installinit -p xen-utils-common --name xendomains --no-restart-on-upgrade -- defaults 21 20
 	dh_link

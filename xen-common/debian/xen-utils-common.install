@@ -1,0 +1,3 @@
+etc/udev/*.rules
+etc/xen/scripts
+etc/xen/xend*
