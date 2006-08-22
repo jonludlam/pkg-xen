@@ -5,3 +5,4 @@ version
 qemu-config
 libs
 qemu-arch
+blktap-disable
