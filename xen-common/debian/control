@@ -9,6 +9,7 @@ Build-Depends: debhelper (>= 5.0.37.2), dpatch
 Package: xen-utils-common
 Architecture: all
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: xen-utils-3.0, xen, libxen-python, libxen2.0, libxen2.0-dev
 Description: XEN administrative tools - common files
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
