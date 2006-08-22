@@ -43,9 +43,9 @@ echo "Exporting xen-common to $DESTDIR..."
 mkdir $DESTDIR || exit 1;
 
 mkdir $DESTDIR/tools
-cp -a $HGDIR/Config.mk $DESTDIR
+cp -a $HGDIR/{Config.mk,config} $DESTDIR
 cp -a $HGDIR/tools/{Rules.mk,examples} $DESTDIR/tools
-(cd $HGDIR; $HG log Config.mk tools/{Rules.mk,examples}) > $DESTDIR/ChangeLog
+(cd $HGDIR; $HG log Config.mk config tools/{Rules.mk,examples}) > $DESTDIR/ChangeLog
 
 echo "Creating orig file $DESTTAR..."
 
