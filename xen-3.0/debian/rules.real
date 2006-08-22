@@ -91,7 +91,7 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 
 install-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 install-utils_$(ARCH): PACKAGE_NAME_UTILS = xen-utils-$(VERSION)$(ABINAME)
-install-utils_$(ARCH): PACKAGE_NAME_IOEMU = xen-ioemu-$(MAJOR)
+install-utils_$(ARCH): PACKAGE_NAME_IOEMU = xen-ioemu-$(SHORT_VERSION)
 install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME_UTILS) -p$(PACKAGE_NAME_IOEMU)
 install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	dh_testdir
