@@ -4,3 +4,4 @@ manpages
 version
 default-network
 qemu-config
+libs
