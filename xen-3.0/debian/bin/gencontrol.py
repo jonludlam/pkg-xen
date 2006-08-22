@@ -143,7 +143,7 @@ $
         raise ValueError
     ret = match.groupdict()
     if ret['unstable'] is not None:
-        ret['major'] = unstable
+        ret['major'] = 'unstable'
         ret['short_version'] = ret['version']
     else:
         ret['version'] = ret['major'] + ret['minor']
