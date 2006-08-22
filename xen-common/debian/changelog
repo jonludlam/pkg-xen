@@ -1,4 +1,4 @@
-xen-common (0.1) UNRELEASED; urgency=low
+xen-common (3.0+hg11205-1) UNRELEASED; urgency=low
 
   * Initial release.
 
