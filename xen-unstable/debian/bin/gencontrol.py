@@ -17,6 +17,7 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
             'MAJOR': self.version['xen']['major'],
             'VERSION': self.version['xen']['version'],
             'SHORT_VERSION': self.version['xen']['short_version'],
+            'EXTRAVERSION': self.version['xen']['extraversion'],
             'ABINAME': self.abiname,
         })
 
@@ -46,6 +47,10 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
                 packages.append(package)
 
         package_utils_name = packages_utils[0]['Package']
+
+        for i in ('postinst', 'prerm'):
+            j = self.substitute(self.templates["xen-utils.%s" % i], vars)
+            file("debian/%s.%s" % (package_utils_name, i), 'w').write(j)
 
         cmds_binary_arch = []
         cmds_binary_arch.append(("$(MAKE) -f debian/rules.real binary-arch-arch %s" % makeflags))
@@ -120,8 +125,10 @@ def parse_version_xen(version):
         (?P<version>
             (?P<major>\d+\.\d+)
             (
-                (?P<minor>\.\d+)
-                -\d+
+                (?P<extraversion>
+                    (?P<minor>\.\d+)
+                    -\d+
+                )
                 |
                 (?P<unstable>-unstable)
             )
@@ -145,9 +152,11 @@ $
     if ret['unstable'] is not None:
         ret['major'] = 'unstable'
         ret['short_version'] = ret['version']
+        ret['extraversion'] = ret['unstable']
     else:
         ret['version'] = ret['major'] + ret['minor']
         ret['short_version'] = ret['major']
+    del ret['unstable']
     return ret
 
 if __name__ == '__main__':

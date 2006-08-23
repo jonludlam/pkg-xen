@@ -33,6 +33,7 @@ $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hyperv
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
 	cp -a $(SOURCE_DIR) $(DIR)
+	echo "XEN_EXTRAVERSION := $(EXTRAVERSION)$(ABINAME)" > $(DIR)/xen/xen-version
 	touch $@
 
 $(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_DIR=$(BUILD_DIR)/source
