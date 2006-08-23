@@ -36,13 +36,14 @@ orig: $(DIR_ORIG)
 unpatch: clean
 
 maintainerclean:
-	rm -rf $(filter-out .svn debian, $(wildcard * .[^.]*))
+	rm -rf $(filter-out .svn debian scripts, $(wildcard * .[^.]*))
 
 install: $(STAMPS_DIR)/source
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	$(MAKE) -C $(BUILD_DIR)/tools/examples install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) -C $(BUILD_DIR)/scripts install DESTDIR=$(CURDIR)/debian/tmp
 
 binary-indep: install
 	dh_testdir
