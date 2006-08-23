@@ -29,9 +29,9 @@ PRIVATE_SCRIPTS_DIR = /usr/lib/xen-common/bin
 
 install:
 	install -d $(DESTDIR)$(GLOBAL_SCRIPTS_DIR) $(DESTDIR)$(PRIVATE_SCRIPTS_DIR)
-	@for i in $(SCRIPTS); do \
+	@for i in $(GLOBAL_SCRIPTS); do \
 	    echo ln -s $(PRIVATE_SCRIPTS_DIR)/$(WRAPPER) $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)/$$i; \
-	    ln -s $(PRIVATE_SCRIPTA_DIR)/$(WRAPPER) $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)/$$i || exit 1; \
+	    ln -s $(PRIVATE_SCRIPTS_DIR)/$(WRAPPER) $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)/$$i || exit 1; \
 	done
 	install $(PRIVATE_SCRIPTS) $(DESTDIR)$(PRIVATE_SCRIPTS_DIR)
 
