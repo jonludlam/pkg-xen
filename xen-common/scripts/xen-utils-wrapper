@@ -1,16 +1,5 @@
 #!/bin/bash
 
-version="$XEN_VERSION"
-# TODO: real version detection
-if [ -z "$version" ]; then
-    version="default"
-fi
-
-root="/usr/lib/xen-$version"
-if ! [ -d "$root" ]; then
-    echo "WARING!  Can't find $version of xen utils, fallback to default version!" >2
-    root="/usr/lib/xen-default"
-fi
-
 command="$(basename $0)"
+root=$(/usr/lib/xen-common/bin/xen-utils-root -v "$XEN_VERSION")
 exec "$root/bin/$command" "$@"

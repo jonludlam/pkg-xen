@@ -1,4 +1,4 @@
-SCRIPTS = \
+GLOBAL_SCRIPTS = \
 	cpuperf-perfcntr \
 	cpuperf-xen \
 	xend \
@@ -18,17 +18,20 @@ SCRIPTS = \
 	xentrace_setsize \
 	xm
 
+PRIVATE_SCRIPTS = \
+	xen-utils-root \
+	$(WRAPPER)
+
 WRAPPER = xen-utils-wrapper
 
-SCRIPTS_DIR = /usr/sbin
-WRAPPER_DIR = /usr/lib/xen-common/bin
+GLOBAL_SCRIPTS_DIR = /usr/sbin
+PRIVATE_SCRIPTS_DIR = /usr/lib/xen-common/bin
 
 install:
-	install -d $(DESTDIR)$(SCRIPTS_DIR)
-	install -d $(DESTDIR)$(WRAPPER_DIR)
+	install -d $(DESTDIR)$(GLOBAL_SCRIPTS_DIR) $(DESTDIR)$(PRIVATE_SCRIPTS_DIR)
 	@for i in $(SCRIPTS); do \
-	    echo ln -s $(WRAPPER_DIR)/$(WRAPPER) $(DESTDIR)$(SCRIPTS_DIR)/$$i; \
-	    ln -s $(WRAPPER_DIR)/$(WRAPPER) $(DESTDIR)$(SCRIPTS_DIR)/$$i || exit 1; \
+	    echo ln -s $(PRIVATE_SCRIPTS_DIR)/$(WRAPPER) $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)/$$i; \
+	    ln -s $(PRIVATE_SCRIPTA_DIR)/$(WRAPPER) $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)/$$i || exit 1; \
 	done
-	install $(WRAPPER) $(DESTDIR)$(WRAPPER_DIR)
+	install $(PRIVATE_SCRIPTS) $(DESTDIR)$(PRIVATE_SCRIPTS_DIR)
 

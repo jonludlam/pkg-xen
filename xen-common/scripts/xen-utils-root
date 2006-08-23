@@ -1,0 +1,35 @@
+#!/bin/bash
+
+while getopts "qv:" OPT; do
+    case "$OPT" in
+	q)
+	QUIET=1
+	;;
+	v)
+	VERSION="$OPTARG"
+	;;
+    esac
+done
+
+# TODO: real version detection
+
+if [ -z "$VERSION" ]; then
+    VERSION="default"
+fi
+
+root="/usr/lib/xen-$VERSION"
+if [ -d "$root" ]; then
+    echo "$root"
+    exit 0
+fi
+
+root="/usr/lib/xen-default"
+if [ -d "$root" ]; then
+    [ "$QUIET" ] || echo "WARING!  Can't find version $VERSION of xen utils, fallback to default version!" >&2
+    echo "$root"
+    exit 0
+fi
+
+[ "$QUIET" ] || echo "ERROR!  Can't find default version of xen utils, bailing out!" >&2
+exit 1
+
