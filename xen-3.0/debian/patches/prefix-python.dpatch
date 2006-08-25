@@ -1,0 +1,94 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## prefix-tools-python.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
+--- xen-3.0~/tools/misc/xend	2006-08-21 05:12:27.000000000 +0000
++++ xen-3.0/tools/misc/xend	2006-08-25 10:05:28.344316353 +0000
+@@ -27,9 +27,8 @@
+ import time
+ import commands
+ 
+-# add fallback path for non-native python path installs if needed
+-sys.path.append('/usr/lib/python')
+-sys.path.append('/usr/lib64/python')
++sys.path.append('%s/../lib/python' % sys.path[0])
++
+ from xen.xend.server import SrvDaemon
+ 
+ class CheckError(ValueError):
+@@ -68,14 +67,14 @@
+ 
+ def start_xenstored():
+     XENSTORED_TRACE = os.getenv("XENSTORED_TRACE")
+-    cmd = "xenstored --pid-file=/var/run/xenstore.pid"
++    cmd = sys.path[0] + "/xenstored --pid-file=/var/run/xenstore.pid"
+     if XENSTORED_TRACE:
+         cmd += " -T /var/log/xenstored-trace.log"
+     s,o = commands.getstatusoutput(cmd)
+ 
+ def start_consoled():
+     if os.fork() == 0:
+-        os.execvp('xenconsoled', ['xenconsoled'])
++        os.execvp(sys.path[0] + '/xenconsoled', ['xenconsoled'])
+             
+ def main():
+     try:
+diff -urNad xen-3.0~/tools/misc/xm xen-3.0/tools/misc/xm
+--- xen-3.0~/tools/misc/xm	2006-08-21 05:12:27.000000000 +0000
++++ xen-3.0/tools/misc/xm	2006-08-25 10:05:28.344316353 +0000
+@@ -1,10 +1,7 @@
+ #!/usr/bin/env python
+ #  -*- mode: python; -*-
+ import sys
+-
+-# add fallback path for non-native python path installs if needed
+-sys.path.append('/usr/lib/python')
+-sys.path.append('/usr/lib64/python')
++sys.path.append('%s/../lib/python' % sys.path[0])
+ from xen.xm import main
+ 
+ main.main(sys.argv)
+diff -urNad xen-3.0~/tools/python/xen/util/auxbin.py xen-3.0/tools/python/xen/util/auxbin.py
+--- xen-3.0~/tools/python/xen/util/auxbin.py	2006-08-21 05:12:26.000000000 +0000
++++ xen-3.0/tools/python/xen/util/auxbin.py	2006-08-25 10:05:28.356310962 +0000
+@@ -16,16 +16,9 @@
+ #============================================================================
+ 
+ 
+-LIB_BIN_32 = "/usr/lib/xen/bin"
+-LIB_BIN_64 = "/usr/lib64/xen/bin"
+-
+-## The architectures on which the LIB_BIN_64 directory is used.  This
+-# deliberately excludes ia64.
+-LIB_64_ARCHS = [ 'x86_64', 'ppc64', 's390x', 'sparc64']
+-
+-
+ import os
+ import os.path
++import sys
+ 
+ 
+ def execute(exe, args = None):
+@@ -41,8 +34,4 @@
+ 
+ 
+ def path():
+-    machine = os.uname()[4]
+-    if machine in LIB_64_ARCHS and os.path.exists(LIB_BIN_64):
+-        return LIB_BIN_64
+-    else:
+-        return LIB_BIN_32
++    return sys.path[0]
+diff -urNad xen-3.0~/tools/python/xen/xm/console.py xen-3.0/tools/python/xen/xm/console.py
+--- xen-3.0~/tools/python/xen/xm/console.py	2006-08-21 05:12:26.000000000 +0000
++++ xen-3.0/tools/python/xen/xm/console.py	2006-08-25 10:05:28.356310962 +0000
+@@ -23,4 +23,4 @@
+ 
+ 
+ def execConsole(domid):
+-    xen.util.auxbin.execute(XENCONSOLE, [str(domid)])
++    xen.util.auxbin.execute(xen.util.auxbin.pathTo(XENCONSOLE), [str(domid)])

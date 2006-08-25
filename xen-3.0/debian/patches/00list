@@ -1,6 +1,7 @@
 prefix-utils
 prefix-ioemu
-manpages
+prefix-python
 version
 qemu-config
 libs
+qemu-arch
