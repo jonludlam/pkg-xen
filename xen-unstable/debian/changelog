@@ -1,5 +1,5 @@
-xen-unstable (3.0-unstable+hg11218-1) UNRELEASED; urgency=low
+xen-unstable (3.0-unstable+hg11218-1) unstable; urgency=low
 
   * Initial release.
 
- -- Bastian Blank <waldi@debian.org>  Thu, 23 Feb 2006 22:39:01 +0100
+ -- Bastian Blank <waldi@debian.org>  Sun, 27 Aug 2006 18:02:24 +0000
