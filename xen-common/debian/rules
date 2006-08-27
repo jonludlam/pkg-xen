@@ -27,16 +27,18 @@ clean:
 $(BUILD_DIR) $(STAMPS_DIR):
 	@[ -d $@ ] || mkdir $@
 
+NO_ORIG = .svn debian scripts
+
 DIR_ORIG = ../orig/xen-common-$(VERSION)
 
 orig: $(DIR_ORIG)
-	rsync --delete --exclude debian --exclude .svn --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
+	rsync --delete $(foreach t, $(NO_ORIG), --exclude $(t)) --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
 
 # This is to make dpatch-edit-patch work
 unpatch: clean
 
 maintainerclean:
-	rm -rf $(filter-out .svn debian scripts, $(wildcard * .[^.]*))
+	rm -rf $(filter-out $(NO_ORIG), $(wildcard * .[^.]*))
 
 install: $(STAMPS_DIR)/source
 	dh_testdir
