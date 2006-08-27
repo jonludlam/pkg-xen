@@ -1,5 +1,5 @@
-xen-common (3.0+hg11205-1) UNRELEASED; urgency=low
+xen-common (3.0+hg11205-1) unstable; urgency=low
 
   * Initial release.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 20 Aug 2006 20:55:29 +0000
+ -- Bastian Blank <waldi@debian.org>  Sun, 27 Aug 2006 17:46:22 +0000
