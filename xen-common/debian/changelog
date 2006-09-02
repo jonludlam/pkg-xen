@@ -1,9 +1,9 @@
-xen-common (3.0+hg11292-1) UNRELEASED; urgency=low
+xen-common (3.0+hg11292-1) unstable; urgency=low
 
   * New upstream snapshot.
   * Create /var/log/xen.
 
- -- Bastian Blank <waldi@debian.org>  Sat,  2 Sep 2006 16:16:17 +0000
+ -- Bastian Blank <waldi@debian.org>  Sat,  2 Sep 2006 16:28:41 +0000
 
 xen-common (3.0+hg11205-1) unstable; urgency=low
 
