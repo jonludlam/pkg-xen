@@ -2,4 +2,4 @@
 
 command="$(basename $0)"
 root=$(/usr/lib/xen-common/bin/xen-utils-root -v "$XEN_VERSION")
-exec "$root/bin/$command" "$@"
+[ "$root" ] && exec "$root/bin/$command" "$@"
