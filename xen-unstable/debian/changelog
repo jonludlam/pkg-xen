@@ -1,8 +1,8 @@
-xen-unstable (3.0-unstable+hg11292-1) UNRELEASED; urgency=low
+xen-unstable (3.0-unstable+hg11292-1) unstable; urgency=low
 
   * New upstream snapshot. This release should provide a stable dom0 abi.
 
- -- Bastian Blank <waldi@debian.org>  Wed, 30 Aug 2006 16:37:29 +0000
+ -- Bastian Blank <waldi@debian.org>  Sat,  2 Sep 2006 16:31:03 +0000
 
 xen-unstable (3.0-unstable+hg11218-1) unstable; urgency=low
 
