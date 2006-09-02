@@ -4,13 +4,13 @@ set -e
 
 case "$1" in
 configure)
-	# Set up udev rules symlink
-	L="/etc/udev/rules.d/z60_xen-backend.rules"
-	[ ! -z "$2" ] || [ -e "$L" ] || [ -L "$L" ] || ln -s ../xen-backend.rules "$L"
+	if [ -z "$2" ]; then
+		L="/etc/udev/rules.d/z60_xen-backend.rules"
+		[ -e "$L" ] || ln -s ../xen-backend.rules "$L"
+	fi
 
-	XENSTORED_DIR="/var/lib/xenstored"
-	[ ! -d "${XENSTORED_DIR}" ] && install -d -m 0700 "${XENSTORED_DIR}" 
-
+	install -d -m 0700 /var/lib/xenstored
+	install -d -m 2750 -g adm /var/log/xen
 	;;
 
 abort-upgrade|abort-remove|abort-deconfigure)
