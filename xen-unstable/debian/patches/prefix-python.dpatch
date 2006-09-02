@@ -6,8 +6,8 @@
 
 @DPATCH@
 diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
---- xen-unstable~/tools/misc/xend	2006-08-22 09:56:46.000000000 +0000
-+++ xen-unstable/tools/misc/xend	2006-08-22 12:18:23.600149518 +0000
+--- xen-unstable~/tools/misc/xend	2006-08-30 16:36:49.000000000 +0000
++++ xen-unstable/tools/misc/xend	2006-08-30 16:51:51.945564148 +0000
 @@ -35,16 +35,7 @@
  
  AUXBIN = 'xen/util/auxbin.py'
@@ -33,7 +33,7 @@ diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
 -    cmd = "xenstored --pid-file /var/run/xenstore.pid"
 +    cmd = sys.path[0] + "/xenstored --pid-file /var/run/xenstore.pid"
      if XENSTORED_TRACE:
-         cmd += " -T /var/log/xenstored-trace.log"
+         cmd += " -T /var/log/xen/xenstored-trace.log"
      s,o = commands.getstatusoutput(cmd)
  
  def start_consoled():
@@ -49,8 +49,8 @@ diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
  def main():
      try:
 diff -urNad xen-unstable~/tools/misc/xm xen-unstable/tools/misc/xm
---- xen-unstable~/tools/misc/xm	2006-08-22 09:56:46.000000000 +0000
-+++ xen-unstable/tools/misc/xm	2006-08-22 12:18:23.600149518 +0000
+--- xen-unstable~/tools/misc/xm	2006-08-30 16:36:49.000000000 +0000
++++ xen-unstable/tools/misc/xm	2006-08-30 16:51:16.445200251 +0000
 @@ -1,10 +1,7 @@
  #!/usr/bin/env python
  #  -*- mode: python; -*-
@@ -64,8 +64,8 @@ diff -urNad xen-unstable~/tools/misc/xm xen-unstable/tools/misc/xm
  
  main.main(sys.argv)
 diff -urNad xen-unstable~/tools/python/xen/util/auxbin.py xen-unstable/tools/python/xen/util/auxbin.py
---- xen-unstable~/tools/python/xen/util/auxbin.py	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/python/xen/util/auxbin.py	2006-08-22 12:18:23.600149518 +0000
+--- xen-unstable~/tools/python/xen/util/auxbin.py	2006-08-30 16:36:48.000000000 +0000
++++ xen-unstable/tools/python/xen/util/auxbin.py	2006-08-30 16:51:16.445200251 +0000
 @@ -16,17 +16,9 @@
  #============================================================================
  
@@ -101,8 +101,8 @@ diff -urNad xen-unstable~/tools/python/xen/util/auxbin.py xen-unstable/tools/pyt
 -        return LIB_32
 +    return os.path.join(path(), '../lib')
 diff -urNad xen-unstable~/tools/python/xen/xm/console.py xen-unstable/tools/python/xen/xm/console.py
---- xen-unstable~/tools/python/xen/xm/console.py	2006-08-22 09:56:45.000000000 +0000
-+++ xen-unstable/tools/python/xen/xm/console.py	2006-08-22 12:19:12.039201599 +0000
+--- xen-unstable~/tools/python/xen/xm/console.py	2006-08-30 16:36:48.000000000 +0000
++++ xen-unstable/tools/python/xen/xm/console.py	2006-08-30 16:51:16.445200251 +0000
 @@ -23,4 +23,4 @@
  
  
