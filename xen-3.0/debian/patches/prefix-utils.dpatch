@@ -8,7 +8,7 @@
 @DPATCH@
 diff -urNad xen-3.0~/Config.mk xen-3.0/Config.mk
 --- xen-3.0~/Config.mk	2006-08-21 05:12:20.000000000 +0000
-+++ xen-3.0/Config.mk	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/Config.mk	2006-09-03 17:23:19.654002141 +0000
 @@ -47,11 +47,9 @@
  CFLAGS  += -m64
  endif
@@ -26,7 +26,7 @@ diff -urNad xen-3.0~/Config.mk xen-3.0/Config.mk
  EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
 diff -urNad xen-3.0~/tools/Rules.mk xen-3.0/tools/Rules.mk
 --- xen-3.0~/tools/Rules.mk	2006-08-21 05:12:22.000000000 +0000
-+++ xen-3.0/tools/Rules.mk	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/Rules.mk	2006-09-03 17:23:19.654002141 +0000
 @@ -10,6 +10,9 @@
  XEN_XENSTORE       = $(XEN_ROOT)/tools/xenstore
  XEN_LIBXENSTAT     = $(XEN_ROOT)/tools/xenstat/libxenstat/src
@@ -39,7 +39,7 @@ diff -urNad xen-3.0~/tools/Rules.mk xen-3.0/tools/Rules.mk
  CFLAGS += -D__XEN_INTERFACE_VERSION__=0x00030101
 diff -urNad xen-3.0~/tools/console/Makefile xen-3.0/tools/console/Makefile
 --- xen-3.0~/tools/console/Makefile	2006-08-21 05:12:21.000000000 +0000
-+++ xen-3.0/tools/console/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/console/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -2,8 +2,7 @@
  XEN_ROOT=../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -66,8 +66,17 @@ diff -urNad xen-3.0~/tools/console/Makefile xen-3.0/tools/console/Makefile
  .PHONY: install
 diff -urNad xen-3.0~/tools/misc/Makefile xen-3.0/tools/misc/Makefile
 --- xen-3.0~/tools/misc/Makefile	2006-08-21 05:12:27.000000000 +0000
-+++ xen-3.0/tools/misc/Makefile	2006-08-25 10:02:25.639982507 +0000
-@@ -32,10 +32,9 @@
++++ xen-3.0/tools/misc/Makefile	2006-09-03 17:23:26.494927688 +0000
+@@ -16,7 +16,7 @@
+ TARGETS  = xenperf xc_shadow
+ 
+ INSTALL_BIN  = $(TARGETS) xencons
+-INSTALL_SBIN = netfix xm xen-bugtool xend xenperf
++INSTALL_BIN += netfix xm xen-bugtool xend
+ 
+ .PHONY: all
+ all: build
+@@ -32,10 +32,8 @@
  
  .PHONY: install
  install: build
@@ -75,13 +84,12 @@ diff -urNad xen-3.0~/tools/misc/Makefile xen-3.0/tools/misc/Makefile
 -	[ -d $(DESTDIR)/usr/sbin ] || $(INSTALL_DIR) $(DESTDIR)/usr/sbin
 -	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)/usr/bin
 -	$(INSTALL_PROG) $(INSTALL_SBIN) $(DESTDIR)/usr/sbin
-+	$(INSTALL_DIR) $(DESTDIR)/usr/$(DIR)
-+	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)/usr/$(DIR)
-+	$(INSTALL_PROG) $(INSTALL_SBIN) $(DESTDIR)/usr/$(DIR)
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)/usr/$(BINDIR)
  	$(MAKE) -C cpuperf install
  	$(MAKE) -C lomount install
  #       No sense in installing miniterm on the Xen box.
-@@ -55,4 +54,4 @@
+@@ -55,4 +53,4 @@
  	$(CC) -c $(CFLAGS) -o $@ $<
  
  $(TARGETS): %: %.o Makefile
@@ -89,7 +97,7 @@ diff -urNad xen-3.0~/tools/misc/Makefile xen-3.0/tools/misc/Makefile
 +	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) -L$(XEN_LIBXC) -lxenctrl
 diff -urNad xen-3.0~/tools/misc/cpuperf/Makefile xen-3.0/tools/misc/cpuperf/Makefile
 --- xen-3.0~/tools/misc/cpuperf/Makefile	2006-08-21 05:12:27.000000000 +0000
-+++ xen-3.0/tools/misc/cpuperf/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/misc/cpuperf/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -37,14 +37,14 @@
  	$(CC) $(CFLAGS) -o $@ $<
  
@@ -109,7 +117,7 @@ diff -urNad xen-3.0~/tools/misc/cpuperf/Makefile xen-3.0/tools/misc/cpuperf/Make
  # End of $RCSfile: Makefile,v $
 diff -urNad xen-3.0~/tools/misc/lomount/Makefile xen-3.0/tools/misc/lomount/Makefile
 --- xen-3.0~/tools/misc/lomount/Makefile	2006-08-21 05:12:27.000000000 +0000
-+++ xen-3.0/tools/misc/lomount/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/misc/lomount/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -21,7 +21,7 @@
  
  .PHONY: install
@@ -121,7 +129,7 @@ diff -urNad xen-3.0~/tools/misc/lomount/Makefile xen-3.0/tools/misc/lomount/Make
  clean:
 diff -urNad xen-3.0~/tools/pygrub/Makefile xen-3.0/tools/pygrub/Makefile
 --- xen-3.0~/tools/pygrub/Makefile	2006-08-21 05:12:24.000000000 +0000
-+++ xen-3.0/tools/pygrub/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/pygrub/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -11,7 +11,7 @@
  .PHONY: install
  ifndef XEN_PYTHON_NATIVE_INSTALL
@@ -133,7 +141,7 @@ diff -urNad xen-3.0~/tools/pygrub/Makefile xen-3.0/tools/pygrub/Makefile
  	CFLAGS="$(CFLAGS)" python setup.py install --root="$(DESTDIR)"
 diff -urNad xen-3.0~/tools/python/Makefile xen-3.0/tools/python/Makefile
 --- xen-3.0~/tools/python/Makefile	2006-08-21 05:12:25.000000000 +0000
-+++ xen-3.0/tools/python/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/python/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -6,15 +6,15 @@
  
  .PHONY: build
@@ -155,7 +163,7 @@ diff -urNad xen-3.0~/tools/python/Makefile xen-3.0/tools/python/Makefile
  .PHONY: test
 diff -urNad xen-3.0~/tools/python/setup.py xen-3.0/tools/python/setup.py
 --- xen-3.0~/tools/python/setup.py	2006-08-21 05:12:25.000000000 +0000
-+++ xen-3.0/tools/python/setup.py	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/python/setup.py	2006-09-03 17:23:19.654002141 +0000
 @@ -5,6 +5,8 @@
  XEN_ROOT = "../.."
  
@@ -183,7 +191,7 @@ diff -urNad xen-3.0~/tools/python/setup.py xen-3.0/tools/python/setup.py
                 libraries          = libraries,
 diff -urNad xen-3.0~/tools/xcutils/Makefile xen-3.0/tools/xcutils/Makefile
 --- xen-3.0~/tools/xcutils/Makefile	2006-08-21 05:12:28.000000000 +0000
-+++ xen-3.0/tools/xcutils/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/xcutils/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -15,7 +15,7 @@
  XEN_ROOT	= ../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -195,7 +203,7 @@ diff -urNad xen-3.0~/tools/xcutils/Makefile xen-3.0/tools/xcutils/Makefile
  
 diff -urNad xen-3.0~/tools/xenmon/Makefile xen-3.0/tools/xenmon/Makefile
 --- xen-3.0~/tools/xenmon/Makefile	2006-08-21 05:12:26.000000000 +0000
-+++ xen-3.0/tools/xenmon/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/xenmon/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -15,8 +15,6 @@
  INSTALL_DIR     = $(INSTALL) -d -m0755
  INSTALL_DATA    = $(INSTALL) -m0644
@@ -222,7 +230,7 @@ diff -urNad xen-3.0~/tools/xenmon/Makefile xen-3.0/tools/xenmon/Makefile
  clean:
 diff -urNad xen-3.0~/tools/xenstat/xentop/Makefile xen-3.0/tools/xenstat/xentop/Makefile
 --- xen-3.0~/tools/xenstat/xentop/Makefile	2006-08-21 05:12:28.000000000 +0000
-+++ xen-3.0/tools/xenstat/xentop/Makefile	2006-08-25 10:02:51.544340554 +0000
++++ xen-3.0/tools/xenstat/xentop/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -25,7 +25,6 @@
  prefix=/usr
  mandir=$(prefix)/share/man
@@ -242,7 +250,7 @@ diff -urNad xen-3.0~/tools/xenstat/xentop/Makefile xen-3.0/tools/xenstat/xentop/
  endif
 diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
 --- xen-3.0~/tools/xenstore/Makefile	2006-08-21 05:12:23.000000000 +0000
-+++ xen-3.0/tools/xenstore/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/xenstore/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -157,14 +157,13 @@
  install: all
  	$(INSTALL_DIR) -p $(DESTDIR)/var/run/xenstored
@@ -266,7 +274,7 @@ diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
  	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
 diff -urNad xen-3.0~/tools/xentrace/Makefile xen-3.0/tools/xentrace/Makefile
 --- xen-3.0~/tools/xentrace/Makefile	2006-08-21 05:12:25.000000000 +0000
-+++ xen-3.0/tools/xentrace/Makefile	2006-08-25 10:02:25.639982507 +0000
++++ xen-3.0/tools/xentrace/Makefile	2006-09-03 17:23:19.654002141 +0000
 @@ -15,17 +15,16 @@
  OBJS     = $(patsubst %.c,%.o,$(wildcard *.c))
  
