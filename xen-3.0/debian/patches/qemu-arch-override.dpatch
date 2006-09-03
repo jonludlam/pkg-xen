@@ -1,0 +1,20 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## qemu-arch-override.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/tools/ioemu/target-i386-dm/Makefile xen-3.0/tools/ioemu/target-i386-dm/Makefile
+--- xen-3.0~/tools/ioemu/target-i386-dm/Makefile	2006-09-03 16:10:52.981866852 +0000
++++ xen-3.0/tools/ioemu/target-i386-dm/Makefile	2006-09-03 16:11:14.832046931 +0000
+@@ -226,9 +226,6 @@
+ 
+ ifeq ($(TARGET_ARCH), i386)
+ LIBOBJS+= helper2.o
+-ifeq ($(ARCH), i386)
+-LIBOBJS+=translate-copy.o
+-endif
+ endif
+ 
+ ifeq ($(TARGET_ARCH), ppc)
