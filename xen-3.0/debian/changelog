@@ -1,10 +1,10 @@
-xen-3.0 (3.0.2-3+hg9762-1) UNRELEASED; urgency=low
+xen-3.0 (3.0.2-3+hg9762-1) unstable; urgency=low
 
   * New upstream snapshot.
   * Rename hypervisor and utils packages to include the complete version.
   * Redo build environment.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 03 Sep 2006 18:02:39 +0000
+ -- Bastian Blank <waldi@debian.org>  Mon,  4 Sep 2006 18:43:12 +0000
 
 xen-3.0 (3.0.2+hg9697-2) unstable; urgency=low
 
