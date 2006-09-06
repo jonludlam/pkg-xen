@@ -10,7 +10,7 @@ desc:
  4GB of memory. If you have more please install the -pae version instead.
 
 [i386-pae]
-config: XEN_TARGET_X86_PAE=y
+config: pae=y
 desc:
  This version of the hypervisor is built with PAE enabled, in order to support
  systems with more than 4GB of memory. If you have less than that you should
