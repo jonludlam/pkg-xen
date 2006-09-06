@@ -95,6 +95,12 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
                 package['Architecture'] = [arch]
                 packages.append(package)
 
+        package_name = packages_own[0]['Package']
+
+        for i in ('postinst', 'postrm'):
+            j = self.substitute(self.templates["xen-hypervisor.%s" % i], vars)
+            file("debian/%s.%s" % (package_name, i), 'w').write(j)
+
         cmds_binary_arch = []
         cmds_binary_arch.append(("$(MAKE) -f debian/rules.real binary-arch-flavour %s" % makeflags,))
         cmds_build = []
