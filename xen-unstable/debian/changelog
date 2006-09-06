@@ -1,9 +1,9 @@
-xen-unstable (3.0-unstable+hg11292-2) UNRELEASED; urgency=low
+xen-unstable (3.0-unstable+hg11292-2) unstable; urgency=low
 
   * Fix pae hypervisor.
   * Call update-grub in hypervisor postinst and postrm scripts.
 
- -- Bastian Blank <waldi@debian.org>  Wed,  6 Sep 2006 15:09:20 +0000
+ -- Bastian Blank <waldi@debian.org>  Wed,  6 Sep 2006 15:10:16 +0000
 
 xen-unstable (3.0-unstable+hg11292-1) unstable; urgency=low
 
