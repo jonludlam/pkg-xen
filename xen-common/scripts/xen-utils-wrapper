@@ -1,5 +1,7 @@
 #!/bin/bash
 
+libdir=/usr/lib
 command="$(basename $0)"
-root=$(/usr/lib/xen-common/bin/xen-utils-root -v "$XEN_VERSION")
-[ "$root" ] && exec "$root/bin/$command" "$@"
+version=$($libdir/xen-common/bin/xen-utils-version -v "$XEN_VERSION")
+[ "$version" ] && exec "$libdir/xen-$version/bin/$command" "$@"
+exit 127

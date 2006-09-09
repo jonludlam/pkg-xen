@@ -6,10 +6,11 @@ PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=xend
 DESC=XEN
 XENSTORED_RUN_DIR="/var/run/xenstored"
-ROOT=$(xen-utils-root -q || true)
+VERSION=$(xen-utils-version -q || true)
+ROOT=/usr/lib/xen-$VERSION
 DAEMON=$ROOT/bin/xend
 
-test "$ROOT" || exit 0
+test "$VERSION" || exit 0
 test -x $DAEMON || exit 0
 test -e /proc/xen/privcmd || exit 0
 grep -q "control_d" /proc/xen/capabilities || exit 0

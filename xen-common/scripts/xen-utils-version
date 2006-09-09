@@ -28,16 +28,14 @@ if [ -z "$VERSION" ]; then
     VERSION="default"
 fi
 
-root="/usr/lib/xen-$VERSION"
-if [ -d "$root" ]; then
-    echo "$root"
+if [ -d "/usr/lib/xen-$VERSION" ]; then
+    echo "$VERSION"
     exit 0
 fi
 
-root="/usr/lib/xen-default"
-if [ -d "$root" ]; then
+if [ -d "/usr/lib/xen-default" ]; then
     [ "$QUIET" ] || echo "WARING!  Can't find version $VERSION of xen utils, fallback to default version!" >&2
-    echo "$root"
+    echo "default"
     exit 0
 fi
 
