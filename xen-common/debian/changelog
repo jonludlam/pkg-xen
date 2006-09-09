@@ -1,9 +1,9 @@
-xen-common (3.0+hg11292-2) UNRELEASED; urgency=low
+xen-common (3.0+hg11292-2) unstable; urgency=low
 
-  * Add lsb init info blocks. 
+  * Add lsb init info blocks.
   * Don't fail if no working xend is available.
 
- -- Bastian Blank <waldi@debian.org>  Sat,  9 Sep 2006 13:31:46 +0200
+ -- Bastian Blank <waldi@debian.org>  Sat,  9 Sep 2006 11:37:52 +0000
 
 xen-common (3.0+hg11292-1) unstable; urgency=low
 
