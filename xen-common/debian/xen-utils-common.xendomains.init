@@ -1,38 +1,25 @@
 #!/bin/bash
-#
-# /etc/init.d/xendomains
-# Start / stop domains automatically when domain 0 boots / shuts down.
-#
-# chkconfig: 345 99 00
-# description: Start / stop Xen domains.
-#
-# This script offers fairly basic functionality.  It should work on Redhat
-# but also on LSB-compliant SuSE releases and on Debian with the LSB package
-# installed.  (LSB is the Linux Standard Base)
-#
-# Based on the example in the "Designing High Quality Integrated Linux
-# Applications HOWTO" by Avi Alkalay
-# <http://www.tldp.org/HOWTO/HighQuality-Apps-HOWTO/>
-#
 ### BEGIN INIT INFO
 # Provides:          xendomains
 # Required-Start:    $syslog $remote_fs xend
 # Should-Start:
 # Required-Stop:     $syslog $remote_fs xend
 # Should-Stop:
-# Default-Start:     3 4 5
-# Default-Stop:      0 1 2 6
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
 # Default-Enabled:   yes
 # Short-Description: Start/stop secondary xen domains
 # Description:       Start / stop domains automatically when domain 0 
 #                    boots / shuts down.
 ### END INIT INFO
 
-# Correct exit code would probably be 5, but it's enough 
-# if xend complains if we're not running as privileged domain
-if ! [ -e /proc/xen/privcmd -a -x /usr/sbin/xm ]; then
-	exit 0
-fi
+PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
+VERSION=$(xen-utils-version -q || true)
+ROOT=/usr/lib/xen-$VERSION
+
+test "$VERSION" || exit 0
+test -e /proc/xen/privcmd || exit 0
+grep -q "control_d" /proc/xen/capabilities || exit 0
 
 LOCKFILE=/var/lock/xendomains
 XENDOM_CONFIG=/etc/default/xendomains
@@ -86,12 +73,6 @@ rc_status()
     return ${_RC_RV}
 }
 rc_exit() { exit ${_RC_RV}; }
-rc_active() 
-{
-    if test -z "$RUNLEVEL"; then read RUNLEVEL REST < <(/sbin/runlevel); fi
-    if test -e /etc/init.d/S[0-9][0-9]${1}; then return 0; fi
-    return 1
-}
 
 if ! which usleep >&/dev/null
 then
