@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set -e
-
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
 NAME=xend
 DESC=XEN
@@ -15,40 +13,44 @@ test -x $DAEMON || exit 0
 test -e /proc/xen/privcmd || exit 0
 grep -q "control_d" /proc/xen/capabilities || exit 0
 
-# Wait for Xend to be up
-await_daemons_up () {
-	i=1
-	rets=10
-	$DAEMON status
-	while [ $? -ne 0 -a $i -lt $rets ]; do
-		sleep 1
-		echo -n .
-		i=$(($i + 1))
-		$DAEMON status
-	done
-}
-
+. /lib/lsb/init-functions
 
 set -e
 
+start()
+{
+	$DAEMON status && return 0
+	$DAEMON start || return 1
+
+	i=0
+	while [ $i -lt 10 ]; do
+		$DAEMON status && return 0 || true
+		i=$(($i + 1))
+		sleep 1
+	done
+	return 1
+}
+
+stop()
+{
+	$DAEMON status || return 0
+	$DAEMON stop || return 1
+}
+
 case "$1" in
   start)
-	echo -n "Starting $DESC: "
 	[ -d "$XENSTORED_RUN_DIR" ] || mkdir -p "$XENSTORED_RUN_DIR"
-	$DAEMON start
-	await_daemons_up
-	echo "$NAME."
+	log_daemon_msg "Starting $DESC" "xend"
+	start && log_end_msg 0 || log_end_msg 1
 	;;
   stop)
-	echo -n "Stopping $DESC: "
-	$DAEMON stop
-	echo "$NAME."
+	log_daemon_msg "Stopping $DESC" "xend"
+	stop && log_end_msg 0 || log_end_msg 1
 	;;
   restart|force-reload)
-	echo -n "Restarting $DESC: "
-	$DAEMON restart
-	await_daemons_up
-	echo "$NAME."
+	log_daemon_msg "Restarting $DESC" "xend"
+	stop || true
+	start && log_end_msg 0 || log_end_msg 1
 	;;
   *)
 	N=/etc/init.d/xen-utils
