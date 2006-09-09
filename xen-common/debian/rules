@@ -54,8 +54,8 @@ binary-indep: install
 	dh_installchangelogs
 	dh_installdocs
 	dh_installexamples
-	dh_installinit -p xen-utils-common --name xend -- defaults 20 21
-	dh_installinit -p xen-utils-common --name xendomains --no-restart-on-upgrade -- defaults 21 20
+	dh_installinit -p xen-utils-common --name xend --no-restart-on-upgrade -- defaults 20 21
+	dh_installinit -p xen-utils-common --name xendomains --no-start -- defaults 21 20
 	dh_link
 	dh_strip
 	dh_compress
