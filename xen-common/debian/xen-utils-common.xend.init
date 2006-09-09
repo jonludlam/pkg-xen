@@ -1,7 +1,16 @@
 #!/bin/sh
+### BEGIN INIT INFO
+# Provides:          xend
+# Required-Start:    $local_fs
+# Required-Stop:     $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      S 0 1 6
+# Short-Description: XEN control daemon
+# Description:       XEN control daemon
+### END INIT INFO
 
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DESC=XEN
+DESC="XEN control daemon"
 XENSTORED_RUN_DIR="/var/run/xenstored"
 VERSION=$(xen-utils-version -q || true)
 ROOT=/usr/lib/xen-$VERSION
