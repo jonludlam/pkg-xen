@@ -1,7 +1,6 @@
 #!/bin/sh
 
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
-NAME=xend
 DESC=XEN
 XENSTORED_RUN_DIR="/var/run/xenstored"
 VERSION=$(xen-utils-version -q || true)
@@ -14,8 +13,6 @@ test -e /proc/xen/privcmd || exit 0
 grep -q "control_d" /proc/xen/capabilities || exit 0
 
 . /lib/lsb/init-functions
-
-set -e
 
 start()
 {
