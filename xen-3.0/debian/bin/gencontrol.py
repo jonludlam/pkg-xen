@@ -125,7 +125,7 @@ def parse_version_xen(version):
         (?P<version>
             (?P<major>\d+\.\d+)
             (
-                (?P<extraversion>
+                (
                     (?P<minor>\.\d+)
                     -\d+
                 )
@@ -156,6 +156,7 @@ $
     else:
         ret['version'] = ret['major'] + ret['minor']
         ret['short_version'] = ret['major']
+        ret['extraversion'] = ret['minor']
     del ret['unstable']
     return ret
 
