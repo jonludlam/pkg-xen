@@ -8,17 +8,14 @@
 diff -urNad xen-unstable~/xen/Makefile xen-unstable/xen/Makefile
 --- xen-unstable~/xen/Makefile	2006-08-18 15:35:47.000000000 +0000
 +++ xen-unstable/xen/Makefile	2006-08-18 16:22:45.830247330 +0000
-@@ -92,18 +92,18 @@
+@@ -92,17 +92,17 @@
  # compile.h contains dynamic build info. Rebuilt on every 'make' invocation.
- include/xen/compile.h: LANG=C
  include/xen/compile.h: include/xen/compile.h.in
--	@sed -e 's/@@date@@/$(shell date)/g' \
--	    -e 's/@@time@@/$(shell date +%T)/g' \
+ 	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
+ 	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
 -	    -e 's/@@whoami@@/$(shell whoami)/g' \
 -	    -e 's/@@domain@@/$(shell ([ -x /bin/dnsdomainname ] && /bin/dnsdomainname) || ([ -x /bin/domainname ] && /bin/domainname || echo [unknown]))/g' \
 -	    -e 's/@@hostname@@/$(shell hostname)/g' \
-+	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
-+	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
  	    -e 's|@@compiler@@|$(shell $(CC) $(CFLAGS) -v 2>&1 | tail -n 1 | sed -e "s;|;/;")|g' \
  	    -e 's/@@version@@/$(XEN_VERSION)/g' \
  	    -e 's/@@subversion@@/$(XEN_SUBVERSION)/g' \
