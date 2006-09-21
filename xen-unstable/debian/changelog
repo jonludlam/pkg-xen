@@ -1,8 +1,8 @@
-xen-unstable (3.0-unstable+hg11470-1) UNRELEASED; urgency=low
+xen-unstable (3.0-unstable+hg11561-1) UNRELEASED; urgency=low
 
   * New upstream snapshot. 
 
- -- Bastian Blank <waldi@debian.org>  Sun, 17 Sep 2006 15:02:45 +0000
+ -- Bastian Blank <waldi@debian.org>  Thu, 21 Sep 2006 19:45:15 +0000
 
 xen-unstable (3.0-unstable+hg11292-2) unstable; urgency=low
 
