@@ -6,4 +6,5 @@ qemu-config
 libs
 qemu-arch
 blktap-disable
+path-relative
 abi-revert-1
