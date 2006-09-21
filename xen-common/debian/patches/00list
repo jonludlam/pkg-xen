@@ -1,3 +1,4 @@
 network-dummy
 xend-disable-relocation
 interpreter
+path-relative
