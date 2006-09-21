@@ -7,8 +7,8 @@
 
 @DPATCH@
 diff -urNad xen-unstable~/tools/firmware/Makefile xen-unstable/tools/firmware/Makefile
---- xen-unstable~/tools/firmware/Makefile	2006-08-22 09:56:47.000000000 +0000
-+++ xen-unstable/tools/firmware/Makefile	2006-08-22 10:47:23.727247679 +0000
+--- xen-unstable~/tools/firmware/Makefile	2006-09-21 21:44:58.000000000 +0200
++++ xen-unstable/tools/firmware/Makefile	2006-09-21 22:45:05.000000000 +0200
 @@ -4,7 +4,7 @@
  # hvmloader is a 32-bit protected mode binary.
  # It belongs in /usr/lib, not /usr/lib64.
@@ -18,9 +18,20 @@ diff -urNad xen-unstable~/tools/firmware/Makefile xen-unstable/tools/firmware/Ma
  
  SUBDIRS :=
  SUBDIRS += rombios
+diff -urNad xen-unstable~/tools/ioemu/Makefile.target xen-unstable/tools/ioemu/Makefile.target
+--- xen-unstable~/tools/ioemu/Makefile.target	2006-09-21 21:44:57.000000000 +0200
++++ xen-unstable/tools/ioemu/Makefile.target	2006-09-21 22:45:50.000000000 +0200
+@@ -191,6 +191,7 @@
+ ifdef CONFIG_SOLARIS
+ LIBS+=-lsocket -lnsl -lresolv
+ endif
++LIBS+=$(RPATH_ARG)
+ 
+ # profiling code
+ ifdef TARGET_GPROF
 diff -urNad xen-unstable~/tools/ioemu/configure xen-unstable/tools/ioemu/configure
---- xen-unstable~/tools/ioemu/configure	2006-08-22 09:56:47.000000000 +0000
-+++ xen-unstable/tools/ioemu/configure	2006-08-22 10:48:40.197691138 +0000
+--- xen-unstable~/tools/ioemu/configure	2006-09-21 21:44:58.000000000 +0200
++++ xen-unstable/tools/ioemu/configure	2006-09-21 22:45:05.000000000 +0200
 @@ -514,9 +514,9 @@
      prefix="/usr/local"
  fi
