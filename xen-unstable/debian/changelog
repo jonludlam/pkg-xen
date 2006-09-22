@@ -1,4 +1,4 @@
-xen-unstable (3.0-unstable+hg11561-1) UNRELEASED; urgency=low
+xen-unstable (3.0-unstable+hg11561-1) unstable; urgency=low
 
   * New upstream snapshot.
   * Revert domctl and sysctl abi to 1.
@@ -7,7 +7,7 @@ xen-unstable (3.0-unstable+hg11561-1) UNRELEASED; urgency=low
     configs.
   * Add proper rpath to qemu-dm.
 
- -- Bastian Blank <waldi@debian.org>  Fri, 22 Sep 2006 17:51:22 +0000
+ -- Bastian Blank <waldi@debian.org>  Fri, 22 Sep 2006 18:01:33 +0000
 
 xen-unstable (3.0-unstable+hg11292-2) unstable; urgency=low
 
