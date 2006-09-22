@@ -1,8 +1,13 @@
 xen-unstable (3.0-unstable+hg11561-1) UNRELEASED; urgency=low
 
-  * New upstream snapshot. 
+  * New upstream snapshot.
+  * Revert domctl and sysctl abi to 1.
+  * Cleanup build dependencies.
+  * Support relative paths for kernel, initrd and device_model entries in
+    configs.
+  * Add proper rpath to qemu-dm.
 
- -- Bastian Blank <waldi@debian.org>  Thu, 21 Sep 2006 19:45:15 +0000
+ -- Bastian Blank <waldi@debian.org>  Fri, 22 Sep 2006 17:51:22 +0000
 
 xen-unstable (3.0-unstable+hg11292-2) unstable; urgency=low
 
