@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## network-bridge.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: Load netloop module
+
+@DPATCH@
+diff -urNad xen-common~/tools/examples/network-bridge xen-common/tools/examples/network-bridge
+--- xen-common~/tools/examples/network-bridge	2006-07-05 18:34:34.000000000 +0000
++++ xen-common/tools/examples/network-bridge	2006-09-27 07:58:21.092674561 +0000
+@@ -59,6 +59,8 @@
+ findCommand "$@"
+ evalVariables "$@"
+ 
++modprobe netloop > /dev/null 2>&1
++
+ vifnum=${vifnum:-$(ip route list | awk '/^default / { print $NF }' | sed 's/^[^0-9]*//')}
+ vifnum=${vifnum:-0}
+ bridge=${bridge:-xenbr${vifnum}}

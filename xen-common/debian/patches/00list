@@ -1,4 +1,5 @@
 network-dummy
+network-bridge
 xend-disable-relocation
 interpreter
 path-relative
