@@ -1,3 +1,9 @@
+xen-common (3.0+hg11624-1) UNRELEASED; urgency=low
+
+  * New upstream snapshot.
+
+ -- Bastian Blank <waldi@debian.org>  Wed, 27 Sep 2006 07:55:37 +0000
+
 xen-common (3.0+hg11292-2) unstable; urgency=low
 
   * Add lsb init info blocks.
