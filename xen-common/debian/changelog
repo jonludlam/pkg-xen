@@ -1,9 +1,10 @@
-xen-common (3.0+hg11624-1) UNRELEASED; urgency=low
+xen-common (3.0+hg11624-1) UNRELEASED; urgency=medium
 
   * New upstream snapshot.
-  * Load netloop module if necessary. 
+  * Load netloop module if necessary. (closes: #388352)
+  * Set urgency to medium. 
 
- -- Bastian Blank <waldi@debian.org>  Wed, 27 Sep 2006 08:00:27 +0000
+ -- Bastian Blank <waldi@debian.org>  Wed, 27 Sep 2006 09:13:53 +0000
 
 xen-common (3.0+hg11292-2) unstable; urgency=low
 
