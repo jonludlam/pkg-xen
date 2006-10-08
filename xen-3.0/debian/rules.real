@@ -101,7 +101,17 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	install -D -m644 debian/xen-utils.NEWS debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/NEWS
 	install -D -m644 debian/xen-utils.README.Debian debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/README.Debian
 	$(MAKE) -C $(DIR)/tools install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME)
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp usr/lib/xen-$(VERSION)$(ABINAME) usr/lib
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp \
+	  usr/lib/xen-$(VERSION)$(ABINAME)/bin \
+	  usr/lib/xen-$(VERSION)$(ABINAME)/lib \
+	  usr/lib/xen-$(VERSION)$(ABINAME)
+	rm debian/$(PACKAGE_NAME_UTILS)/usr/lib/xen-$(VERSION)$(ABINAME)/bin/qemu*
+	DH_OPTIONS= dh_install  -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp \
+	  usr/lib/xen-$(VERSION)$(ABINAME)/bin/qemu-dm \
+	  usr/lib/xen-$(VERSION)$(ABINAME)/bin
+	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp \
+	  usr/lib/xen-$(VERSION)$(ABINAME)/boot \
+	  usr/lib/xen-$(VERSION)$(ABINAME)
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/share/xen-$(VERSION)$(ABINAME) usr/share
 	dh_pycentral
 	dh_python
