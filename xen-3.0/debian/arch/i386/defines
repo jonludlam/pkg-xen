@@ -5,11 +5,13 @@ flavours:
 xen-arch: x86_32
 
 [i386]
+class: i386
 desc:
  This version of the hypervisor is built with support for systems with up to
  4GB of memory. If you have more please install the -pae version instead.
 
 [i386-pae]
+class: i386 with pae
 config: pae=y
 desc:
  This version of the hypervisor is built with PAE enabled, in order to support
