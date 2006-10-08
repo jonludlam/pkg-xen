@@ -2,6 +2,8 @@
 
 HG=$(which hg)
 HGDIR=$1
+OVERRIDE_MAJOR=$2
+OVERRIDE_VERSION=$3
 
 if [ ! -x $HG ]; then
 	echo "hg must be installed"
@@ -9,39 +11,45 @@ if [ ! -x $HG ]; then
 fi
 
 if [ ! -d "$HGDIR" ] && [ ! -d "$HGDIR/.hg" ]; then
-	echo "Usage: $0 <xen-hg-dir>"
+	echo "Usage: $0 <xen-hg-dir> [overwrite-major overwrite-version]"
 	exit 1
 fi
 
-
-
-eval $(env -i -- make -f - version <<EOF
-include $HGDIR/xen/Makefile
-
-ifeq (\$(XEN_EXTRAVERSION),-unstable)
-MAJOR = unstable
+if [ "$OVERRIDE_MAJOR" ] && [ "$OVERRIDE_VERSION" ]; then
+	MAJOR=$OVERRIDE_MAJOR
+	VERSION=$OVERRIDE_VERSION
 else
-MAJOR = \$(XEN_VERSION).\$(XEN_SUBVERSION)
-endif
+	eval $(env -i -- make -f - version <<EOF
+	include $HGDIR/xen/Makefile
 
-HASH = \$(shell cd $HGDIR; $HG id | awk '{ print \$\$1}')
-CHANGESET = \$(shell cd $HGDIR; $HG log -r \$(HASH) | head -n 1 | sed -e 's/ //g;' | cut -d: -f2)
+	ifeq (\$(XEN_EXTRAVERSION),-unstable)
+	MAJOR = unstable
+	else
+	MAJOR = \$(XEN_VERSION).\$(XEN_SUBVERSION)
+	endif
 
-ifneq (\$(MAJOR),unstable)
-RELEASE_CHG = \$(shell cd $HGDIR; $HG tags | perl -ne 'BEGIN { \$\$done = 0; } /RELEASE-([-0-9.]+) +(\d+):/; if (\$\$1 and \$\$2 <= '\$(CHANGESET)' and not \$\$done) { print "\$\$2\n"; \$\$done = 1; }')
-endif
+	HASH = \$(shell cd $HGDIR; $HG id | awk '{ print \$\$1}')
+	CHANGESET = \$(shell cd $HGDIR; $HG log -r \$(HASH) | head -n 1 | sed -e 's/ //g;' | cut -d: -f2)
 
-ifeq (\$(RELEASE_CHG),\$(CHANGESET))
-VERSION = \$(XEN_FULLVERSION)
-else
-VERSION = \$(XEN_FULLVERSION)+hg\$(CHANGESET)
-endif
+	ifneq (\$(MAJOR),unstable)
+	RELEASE_CHG = \$(shell cd $HGDIR; $HG tags | perl -ne 'BEGIN { \$\$done = 0; } /RELEASE-([-0-9.]+) +(\d+):/; if (\$\$1 and \$\$2 <= '\$(CHANGESET)' and not \$\$done) { print "\$\$2\n"; \$\$done = 1; }')
+	endif
 
-PHONY: version
-version:
-	@echo DESTDIR="xen-\$(MAJOR)-\$(VERSION)"
-	@echo DESTTAR="xen-\$(MAJOR)_\$(VERSION).orig.tar.gz"
-EOF)
+	ifeq (\$(RELEASE_CHG),\$(CHANGESET))
+	VERSION = \$(XEN_FULLVERSION)
+	else
+	VERSION = \$(XEN_FULLVERSION)+hg\$(CHANGESET)
+	endif
+
+	PHONY: version
+	version:
+		@echo MAJOR="\$(MAJOR)"
+		@echo VERSION="\$(VERSION)"
+	EOF)
+fi
+
+DESTDIR="xen-${MAJOR}-${VERSION}"
+DESTTAR="xen-${MAJOR}_${VERSION}.orig.tar.gz"
 
 if [ -d $DESTDIR ]; then
 	echo "Destination directory $DESTDIR already exists"
