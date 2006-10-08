@@ -14,7 +14,7 @@ diff -urNad xen-3.0~/tools/firmware/Makefile xen-3.0/tools/firmware/Makefile
  # It belongs in /usr/lib, not /usr/lib64.
  TARGET      := hvmloader/hvmloader
 -INSTALL_DIR := $(DESTDIR)/usr/lib/xen/boot
-+INSTALL_DIR := $(DESTDIR)/usr/lib/xen-ioemu-$(XEN_VERSION_IOEMU)/boot
++INSTALL_DIR := $(DESTDIR)/usr/lib/xen-$(XEN_VERSION)/boot
  
  SUBDIRS :=
  SUBDIRS += rombios
@@ -26,7 +26,7 @@ diff -urNad xen-3.0~/tools/ioemu/configure xen-3.0/tools/ioemu/configure
  fi
  mandir="$installroot/$prefix/share/man"
 -datadir="$installroot/$prefix/share/xen/qemu"
-+datadir="$installroot/$prefix/share/xen-ioemu-$XEN_VERSION_IOEMU/qemu"
++datadir="$installroot/$prefix/share/xen-$XEN_VERSION/qemu"
  docdir="$installroot/$prefix/share/doc/qemu"
  bindir="$installroot/$prefix/bin"
  configdir="$installroot/etc/xen"
@@ -38,7 +38,7 @@ diff -urNad xen-3.0~/tools/ioemu/target-i386-dm/Makefile xen-3.0/tools/ioemu/tar
  include $(XEN_ROOT)/tools/Rules.mk
  
 -INSTALL_DIR := $(DESTDIR)/usr/$(LIBDIR)/xen/bin
-+INSTALL_DIR := $(DESTDIR)/usr/lib/xen-ioemu-$(XEN_VERSION_IOEMU)/bin
++INSTALL_DIR := $(DESTDIR)/usr/lib/xen-$(XEN_VERSION)/bin
  TARGET_PATH=$(SRC_PATH)/target-$(TARGET_ARCH)
  VPATH=$(SRC_PATH):$(TARGET_PATH):$(SRC_PATH)/hw:$(SRC_PATH)/audio
  DEFINES=-I. -I$(TARGET_PATH) -I$(SRC_PATH)

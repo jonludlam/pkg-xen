@@ -18,7 +18,7 @@ diff -urNad xen-3.0~/Config.mk xen-3.0/Config.mk
 -else
 -LIBDIR = lib
 -endif
-+PREFIX = lib/xen-$(XEN_VERSION_TOOLS)
++PREFIX = lib/xen-$(XEN_VERSION)
 +BINDIR = $(PREFIX)/bin
 +LIBDIR = $(PREFIX)/lib
  
