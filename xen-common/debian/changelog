@@ -1,3 +1,9 @@
+xen-common (3.0+hg11624-2) UNRELEASED; urgency=low
+
+  * Add qemu-ifup script. 
+
+ -- Bastian Blank <waldi@debian.org>  Tue,  3 Oct 2006 12:12:10 +0000
+
 xen-common (3.0+hg11624-1) unstable; urgency=medium
 
   * New upstream snapshot.
