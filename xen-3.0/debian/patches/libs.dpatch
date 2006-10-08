@@ -5,9 +5,9 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
---- xen-3.0~/tools/libxc/Makefile	2006-08-21 05:12:27.000000000 +0000
-+++ xen-3.0/tools/libxc/Makefile	2006-08-21 06:40:50.652754733 +0000
+diff -urNad xen-unstable~/tools/libxc/Makefile xen-unstable/tools/libxc/Makefile
+--- xen-unstable~/tools/libxc/Makefile	2006-08-22 09:56:46.000000000 +0000
++++ xen-unstable/tools/libxc/Makefile	2006-08-22 10:24:54.509973069 +0000
 @@ -4,9 +4,6 @@
  INSTALL_DATA	= $(INSTALL) -m0644
  INSTALL_DIR	= $(INSTALL) -d -m0755
@@ -18,9 +18,9 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
  XEN_ROOT = ../..
  include $(XEN_ROOT)/tools/Rules.mk
  
-@@ -61,11 +58,9 @@
- LIB_BUILD_OBJS := $(patsubst %.c,%.o,$(BUILD_SRCS))
- PIC_BUILD_OBJS := $(patsubst %.c,%.opic,$(BUILD_SRCS))
+@@ -55,11 +52,9 @@
+ GUEST_LIB_OBJS := $(patsubst %.c,%.o,$(GUEST_SRCS-y))
+ GUEST_PIC_OBJS := $(patsubst %.c,%.opic,$(GUEST_SRCS-y))
  
 -LIB := libxenctrl.a
 -LIB += libxenctrl.so libxenctrl.so.$(MAJOR) libxenctrl.so.$(MAJOR).$(MINOR)
@@ -32,7 +32,7 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
  
  .PHONY: all
  all: build
-@@ -87,16 +82,10 @@
+@@ -81,16 +76,10 @@
  install: build
  	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
@@ -40,19 +40,19 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
 -	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)/usr/$(LIBDIR)
 -	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so.$(MAJOR)
 -	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so
-+	$(INSTALL_PROG) libxenctrl.so $(DESTDIR)/usr/$(LIBDIR)
++	$(INSTALL_DATA) libxenctrl.so $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DATA) xenctrl.h $(DESTDIR)/usr/include
  
 -	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
 -	$(INSTALL_DATA) libxenguest.a $(DESTDIR)/usr/$(LIBDIR)
 -	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so.$(MAJOR)
 -	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so
-+	$(INSTALL_PROG) libxenguest.so $(DESTDIR)/usr/$(LIBDIR)
++	$(INSTALL_DATA) libxenguest.so $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include
  
  .PHONY: TAGS
-@@ -122,25 +111,15 @@
- libxenctrl.a: $(LIB_OBJS)
+@@ -118,26 +107,16 @@
+ libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
 -libxenctrl.so: libxenctrl.so.$(MAJOR)
@@ -60,14 +60,14 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
 -libxenctrl.so.$(MAJOR): libxenctrl.so.$(MAJOR).$(MINOR)
 -	ln -sf $< $@
 -
--libxenctrl.so.$(MAJOR).$(MINOR): $(PIC_OBJS)
+-libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
 -	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenctrl.so.$(MAJOR) -shared -o $@ $^
-+libxenctrl.so: $(PIC_OBJS)
++libxenctrl.so: $(CTRL_PIC_OBJS)
 +	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^
  
  # libxenguest
  
- libxenguest.a: $(LIB_BUILD_OBJS)
+ libxenguest.a: $(GUEST_LIB_OBJS)
  	$(AR) rc $@ $^
  
 -libxenguest.so: libxenguest.so.$(MAJOR)
@@ -75,9 +75,50 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
 -libxenguest.so.$(MAJOR): libxenguest.so.$(MAJOR).$(MINOR)
 -	ln -sf $< $@
 -
--libxenguest.so.$(MAJOR).$(MINOR): $(PIC_BUILD_OBJS) libxenctrl.so
+-libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
 -	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenguest.so.$(MAJOR) -shared -o $@ $^ -lz -lxenctrl
-+libxenguest.so: $(PIC_BUILD_OBJS) libxenctrl.so
++libxenguest.so: $(GUEST_PIC_OBJS) libxenctrl.so
 +	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ -lz -lxenctrl
  
  -include $(DEPS)
+ 
+diff -urNad xen-unstable~/tools/xenstore/Makefile xen-unstable/tools/xenstore/Makefile
+--- xen-unstable~/tools/xenstore/Makefile	2006-08-22 10:23:24.313310008 +0000
++++ xen-unstable/tools/xenstore/Makefile	2006-08-22 10:24:42.839218147 +0000
+@@ -2,9 +2,6 @@
+ include $(XEN_ROOT)/tools/Rules.mk
+ XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
+ 
+-MAJOR = 3.0
+-MINOR = 0
+-
+ INSTALL         = install
+ INSTALL_DATA	= $(INSTALL) -m0644
+ INSTALL_PROG    = $(INSTALL) -m0755
+@@ -89,13 +86,8 @@
+ talloc_test.o: talloc.c
+ 	$(COMPILE.c) -o $@ $<
+ 
+-libxenstore.so: libxenstore.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenstore.so.$(MAJOR): libxenstore.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenstore.so.$(MAJOR).$(MINOR): xs.opic xs_lib.opic
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,-soname -Wl,libxenstore.so.$(MAJOR) -shared -o $@ $^ -lpthread
++libxenstore.so: xs.opic xs_lib.opic
++	$(CC) $(CFLAGS) $(LDFLAGS) -shared -o $@ $^ -lpthread
+ 
+ libxenstore.a: xs.o xs_lib.o
+ 	$(AR) rcs libxenstore.a $^
+@@ -182,9 +174,7 @@
+ 	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_DIR) -p $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
+-	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so
++	$(INSTALL_DATA) libxenstore.so $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include

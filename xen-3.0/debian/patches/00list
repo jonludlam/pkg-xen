@@ -5,4 +5,5 @@ version
 qemu-config
 libs
 qemu-arch
-qemu-arch-override
+blktap-disable
+path-relative

@@ -5,15 +5,15 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-3.0~/tools/ioemu/configure xen-3.0/tools/ioemu/configure
---- xen-3.0~/tools/ioemu/configure	2006-08-20 22:53:18.791876889 +0000
-+++ xen-3.0/tools/ioemu/configure	2006-08-20 22:53:37.036073313 +0000
-@@ -364,7 +364,7 @@
- datadir="$installroot/$prefix/share/xen-ioemu-$XEN_VERSION_IOEMU/qemu"
- docdir="$installroot/$prefix/share/doc/qemu"
- bindir="$installroot/$prefix/bin"
--configdir="$installroot/etc/xen"
-+configdir="$installroot/etc/xen/scripts"
- fi
+diff -urNad xen-unstable~/tools/ioemu/vl.c xen-unstable/tools/ioemu/vl.c
+--- xen-unstable~/tools/ioemu/vl.c	2006-09-21 19:44:57.000000000 +0000
++++ xen-unstable/tools/ioemu/vl.c	2006-09-28 06:53:45.238717978 +0000
+@@ -88,7 +88,7 @@
  
- echo "Install prefix    $prefix"
+ #include "exec-all.h"
+ 
+-#define DEFAULT_NETWORK_SCRIPT "/etc/xen/qemu-ifup"
++#define DEFAULT_NETWORK_SCRIPT "/etc/xen/scripts/qemu-ifup"
+ #define DEFAULT_BRIDGE "xenbr0"
+ 
+ //#define DEBUG_UNUSED_IOPORT
