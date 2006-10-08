@@ -133,7 +133,11 @@ def parse_version_xen(version):
             (
                 (
                     (?P<minor>\.\d+)
-                    -\d+
+                    (
+                        (-\d+)
+                        |
+                        (~rc\d+)
+                    )
                 )
                 |
                 (?P<unstable>-unstable)
