@@ -1,10 +1,10 @@
-xen-3.0 (3.0.3~rc1+hg11686-1) UNRELEASED; urgency=low
+xen-3.0 (3.0.3~rc1+hg11686-1) unstable; urgency=low
 
   * New upstream snapshot.
   * Rename ioemu package to include the complete version.
   * Fix name of hypervisor. (closes: #391771)
 
- -- Bastian Blank <waldi@debian.org>  Sun,  8 Oct 2006 19:05:32 +0000
+ -- Bastian Blank <waldi@debian.org>  Mon,  9 Oct 2006 12:48:13 +0000
 
 xen-3.0 (3.0.2-3+hg9762-1) unstable; urgency=low
 
