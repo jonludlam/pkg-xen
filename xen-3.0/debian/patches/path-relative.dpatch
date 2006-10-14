@@ -5,10 +5,10 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-unstable~/tools/python/xen/xm/create.py xen-unstable/tools/python/xen/xm/create.py
---- xen-unstable~/tools/python/xen/xm/create.py	2006-09-21 21:44:56.000000000 +0200
-+++ xen-unstable/tools/python/xen/xm/create.py	2006-09-21 23:24:49.000000000 +0200
-@@ -462,6 +462,14 @@
+diff -urNad xen-3.0~/tools/python/xen/xm/create.py xen-3.0/tools/python/xen/xm/create.py
+--- xen-3.0~/tools/python/xen/xm/create.py	2006-10-14 10:24:31.000000000 +0000
++++ xen-3.0/tools/python/xen/xm/create.py	2006-10-14 12:30:03.877096876 +0000
+@@ -464,6 +464,14 @@
      else:
          return s
  
@@ -23,7 +23,7 @@ diff -urNad xen-unstable~/tools/python/xen/xm/create.py xen-unstable/tools/pytho
  def configure_image(vals):
      """Create the image config.
      """
-@@ -469,9 +477,9 @@
+@@ -471,9 +479,9 @@
          return None
      config_image = [ vals.builder ]
      if vals.kernel:
@@ -35,15 +35,16 @@ diff -urNad xen-unstable~/tools/python/xen/xm/create.py xen-unstable/tools/pytho
      if vals.cmdline_ip:
          cmdline_ip = strip('ip=', vals.cmdline_ip)
          config_image.append(['ip', cmdline_ip])
-@@ -634,13 +642,15 @@
+@@ -635,7 +643,7 @@
  def configure_hvm(config_image, vals):
      """Create the config for HVM devices.
      """
 -    args = [ 'device_model', 'pae', 'vcpus', 'boot', 'fda', 'fdb',
 +    args = [ 'pae', 'vcpus', 'boot', 'fda', 'fdb',
               'localtime', 'serial', 'stdvga', 'isa', 'nographic', 'soundhw',
-              'vnc', 'vncdisplay', 'vncunused', 'vncconsole', 'sdl', 'display',
-              'acpi', 'apic', 'xauthority', 'usb', 'usbdevice' ]
+              'vnc', 'vncdisplay', 'vncunused', 'vncconsole', 'vnclisten',
+              'sdl', 'display', 'xauthority',
+@@ -643,6 +651,8 @@
      for a in args:
          if (vals.__dict__[a]):
              config_image.append([a, vals.__dict__[a]])
