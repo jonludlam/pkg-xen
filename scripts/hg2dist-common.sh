@@ -59,10 +59,10 @@ fi
 
 echo "Exporting xen-common to $DESTDIR..."
 
-mkdir $DESTDIR || exit 1;
+mkdir -p $DESTDIR/docs $DESTDIR/tools || exit 1
 
-mkdir $DESTDIR/tools
 cp -a $HGDIR/{Config.mk,config} $DESTDIR
+cp -a $HGDIR/docs/man $DESTDIR/docs
 cp -a $HGDIR/tools/{Rules.mk,examples} $DESTDIR/tools
 (cd $HGDIR; $HG log Config.mk config tools/{Rules.mk,examples}) > $DESTDIR/ChangeLog
 
