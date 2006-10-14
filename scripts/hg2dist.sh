@@ -20,32 +20,32 @@ if [ "$OVERRIDE_MAJOR" ] && [ "$OVERRIDE_VERSION" ]; then
 	VERSION=$OVERRIDE_VERSION
 else
 	eval $(env -i -- make -f - version <<EOF
-	include $HGDIR/xen/Makefile
+include $HGDIR/xen/Makefile
 
-	ifeq (\$(XEN_EXTRAVERSION),-unstable)
-	MAJOR = unstable
-	else
-	MAJOR = \$(XEN_VERSION).\$(XEN_SUBVERSION)
-	endif
+ifeq (\$(XEN_EXTRAVERSION),-unstable)
+MAJOR = unstable
+else
+MAJOR = \$(XEN_VERSION).\$(XEN_SUBVERSION)
+endif
 
-	HASH = \$(shell cd $HGDIR; $HG id | awk '{ print \$\$1}')
-	CHANGESET = \$(shell cd $HGDIR; $HG log -r \$(HASH) | head -n 1 | sed -e 's/ //g;' | cut -d: -f2)
+HASH = \$(shell cd $HGDIR; $HG id | awk '{ print \$\$1}')
+CHANGESET = \$(shell cd $HGDIR; $HG log -r \$(HASH) | head -n 1 | sed -e 's/ //g;' | cut -d: -f2)
 
-	ifneq (\$(MAJOR),unstable)
-	RELEASE_CHG = \$(shell cd $HGDIR; $HG tags | perl -ne 'BEGIN { \$\$done = 0; } /RELEASE-([-0-9.]+) +(\d+):/; if (\$\$1 and \$\$2 <= '\$(CHANGESET)' and not \$\$done) { print "\$\$2\n"; \$\$done = 1; }')
-	endif
+ifneq (\$(MAJOR),unstable)
+RELEASE_CHG = \$(shell cd $HGDIR; $HG tags | perl -ne 'BEGIN { \$\$done = 0; } /RELEASE-([-0-9.]+) +(\d+):/; if (\$\$1 and \$\$2 <= '\$(CHANGESET)' and not \$\$done) { print "\$\$2\n"; \$\$done = 1; }')
+endif
 
-	ifeq (\$(RELEASE_CHG),\$(CHANGESET))
-	VERSION = \$(XEN_FULLVERSION)
-	else
-	VERSION = \$(XEN_FULLVERSION)+hg\$(CHANGESET)
-	endif
+ifeq (\$(RELEASE_CHG),\$(CHANGESET))
+VERSION = \$(XEN_FULLVERSION)
+else
+VERSION = \$(XEN_FULLVERSION)+hg\$(CHANGESET)
+endif
 
-	PHONY: version
-	version:
-		@echo MAJOR="\$(MAJOR)"
-		@echo VERSION="\$(VERSION)"
-	EOF)
+PHONY: version
+version:
+	@echo MAJOR="\$(MAJOR)"
+	@echo VERSION="\$(VERSION)"
+EOF)
 fi
 
 DESTDIR="xen-${MAJOR}-${VERSION}"
