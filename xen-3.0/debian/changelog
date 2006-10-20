@@ -1,8 +1,8 @@
-xen-3.0 (3.0.3-0-1) UNRELEASED; urgency=low
+xen-3.0 (3.0.3-0-1) unstable; urgency=low
 
-  * New upstream version. 
+  * New upstream version.
 
- -- Bastian Blank <waldi@debian.org>  Thu, 19 Oct 2006 09:30:24 +0000
+ -- Bastian Blank <waldi@debian.org>  Fri, 20 Oct 2006 11:04:35 +0000
 
 xen-3.0 (3.0.3~rc4+hg11760-1) unstable; urgency=low
 
