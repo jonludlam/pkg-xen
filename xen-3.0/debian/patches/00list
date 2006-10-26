@@ -7,3 +7,4 @@ libs
 qemu-arch
 blktap-disable
 path-relative
+not-reinvent-udev

@@ -1,3 +1,9 @@
+xen-3.0 (3.0.3-0-2) UNRELEASED; urgency=low
+
+  * Remove device recreate code. 
+
+ -- Bastian Blank <waldi@debian.org>  Thu, 26 Oct 2006 11:54:01 +0000
+
 xen-3.0 (3.0.3-0-1) unstable; urgency=low
 
   * New upstream version.
