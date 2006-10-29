@@ -1,6 +1,10 @@
 xen-3.0 (3.0.3-0-2) UNRELEASED; urgency=low
 
+  [Bastian Blank]
   * Remove device recreate code. 
+
+  [ Guido Trotter ]
+  * Add missing build dependency on zlib1g-dev
 
  -- Bastian Blank <waldi@debian.org>  Thu, 26 Oct 2006 11:54:01 +0000
 
