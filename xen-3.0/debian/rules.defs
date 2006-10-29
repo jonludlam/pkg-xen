@@ -1,2 +1,5 @@
 KERNELVERSION := 2.6.18-1
 MAJOR := 3.0
+BUILD_DIR = debian/build
+STAMPS_DIR = debian/stamps
+TEMPLATES_DIR = debian/templates
