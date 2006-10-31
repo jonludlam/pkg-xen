@@ -71,5 +71,5 @@ echo "Creating orig file $DESTTAR..."
 tar zcf $DESTTAR $DESTDIR || exit 1;
 
 echo "DONE"
-echo "Now please svn export your debian directory in $DESTDIR and check that the changelog version matches"
+echo "Now please svn export your debian and scripts directory in $DESTDIR and check that the changelog version matches"
 
