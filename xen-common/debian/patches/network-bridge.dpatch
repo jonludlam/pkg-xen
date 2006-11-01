@@ -12,7 +12,7 @@ diff -urNad xen-common~/tools/examples/network-bridge xen-common/tools/examples/
  findCommand "$@"
  evalVariables "$@"
  
-+modprobe netloop > /dev/null 2>&1
++modprobe netloop > /dev/null 2>&1 || true
 +
  vifnum=${vifnum:-$(ip route list | awk '/^default / { print $NF }' | sed 's/^[^0-9]*//')}
  vifnum=${vifnum:-0}

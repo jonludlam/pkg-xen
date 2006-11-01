@@ -1,9 +1,13 @@
 xen-common (3.0.3~rc4+hg11760-1) UNRELEASED; urgency=low
 
+  [ Bastian Blank ]
   * New upstream snapshot.
-  * Add manpages.
+  * Add manpages. (Closes: #394931)
 
- -- Bastian Blank <waldi@debian.org>  Sat, 14 Oct 2006 13:57:37 +0000
+  [ Julien Danjou ]
+  * Don't fail on loading netloop if it does not exist (Closes: #396477)
+
+ -- Julien Danjou <acid@debian.org>  Wed,  1 Nov 2006 08:05:09 +0100
 
 xen-common (3.0+hg11624-2) unstable; urgency=low
 
