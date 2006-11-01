@@ -1,4 +1,4 @@
-xen-common (3.0.3~rc4+hg11760-1) UNRELEASED; urgency=low
+xen-common (3.0.3-0-1) UNRELEASED; urgency=low
 
   [ Bastian Blank ]
   * New upstream snapshot.
