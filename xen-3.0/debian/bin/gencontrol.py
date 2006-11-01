@@ -21,6 +21,9 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
             'ABINAME': self.abiname,
         })
 
+    def do_main_packages(self, packages, extra):
+        packages.extend(self.process_packages(self.templates["control.main"], self.vars))
+
     def do_arch_setup(self, vars, makeflags, arch, extra):
         for i in (
             ('xen-arch', 'XEN_ARCH'),
