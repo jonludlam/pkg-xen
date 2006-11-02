@@ -1,12 +1,15 @@
-xen-3.0 (3.0.3-0-2) UNRELEASED; urgency=low
+xen-3.0 (3.0.3-0-2) unstable; urgency=medium
 
   [Bastian Blank]
-  * Remove device recreate code. 
+  * Remove device recreate code.
+  * Remove build dependency on linux-support-X
 
   [ Guido Trotter ]
-  * Add missing build dependency on zlib1g-dev
+  * Add missing build dependency on zlib1g-dev (closes: #396557)
+  * Add missing build dependencies on libncurses5-dev and x11proto-core-dev
+    (closes: #396561, #396567)
 
- -- Bastian Blank <waldi@debian.org>  Thu, 26 Oct 2006 11:54:01 +0000
+ -- Guido Trotter <ultrotter@debian.org>  Thu,  2 Nov 2006 16:38:02 +0000
 
 xen-3.0 (3.0.3-0-1) unstable; urgency=low
 
