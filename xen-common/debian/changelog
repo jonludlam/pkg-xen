@@ -1,3 +1,9 @@
+xen-common (3.0.3-0-2) unstable; urgency=medium
+
+  * Make xen-utils-common depend on udev (closes: #398372)
+
+ -- Guido Trotter <ultrotter@debian.org>  Mon, 13 Nov 2006 14:07:43 +0000
+
 xen-common (3.0.3-0-1) unstable; urgency=medium
 
   [ Bastian Blank ]
