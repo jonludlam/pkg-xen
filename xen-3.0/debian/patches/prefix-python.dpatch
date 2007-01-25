@@ -5,10 +5,10 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
---- xen-unstable~/tools/misc/xend	2006-09-21 21:44:57.000000000 +0200
-+++ xen-unstable/tools/misc/xend	2006-09-21 23:32:35.000000000 +0200
-@@ -35,16 +35,7 @@
+diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
+--- xen-3.0~/tools/misc/xend	2007-01-01 13:31:41.000000000 +0000
++++ xen-3.0/tools/misc/xend	2007-01-01 13:45:55.018551704 +0000
+@@ -38,16 +38,7 @@
  
  AUXBIN = 'xen/util/auxbin.py'
  
@@ -26,7 +26,7 @@ diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
  
  from xen.xend.server import SrvDaemon
  
-@@ -84,18 +75,18 @@
+@@ -87,18 +78,18 @@
  
  def start_xenstored():
      XENSTORED_TRACE = os.getenv("XENSTORED_TRACE")
@@ -48,9 +48,9 @@ diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
              
  def main():
      try:
-diff -urNad xen-unstable~/tools/misc/xm xen-unstable/tools/misc/xm
---- xen-unstable~/tools/misc/xm	2006-09-21 21:44:57.000000000 +0200
-+++ xen-unstable/tools/misc/xm	2006-09-21 23:32:35.000000000 +0200
+diff -urNad xen-3.0~/tools/misc/xm xen-3.0/tools/misc/xm
+--- xen-3.0~/tools/misc/xm	2007-01-01 13:31:41.000000000 +0000
++++ xen-3.0/tools/misc/xm	2007-01-01 13:45:55.018551704 +0000
 @@ -1,10 +1,7 @@
  #!/usr/bin/env python
  #  -*- mode: python; -*-
@@ -63,9 +63,9 @@ diff -urNad xen-unstable~/tools/misc/xm xen-unstable/tools/misc/xm
  from xen.xm import main
  
  main.main(sys.argv)
-diff -urNad xen-unstable~/tools/python/xen/util/auxbin.py xen-unstable/tools/python/xen/util/auxbin.py
---- xen-unstable~/tools/python/xen/util/auxbin.py	2006-09-21 21:44:56.000000000 +0200
-+++ xen-unstable/tools/python/xen/util/auxbin.py	2006-09-21 23:33:12.000000000 +0200
+diff -urNad xen-3.0~/tools/python/xen/util/auxbin.py xen-3.0/tools/python/xen/util/auxbin.py
+--- xen-3.0~/tools/python/xen/util/auxbin.py	2007-01-01 13:31:43.000000000 +0000
++++ xen-3.0/tools/python/xen/util/auxbin.py	2007-01-01 13:46:21.697077864 +0000
 @@ -16,17 +16,9 @@
  #============================================================================
  
@@ -75,7 +75,7 @@ diff -urNad xen-unstable~/tools/python/xen/util/auxbin.py xen-unstable/tools/pyt
 -LIB_BIN_SUFFIX = "xen/bin"
 -
 -## The architectures on which the LIB_64 directory is used.  This
--# deliberately excludes ia64 and ppc64.
+-# deliberately excludes ia64 and ppc64, and Solaris.
 -LIB_64_ARCHS = [ 'x86_64', 's390x', 'sparc64']
 -
 -
@@ -104,11 +104,11 @@ diff -urNad xen-unstable~/tools/python/xen/util/auxbin.py xen-unstable/tools/pyt
 -    else:
 -        return LIB_32
 +    return os.path.realpath(os.path.join(path(), '../lib'))
-diff -urNad xen-unstable~/tools/python/xen/xm/console.py xen-unstable/tools/python/xen/xm/console.py
---- xen-unstable~/tools/python/xen/xm/console.py	2006-09-21 21:44:56.000000000 +0200
-+++ xen-unstable/tools/python/xen/xm/console.py	2006-09-21 23:32:35.000000000 +0200
-@@ -23,4 +23,4 @@
- 
+diff -urNad xen-3.0~/tools/python/xen/xm/console.py xen-3.0/tools/python/xen/xm/console.py
+--- xen-3.0~/tools/python/xen/xm/console.py	2007-01-01 13:31:46.000000000 +0000
++++ xen-3.0/tools/python/xen/xm/console.py	2007-01-01 13:45:55.018551704 +0000
+@@ -21,4 +21,4 @@
+ import xen.util.auxbin
  
  def execConsole(domid):
 -    xen.util.auxbin.execute(XENCONSOLE, [str(domid)])

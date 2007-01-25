@@ -5,21 +5,21 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-unstable~/tools/Makefile xen-unstable/tools/Makefile
---- xen-unstable~/tools/Makefile	2006-08-22 09:56:47.000000000 +0000
-+++ xen-unstable/tools/Makefile	2006-08-22 17:56:06.202699107 +0000
+diff -urNad xen-3.0~/tools/Makefile xen-3.0/tools/Makefile
+--- xen-3.0~/tools/Makefile	2007-01-01 13:31:17.000000000 +0000
++++ xen-3.0/tools/Makefile	2007-01-01 13:51:07.342901844 +0000
 @@ -17,7 +17,6 @@
  SUBDIRS-$(VTPM_TOOLS) += vtpm
  SUBDIRS-y += xenstat
  SUBDIRS-y += libaio
 -SUBDIRS-y += blktap
- 
- # These don't cross-compile
- ifeq ($(XEN_COMPILE_ARCH),$(XEN_TARGET_ARCH))
-diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
---- xen-unstable~/tools/misc/xend	2006-08-22 17:56:05.754900357 +0000
-+++ xen-unstable/tools/misc/xend	2006-08-22 17:56:20.568242935 +0000
-@@ -84,10 +84,6 @@
+ SUBDIRS-y += libfsimage
+ SUBDIRS-$(XENFB_TOOLS) += xenfb
+ SUBDIRS-$(LIBXENAPI_BINDINGS) += libxen
+diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
+--- xen-3.0~/tools/misc/xend	2007-01-01 13:50:50.947812144 +0000
++++ xen-3.0/tools/misc/xend	2007-01-01 13:51:34.617386944 +0000
+@@ -87,10 +87,6 @@
      if os.fork() == 0:
          os.execvp(sys.path[0] + '/xenconsoled', ['xenconsoled'])
  
@@ -30,11 +30,11 @@ diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
  def main():
      try:
          check_logging()
-@@ -101,19 +97,16 @@
-     elif sys.argv[1] == 'start':
-         start_xenstored()
-         start_consoled()
--	start_blktapctrl()
+@@ -105,12 +101,10 @@
+         if os.uname()[0] != "SunOS":
+             start_xenstored()
+             start_consoled()
+-            start_blktapctrl()
          return daemon.start()
      elif sys.argv[1] == 'trace_start':
          start_xenstored()
@@ -43,6 +43,7 @@ diff -urNad xen-unstable~/tools/misc/xend xen-unstable/tools/misc/xend
          return daemon.start(trace=1)
      elif sys.argv[1] == 'stop':
          return daemon.stop()
+@@ -119,7 +113,6 @@
      elif sys.argv[1] == 'restart':
          start_xenstored()
          start_consoled()
