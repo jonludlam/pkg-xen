@@ -6,8 +6,8 @@
 
 @DPATCH@
 diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
---- xen-3.0~/tools/libxc/Makefile	2007-01-01 13:31:39.000000000 +0000
-+++ xen-3.0/tools/libxc/Makefile	2007-01-01 13:50:35.148689118 +0000
+--- xen-3.0~/tools/libxc/Makefile	2007-01-23 18:26:00.000000000 +0100
++++ xen-3.0/tools/libxc/Makefile	2007-01-23 18:29:25.464054877 +0100
 @@ -1,9 +1,6 @@
  XEN_ROOT = ../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -83,8 +83,8 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
  -include $(DEPS)
  
 diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
---- xen-3.0~/tools/xenstore/Makefile	2007-01-01 13:48:53.618319274 +0000
-+++ xen-3.0/tools/xenstore/Makefile	2007-01-01 13:49:39.291787747 +0000
+--- xen-3.0~/tools/xenstore/Makefile	2007-01-23 18:29:25.200038377 +0100
++++ xen-3.0/tools/xenstore/Makefile	2007-01-23 18:30:04.722508377 +0100
 @@ -2,9 +2,6 @@
  include $(XEN_ROOT)/tools/Rules.mk
  XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
@@ -105,9 +105,9 @@ diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
 -	ln -sf $< $@
 -
 -libxenstore.so.$(MAJOR).$(MINOR): xs.opic xs_lib.opic
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenstore.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenstore.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
 +libxenstore.so: xs.opic xs_lib.opic
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
  
  libxenstore.a: xs.o xs_lib.o
  	$(AR) rcs libxenstore.a $^
@@ -122,3 +122,31 @@ diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
  	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
  	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
+diff -urNad xen-3.0~/tools/xenstore/Makefile.rej xen-3.0/tools/xenstore/Makefile.rej
+--- xen-3.0~/tools/xenstore/Makefile.rej	1970-01-01 01:00:00.000000000 +0100
++++ xen-3.0/tools/xenstore/Makefile.rej	2007-01-23 18:29:25.464054877 +0100
+@@ -0,0 +1,24 @@
++***************
++*** 85,97 ****
++  talloc_test.o: talloc.c
++  	$(COMPILE.c) -o $@ $<
++  
++- libxenstore.so: libxenstore.so.$(MAJOR)
++- 	ln -sf $< $@
++- libxenstore.so.$(MAJOR): libxenstore.so.$(MAJOR).$(MINOR)
++- 	ln -sf $< $@
++- 
++- libxenstore.so.$(MAJOR).$(MINOR): xs.opic xs_lib.opic
++- 	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenstore.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
++  
++  libxenstore.a: xs.o xs_lib.o
++  	$(AR) rcs libxenstore.a $^
++--- 82,89 ----
++  talloc_test.o: talloc.c
++  	$(COMPILE.c) -o $@ $<
++  
+++ libxenstore.so: xs.opic xs_lib.opic
+++ 	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
++  
++  libxenstore.a: xs.o xs_lib.o
++  	$(AR) rcs libxenstore.a $^
