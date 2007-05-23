@@ -128,9 +128,9 @@ rdnames()
 
 parseln()
 {
-    name=`echo "$1" | cut -c0-17`
+    name=`echo $1 | cut -d\  -f1`
     name=${name%% *}
-    rest=`echo "$1" | cut -c18- `
+    rest=`echo $1 | cut -d\  -f2-`
     read id mem cpu vcpu state tm < <(echo "$rest")
 }
 
