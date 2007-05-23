@@ -1,12 +1,13 @@
 xen-3.0 (3.0.4-1-1) unstable; urgency=low
 
   [ Bastian Blank ]
-  * New upstream version.
+  * New upstream version (closes: #394411)
 
   [ Guido Trotter ]
   * Actually try to build and release xen 3.0.4
+  * Update build dependencies
 
- -- Guido Trotter <ultrotter@debian.org>  Wed, 23 May 2007 11:16:03 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Wed, 23 May 2007 11:57:29 +0100
 
 xen-3.0 (3.0.3-0-2) unstable; urgency=medium
 
