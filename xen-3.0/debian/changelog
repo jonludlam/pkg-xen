@@ -4,10 +4,9 @@ xen-3.0 (3.0.4-1-1) unstable; urgency=low
   * New upstream version.
 
   [ Guido Trotter ]
-  * Bump up linux-support version to the unstable one
   * Actually try to build and release xen 3.0.4
 
- -- Guido Trotter <ultrotter@debian.org>  Wed, 23 May 2007 11:12:59 +0100
+ -- Guido Trotter <ultrotter@debian.org>  Wed, 23 May 2007 11:16:03 +0100
 
 xen-3.0 (3.0.3-0-2) unstable; urgency=medium
 

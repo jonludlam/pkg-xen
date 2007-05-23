@@ -1,4 +1,4 @@
-KERNELVERSION := 2.6.21-2
+KERNELVERSION := 2.6.18-3
 MAJOR := 3.0
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
