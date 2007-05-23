@@ -1,8 +1,13 @@
-xen-common (3.0.3-0-3) UNRELEASED; urgency=low
+xen-common (3.0.4-1-1) unstable; urgency=low
 
+  [ Julien Danjou ]
   * Fix typo in init.d script (Closes: #404078)
 
- -- Julien Danjou <acid@debian.org>  Thu, 21 Dec 2006 20:21:17 +0100
+  [ Guido Trotter ]
+  * New upstream release
+  * Fix xendomains init.d script for long domain names (Closes: #395305)
+
+ -- Guido Trotter <ultrotter@debian.org>  Wed, 23 May 2007 13:24:53 +0100
 
 xen-common (3.0.3-0-2) unstable; urgency=medium
 
