@@ -1,0 +1,22 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## xendomains.dpatch by Guido Trotter <ultrotter@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-common-3.0.4-1~/tools/examples/init.d/xendomains xen-common-3.0.4-1/tools/examples/init.d/xendomains
+--- xen-common-3.0.4-1~/tools/examples/init.d/xendomains	2007-04-18 11:09:05.000000000 +0100
++++ xen-common-3.0.4-1/tools/examples/init.d/xendomains	2007-05-23 13:29:06.691900880 +0100
+@@ -175,9 +175,9 @@
+ 
+ parseln()
+ {
+-    name=`echo "$1" | cut -c0-17`
++    name=`echo "$1" | cut -d\  -f1 `
+     name=${name%% *}
+-    rest=`echo "$1" | cut -c18- `
++    rest=`echo "$1" | cut -d\  -f2 `
+     read id mem cpu vcpu state tm < <(echo "$rest")
+ }
+ 
