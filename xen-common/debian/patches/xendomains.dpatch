@@ -13,10 +13,10 @@ diff -urNad xen-common-3.0.4-1~/tools/examples/init.d/xendomains xen-common-3.0.
  parseln()
  {
 -    name=`echo "$1" | cut -c0-17`
-+    name=`echo "$1" | cut -d\  -f1 `
++    name=`echo $1 | cut -d\  -f1 `
      name=${name%% *}
 -    rest=`echo "$1" | cut -c18- `
-+    rest=`echo "$1" | cut -d\  -f2 `
++    rest=`echo $1 | cut -d\  -f2 `
      read id mem cpu vcpu state tm < <(echo "$rest")
  }
  
