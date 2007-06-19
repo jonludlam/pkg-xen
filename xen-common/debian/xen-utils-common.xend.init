@@ -12,7 +12,7 @@
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="XEN control daemon"
 XENSTORED_RUN_DIR="/var/run/xenstored"
-VERSION=$(xen-utils-version -q || true)
+VERSION=$(xen-utils-version -q 2>/dev/null || true)
 ROOT=/usr/lib/xen-$VERSION
 DAEMON=$ROOT/bin/xend
 

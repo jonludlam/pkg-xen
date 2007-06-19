@@ -1,3 +1,10 @@
+xen-common (3.0.4-1-2) unstable; urgency=low
+
+  * Hide error message when xen-utils-version is not there (closes: #422667)
+    (Thanks to Vincent Bernat)
+
+ -- Guido Trotter <ultrotter@debian.org>  Tue, 19 Jun 2007 10:10:27 +0100
+
 xen-common (3.0.4-1-1) unstable; urgency=low
 
   [ Julien Danjou ]
