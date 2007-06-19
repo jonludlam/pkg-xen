@@ -68,7 +68,7 @@ $(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
 install-base:
 	dh_installchangelogs
 	dh_installdocs
-	dh_compress
+	dh_compress -X.pdf
 	dh_fixperms
 	dh_installdeb
 	dh_gencontrol -- $(GENCONTROL_ARGS)
