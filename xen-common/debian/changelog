@@ -1,3 +1,10 @@
+xen-common (3.1.0-0-1) UNRELEASED; urgency=low
+
+  * New upstream version
+  * Remove interpreters patch, not useful anymore
+
+ -- Julien Danjou <acid@debian.org>  Tue, 19 Jun 2007 20:59:55 +0200
+
 xen-common (3.0.4-1-2) unstable; urgency=low
 
   * Hide error message when xen-utils-version is not there (closes: #422667)

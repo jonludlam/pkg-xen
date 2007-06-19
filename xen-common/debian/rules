@@ -22,7 +22,7 @@ define build_man
 endef
 
 build: $(STAMPS_DIR)/source
-	mkdir $(BUILD_DIR)/docs/out
+	mkdir $(BUILD_DIR)/docs/man
 	$(call build_man,xend-config.sxp.pod.5,xend-config.sxp.5,xend-config.sxp,5)
 	$(call build_man,xmdomain.cfg.pod.5,xmdomain.cfg.5,xmdomain.cfg,5)
 	$(call build_man,xm.pod.1,xm.1,xm,1)
@@ -64,7 +64,7 @@ binary-indep: install
 	dh_installexamples
 	dh_installinit -p xen-utils-common --name xend --no-restart-on-upgrade -- defaults 20 21
 	dh_installinit -p xen-utils-common --name xendomains --no-start -- defaults 21 20
-	dh_installman $(BUILD_DIR)/docs/out/*
+	dh_installman $(BUILD_DIR)/docs/man/*
 	dh_link
 	dh_strip
 	dh_compress
@@ -77,5 +77,5 @@ binary-indep: install
 
 binary-arch:
 
-binary: binary-indep binary-arch
+binary: build binary-indep binary-arch
 .PHONY: build clean binary-indep binary-arch binary install #PHONY_CONFIGURE#
