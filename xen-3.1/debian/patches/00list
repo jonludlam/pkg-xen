@@ -1,0 +1,10 @@
+prefix-utils
+prefix-ioemu
+prefix-python
+pygrub-fix
+version
+qemu-config
+libs
+qemu-arch
+blktap-disable
+path-relative

@@ -1,0 +1,113 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## prefix-tools-python.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
+--- xen-3.0~/tools/misc/xend	2007-01-01 13:31:41.000000000 +0000
++++ xen-3.0/tools/misc/xend	2007-01-01 13:45:55.018551704 +0000
+@@ -31,13 +31,8 @@
+ import time
+ import commands
+ 
+-result = commands.getstatusoutput(os.path.join(os.path.dirname(sys.argv[0]),
+-                                               'xen-python-path'))
+-if result[0] != 0:
+-    print >>sys.stderr, result[1]
+-    sys.exit(1)
+-
+-sys.path.append(result[1])
++AUXBIN = 'xen/util/auxbin.py'
++sys.path.append('%s/../lib/python' % sys.path[0])
+ 
+ from xen.xend.server import SrvDaemon
+ 
+@@ -87,18 +78,18 @@
+ 
+ def start_xenstored():
+     XENSTORED_TRACE = os.getenv("XENSTORED_TRACE")
+-    cmd = "xenstored --pid-file /var/run/xenstore.pid"
++    cmd = sys.path[0] + "/xenstored --pid-file /var/run/xenstore.pid"
+     if XENSTORED_TRACE:
+         cmd += " -T /var/log/xen/xenstored-trace.log"
+     s,o = commands.getstatusoutput(cmd)
+ 
+ def start_consoled():
+     if os.fork() == 0:
+-        os.execvp('xenconsoled', ['xenconsoled'])
++        os.execvp(sys.path[0] + '/xenconsoled', ['xenconsoled'])
+ 
+ def start_blktapctrl():
+     if os.fork() == 0:
+-        os.execvp('blktapctrl', ['blktapctrl'])
++        os.execvp(sys.path[0] + '/blktapctrl', ['blktapctrl'])
+             
+ def main():
+     try:
+diff -urNad xen-3.0~/tools/misc/xm xen-3.0/tools/misc/xm
+--- xen-3.0~/tools/misc/xm	2007-01-01 13:31:41.000000000 +0000
++++ xen-3.0/tools/misc/xm	2007-01-01 13:45:55.018551704 +0000
+@@ -1,10 +1,7 @@
+ #!/usr/bin/env python
+ #  -*- mode: python; -*-
+ import sys
+-
+-# add fallback path for non-native python path installs if needed
+-sys.path.append('/usr/lib/python')
+-sys.path.append('/usr/lib64/python')
++sys.path.append('%s/../lib/python' % sys.path[0])
+ from xen.xm import main
+ 
+ main.main(sys.argv)
+diff -urNad xen-3.0~/tools/python/xen/util/auxbin.py xen-3.0/tools/python/xen/util/auxbin.py
+--- xen-3.0~/tools/python/xen/util/auxbin.py	2007-01-01 13:31:43.000000000 +0000
++++ xen-3.0/tools/python/xen/util/auxbin.py	2007-01-01 13:46:21.697077864 +0000
+@@ -16,17 +16,9 @@
+ #============================================================================
+ 
+ 
+-LIB_32 = "/usr/lib"
+-LIB_64 = "/usr/lib64"
+-LIB_BIN_SUFFIX = "xen/bin"
+-
+-## The architectures on which the LIB_64 directory is used.  This
+-# deliberately excludes ia64 and ppc64, and Solaris.
+-LIB_64_ARCHS = [ 'x86_64', 's390x', 'sparc64']
+-
+-
+ import os
+ import os.path
++import sys
+ 
+ 
+ def execute(exe, args = None):
+@@ -42,12 +34,12 @@
+ 
+ 
+ def path():
+-    return os.path.join(libpath(), LIB_BIN_SUFFIX)
++    return sys.path[0]
++
++
++def root():
++    return os.path.realpath(os.path.join(path(), '..'))
+ 
+ 
+ def libpath():
+-    machine = os.uname()[4]
+-    if machine in LIB_64_ARCHS and os.path.exists(LIB_64):
+-        return LIB_64
+-    else:
+-        return LIB_32
++    return os.path.realpath(os.path.join(path(), '../lib'))
+diff -urNad xen-3.0~/tools/python/xen/xm/console.py xen-3.0/tools/python/xen/xm/console.py
+--- xen-3.0~/tools/python/xen/xm/console.py	2007-01-01 13:31:46.000000000 +0000
++++ xen-3.0/tools/python/xen/xm/console.py	2007-01-01 13:45:55.018551704 +0000
+@@ -21,4 +21,4 @@
+ import xen.util.auxbin
+ 
+ def execConsole(domid):
+-    xen.util.auxbin.execute(XENCONSOLE, [str(domid)])
++    xen.util.auxbin.execute(xen.util.auxbin.pathTo(XENCONSOLE), [str(domid)])

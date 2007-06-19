@@ -1,0 +1,46 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## libdir.dpatch by Bastian Blank <waldi@debian.org>
+## Forward ported to xen 3.0.2 by Guido Trotter <ultrotter@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/tools/firmware/Makefile xen-3.0/tools/firmware/Makefile
+--- xen-3.0~/tools/firmware/Makefile	2007-01-01 13:31:22.000000000 +0000
++++ xen-3.0/tools/firmware/Makefile	2007-01-01 13:45:38.811446711 +0000
+@@ -4,7 +4,7 @@
+ # hvmloader is a 32-bit protected mode binary.
+ # It belongs in /usr/lib, not /usr/lib64.
+ TARGET      := hvmloader/hvmloader
+-INST_DIR := $(DESTDIR)/usr/lib/xen/boot
++INST_DIR := $(DESTDIR)/usr/lib/xen-$(XEN_VERSION)/boot
+ 
+ SUBDIRS :=
+ SUBDIRS += rombios
+diff -urNad xen-3.0~/tools/ioemu/Makefile.target xen-3.0/tools/ioemu/Makefile.target
+--- xen-3.0~/tools/ioemu/Makefile.target	2007-01-01 13:31:25.000000000 +0000
++++ xen-3.0/tools/ioemu/Makefile.target	2007-01-01 13:45:23.676282285 +0000
+@@ -192,6 +192,7 @@
+ ifdef CONFIG_SOLARIS
+ LIBS+=-lsocket -lnsl -lresolv
+ endif
++LIBS+=$(RPATH_ARG)
+ 
+ # profiling code
+ ifdef TARGET_GPROF
+diff -urNad xen-3.0~/tools/ioemu/configure xen-3.0/tools/ioemu/configure
+--- xen-3.0~/tools/ioemu/configure	2007-01-01 13:31:26.000000000 +0000
++++ xen-3.0/tools/ioemu/configure	2007-01-01 13:45:23.676282285 +0000
+@@ -514,9 +514,9 @@
+     prefix="/usr/local"
+ fi
+ mandir="$prefix/share/man"
+-datadir="$prefix/share/xen/qemu"
++datadir="$prefix/share/xen-$XEN_VERSION/qemu"
+ docdir="$prefix/share/doc/qemu"
+-bindir="$prefix/$libdir/xen/bin"
++bindir="$prefix/lib/xen-$XEN_VERSION/bin"
+ configdir="/etc/xen"
+ fi
+ 

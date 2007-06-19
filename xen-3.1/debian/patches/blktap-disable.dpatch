@@ -1,0 +1,53 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## blktap-disable.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.0~/tools/Makefile xen-3.0/tools/Makefile
+--- xen-3.0~/tools/Makefile	2007-01-01 13:31:17.000000000 +0000
++++ xen-3.0/tools/Makefile	2007-01-01 13:51:07.342901844 +0000
+@@ -17,7 +17,6 @@
+ SUBDIRS-$(VTPM_TOOLS) += vtpm
+ SUBDIRS-y += xenstat
+ SUBDIRS-y += libaio
+-SUBDIRS-y += blktap
+ SUBDIRS-y += libfsimage
+ SUBDIRS-$(XENFB_TOOLS) += xenfb
+ SUBDIRS-$(LIBXENAPI_BINDINGS) += libxen
+diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
+--- xen-3.0~/tools/misc/xend	2007-01-01 13:50:50.947812144 +0000
++++ xen-3.0/tools/misc/xend	2007-01-01 13:51:34.617386944 +0000
+@@ -87,10 +87,6 @@
+     if os.fork() == 0:
+         os.execvp(sys.path[0] + '/xenconsoled', ['xenconsoled'])
+ 
+-def start_blktapctrl():
+-    if os.fork() == 0:
+-        os.execvp(sys.path[0] + '/blktapctrl', ['blktapctrl'])
+-            
+ def main():
+     try:
+         check_logging()
+@@ -105,12 +101,10 @@
+         if os.uname()[0] != "SunOS":
+             start_xenstored()
+             start_consoled()
+-            start_blktapctrl()
+         return daemon.start()
+     elif sys.argv[1] == 'trace_start':
+         start_xenstored()
+         start_consoled()
+-        start_blktapctrl()
+         return daemon.start(trace=1)
+     elif sys.argv[1] == 'stop':
+         return daemon.stop()
+@@ -119,7 +113,6 @@
+     elif sys.argv[1] == 'restart':
+         start_xenstored()
+         start_consoled()
+-        start_blktapctrl()
+         return daemon.stop() or daemon.start()
+     elif sys.argv[1] == 'status':
+         return daemon.status()

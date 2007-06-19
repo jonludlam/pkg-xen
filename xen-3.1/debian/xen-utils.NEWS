@@ -1,0 +1,25 @@
+xen-3.0 (3.0.1-1) unstable; urgency=low
+
+  If you are upgrading from official xen 2.0.6 packages (or unofficial 2.0.7
+  ones) be careful: manual intervention is needed before you can boot into your
+  new Xen 3.0 system. In particular you *must* upgrade both your Domain 0
+  kernel and your unprivileged domains ones with a xen-flavored version of
+  Linux 2.6.12.  Instructions for how to do so are provided in the
+  README.Debian file, as they are useful for new users of Xen too.
+
+  Also please note that Xen 2.0.6 has a bug and before getting removed doesn't
+  shutdown your domains. This, together with the fact that xen-utils for Xen
+  3.0 is incompatible with the 2.0 hypervisor means that you won't be able to
+  control your domains after upgrading, other than through the network. So
+  please shut them all down before upgrading to this packages.
+
+  If you want to be really sure that nothing will go wrong please reboot into
+  a normal Linux system before upgrading, upgrade from there, build the new
+  kernels, and only then start your new Xen 3.0 system.
+
+  On the good news side: Xen 3.0 is able to automatically baloon down your
+  Domain 0 to the value specified in /etc/xen/xend-config.sxp. For it to be
+  able to do so, just remove your "dom0_mem=" option from the xen kernel line in
+  your grub.conf, and also the "mem=" option from your linux module line.
+
+ -- Guido Trotter <ultrotter@debian.org>  Tue, 21 Feb 2006 09:07:26 +0100

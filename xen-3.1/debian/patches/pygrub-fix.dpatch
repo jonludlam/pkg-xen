@@ -1,0 +1,59 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## pygrub-fix by Peter Siering <ps@ctmagazin.de>
+## fixes pygrub's path to python modules as suggested by Joey Hess in #404533
+## changes python prefixes while building pygrub
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-3.1.0-src~/tools/pygrub/Makefile xen-3.1.0-src/tools/pygrub/Makefile
+--- xen-3.1.0-src~/tools/pygrub/Makefile	2007-06-19 21:53:37.804168521 +0200
++++ xen-3.1.0-src/tools/pygrub/Makefile	2007-06-19 21:56:07.597507884 +0200
+@@ -6,7 +6,7 @@
+ all: build
+ .PHONY: build
+ build:
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py build
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py build
+ 
+ .PHONY: install
+ ifndef XEN_PYTHON_NATIVE_INSTALL
+@@ -16,7 +16,7 @@
+ 	$(INSTALL_DIR) $(DESTDIR)/var/run/xend/boot
+ else
+ install: all
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py install --root="$(DESTDIR)"
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py install --root="$(DESTDIR)"
+ 	$(INSTALL_DIR) $(DESTDIR)/var/run/xend/boot
+ endif
+ 
+diff -urNad xen-3.1.0-src~/tools/pygrub/setup.py xen-3.1.0-src/tools/pygrub/setup.py
+--- xen-3.1.0-src~/tools/pygrub/setup.py	2007-05-18 16:45:21.000000000 +0200
++++ xen-3.1.0-src/tools/pygrub/setup.py	2007-06-19 21:53:38.344216876 +0200
+@@ -4,11 +4,13 @@
+ import sys
+ 
+ extra_compile_args  = [ "-fno-strict-aliasing", "-Werror" ]
++extra_link_args = [ "-Wl,-rpath,/usr/%s" % os.environ['LIBDIR'] ]
+ 
+ XEN_ROOT = "../.."
+ 
+ fsimage = Extension("fsimage",
+     extra_compile_args = extra_compile_args,
++    extra_link_args = extra_link_args,
+     include_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
+     library_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
+     libraries = ["fsimage"],
+diff -urNad xen-3.1.0-src~/tools/pygrub/src/pygrub xen-3.1.0-src/tools/pygrub/src/pygrub
+--- xen-3.1.0-src~/tools/pygrub/src/pygrub	2007-05-18 16:45:21.000000000 +0200
++++ xen-3.1.0-src/tools/pygrub/src/pygrub	2007-06-19 21:53:38.344216876 +0200
+@@ -21,7 +21,7 @@
+ import curses, _curses, curses.wrapper, curses.textpad, curses.ascii
+ import getopt
+ 
+-sys.path = [ '/usr/lib/python' ] + sys.path
++sys.path.append('%s/../lib/python' % sys.path[0])
+ 
+ import fsimage
+ import grub.GrubConf

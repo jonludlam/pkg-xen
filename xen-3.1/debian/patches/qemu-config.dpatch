@@ -1,0 +1,19 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## qemu-config.dpatch by Bastian Blank <waldi@debian.org>
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+diff -urNad xen-unstable~/tools/ioemu/vl.c xen-unstable/tools/ioemu/vl.c
+--- xen-unstable~/tools/ioemu/vl.c	2006-09-21 19:44:57.000000000 +0000
++++ xen-unstable/tools/ioemu/vl.c	2006-09-28 06:53:45.238717978 +0000
+@@ -89,7 +89,7 @@
+ #include "exec-all.h"
+ 
+ #include <xen/hvm/params.h>
+-#define DEFAULT_NETWORK_SCRIPT "/etc/xen/qemu-ifup"
++#define DEFAULT_NETWORK_SCRIPT "/etc/xen/scripts/qemu-ifup"
+ #define DEFAULT_BRIDGE "xenbr0"
+ 
+ //#define DEBUG_UNUSED_IOPORT

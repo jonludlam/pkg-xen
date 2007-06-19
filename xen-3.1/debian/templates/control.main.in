@@ -1,0 +1,7 @@
+Package: xen-docs-@short_version@
+Architecture: all
+Description: documentation for XEN, a Virtual Machine Monitor
+ This package contains all the large documentation files for XEN.  This
+ includes a description interface(both the api, and a nice explanation of
+ how XEN works).  It also contains the VBD and Xeno howtos.
+
