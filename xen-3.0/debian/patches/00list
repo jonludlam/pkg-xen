@@ -8,3 +8,5 @@ qemu-arch
 blktap-disable
 path-relative
 not-reinvent-udev
+install-boot
+ia64-build

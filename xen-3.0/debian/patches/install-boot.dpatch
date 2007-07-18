@@ -1,0 +1,21 @@
+#! /bin/sh /usr/share/dpatch/dpatch-run
+## install-boot.dpatch by Alex Williamson <alex.williamson@hp.com>
+##
+## Only archs building tools/firmware end up with /usr/lib/xen/boot,
+## create it if the subdirs install didn't
+##
+## All lines beginning with `## DP:' are a description of the patch.
+## DP: No description.
+
+@DPATCH@
+--- xen-3.0/tools/Makefile	2007-07-17 08:53:23.000000000 -0600
++++ xen-3.0/tools/Makefile	2007-07-17 08:55:57.000000000 -0600
+@@ -42,6 +42,8 @@
+ 	$(MAKE) ioemuinstall
+ 	$(INSTALL_DIR) -p $(DESTDIR)/var/xen/dump
+ 	$(INSTALL_DIR) -p $(DESTDIR)/var/log/xen
++	[ -d $(DESTDIR)/usr/lib/xen-$(XEN_VERSION)/boot ] || \
++	  $(INSTALL_DIR) -p $(DESTDIR)/usr/lib/xen-$(XEN_VERSION)/boot
+ 
+ .PHONY: clean
+ clean: check_clean

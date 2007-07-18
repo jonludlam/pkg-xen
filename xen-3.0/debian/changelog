@@ -1,8 +1,9 @@
 xen-3.0 (3.0.4-1-2) UNRELEASED; urgency=low
 
   * Don't compress PDF (Closes: #429045)
+  * Add support for ia64 (Closes: #389320)
 
- -- Julien Danjou <acid@debian.org>  Tue, 19 Jun 2007 22:08:51 +0200
+ -- Julien Danjou <acid@debian.org>  Wed, 18 Jul 2007 08:24:51 +0200
 
 xen-3.0 (3.0.4-1-1) unstable; urgency=low
 

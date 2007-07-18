@@ -1,0 +1,8 @@
+[base]
+flavours:
+ ia64
+xen-arch: ia64
+
+[ia64]
+class: ia64
+longclass: all single- and multiprocessor Intel Itanium II
