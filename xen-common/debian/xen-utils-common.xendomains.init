@@ -146,7 +146,7 @@ is_running()
 		RC=0
 		;;
 	esac
-    done < <(xm list | tail +2)
+    done < <(xm list | tail -n +2)
     return $RC
 }
 
@@ -212,7 +212,7 @@ all_zombies()
 	if test "$state" != "-b---d" -a "$state" != "-----d"; then
 	    return 1;
 	fi
-    done < <(xm list | tail +2)
+    done < <(xm list | tail -n +2)
     return 0
 }
 
@@ -323,7 +323,7 @@ stop()
 	    fi
 	    kill $WDOG_PIG >/dev/null 2>&1
 	fi
-    done < <(xm list | tail +2)
+    done < <(xm list | tail -n +2)
 
     # NB. this shuts down ALL Xen domains (politely), not just the ones in
     # AUTODIR/*
@@ -356,7 +356,7 @@ check_domain_up()
 		return 0
 		;;
 	esac
-    done < <(xm list | tail +2)
+    done < <(xm list | tail -n +2)
     return 1
 }
 
