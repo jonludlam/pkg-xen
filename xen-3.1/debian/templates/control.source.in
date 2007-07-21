@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
 Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Build-Depends: debhelper (>= 5.0.37.2), python-dev (>= 2.3), libsdl1.2-dev, bcc, dpatch, lsb-release, python-central (>= 0.5), zlib1g-dev, libncurses5-dev, x11proto-core-dev, libssl-dev, libcrypto++-dev
-Build-Depends-Indep: transfig, tetex-bin, tetex-extra, gs-common
+Build-Depends-Indep: transfig, tetex-bin, tetex-extra, gs-common, graphviz
 Standards-Version: 3.7.2.0
 XS-Python-Version: current
 

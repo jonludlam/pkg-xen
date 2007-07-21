@@ -7,6 +7,10 @@ xen-common (3.1.0-0-1) UNRELEASED; urgency=low
   [ Guido Trotter ]
   * Handle gracefully domains called Name.* (closes: #432583)
 
+  [ Ralph Passgang ]
+  * create directories with mkdir's "-p" option
+  * create $(BUILD_DIR)/docs/out before pod2man is executed.
+
  -- Guido Trotter <ultrotter@debian.org>  Tue, 10 Jul 2007 21:21:51 +0100
 
 xen-common (3.0.4-1-2) unstable; urgency=low

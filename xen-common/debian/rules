@@ -12,17 +12,18 @@ source: $(STAMPS_DIR)/source
 $(STAMPS_DIR)/source: $(STAMPS_DIR)
 	dh_testdir
 	@rm -rf $(BUILD_DIR)
-	mkdir $(BUILD_DIR)
+	mkdir -p $(BUILD_DIR)
 	cp -a $(srcfiles) $(BUILD_DIR)
 	dpatch -d $(BUILD_DIR) apply-all
 	touch $@
 
 define build_man
+	mkdir -p $(BUILD_DIR)/docs/out
 	pod2man --release=$(VERSION) --name=$(3) -s $(4) -c Xen $(BUILD_DIR)/docs/man/$(1) $(BUILD_DIR)/docs/out/$(2)
 endef
 
 build: $(STAMPS_DIR)/source
-	mkdir $(BUILD_DIR)/docs/man
+	mkdir -p $(BUILD_DIR)/docs/man
 	$(call build_man,xend-config.sxp.pod.5,xend-config.sxp.5,xend-config.sxp,5)
 	$(call build_man,xmdomain.cfg.pod.5,xmdomain.cfg.5,xmdomain.cfg,5)
 	$(call build_man,xm.pod.1,xm.1,xm,1)
@@ -33,7 +34,7 @@ clean:
 	dh_clean
 
 $(BUILD_DIR) $(STAMPS_DIR):
-	@[ -d $@ ] || mkdir $@
+	@[ -d $@ ] || mkdir -p $@
 
 NO_ORIG = .svn debian scripts
 
