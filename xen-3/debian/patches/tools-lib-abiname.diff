@@ -112,3 +112,39 @@
  	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
  	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
+--- xen-3.orig/tools/blktap/lib/Makefile
++++ xen-3/tools/blktap/lib/Makefile
+@@ -1,9 +1,7 @@
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR    = 3.0
+-MINOR    = 0
+-SONAME   = libblktap.so.$(MAJOR)
++SONAME   = libblktap.so
+ 
+ BLKTAP_INSTALL_DIR = /usr/$(BINDIR)
+ 
+@@ -28,7 +26,7 @@
+ OBJS     = $(patsubst %.c,%.o,$(SRCS))
+ IBINS   :=
+ 
+-LIB      = libblktap.a libblktap.so.$(MAJOR).$(MINOR)
++LIB      = libblktap.a libblktap.so
+ 
+ .PHONY: all
+ all: build
+@@ -51,11 +49,9 @@
+ 	rm -rf *.a *.so* *.o *.rpm $(LIB) *~ $(DEPS) xen TAGS
+ 
+ libblktap.a: $(OBJS) 
+-	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,$(SONAME) $(SHLIB_CFLAGS) \
++	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
+ 	      -L$(XEN_XENSTORE) -l xenstore                                \
+-	      -o libblktap.so.$(MAJOR).$(MINOR) $^ $(LIBS)
+-	ln -sf libblktap.so.$(MAJOR).$(MINOR) libblktap.so.$(MAJOR)
+-	ln -sf libblktap.so.$(MAJOR) libblktap.so
++	      -o libblktap.so $^ $(LIBS)
+ 	$(AR) rc $@ libblktap.so
+ 
+ .PHONY: TAGS all build clean install libblktap

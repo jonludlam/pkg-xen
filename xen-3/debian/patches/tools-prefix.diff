@@ -232,7 +232,18 @@
  # It belongs in /usr/lib, not /usr/lib64.
  TARGET      := hvmloader/hvmloader
 -INST_DIR := $(DESTDIR)/usr/lib/xen/boot
-+INST_DIR := $(DESTDIR)/usr/$(LIBDIR)/boot
++INST_DIR := $(DESTDIR)/usr/$(PREFIX)/boot
  
  SUBDIRS :=
  SUBDIRS += rombios rombios/32bit
+--- xen-3.orig/tools/blktap/lib/Makefile
++++ xen-3/tools/blktap/lib/Makefile
+@@ -5,7 +5,7 @@
+ MINOR    = 0
+ SONAME   = libblktap.so.$(MAJOR)
+ 
+-BLKTAP_INSTALL_DIR = /usr/sbin
++BLKTAP_INSTALL_DIR = /usr/$(BINDIR)
+ 
+ INCLUDES += -I. -I.. -I $(XEN_LIBXC) -I $(XEN_XENSTORE)
+ 
