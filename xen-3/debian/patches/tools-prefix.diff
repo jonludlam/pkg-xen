@@ -9,6 +9,14 @@
  LIBAIO_DIR   = ../../libaio/src
  
  CFLAGS   += -Werror
+@@ -55,6 +55,7 @@
+ 	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(AIOLIBS) $(LIBS)
+ 
+ install: all
++	$(INSTALL_DIR) $(DESTDIR)$(INST_DIR)
+ 	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(INST_DIR)
+ 
+ clean:
 --- xen-3.orig/tools/console/Makefile
 +++ xen-3/tools/console/Makefile
 @@ -2,8 +2,7 @@
@@ -21,7 +29,7 @@
  
  CFLAGS  += -Werror
  
-@@ -30,7 +29,6 @@
+@@ -30,7 +29,5 @@
  
  .PHONY: install
  install: $(BIN)
@@ -30,20 +38,20 @@
 -	$(INSTALL_DIR) $(DESTDIR)/$(CLIENT_INSTALL_DIR)
 -	$(INSTALL_PROG) xenconsole $(DESTDIR)/$(CLIENT_INSTALL_DIR)
 +	$(INSTALL_DIR) $(DESTDIR)/$(DIR)
-+	$(INSTALL_PROG) xenconsoled $(DESTDIR)/$(DIR)
-+	$(INSTALL_PROG) xenconsole $(DESTDIR)/$(DIR)
++	$(INSTALL_PROG) xenconsole xenconsoled $(DESTDIR)/$(DIR)
 --- xen-3.orig/tools/misc/Makefile
 +++ xen-3/tools/misc/Makefile
-@@ -14,7 +14,7 @@
+@@ -13,8 +13,7 @@
+ TARGETS-$(CONFIG_X86) += xen-detect
  TARGETS := $(TARGETS-y)
  
- INSTALL_BIN  = $(TARGETS) xencons
+-INSTALL_BIN  = $(TARGETS) xencons
 -INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf
-+INSTALL_BIN = netfix xm xen-bugtool xen-python-path xend xenperf
++INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend
  
  .PHONY: all
  all: build
-@@ -26,10 +26,7 @@
+@@ -26,10 +25,8 @@
  
  .PHONY: install
  install: build
@@ -51,7 +59,8 @@
 -	[ -d $(DESTDIR)/usr/sbin ] || $(INSTALL_DIR) $(DESTDIR)/usr/sbin
 -	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)/usr/bin
 -	$(INSTALL_PROG) $(INSTALL_SBIN) $(DESTDIR)/usr/sbin
-+	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) $(INSTALL_TARGETS) $(DESTDIR)/usr/$(BINDIR)
  	$(MAKE) -C lomount install
  #       No sense in installing miniterm on the Xen box.
  #	$(MAKE) -C miniterm install
@@ -112,7 +121,7 @@
  CFLAGS  += -Werror
  CFLAGS  += -I $(XEN_XC)
  CFLAGS  += -I $(XEN_LIBXC)
-@@ -31,10 +29,10 @@
+@@ -31,10 +29,8 @@
  
  .PHONY: install
  install: build
@@ -121,9 +130,7 @@
 -	$(INSTALL_PROG) xentrace_setmask  $(DESTDIR)$(sbindir)/xentrace_setmask
 -	$(INSTALL_PROG) xenmon.py  $(DESTDIR)$(sbindir)/xenmon.py
 +	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
-+	$(INSTALL_PROG) xenbaked $(DESTDIR)/usr/$(BINDIR)/xenbaked
-+	$(INSTALL_PROG) xentrace_setmask  $(DESTDIR)/usr/$(BINDIR)/xentrace_setmask
-+	$(INSTALL_PROG) xenmon.py  $(DESTDIR)/usr/$(BINDIR)/xenmon.py
++	$(INSTALL_PROG) xenbaked xenmon.py xentrace_setmask $(DESTDIR)/usr/$(BINDIR)
  
  .PHONY: clean
  clean:
@@ -142,13 +149,13 @@
  .PHONY: install
  install: xentop xentop.1
 -	$(INSTALL_PROG) xentop $(DESTDIR)$(sbindir)/xentop
-+	$(INSTALL_PROG) xentop $(DESTDIR)/usr/$(BINDIR)/xentop
++	$(INSTALL_PROG) -D xentop $(DESTDIR)/usr/$(BINDIR)/xentop
  	$(INSTALL_DIR) $(DESTDIR)$(man1dir)
  	$(INSTALL_DATA) xentop.1 $(DESTDIR)$(man1dir)/xentop.1
  
 --- xen-3.orig/tools/xenstore/Makefile
 +++ xen-3/tools/xenstore/Makefile
-@@ -170,13 +170,12 @@
+@@ -170,13 +170,9 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
@@ -160,10 +167,7 @@
 -	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)/usr/bin
 -	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/bin
 -	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/bin
-+	$(INSTALL_PROG) xenstored $(DESTDIR)/usr/$(BINDIR)
-+	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
-+	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/$(BINDIR)
-+	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) xenstore-control xenstore-ls xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
  	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
  	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
