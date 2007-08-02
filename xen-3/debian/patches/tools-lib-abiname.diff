@@ -156,3 +156,51 @@
  	$(AR) rc $@ libblktap.so
  
  .PHONY: TAGS all build clean install libblktap
+--- xen-3.orig/tools/libfsimage/common/Makefile
++++ xen-3/tools/libfsimage/common/Makefile
+@@ -1,9 +1,6 @@
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR = 1.0
+-MINOR = 0
+-
+ CFLAGS += -Werror -Wp,-MD,.$(@F).d
+ DEPS = .*.d
+ 
+@@ -15,7 +12,7 @@
+ 
+ PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
+ 
+-LIB = libfsimage.so libfsimage.so.$(MAJOR) libfsimage.so.$(MAJOR).$(MINOR)
++LIB = libfsimage.so
+ 
+ .PHONY: all
+ all: $(LIB)
+@@ -24,9 +21,7 @@
+ install: all
+ 	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
+ 	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
+-	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libfsimage.so.$(MAJOR)
+-	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libfsimage.so
++	$(INSTALL_PROG) libfsimage.so $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) fsimage.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) fsimage_plugin.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) fsimage_grub.h $(DESTDIR)/usr/include
+@@ -34,13 +29,8 @@
+ clean distclean:
+ 	rm -f $(PIC_OBJS) $(LIB)
+ 
+-libfsimage.so: libfsimage.so.$(MAJOR)
+-	ln -sf $< $@
+-libfsimage.so.$(MAJOR): libfsimage.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libfsimage.so.$(MAJOR).$(MINOR): $(PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libfsimage.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
++libfsimage.so: $(PIC_OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
+ 
+ -include $(DEPS)
+ 

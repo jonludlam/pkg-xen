@@ -22,6 +22,6 @@
  
 +LIBDIR = lib/pygrub
 +
- MAJOR = 1.0
- MINOR = 0
+ CFLAGS += -Werror -Wp,-MD,.$(@F).d
+ DEPS = .*.d
  
