@@ -10,3 +10,4 @@ tools-ioemu-arch.diff
 tools-ioemu-config.diff
 tools-pygrub-prefix.diff
 tools-libfsimage-prefix.diff
+disable-features.diff
