@@ -15,7 +15,7 @@ class GenOrig(object):
             self.do_update()
             self.do_version()
 
-            self.orig_dir = "%s-%s.orig" % (self.source, self.version)
+            self.orig_dir = "%s-%s" % (self.source, self.version)
             self.orig_tar = "%s_%s.orig.tar.gz" % (self.source, self.version)
 
             self.do_archive()
