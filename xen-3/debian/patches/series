@@ -8,3 +8,5 @@ tools-lib-abiname.diff
 tools-python-xen-xm-relative-path.diff
 tools-ioemu-arch.diff
 tools-ioemu-config.diff
+tools-pygrub-prefix.diff
+tools-libfsimage-prefix.diff

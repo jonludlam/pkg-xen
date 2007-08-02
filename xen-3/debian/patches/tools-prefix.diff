@@ -66,17 +66,6 @@
  
  .PHONY: clean
  clean:
---- xen-3.orig/tools/pygrub/Makefile
-+++ xen-3/tools/pygrub/Makefile
-@@ -12,7 +12,7 @@
- ifndef XEN_PYTHON_NATIVE_INSTALL
- install: LIBPATH=$(shell PYTHONPATH=../python/xen/util python -c "import auxbin; print auxbin.libpath()")
- install: all
--	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py install --home="$(DESTDIR)/usr" --prefix="" --install-lib="$(DESTDIR)$(LIBPATH)/python"
-+	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py install --home="$(DESTDIR)/usr/$(LIBDIR)" --prefix="" --install-lib="$(DESTDIR)/usr/$(LIBDIR)/python" --install-scripts=$(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)/var/run/xend/boot
- else
- install: all
 --- xen-3.orig/tools/python/Makefile
 +++ xen-3/tools/python/Makefile
 @@ -16,7 +16,7 @@

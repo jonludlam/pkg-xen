@@ -1,0 +1,27 @@
+--- xen-3.orig/tools/libfsimage/Rules.mk
++++ xen-3/tools/libfsimage/Rules.mk
+@@ -7,11 +7,8 @@
+ 
+ PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
+ 
+-FSDIR-$(CONFIG_Linux) = $(LIBDIR)/fs/$(FS)
+-FSDIR-$(CONFIG_SunOS)-x86_64 = lib/fs/$(FS)/64
+-FSDIR-$(CONFIG_SunOS)-x86_32 = lib/fs/$(FS)/
+-FSDIR-$(CONFIG_SunOS) = $(FSDIR-$(CONFIG_SunOS)-$(XEN_TARGET_ARCH))
+-FSDIR = $(FSDIR-y)
++LIBDIR = lib/pygrub
++FSDIR = $(LIBDIR)/fs/$(FS)
+ 
+ FSLIB = fsimage.so
+ 
+--- xen-3.orig/tools/libfsimage/common/Makefile
++++ xen-3/tools/libfsimage/common/Makefile
+@@ -1,6 +1,8 @@
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
++LIBDIR = lib/pygrub
++
+ MAJOR = 1.0
+ MINOR = 0
+ 

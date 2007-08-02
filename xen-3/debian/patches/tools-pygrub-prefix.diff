@@ -1,0 +1,52 @@
+--- xen-3.orig/tools/pygrub/Makefile
++++ xen-3/tools/pygrub/Makefile
+@@ -2,17 +2,19 @@
+ XEN_ROOT = ../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
++BINDIR = bin
++LIBDIR = lib/pygrub
++
+ .PHONY: all
+ all: build
+ .PHONY: build
+ build:
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py build
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR=$(LIBDIR) python setup.py build
+ 
+ .PHONY: install
+ ifndef XEN_PYTHON_NATIVE_INSTALL
+-install: LIBPATH=$(shell PYTHONPATH=../python/xen/util python -c "import auxbin; print auxbin.libpath()")
+ install: all
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py install --home="$(DESTDIR)/usr" --prefix="" --install-lib="$(DESTDIR)$(LIBPATH)/python"
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR=$(LIBDIR) python setup.py install --home="$(DESTDIR)/usr/$(LIBDIR)" --prefix="" --install-lib="$(DESTDIR)/usr/$(LIBDIR)/python" --install-scripts=$(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)/var/run/xend/boot
+ else
+ install: all
+--- xen-3.orig/tools/pygrub/src/pygrub
++++ xen-3/tools/pygrub/src/pygrub
+@@ -21,7 +21,7 @@
+ import curses, _curses, curses.wrapper, curses.textpad, curses.ascii
+ import getopt
+ 
+-sys.path = [ '/usr/lib/python' ] + sys.path
++sys.path = [ '/usr/lib/pygrub/python' ] + sys.path
+ 
+ import fsimage
+ import grub.GrubConf
+--- xen-3.orig/tools/pygrub/setup.py
++++ xen-3/tools/pygrub/setup.py
+@@ -4,11 +4,13 @@
+ import sys
+ 
+ extra_compile_args  = [ "-fno-strict-aliasing", "-Werror" ]
++extra_link_args = [ "-Wl,-rpath,/usr/%s" % os.environ['LIBDIR'] ]
+ 
+ XEN_ROOT = "../.."
+ 
+ fsimage = Extension("fsimage",
+     extra_compile_args = extra_compile_args,
++    extra_link_args = extra_link_args,
+     include_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
+     library_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
+     libraries = ["fsimage"],
