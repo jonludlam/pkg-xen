@@ -6,9 +6,9 @@ export DH_OPTIONS
 
 include debian/rules.defs
 
-HEADERS_DIR = /usr/src/linux-headers-$(UPSTREAMVERSION)$(ABINAME)$(LOCALVERSION)
-
-binary-arch-arch: install-utils_$(ARCH)
+binary-arch-arch: install-utils-pygrub_$(ARCH)
+binary-arch-arch: install-utils-ioemu_$(ARCH)
+binary-arch-arch: install-utils-utils_$(ARCH)
 binary-arch-flavour: install-hypervisor_$(ARCH)_$(FLAVOUR)
 
 binary-indep: install-docs
@@ -97,29 +97,55 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)$(ABINAME)-$(FLAVOUR).gz
 	$(MAKE) -f debian/rules.real install-base
 
-install-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
-install-utils_$(ARCH): PACKAGE_NAME_UTILS = xen-utils-$(VERSION)$(ABINAME)
-install-utils_$(ARCH): PACKAGE_NAME_IOEMU = xen-ioemu-$(VERSION)$(ABINAME)
-install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME_UTILS) -p$(PACKAGE_NAME_IOEMU)
-install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
+install-utils-temp_$(ARCH): SOURCE_DIR = $(BUILD_DIR)/build-utils_$(ARCH)
+install-utils-temp_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
+install-utils-temp_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
+	dh_testdir
+	dh_testroot
+	@rm -rf $(DIR)
+	$(MAKE) -C $(SOURCE_DIR)/tools install DESTDIR=$(CURDIR)/$(DIR) DISTDIR=$(CURDIR)/$(DIR) XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME)
+
+install-utils-pygrub_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
+install-utils-pygrub_$(ARCH): PACKAGE_NAME = pygrub
+install-utils-pygrub_$(ARCH): LIBDIR = usr/lib/pygrub
+install-utils-pygrub_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
+install-utils-pygrub_$(ARCH): install-utils-temp_$(ARCH)
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	install -D -m644 debian/xen-utils.NEWS debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/NEWS
-	install -D -m644 debian/xen-utils.README.Debian debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/README.Debian
-	$(MAKE) -C $(DIR)/tools install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME)
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp \
-	  usr/lib/xen-$(VERSION)$(ABINAME)/bin \
-	  usr/lib/xen-$(VERSION)$(ABINAME)/lib \
-	  usr/lib/xen-$(VERSION)$(ABINAME)
-	rm debian/$(PACKAGE_NAME_UTILS)/usr/lib/xen-$(VERSION)$(ABINAME)/bin/qemu*
-	DH_OPTIONS= dh_install  -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp \
-	  usr/lib/xen-$(VERSION)$(ABINAME)/bin/qemu-dm \
-	  usr/lib/xen-$(VERSION)$(ABINAME)/bin
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp \
-	  usr/lib/xen-$(VERSION)$(ABINAME)/boot \
-	  usr/lib/xen-$(VERSION)$(ABINAME)
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/share/xen-$(VERSION)$(ABINAME) usr/share
+	dh_install --sourcedir=$(DIR) $(LIBDIR)
+	dh_pycentral
+	dh_strip
+	dh_shlibdeps
+	$(MAKE) -f debian/rules.real install-base
+
+install-utils-ioemu_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
+install-utils-ioemu_$(ARCH): PACKAGE_NAME = xen-ioemu-$(VERSION)$(ABINAME)
+install-utils-ioemu_$(ARCH): LIBDIR = usr/lib/xen-$(VERSION)$(ABINAME)
+install-utils-ioemu_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
+install-utils-ioemu_$(ARCH): install-utils-temp_$(ARCH)
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_install --sourcedir=$(DIR) $(LIBDIR)/bin/qemu-dm
+	dh_install --sourcedir=$(DIR) $(LIBDIR)/boot
+	dh_install --sourcedir=$(DIR) usr/share/xen-$(VERSION)$(ABINAME)
+	dh_strip
+	dh_shlibdeps
+	$(MAKE) -f debian/rules.real install-base
+
+install-utils-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
+install-utils-utils_$(ARCH): PACKAGE_NAME = xen-utils-$(VERSION)$(ABINAME)
+install-utils-utils_$(ARCH): PACKAGE_DIR = debian/$(PACKAGE_NAME)
+install-utils-utils_$(ARCH): LIBDIR = usr/lib/xen-$(VERSION)$(ABINAME)
+install-utils-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
+install-utils-utils_$(ARCH): install-utils-temp_$(ARCH)
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	install -D -m644 debian/xen-utils.NEWS $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/NEWS
+	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
+	dh_install --sourcedir=$(DIR) $(LIBDIR)/bin $(LIBDIR)/lib $(LIBDIR) -Xqemu
 	dh_pycentral
 	dh_strip
 	dh_shlibdeps
