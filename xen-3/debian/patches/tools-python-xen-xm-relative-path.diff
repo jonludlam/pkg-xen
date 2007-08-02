@@ -1,14 +1,6 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## kernel-path-relative.dpatch by Bastian Blank <waldi@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
-
-@DPATCH@
-diff -urNad xen-3.0~/tools/python/xen/xm/create.py xen-3.0/tools/python/xen/xm/create.py
---- xen-3.0~/tools/python/xen/xm/create.py	2007-01-01 13:31:46.000000000 +0000
-+++ xen-3.0/tools/python/xen/xm/create.py	2007-01-01 13:52:32.342169960 +0000
-@@ -504,6 +504,14 @@
+--- xen-3.orig/tools/python/xen/xm/create.py
++++ xen-3/tools/python/xen/xm/create.py
+@@ -530,6 +530,14 @@
      else:
          return s
  
@@ -23,7 +15,7 @@ diff -urNad xen-3.0~/tools/python/xen/xm/create.py xen-3.0/tools/python/xen/xm/c
  def configure_image(vals):
      """Create the image config.
      """
-@@ -511,9 +519,9 @@
+@@ -537,9 +545,9 @@
          return None
      config_image = [ vals.builder ]
      if vals.kernel:
@@ -35,7 +27,7 @@ diff -urNad xen-3.0~/tools/python/xen/xm/create.py xen-3.0/tools/python/xen/xm/c
      if vals.cmdline_ip:
          cmdline_ip = strip('ip=', vals.cmdline_ip)
          config_image.append(['ip', cmdline_ip])
-@@ -693,7 +701,7 @@
+@@ -722,7 +730,7 @@
  def configure_hvm(config_image, vals):
      """Create the config for HVM devices.
      """
@@ -43,8 +35,8 @@ diff -urNad xen-3.0~/tools/python/xen/xm/create.py xen-3.0/tools/python/xen/xm/c
 +    args = [ 'pae', 'vcpus', 'boot', 'fda', 'fdb',
               'localtime', 'serial', 'stdvga', 'isa', 'nographic', 'soundhw',
               'vnc', 'vncdisplay', 'vncunused', 'vncconsole', 'vnclisten',
-              'sdl', 'display', 'xauthority',
-@@ -701,6 +709,8 @@
+              'sdl', 'display', 'xauthority', 'rtc_timeoffset', 'monitor',
+@@ -730,6 +738,8 @@
      for a in args:
          if a in vals.__dict__ and vals.__dict__[a] is not None:
              config_image.append([a, vals.__dict__[a]])
@@ -52,4 +44,4 @@ diff -urNad xen-3.0~/tools/python/xen/xm/create.py xen-3.0/tools/python/xen/xm/c
 +        config_image.append([ 'device_model', abspath(vals.device_model, 'bin') ])
      config_image.append(['vncpasswd', vals.vncpasswd])
  
- def run_bootloader(vals, config_image):
+ 

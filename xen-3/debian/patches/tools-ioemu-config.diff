@@ -1,0 +1,11 @@
+--- xen-3.orig/tools/ioemu/vl.c
++++ xen-3/tools/ioemu/vl.c
+@@ -89,7 +89,7 @@
+ #include "exec-all.h"
+ 
+ #include <xen/hvm/params.h>
+-#define DEFAULT_NETWORK_SCRIPT "/etc/xen/qemu-ifup"
++#define DEFAULT_NETWORK_SCRIPT "/etc/xen/scripts/qemu-ifup"
+ #define DEFAULT_BRIDGE "xenbr0"
+ 
+ //#define DEBUG_UNUSED_IOPORT

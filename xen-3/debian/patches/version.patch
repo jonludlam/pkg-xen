@@ -5,10 +5,9 @@
 ## DP: No description.
 
 @DPATCH@
-diff -urNad xen-3.0~/xen/Makefile xen-3.0/xen/Makefile
---- xen-3.0~/xen/Makefile	2007-01-01 13:31:54.000000000 +0000
-+++ xen-3.0/xen/Makefile	2007-01-01 13:47:54.953567948 +0000
-@@ -93,16 +93,16 @@
+--- xen-3.orig/xen/Makefile
++++ xen-3/xen/Makefile
+@@ -105,16 +105,16 @@
  include/xen/compile.h: include/xen/compile.h.in
  	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
  	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
@@ -29,10 +28,9 @@ diff -urNad xen-3.0~/xen/Makefile xen-3.0/xen/Makefile
  	@mv -f $@.new $@
  
  include/asm-$(TARGET_ARCH)/asm-offsets.h: arch/$(TARGET_ARCH)/asm-offsets.s
-diff -urNad xen-3.0~/xen/arch/powerpc/boot_of.c xen-3.0/xen/arch/powerpc/boot_of.c
---- xen-3.0~/xen/arch/powerpc/boot_of.c	2007-01-01 13:31:57.000000000 +0000
-+++ xen-3.0/xen/arch/powerpc/boot_of.c	2007-01-01 13:46:38.345805238 +0000
-@@ -1292,9 +1292,10 @@
+--- xen-3.orig/xen/arch/powerpc/boot_of.c
++++ xen-3/xen/arch/powerpc/boot_of.c
+@@ -1332,9 +1332,10 @@
      of_getprop(bof_chosen, "stdout", &of_out, sizeof (of_out));
  
      of_printf("%s\n", "---------------------------------------------------");
@@ -45,10 +43,9 @@ diff -urNad xen-3.0~/xen/arch/powerpc/boot_of.c xen-3.0/xen/arch/powerpc/boot_of
                xen_compiler(), xen_compile_date());
  
      of_printf("%s args: 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx\n"
-diff -urNad xen-3.0~/xen/common/kernel.c xen-3.0/xen/common/kernel.c
---- xen-3.0~/xen/common/kernel.c	2007-01-01 13:32:04.000000000 +0000
-+++ xen-3.0/xen/common/kernel.c	2007-01-01 13:46:38.345805238 +0000
-@@ -141,8 +141,8 @@
+--- xen-3.orig/xen/common/kernel.c
++++ xen-3/xen/common/kernel.c
+@@ -151,8 +151,8 @@
      {
          struct xen_compile_info info;
          safe_strcpy(info.compiler,       xen_compiler());
@@ -59,9 +56,8 @@ diff -urNad xen-3.0~/xen/common/kernel.c xen-3.0/xen/common/kernel.c
          safe_strcpy(info.compile_date,   xen_compile_date());
          if ( copy_to_guest(arg, &info, 1) )
              return -EFAULT;
-diff -urNad xen-3.0~/xen/common/version.c xen-3.0/xen/common/version.c
---- xen-3.0~/xen/common/version.c	2007-01-01 13:32:06.000000000 +0000
-+++ xen-3.0/xen/common/version.c	2007-01-01 13:46:38.345805238 +0000
+--- xen-3.orig/xen/common/version.c
++++ xen-3/xen/common/version.c
 @@ -10,19 +10,24 @@
      return XEN_COMPILE_TIME;
  }
@@ -101,10 +97,9 @@ diff -urNad xen-3.0~/xen/common/version.c xen-3.0/xen/common/version.c
 -{
 -    return XEN_BANNER;
 -}
-diff -urNad xen-3.0~/xen/drivers/char/console.c xen-3.0/xen/drivers/char/console.c
---- xen-3.0~/xen/drivers/char/console.c	2007-01-01 13:32:06.000000000 +0000
-+++ xen-3.0/xen/drivers/char/console.c	2007-01-01 13:46:38.345805238 +0000
-@@ -502,12 +502,10 @@
+--- xen-3.orig/xen/drivers/char/console.c
++++ xen-3/xen/drivers/char/console.c
+@@ -522,12 +522,10 @@
      serial_set_rx_handler(sercon_handle, serial_rx);
  
      /* HELLO WORLD --- start-of-day banner text. */
@@ -120,9 +115,8 @@ diff -urNad xen-3.0~/xen/drivers/char/console.c xen-3.0/xen/drivers/char/console
             xen_compiler(), xen_compile_date());
      printk(" Latest ChangeSet: %s\n\n", xen_changeset());
      set_printk_prefix("(XEN) ");
-diff -urNad xen-3.0~/xen/include/xen/compile.h.in xen-3.0/xen/include/xen/compile.h.in
---- xen-3.0~/xen/include/xen/compile.h.in	2007-01-01 13:32:12.000000000 +0000
-+++ xen-3.0/xen/include/xen/compile.h.in	2007-01-01 13:46:38.345805238 +0000
+--- xen-3.orig/xen/include/xen/compile.h.in
++++ xen-3/xen/include/xen/compile.h.in
 @@ -1,8 +1,9 @@
  #define XEN_COMPILE_DATE	"@@date@@"
  #define XEN_COMPILE_TIME	"@@time@@"
@@ -141,9 +135,8 @@ diff -urNad xen-3.0~/xen/include/xen/compile.h.in xen-3.0/xen/include/xen/compil
  
  #define XEN_CHANGESET		"@@changeset@@"
 -#define XEN_BANNER		\
-diff -urNad xen-3.0~/xen/include/xen/version.h xen-3.0/xen/include/xen/version.h
---- xen-3.0~/xen/include/xen/version.h	2007-01-01 13:32:12.000000000 +0000
-+++ xen-3.0/xen/include/xen/version.h	2007-01-01 13:46:38.345805238 +0000
+--- xen-3.orig/xen/include/xen/version.h
++++ xen-3/xen/include/xen/version.h
 @@ -3,14 +3,14 @@
  
  const char *xen_compile_date(void);

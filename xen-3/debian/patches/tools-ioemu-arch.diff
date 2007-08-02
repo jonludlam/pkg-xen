@@ -1,13 +1,5 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## arch.dpatch by Bastian Blank <waldi@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
-
-@DPATCH@
-diff -urNad xen-unstable~/tools/ioemu/configure xen-unstable/tools/ioemu/configure
---- xen-unstable~/tools/ioemu/configure	2006-08-18 15:35:45.000000000 +0000
-+++ xen-unstable/tools/ioemu/configure	2006-08-18 16:19:34.759859866 +0000
+--- xen-3.orig/tools/ioemu/configure
++++ xen-3/tools/ioemu/configure
 @@ -27,46 +27,18 @@
  make="make"
  install="install"

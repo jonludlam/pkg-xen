@@ -1,0 +1,10 @@
+config-prefix.diff
+tools-rpath.diff
+tools-prefix.diff
+tools-prefix-python.diff
+tools-ldflags.diff
+version.patch
+tools-lib-abiname.diff
+tools-python-xen-xm-relative-path.diff
+tools-ioemu-arch.diff
+tools-ioemu-config.diff

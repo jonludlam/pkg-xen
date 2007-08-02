@@ -1,13 +1,5 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## prefix-tools-python.dpatch by Bastian Blank <waldi@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
-
-@DPATCH@
-diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
---- xen-3.0~/tools/misc/xend	2007-01-01 13:31:41.000000000 +0000
-+++ xen-3.0/tools/misc/xend	2007-01-01 13:45:55.018551704 +0000
+--- xen-3.orig/tools/misc/xend
++++ xen-3/tools/misc/xend
 @@ -31,13 +31,8 @@
  import time
  import commands
@@ -24,7 +16,7 @@ diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
  
  from xen.xend.server import SrvDaemon
  
-@@ -87,18 +78,18 @@
+@@ -77,18 +72,18 @@
  
  def start_xenstored():
      XENSTORED_TRACE = os.getenv("XENSTORED_TRACE")
@@ -46,9 +38,8 @@ diff -urNad xen-3.0~/tools/misc/xend xen-3.0/tools/misc/xend
              
  def main():
      try:
-diff -urNad xen-3.0~/tools/misc/xm xen-3.0/tools/misc/xm
---- xen-3.0~/tools/misc/xm	2007-01-01 13:31:41.000000000 +0000
-+++ xen-3.0/tools/misc/xm	2007-01-01 13:45:55.018551704 +0000
+--- xen-3.orig/tools/misc/xm
++++ xen-3/tools/misc/xm
 @@ -1,10 +1,7 @@
  #!/usr/bin/env python
  #  -*- mode: python; -*-
@@ -61,9 +52,8 @@ diff -urNad xen-3.0~/tools/misc/xm xen-3.0/tools/misc/xm
  from xen.xm import main
  
  main.main(sys.argv)
-diff -urNad xen-3.0~/tools/python/xen/util/auxbin.py xen-3.0/tools/python/xen/util/auxbin.py
---- xen-3.0~/tools/python/xen/util/auxbin.py	2007-01-01 13:31:43.000000000 +0000
-+++ xen-3.0/tools/python/xen/util/auxbin.py	2007-01-01 13:46:21.697077864 +0000
+--- xen-3.orig/tools/python/xen/util/auxbin.py
++++ xen-3/tools/python/xen/util/auxbin.py
 @@ -16,17 +16,9 @@
  #============================================================================
  
@@ -102,9 +92,8 @@ diff -urNad xen-3.0~/tools/python/xen/util/auxbin.py xen-3.0/tools/python/xen/ut
 -    else:
 -        return LIB_32
 +    return os.path.realpath(os.path.join(path(), '../lib'))
-diff -urNad xen-3.0~/tools/python/xen/xm/console.py xen-3.0/tools/python/xen/xm/console.py
---- xen-3.0~/tools/python/xen/xm/console.py	2007-01-01 13:31:46.000000000 +0000
-+++ xen-3.0/tools/python/xen/xm/console.py	2007-01-01 13:45:55.018551704 +0000
+--- xen-3.orig/tools/python/xen/xm/console.py
++++ xen-3/tools/python/xen/xm/console.py
 @@ -21,4 +21,4 @@
  import xen.util.auxbin
  

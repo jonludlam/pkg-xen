@@ -1,0 +1,48 @@
+--- xen-3.orig/Config.mk
++++ xen-3/Config.mk
+@@ -26,6 +26,10 @@
+ include $(XEN_ROOT)/config/$(XEN_OS).mk
+ include $(XEN_ROOT)/config/$(XEN_TARGET_ARCH).mk
+ 
++PREFIX = lib/xen-$(XEN_VERSION)
++BINDIR = $(PREFIX)/bin
++LIBDIR = $(PREFIX)/lib
++
+ ifneq ($(EXTRA_PREFIX),)
+ EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
+ EXTRA_LIB += $(EXTRA_PREFIX)/$(LIBDIR)
+--- xen-3.orig/config/ia64.mk
++++ xen-3/config/ia64.mk
+@@ -3,5 +3,3 @@
+ 
+ CONFIG_IOEMU := y
+ CONFIG_XCUTILS := y
+-
+-LIBDIR := lib
+--- xen-3.orig/config/powerpc64.mk
++++ xen-3/config/powerpc64.mk
+@@ -4,4 +4,3 @@
+ CONFIG_XENCOMM := y
+ 
+ CFLAGS += -DELFSIZE=64
+-LIBDIR := lib
+--- xen-3.orig/config/x86_32.mk
++++ xen-3/config/x86_32.mk
+@@ -8,7 +8,6 @@
+ CONFIG_IOEMU := y
+ 
+ CFLAGS += -m32 -march=i686
+-LIBDIR := lib
+ 
+ # Use only if calling $(LD) directly.
+ ifeq ($(XEN_OS),OpenBSD)
+--- xen-3.orig/config/x86_64.mk
++++ xen-3/config/x86_64.mk
+@@ -9,7 +9,6 @@
+ CONFIG_IOEMU := y
+ 
+ CFLAGS += -m64
+-LIBDIR = $(LIB64DIR)
+ 
+ # Use only if calling $(LD) directly.
+ ifeq ($(XEN_OS),OpenBSD)

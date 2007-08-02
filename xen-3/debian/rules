@@ -49,9 +49,6 @@ DIR_ORIG = ../orig/xen-$(MAJOR)-$(VERSION)
 orig: $(DIR_ORIG)
 	rsync --delete --exclude debian --exclude .svn --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
 
-# This is to make dpatch-edit-patch work
-unpatch: clean                                 
-
 CONTROL_FILES += debian/changelog $(wildcard debian/templates/control.*) 
 CONTROL_FILES += $(wildcard debian/arch/defines) $(wildcard debian/arch/*/defines)
 GENCONTROL = $(__MODULES_DIR)gencontrol.py

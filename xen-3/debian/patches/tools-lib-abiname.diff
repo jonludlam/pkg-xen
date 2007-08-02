@@ -1,13 +1,5 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## libs.dpatch by Bastian Blank <waldi@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
-
-@DPATCH@
-diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
---- xen-3.0~/tools/libxc/Makefile	2007-01-23 18:26:00.000000000 +0100
-+++ xen-3.0/tools/libxc/Makefile	2007-01-23 18:29:25.464054877 +0100
+--- xen-3.orig/tools/libxc/Makefile
++++ xen-3/tools/libxc/Makefile
 @@ -1,9 +1,6 @@
  XEN_ROOT = ../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -17,40 +9,21 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
 -
  CTRL_SRCS-y       :=
  CTRL_SRCS-y       += xc_core.c
- CTRL_SRCS-y       += xc_domain.c
-@@ -30,7 +30,7 @@
- GUEST_SRCS-$(CONFIG_HVM) += xc_hvm_build.c
- 
- # symlink libelf from xen/common/libelf/
--LIBELF_SRCS := libelf-tools.c libelf-loader.c
-+LIBELF_SRCS := libelf-private.h libelf-tools.c libelf-loader.c
- LIBELF_SRCS += libelf-dominfo.c libelf-relocate.c
- 
- libelf-tools.o: libelf-tools.c libelf-private.h
-@@ -39,7 +39,7 @@
- libelf-relocate.o: libelf-relocate.c libelf-private.h
- 
- $(LIBELF_SRCS) libelf-private.h:
--	ln -s ../../xen/common/libelf/$@ $@
-+	ln -sf ../../xen/common/libelf/$@ $@
- 
- # add libelf bits to libxc
- GUEST_SRCS-y += $(LIBELF_SRCS)
-@@ -50,11 +47,9 @@
- GUEST_LIB_OBJS := $(patsubst %.c,%.o,$(GUEST_SRCS-y))
+ CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
+@@ -79,10 +76,10 @@
  GUEST_PIC_OBJS := $(patsubst %.c,%.opic,$(GUEST_SRCS-y))
  
--LIB := libxenctrl.a
+ LIB := libxenctrl.a
 -LIB += libxenctrl.so libxenctrl.so.$(MAJOR) libxenctrl.so.$(MAJOR).$(MINOR)
 +LIB += libxenctrl.so
  
--LIB += libxenguest.a
+ LIB += libxenguest.a
 -LIB += libxenguest.so libxenguest.so.$(MAJOR) libxenguest.so.$(MAJOR).$(MINOR)
 +LIB += libxenguest.so
  
  .PHONY: all
  all: build
-@@ -76,16 +71,10 @@
+@@ -104,16 +101,10 @@
  install: build
  	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
@@ -69,7 +42,7 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include
  
  .PHONY: TAGS
-@@ -113,26 +102,16 @@
+@@ -141,26 +132,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -100,9 +73,8 @@ diff -urNad xen-3.0~/tools/libxc/Makefile xen-3.0/tools/libxc/Makefile
  
  -include $(DEPS)
  
-diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
---- xen-3.0~/tools/xenstore/Makefile	2007-01-23 18:29:25.200038377 +0100
-+++ xen-3.0/tools/xenstore/Makefile	2007-01-23 18:30:04.722508377 +0100
+--- xen-3.orig/tools/xenstore/Makefile
++++ xen-3/tools/xenstore/Makefile
 @@ -2,9 +2,6 @@
  include $(XEN_ROOT)/tools/Rules.mk
  XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
@@ -140,31 +112,3 @@ diff -urNad xen-3.0~/tools/xenstore/Makefile xen-3.0/tools/xenstore/Makefile
  	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
  	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
-diff -urNad xen-3.0~/tools/xenstore/Makefile.rej xen-3.0/tools/xenstore/Makefile.rej
---- xen-3.0~/tools/xenstore/Makefile.rej	1970-01-01 01:00:00.000000000 +0100
-+++ xen-3.0/tools/xenstore/Makefile.rej	2007-01-23 18:29:25.464054877 +0100
-@@ -0,0 +1,24 @@
-+***************
-+*** 85,97 ****
-+  talloc_test.o: talloc.c
-+  	$(COMPILE.c) -o $@ $<
-+  
-+- libxenstore.so: libxenstore.so.$(MAJOR)
-+- 	ln -sf $< $@
-+- libxenstore.so.$(MAJOR): libxenstore.so.$(MAJOR).$(MINOR)
-+- 	ln -sf $< $@
-+- 
-+- libxenstore.so.$(MAJOR).$(MINOR): xs.opic xs_lib.opic
-+- 	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenstore.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
-+  
-+  libxenstore.a: xs.o xs_lib.o
-+  	$(AR) rcs libxenstore.a $^
-+--- 82,89 ----
-+  talloc_test.o: talloc.c
-+  	$(COMPILE.c) -o $@ $<
-+  
-++ libxenstore.so: xs.opic xs_lib.opic
-++ 	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
-+  
-+  libxenstore.a: xs.o xs_lib.o
-+  	$(AR) rcs libxenstore.a $^
