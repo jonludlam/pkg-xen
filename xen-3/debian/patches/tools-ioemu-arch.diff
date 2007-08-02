@@ -53,3 +53,14 @@
    *)
      cpu="unknown"
    ;;
+--- xen-3.orig/tools/Makefile
++++ xen-3/tools/Makefile
+@@ -67,7 +67,7 @@
+ export IOEMU_DIR ?= ioemu
+ ioemu ioemuinstall:
+ 	[ -f $(IOEMU_DIR)/config-host.mak ] || \
+-	  (cd $(IOEMU_DIR) && sh configure --prefix=/usr)
++	  (cd $(IOEMU_DIR) && XEN_TARGET_ARCH=$(XEN_TARGET_ARCH) sh configure --prefix=/usr)
+ 	$(MAKE) -C $(IOEMU_DIR) $(patsubst ioemu%,%,$@)
+ ioemuclean:
+ 	$(MAKE) -C $(IOEMU_DIR) distclean
