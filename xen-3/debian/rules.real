@@ -121,7 +121,6 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	  usr/lib/xen-$(VERSION)$(ABINAME)
 	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/share/xen-$(VERSION)$(ABINAME) usr/share
 	dh_pycentral
-	dh_python
 	dh_strip
 	dh_shlibdeps
 	$(MAKE) -f debian/rules.real install-base
