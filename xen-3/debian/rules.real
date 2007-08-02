@@ -76,7 +76,7 @@ install-base:
 	dh_builddeb
 
 install-docs: DIR=$(BUILD_DIR)/build-docs
-install-docs: PACKAGE_NAME = xen-docs-$(SHORT_VERSION)
+install-docs: PACKAGE_NAME = xen-docs-$(VERSION)
 install-docs: DH_OPTIONS = -p$(PACKAGE_NAME)
 install-docs: $(STAMPS_DIR)/build-docs
 	dh_testdir

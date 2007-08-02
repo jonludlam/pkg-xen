@@ -1,23 +1,22 @@
 #!/usr/bin/env python2.4
-import sys
-sys.path.append(sys.argv[2]+ "/lib/python")
-import debian_linux.gencontrol
+import os, sys
+sys.path.append(os.path.join(sys.path[0], "../lib/python"))
+from debian_xen.debian import VersionXen
+from debian_linux.gencontrol import Gencontrol as Base
 from debian_linux.config import *
 from debian_linux.debian import *
 
-class gencontrol(debian_linux.gencontrol.gencontrol):
+class Gencontrol(Base):
     makefile_targets = ('binary-arch', 'build', 'setup')
 
     def __init__(self):
-        super(gencontrol, self).__init__()
-        self.process_changelog(read_changelog())
+        super(Gencontrol, self).__init__()
+        self.process_changelog()
 
     def do_main_setup(self, vars, makeflags, extra):
         makeflags.update({
-            'MAJOR': self.version['xen']['major'],
-            'VERSION': self.version['xen']['version'],
-            'SHORT_VERSION': self.version['xen']['short_version'],
-            'EXTRAVERSION': self.version['xen']['extraversion'],
+            'MAJOR': self.version.xen_major,
+            'VERSION': self.version.xen_version,
             'ABINAME': self.abiname,
         })
 
@@ -110,63 +109,15 @@ class gencontrol(debian_linux.gencontrol.gencontrol):
         makefile.append(("setup-%s-%s-real:" % (arch, flavour), cmds_setup))
         makefile.append(("source-%s-%s-real:" % (arch, flavour)))
 
-    def process_changelog(self, changelog):
-        self.version = changelog[0]['Version']
-        self.version['xen'] = parse_version_xen(self.version['complete'])
+    def process_changelog(self):
+        changelog = Changelog(version = VersionXen)
+        self.version = changelog[0].version
         self.abiname = '-%s' % self.config['abi',]['abiname']
         self.vars = {
-            'major': self.version['xen']['major'],
-            'version': self.version['xen']['version'],
-            'short_version': self.version['xen']['short_version'],
+            'major': self.version.xen_major,
+            'version': self.version.xen_version,
             'abiname': self.abiname,
         }
 
-def parse_version_xen(version):
-    version_re = ur"""
-^
-(?P<source>
-    (?P<upstream>
-        (?P<version>
-            (?P<major>\d+\.\d+)
-            (
-                (
-                    (?P<minor>\.\d+)
-                    (
-                        (-\d+)
-                        |
-                        (~rc\d+)
-                    )
-                )
-                |
-                (?P<unstable>-unstable)
-            )
-        )
-        (?:
-            \+hg
-            (?P<hg_rev>
-                \d+
-            )
-        )?
-    )
-    -
-    (?P<debian>[^-]+)
-)
-$
-"""
-    match = re.match(version_re, version, re.X)
-    if match is None:
-        raise ValueError
-    ret = match.groupdict()
-    if ret['unstable'] is not None:
-        ret['major'] = 'unstable'
-        ret['short_version'] = ret['version']
-        ret['extraversion'] = ret['unstable']
-    else:
-        ret['version'] = ret['major'] + ret['minor']
-        ret['short_version'] = ret['major']
-        ret['extraversion'] = ret['minor']
-    del ret['unstable']
-    return ret
-
 if __name__ == '__main__':
-    gencontrol()()
+    Gencontrol()()

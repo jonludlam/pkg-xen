@@ -2,7 +2,7 @@ Package: xen-utils-@version@@abiname@
 Depends: ${shlibs:Depends}, ${python:Depends}, xen-utils-common (>= 3.0+hg11624-2), iproute, udev (>> 0.060)
 Recommends: bridge-utils, libc6-xen [i386], xen-hypervisor-@version@@abiname@
 Provides: xen-utils
-Suggests: xen-docs-@short_version@
+Suggests: xen-docs-@version@
 XB-Python-Version: ${python:Versions}
 Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
