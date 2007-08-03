@@ -7,9 +7,12 @@ xen-3 (3.1.0-1) UNRELEASED; urgency=low
   * Added graphviz to Build-Indeps
 
   [ Bastian Blank ]
-  * Upstream removed one part of the version. Do it also. 
+  * Upstream removed one part of the version. Do it also.
+  * Merge utils packages.
+  * Install blktap support.
+  * Install pygrub.
 
- -- Bastian Blank <waldi@debian.org>  Fri, 03 Aug 2007 15:24:56 +0000
+ -- Bastian Blank <waldi@debian.org>  Fri, 03 Aug 2007 23:01:21 +0000
 
 xen-3.0 (3.0.4-1-1) unstable; urgency=low
 
