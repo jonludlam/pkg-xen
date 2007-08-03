@@ -21,10 +21,3 @@ Description: XEN administrative tools
  For this to work, you will need a CPU with hardware virtualization support,
  such as Intel's CPUs with VT, or AMD's CPUs with Pacifica.
 
-Package: pygrub
-Depends: ${python:Depends}
-Recommends: xen-utils-@version@@abiname@
-XB-Python-Version: ${python:Versions}
-Description: Userspace GRUB for XEN
- Userspace GRUB for XEN
-

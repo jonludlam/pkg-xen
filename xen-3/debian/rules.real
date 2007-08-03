@@ -6,7 +6,6 @@ export DH_OPTIONS
 
 include debian/rules.defs
 
-binary-arch-arch: install-utils-pygrub_$(ARCH)
 binary-arch-arch: install-utils-ioemu_$(ARCH)
 binary-arch-arch: install-utils-utils_$(ARCH)
 binary-arch-flavour: install-hypervisor_$(ARCH)_$(FLAVOUR)
@@ -104,20 +103,6 @@ install-utils-temp_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	dh_testroot
 	@rm -rf $(DIR)
 	$(MAKE) -C $(SOURCE_DIR)/tools install DESTDIR=$(CURDIR)/$(DIR) DISTDIR=$(CURDIR)/$(DIR) XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME)
-
-install-utils-pygrub_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
-install-utils-pygrub_$(ARCH): PACKAGE_NAME = pygrub
-install-utils-pygrub_$(ARCH): LIBDIR = usr/lib/pygrub
-install-utils-pygrub_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
-install-utils-pygrub_$(ARCH): install-utils-temp_$(ARCH)
-	dh_testdir
-	dh_testroot
-	dh_clean -k
-	dh_install --sourcedir=$(DIR) $(LIBDIR)
-	dh_pycentral
-	dh_strip
-	dh_shlibdeps
-	$(MAKE) -f debian/rules.real install-base
 
 install-utils-ioemu_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 install-utils-ioemu_$(ARCH): PACKAGE_NAME = xen-ioemu-$(VERSION)$(ABINAME)
