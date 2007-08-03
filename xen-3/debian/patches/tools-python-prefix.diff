@@ -1,0 +1,42 @@
+--- xen-3.orig/tools/python/xen/util/auxbin.py
++++ xen-3/tools/python/xen/util/auxbin.py
+@@ -16,18 +16,11 @@
+ #============================================================================
+ 
+ 
+-LIB_32 = "/usr/lib"
+-LIB_64 = "/usr/lib64"
+-LIB_BIN_SUFFIX = "xen/bin"
+-
+-## The architectures on which the LIB_64 directory is used.  This
+-# deliberately excludes ia64 and ppc64, and Solaris.
+-LIB_64_ARCHS = [ 'x86_64', 's390x', 'sparc64']
+-
+-
+ import os
+ import os.path
++import sys
+ 
++_path = sys.path[0]
+ 
+ def execute(exe, args = None):
+     exepath = pathTo(exe)
+@@ -42,12 +35,12 @@
+ 
+ 
+ def path():
+-    return os.path.join(libpath(), LIB_BIN_SUFFIX)
++    return _path
++
++
++def root():
++    return os.path.realpath(os.path.join(path(), '..'))
+ 
+ 
+ def libpath():
+-    machine = os.uname()[4]
+-    if machine in LIB_64_ARCHS and os.path.exists(LIB_64):
+-        return LIB_64
+-    else:
+-        return LIB_32
++    return os.path.realpath(os.path.join(path(), '../lib'))

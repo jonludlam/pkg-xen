@@ -1,7 +1,8 @@
 config-prefix.diff
 tools-rpath.diff
 tools-prefix.diff
-tools-prefix-python.diff
+tools-misc-prefix.diff
+tools-python-prefix.diff
 tools-ldflags.diff
 version.patch
 tools-lib-abiname.diff
