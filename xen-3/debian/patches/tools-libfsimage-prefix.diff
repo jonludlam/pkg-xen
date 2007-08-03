@@ -13,3 +13,41 @@
  
  FSLIB = fsimage.so
  
+--- xen-3.orig/tools/libfsimage/common/Makefile
++++ xen-3/tools/libfsimage/common/Makefile
+@@ -1,7 +1,7 @@
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-CFLAGS += -Werror -Wp,-MD,.$(@F).d
++CFLAGS += -Werror -Wp,-MD,.$(@F).d -DLIBDIR="\"$(LIBDIR)\""
+ DEPS = .*.d
+ 
+ LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
+--- xen-3.orig/tools/libfsimage/common/fsimage_plugin.c
++++ xen-3/tools/libfsimage/common/fsimage_plugin.c
+@@ -131,23 +131,8 @@
+ 	int err;
+ 	int ret = -1;
+ 
+-#ifdef __sun__
+ 	if (fsdir == NULL)
+-		fsdir = "/usr/lib/fs";
+-
+-	if (sizeof(void *) == 8)
+-		isadir = "64/";
+-#elif defined(__ia64__)
+-	if (fsdir == NULL)
+-		fsdir = "/usr/lib/fs";
+-#else
+-	if (fsdir == NULL) {
+-		if (sizeof(void *) == 8)
+-			fsdir = "/usr/lib64/fs";
+-		else
+-			fsdir = "/usr/lib/fs";
+-	}
+-#endif
++		fsdir = "/usr/" LIBDIR "/fs";
+ 
+ 	if ((name_max = pathconf(fsdir, _PC_NAME_MAX)) == -1)
+ 		goto fail;
