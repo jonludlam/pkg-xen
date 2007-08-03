@@ -2,12 +2,14 @@ xen-3 (3.1.0-1) UNRELEASED; urgency=low
 
   [ Julien Danjou ]
   * New upstream version.
-  * Update some dpatches, fix pygrub, thanks to Peter Siering
 
   [ Ralph Passgang ]
-  * added graphviz to Build-Indeps
+  * Added graphviz to Build-Indeps
 
- -- Julien Danjou <acid@debian.org>  Tue, 19 Jun 2007 20:55:15 +0200
+  [ Bastian Blank ]
+  * Upstream removed one part of the version. Do it also. 
+
+ -- Bastian Blank <waldi@debian.org>  Fri, 03 Aug 2007 15:24:56 +0000
 
 xen-3.0 (3.0.4-1-1) unstable; urgency=low
 
