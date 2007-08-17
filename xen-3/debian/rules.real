@@ -58,9 +58,16 @@ $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/setup-hyperviso
 	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=$(XEN_ARCH) $(CONFIG)
 	touch $@
 
+$(STAMPS_DIR)/build-utils_$(ARCH) \
+install-utils_$(ARCH): CONFIG = \
+		XEN_COMPILE_ARCH=$(XEN_ARCH) \
+		XEN_TARGET_ARCH=$(XEN_ARCH) \
+		XEN_VERSION=$(VERSION)$(ABINAME) \
+		XENFB_TOOLS=y
+
 $(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
-	$(MAKE) -C $(DIR)/tools XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME)
+	$(MAKE) -C $(DIR)/tools $(CONFIG)
 	touch $@
 
 install-base:
@@ -105,7 +112,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	dh_testroot
 	dh_clean -k
 	@rm -rf $(DIR)
-	$(MAKE) -C $(SOURCE_DIR)/tools install DESTDIR=$(CURDIR)/$(DIR) DISTDIR=$(CURDIR)/$(DIR) XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION=$(VERSION)$(ABINAME)
+	$(MAKE) -C $(SOURCE_DIR)/tools install DESTDIR=$(CURDIR)/$(DIR) DISTDIR=$(CURDIR)/$(DIR) $(CONFIG)
 	install -D -m644 debian/xen-utils.NEWS $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/NEWS
 	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
 	dh_install --sourcedir=$(DIR) usr/lib
