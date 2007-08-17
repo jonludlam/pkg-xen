@@ -1,0 +1,13 @@
+# Wait a little bit before starting xenconsoled.
+
+--- xen-3.orig/tools/misc/xend
++++ xen-3/tools/misc/xend
+@@ -78,6 +78,8 @@
+         execute('xenstored', args)
+ 
+ def start_consoled():
++    import time
++    time.sleep(2)
+     if os.fork() == 0:
+         execute('xenconsoled')
+ 
