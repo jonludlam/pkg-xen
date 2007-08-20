@@ -1,4 +1,4 @@
-xen-3 (3.1.0-1) UNRELEASED; urgency=low
+xen-3 (3.1.0-1) unstable; urgency=low
 
   [ Julien Danjou ]
   * New upstream version.
@@ -14,7 +14,7 @@ xen-3 (3.1.0-1) UNRELEASED; urgency=low
   * Install xenfb tools.
   * xenconsoled startup is racy, wait a little bit.
 
- -- Bastian Blank <waldi@debian.org>  Fri, 17 Aug 2007 17:08:58 +0000
+ -- Bastian Blank <waldi@debian.org>  Mon, 20 Aug 2007 15:05:08 +0000
 
 xen-3.0 (3.0.4-1-1) unstable; urgency=low
 
