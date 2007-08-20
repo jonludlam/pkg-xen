@@ -1,3 +1,10 @@
+xen-3 (3.1.0-2) UNRELEASED; urgency=low
+
+  * Switch to texlive for documentation.
+  * Drop unused transfig.
+
+ -- Bastian Blank <waldi@debian.org>  Mon, 20 Aug 2007 15:45:09 +0000
+
 xen-3 (3.1.0-1) unstable; urgency=low
 
   [ Julien Danjou ]
