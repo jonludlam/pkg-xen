@@ -31,7 +31,7 @@ maintainerclean:
 
 clean: debian/control
 	dh_testdir
-	rm -rf $(BUILD_DIR) $(STAMPS_DIR)
+	rm -rf $(BUILD_DIR) $(STAMPS_DIR) debian/lib/python/debian_xen/*.pyc
 	dh_clean
 
 binary-indep:
