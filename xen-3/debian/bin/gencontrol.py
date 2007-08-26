@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.4
+#!/usr/bin/env python
 import os, sys
 sys.path.append(os.path.join(sys.path[0], "../lib/python"))
 from debian_xen.debian import VersionXen
