@@ -11,7 +11,7 @@
 -    sys.exit(1)
 -
 -sys.path.append(result[1])
-+sys.path.append(sys.path[0] + '/../lib/python')
++sys.path.insert(1, sys.path[0] + '/../lib/python')
  
  from xen.xend.server import SrvDaemon
 +from xen.util.auxbin import execute
@@ -55,7 +55,7 @@
 -# add fallback path for non-native python path installs if needed
 -sys.path.append('/usr/lib/python')
 -sys.path.append('/usr/lib64/python')
-+sys.path.append(sys.path[0] + '/../lib/python')
++sys.path.insert(1, sys.path[0] + '/../lib/python')
  from xen.xm import main
  
  main.main(sys.argv)

@@ -23,7 +23,7 @@
  import getopt
  
 -sys.path = [ '/usr/lib/python' ] + sys.path
-+sys.path.append(sys.path[0] + '/../lib/python')
++sys.path.insert(1, sys.path[0] + '/../lib/python')
  
  import fsimage
  import grub.GrubConf
