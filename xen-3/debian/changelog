@@ -1,11 +1,11 @@
-xen-3 (3.1.0-2) UNRELEASED; urgency=low
+xen-3 (3.1.0-2) unstable; urgency=low
 
   * Switch to texlive for documentation.
   * Drop unused transfig.
   * Drop unused latex features from documentation.
   * Build depend against gcc-multilib for amd64. (closes: #439662)
 
- -- Bastian Blank <waldi@debian.org>  Sun, 26 Aug 2007 12:18:53 +0000
+ -- Bastian Blank <waldi@debian.org>  Fri, 31 Aug 2007 08:15:50 +0000
 
 xen-3 (3.1.0-1) unstable; urgency=low
 
