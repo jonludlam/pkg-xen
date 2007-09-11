@@ -1,3 +1,11 @@
+xen-unstable (3.0-unstable+hg15837-1) UNRELEASED; urgency=low
+
+  * New upstream snapshot.
+  * Don't longer try to maintain binary compatibility between unstable
+    snapshots.
+
+ -- Bastian Blank <waldi@debian.org>  Tue, 11 Sep 2007 12:36:42 +0000
+
 xen-unstable (3.0-unstable+hg11561-1) unstable; urgency=low
 
   * New upstream snapshot.

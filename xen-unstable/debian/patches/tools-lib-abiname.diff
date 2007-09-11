@@ -1,0 +1,206 @@
+--- xen-3.orig/tools/libxc/Makefile
++++ xen-3/tools/libxc/Makefile
+@@ -1,9 +1,6 @@
+ XEN_ROOT = ../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR    = 3.0
+-MINOR    = 0
+-
+ CTRL_SRCS-y       :=
+ CTRL_SRCS-y       += xc_core.c
+ CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
+@@ -79,10 +76,10 @@
+ GUEST_PIC_OBJS := $(patsubst %.c,%.opic,$(GUEST_SRCS-y))
+ 
+ LIB := libxenctrl.a
+-LIB += libxenctrl.so libxenctrl.so.$(MAJOR) libxenctrl.so.$(MAJOR).$(MINOR)
++LIB += libxenctrl.so
+ 
+ LIB += libxenguest.a
+-LIB += libxenguest.so libxenguest.so.$(MAJOR) libxenguest.so.$(MAJOR).$(MINOR)
++LIB += libxenguest.so
+ 
+ .PHONY: all
+ all: build
+@@ -104,16 +101,10 @@
+ install: build
+ 	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
+ 	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
+-	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so.$(MAJOR)
+-	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so
++	$(INSTALL_DATA) libxenctrl.so $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) xenctrl.h $(DESTDIR)/usr/include
+ 
+-	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_DATA) libxenguest.a $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so.$(MAJOR)
+-	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so
++	$(INSTALL_DATA) libxenguest.so $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include
+ 
+ .PHONY: TAGS
+@@ -141,26 +132,16 @@
+ libxenctrl.a: $(CTRL_LIB_OBJS)
+ 	$(AR) rc $@ $^
+ 
+-libxenctrl.so: libxenctrl.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenctrl.so.$(MAJOR): libxenctrl.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
++libxenctrl.so: $(CTRL_PIC_OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
+ 
+ # libxenguest
+ 
+ libxenguest.a: $(GUEST_LIB_OBJS)
+ 	$(AR) rc $@ $^
+ 
+-libxenguest.so: libxenguest.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenguest.so.$(MAJOR): libxenguest.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl -lpthread
++libxenguest.so: $(GUEST_PIC_OBJS) libxenctrl.so
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl -lpthread
+ 
+ -include $(DEPS)
+ 
+--- xen-3.orig/tools/xenstore/Makefile
++++ xen-3/tools/xenstore/Makefile
+@@ -2,9 +2,6 @@
+ include $(XEN_ROOT)/tools/Rules.mk
+ XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
+ 
+-MAJOR = 3.0
+-MINOR = 0
+-
+ PROFILE=#-pg
+ BASECFLAGS=-Werror
+ # Make gcc generate dependencies.
+@@ -85,13 +82,8 @@
+ talloc_test.o: talloc.c
+ 	$(COMPILE.c) -o $@ $<
+ 
+-libxenstore.so: libxenstore.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenstore.so.$(MAJOR): libxenstore.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenstore.so.$(MAJOR).$(MINOR): xs.opic xs_lib.opic
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenstore.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
++libxenstore.so: xs.opic xs_lib.opic
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
+ 
+ libxenstore.a: xs.o xs_lib.o
+ 	$(AR) rcs libxenstore.a $^
+@@ -177,9 +169,7 @@
+ 	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
+-	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so
++	$(INSTALL_DATA) libxenstore.so $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
+--- xen-3.orig/tools/blktap/lib/Makefile
++++ xen-3/tools/blktap/lib/Makefile
+@@ -1,9 +1,7 @@
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR    = 3.0
+-MINOR    = 0
+-SONAME   = libblktap.so.$(MAJOR)
++SONAME   = libblktap.so
+ 
+ BLKTAP_INSTALL_DIR = /usr/$(BINDIR)
+ 
+@@ -28,7 +26,7 @@
+ OBJS     = $(patsubst %.c,%.o,$(SRCS))
+ IBINS   :=
+ 
+-LIB      = libblktap.a libblktap.so.$(MAJOR).$(MINOR)
++LIB      = libblktap.a libblktap.so
+ 
+ .PHONY: all
+ all: build
+@@ -43,19 +41,15 @@
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/include
+ 	$(INSTALL_PROG) $(LIB) $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libblktap.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libblktap.so.$(MAJOR)
+-	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libblktap.so
+ 	$(INSTALL_PROG) blktaplib.h $(DESTDIR)/usr/include
+ 
+ clean:
+ 	rm -rf *.a *.so* *.o *.rpm $(LIB) *~ $(DEPS) xen TAGS
+ 
+ libblktap.a: $(OBJS) 
+-	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,$(SONAME) $(SHLIB_CFLAGS) \
++	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
+ 	      -L$(XEN_XENSTORE) -l xenstore                                \
+-	      -o libblktap.so.$(MAJOR).$(MINOR) $^ $(LIBS)
+-	ln -sf libblktap.so.$(MAJOR).$(MINOR) libblktap.so.$(MAJOR)
+-	ln -sf libblktap.so.$(MAJOR) libblktap.so
++	      -o libblktap.so $^ $(LIBS)
+ 	$(AR) rc $@ libblktap.so
+ 
+ .PHONY: TAGS all build clean install libblktap
+--- xen-3.orig/tools/libfsimage/common/Makefile
++++ xen-3/tools/libfsimage/common/Makefile
+@@ -1,9 +1,6 @@
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR = 1.0
+-MINOR = 0
+-
+ CFLAGS += -Werror -Wp,-MD,.$(@F).d
+ DEPS = .*.d
+ 
+@@ -15,7 +12,7 @@
+ 
+ PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
+ 
+-LIB = libfsimage.so libfsimage.so.$(MAJOR) libfsimage.so.$(MAJOR).$(MINOR)
++LIB = libfsimage.so
+ 
+ .PHONY: all
+ all: $(LIB)
+@@ -24,9 +21,7 @@
+ install: all
+ 	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
+ 	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
+-	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libfsimage.so.$(MAJOR)
+-	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libfsimage.so
++	$(INSTALL_PROG) libfsimage.so $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) fsimage.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) fsimage_plugin.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) fsimage_grub.h $(DESTDIR)/usr/include
+@@ -34,13 +29,8 @@
+ clean distclean:
+ 	rm -f $(PIC_OBJS) $(LIB)
+ 
+-libfsimage.so: libfsimage.so.$(MAJOR)
+-	ln -sf $< $@
+-libfsimage.so.$(MAJOR): libfsimage.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libfsimage.so.$(MAJOR).$(MINOR): $(PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libfsimage.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
++libfsimage.so: $(PIC_OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ -lpthread
+ 
+ -include $(DEPS)
+ 

@@ -1,0 +1,61 @@
+--- xen-3.orig/tools/misc/xend
++++ xen-3/tools/misc/xend
+@@ -31,15 +31,10 @@
+ import time
+ import commands
+ 
+-result = commands.getstatusoutput(os.path.join(os.path.dirname(sys.argv[0]),
+-                                               'xen-python-path'))
+-if result[0] != 0:
+-    print >>sys.stderr, result[1]
+-    sys.exit(1)
+-
+-sys.path.append(result[1])
++sys.path.insert(1, sys.path[0] + '/../lib/python')
+ 
+ from xen.xend.server import SrvDaemon
++from xen.util.auxbin import execute
+ 
+ class CheckError(ValueError):
+     pass
+@@ -76,19 +71,19 @@
+         raise CheckError("invalid user")
+ 
+ def start_xenstored():
+-    XENSTORED_TRACE = os.getenv("XENSTORED_TRACE")
+-    cmd = "xenstored --pid-file /var/run/xenstore.pid"
+-    if XENSTORED_TRACE:
+-        cmd += " -T /var/log/xen/xenstored-trace.log"
+-    s,o = commands.getstatusoutput(cmd)
++    args = ["--pid-file", "/var/run/xenstore.pid"]
++    if os.getenv("XENSTORED_TRACE"):
++        args.extend(["-T", "/var/log/xen/xenstored-trace.log"])
++    if os.fork() == 0:
++        execute('xenstored', args)
+ 
+ def start_consoled():
+     if os.fork() == 0:
+-        os.execvp('xenconsoled', ['xenconsoled'])
++        execute('xenconsoled')
+ 
+ def start_blktapctrl():
+     if os.fork() == 0:
+-        os.execvp('blktapctrl', ['blktapctrl'])
++        execute('blktapctrl')
+             
+ def main():
+     try:
+--- xen-3.orig/tools/misc/xm
++++ xen-3/tools/misc/xm
+@@ -1,10 +1,7 @@
+ #!/usr/bin/env python
+ #  -*- mode: python; -*-
+ import sys
+-
+-# add fallback path for non-native python path installs if needed
+-sys.path.append('/usr/lib/python')
+-sys.path.append('/usr/lib64/python')
++sys.path.insert(1, sys.path[0] + '/../lib/python')
+ from xen.xm import main
+ 
+ main.main(sys.argv)

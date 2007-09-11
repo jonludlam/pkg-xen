@@ -1,4 +1,4 @@
-Package: xen-docs-@short_version@
+Package: xen-docs-@version@
 Architecture: all
 Description: documentation for XEN, a Virtual Machine Monitor
  This package contains all the large documentation files for XEN.  This

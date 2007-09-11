@@ -1,0 +1,25 @@
+--- xen-3.orig/tools/misc/Makefile
++++ xen-3/tools/misc/Makefile
+@@ -20,22 +20,15 @@
+ 
+ .PHONY: build
+ build: $(TARGETS)
+-	$(MAKE) -C miniterm
+-	$(MAKE) -C lomount
+ 
+ .PHONY: install
+ install: build
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_PROG) $(INSTALL_TARGETS) $(DESTDIR)/usr/$(BINDIR)
+-	$(MAKE) -C lomount install
+-#       No sense in installing miniterm on the Xen box.
+-#	$(MAKE) -C miniterm install
+ 
+ .PHONY: clean
+ clean:
+ 	$(RM) *.o $(TARGETS) *~
+-	$(MAKE) -C miniterm clean
+-	$(MAKE) -C lomount clean
+ 
+ %.o: %.c $(HDRS) Makefile
+ 	$(CC) -c $(CFLAGS) -o $@ $<

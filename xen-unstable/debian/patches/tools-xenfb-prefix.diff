@@ -1,0 +1,34 @@
+--- xen-3.orig/tools/xenfb/Makefile
++++ xen-3/tools/xenfb/Makefile
+@@ -3,6 +3,7 @@
+ 
+ CFLAGS  += -I$(XEN_LIBXC) -I$(XEN_XENSTORE)
+ CFLAGS  += -I$(XEN_ROOT)/linux-2.6-xen-sparse/include -I$(XEN_ROOT)/tools/ioemu
++CFLAGS  += -DSHAREDIR="\"share/xen-$(XEN_VERSION)\""
+ LDFLAGS += -L$(XEN_LIBXC) -L$(XEN_XENSTORE)
+ 
+ .PHONY: all
+@@ -13,9 +14,9 @@
+ 	$(MAKE) vncfb sdlfb
+ 
+ install: all
+-	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)/xen/bin
+-	$(INSTALL_PROG) vncfb $(DESTDIR)/usr/$(LIBDIR)/xen/bin/xen-vncfb
+-	$(INSTALL_PROG) sdlfb $(DESTDIR)/usr/$(LIBDIR)/xen/bin/xen-sdlfb
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) vncfb $(DESTDIR)/usr/$(BINDIR)/xen-vncfb
++	$(INSTALL_PROG) sdlfb $(DESTDIR)/usr/$(BINDIR)/xen-sdlfb
+ 
+ sdlfb: sdlfb.o xenfb.o
+ 
+--- xen-3.orig/tools/xenfb/vncfb.c
++++ xen-3/tools/xenfb/vncfb.c
+@@ -13,7 +13,7 @@
+ 
+ /* Grab key translation support routines from qemu directory. */
+ #define qemu_mallocz(size) calloc(1, (size))
+-static const char *bios_dir = "/usr/share/xen/qemu";
++static const char *bios_dir = "/usr/" SHAREDIR "/qemu";
+ #include "vnc_keysym.h"
+ #include "keymaps.c"
+ 

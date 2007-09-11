@@ -1,0 +1,242 @@
+--- xen-3.orig/tools/blktap/drivers/Makefile
++++ xen-3/tools/blktap/drivers/Makefile
+@@ -5,7 +5,7 @@
+ 
+ IBIN         = blktapctrl tapdisk
+ QCOW_UTIL    = img2qcow qcow2raw qcow-create
+-INST_DIR     = /usr/sbin
++INST_DIR     = /usr/$(BINDIR)
+ LIBAIO_DIR   = ../../libaio/src
+ 
+ CFLAGS   += -Werror
+@@ -55,6 +55,7 @@
+ 	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(AIOLIBS) $(LIBS)
+ 
+ install: all
++	$(INSTALL_DIR) $(DESTDIR)$(INST_DIR)
+ 	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(INST_DIR)
+ 
+ clean:
+--- xen-3.orig/tools/console/Makefile
++++ xen-3/tools/console/Makefile
+@@ -2,8 +2,7 @@
+ XEN_ROOT=../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-DAEMON_INSTALL_DIR = /usr/sbin
+-CLIENT_INSTALL_DIR = /usr/$(LIBDIR)/xen/bin
++DIR = /usr/$(BINDIR)
+ 
+ CFLAGS  += -Werror
+ 
+@@ -30,7 +29,5 @@
+ 
+ .PHONY: install
+ install: $(BIN)
+-	$(INSTALL_DIR) $(DESTDIR)/$(DAEMON_INSTALL_DIR)
+-	$(INSTALL_PROG) xenconsoled $(DESTDIR)/$(DAEMON_INSTALL_DIR)
+-	$(INSTALL_DIR) $(DESTDIR)/$(CLIENT_INSTALL_DIR)
+-	$(INSTALL_PROG) xenconsole $(DESTDIR)/$(CLIENT_INSTALL_DIR)
++	$(INSTALL_DIR) $(DESTDIR)/$(DIR)
++	$(INSTALL_PROG) xenconsole xenconsoled $(DESTDIR)/$(DIR)
+--- xen-3.orig/tools/misc/Makefile
++++ xen-3/tools/misc/Makefile
+@@ -13,8 +13,7 @@
+ TARGETS-$(CONFIG_X86) += xen-detect
+ TARGETS := $(TARGETS-y)
+ 
+-INSTALL_BIN  = $(TARGETS) xencons
+-INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf
++INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend
+ 
+ .PHONY: all
+ all: build
+@@ -26,10 +25,8 @@
+ 
+ .PHONY: install
+ install: build
+-	[ -d $(DESTDIR)/usr/bin ] || $(INSTALL_DIR) $(DESTDIR)/usr/bin
+-	[ -d $(DESTDIR)/usr/sbin ] || $(INSTALL_DIR) $(DESTDIR)/usr/sbin
+-	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)/usr/bin
+-	$(INSTALL_PROG) $(INSTALL_SBIN) $(DESTDIR)/usr/sbin
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) $(INSTALL_TARGETS) $(DESTDIR)/usr/$(BINDIR)
+ 	$(MAKE) -C lomount install
+ #       No sense in installing miniterm on the Xen box.
+ #	$(MAKE) -C miniterm install
+--- xen-3.orig/tools/misc/lomount/Makefile
++++ xen-3/tools/misc/lomount/Makefile
+@@ -16,7 +16,7 @@
+ 
+ .PHONY: install
+ install: build
+-	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/bin
++	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/$(BINDIR)
+ 
+ .PHONY: clean
+ clean:
+--- xen-3.orig/tools/python/Makefile
++++ xen-3/tools/python/Makefile
+@@ -16,7 +16,7 @@
+ 
+ .PHONY: build buildpy
+ buildpy:
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py build
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py build
+ 
+ build: buildpy refresh-pot refresh-po $(CATALOGS)
+ 
+@@ -57,10 +57,10 @@
+ ifndef XEN_PYTHON_NATIVE_INSTALL
+ install: LIBPATH=$(shell PYTHONPATH=xen/util python -c "import auxbin; print auxbin.libpath()")
+ install: install-messages install-dtd
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py install --home="$(DESTDIR)/usr" --prefix="" --force --install-lib="$(DESTDIR)$(LIBPATH)/python"
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py install --home="$(DESTDIR)/usr/$(LIBDIR)" --install-lib=$(DESTDIR)/usr/$(LIBDIR)/python --force
+ else
+ install: install-messages install-dtd
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py install --root="$(DESTDIR)" --force
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py install --root="$(DESTDIR)" --force
+ endif
+ 
+ install-dtd: all
+--- xen-3.orig/tools/xcutils/Makefile
++++ xen-3/tools/xcutils/Makefile
+@@ -11,7 +11,7 @@
+ XEN_ROOT	= ../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-PROGRAMS_INSTALL_DIR = /usr/$(LIBDIR)/xen/bin
++PROGRAMS_INSTALL_DIR = /usr/$(BINDIR)
+ 
+ INCLUDES += -I $(XEN_LIBXC) -I $(XEN_XENSTORE)
+ 
+--- xen-3.orig/tools/xenmon/Makefile
++++ xen-3/tools/xenmon/Makefile
+@@ -13,8 +13,6 @@
+ XEN_ROOT=../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-sbindir=/usr/sbin
+-
+ CFLAGS  += -Werror
+ CFLAGS  += -I $(XEN_XC)
+ CFLAGS  += -I $(XEN_LIBXC)
+@@ -31,10 +29,8 @@
+ 
+ .PHONY: install
+ install: build
+-	[ -d $(DESTDIR)$(sbindir) ] || $(INSTALL_DIR) $(DESTDIR)$(sbindir)
+-	$(INSTALL_PROG) xenbaked $(DESTDIR)$(sbindir)/xenbaked
+-	$(INSTALL_PROG) xentrace_setmask  $(DESTDIR)$(sbindir)/xentrace_setmask
+-	$(INSTALL_PROG) xenmon.py  $(DESTDIR)$(sbindir)/xenmon.py
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) xenbaked xenmon.py xentrace_setmask $(DESTDIR)/usr/$(BINDIR)
+ 
+ .PHONY: clean
+ clean:
+--- xen-3.orig/tools/xenstat/xentop/Makefile
++++ xen-3/tools/xenstat/xentop/Makefile
+@@ -21,7 +21,6 @@
+ prefix=/usr
+ mandir=$(prefix)/share/man
+ man1dir=$(mandir)/man1
+-sbindir=$(prefix)/sbin
+ 
+ CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
+ LDFLAGS += -L$(XEN_LIBXENSTAT)
+@@ -33,7 +32,7 @@
+ 
+ .PHONY: install
+ install: xentop xentop.1
+-	$(INSTALL_PROG) xentop $(DESTDIR)$(sbindir)/xentop
++	$(INSTALL_PROG) -D xentop $(DESTDIR)/usr/$(BINDIR)/xentop
+ 	$(INSTALL_DIR) $(DESTDIR)$(man1dir)
+ 	$(INSTALL_DATA) xentop.1 $(DESTDIR)$(man1dir)/xentop.1
+ 
+--- xen-3.orig/tools/xenstore/Makefile
++++ xen-3/tools/xenstore/Makefile
+@@ -170,13 +170,9 @@
+ install: all
+ 	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
+ 	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
+-	$(INSTALL_DIR) $(DESTDIR)/usr/bin
+-	$(INSTALL_DIR) $(DESTDIR)/usr/sbin
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/include
+-	$(INSTALL_PROG) xenstored $(DESTDIR)/usr/sbin
+-	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)/usr/bin
+-	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/bin
+-	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/bin
++	$(INSTALL_PROG) xenstore-control xenstore-ls xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+ 	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
+--- xen-3.orig/tools/xentrace/Makefile
++++ xen-3/tools/xentrace/Makefile
+@@ -35,15 +35,11 @@
+ 
+ .PHONY: install
+ install: build
+-	[ -d $(DESTDIR)/usr/bin ] || $(INSTALL_DIR) $(DESTDIR)/usr/bin
+-	[ -z "$(LIBBIN)" ] || [ -d $(DESTDIR)/usr/$(LIBDIR)/xen/bin ] || \
+-		$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)/xen/bin
+-	[ -d $(DESTDIR)/usr/share/man/man1 ] || \
+-		$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man1
+-	[ -d $(DESTDIR)/usr/share/man/man8 ] || \
+-		$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man8
+-	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/bin
+-	[ -z "$(LIBBIN)" ] || $(INSTALL_PROG) $(LIBBIN) $(DESTDIR)/usr/$(LIBDIR)/xen/bin
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man1
++	$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man8
++	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/$(BINDIR)
++	[ -z "$(LIBBIN)" ] || $(INSTALL_PROG) $(LIBBIN) $(DESTDIR)/usr/$(BINDIR)
+ 	$(INSTALL_DATA) $(MAN1) $(DESTDIR)/usr/share/man/man1
+ 	$(INSTALL_DATA) $(MAN8) $(DESTDIR)/usr/share/man/man8
+ 
+--- xen-3.orig/tools/ioemu/Makefile.target
++++ xen-3/tools/ioemu/Makefile.target
+@@ -192,6 +192,7 @@
+ ifdef CONFIG_SOLARIS
+ LIBS+=-lsocket -lnsl -lresolv
+ endif
++LIBS+=$(RPATH_ARG)
+ 
+ # profiling code
+ ifdef TARGET_GPROF
+--- xen-3.orig/tools/ioemu/configure
++++ xen-3/tools/ioemu/configure
+@@ -514,9 +514,9 @@
+     prefix="/usr/local"
+ fi
+ mandir="$prefix/share/man"
+-datadir="$prefix/share/xen/qemu"
++datadir="$prefix/share/xen-$XEN_VERSION/qemu"
+ docdir="$prefix/share/doc/qemu"
+-bindir="$prefix/$libdir/xen/bin"
++bindir="$prefix/lib/xen-$XEN_VERSION/bin"
+ configdir="/etc/xen"
+ fi
+ 
+--- xen-3.orig/tools/firmware/Makefile
++++ xen-3/tools/firmware/Makefile
+@@ -4,7 +4,7 @@
+ # hvmloader is a 32-bit protected mode binary.
+ # It belongs in /usr/lib, not /usr/lib64.
+ TARGET      := hvmloader/hvmloader
+-INST_DIR := $(DESTDIR)/usr/lib/xen/boot
++INST_DIR := $(DESTDIR)/usr/$(PREFIX)/boot
+ 
+ SUBDIRS :=
+ SUBDIRS += rombios rombios/32bit
+--- xen-3.orig/tools/blktap/lib/Makefile
++++ xen-3/tools/blktap/lib/Makefile
+@@ -5,7 +5,7 @@
+ MINOR    = 0
+ SONAME   = libblktap.so.$(MAJOR)
+ 
+-BLKTAP_INSTALL_DIR = /usr/sbin
++BLKTAP_INSTALL_DIR = /usr/$(BINDIR)
+ 
+ INCLUDES += -I. -I.. -I $(XEN_LIBXC) -I $(XEN_XENSTORE)
+ 

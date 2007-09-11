@@ -1,5 +1,10 @@
+DEB_HOST_ARCH     := $(shell dpkg-architecture -a$(ARCH) -qDEB_HOST_ARCH)
+DEB_HOST_GNU_TYPE := $(shell dpkg-architecture -a$(ARCH) -qDEB_HOST_GNU_TYPE)
+DEB_BUILD_ARCH    := $(shell dpkg-architecture -a$(ARCH) -qDEB_BUILD_ARCH)
+
+export DH_OPTIONS
+
 include debian/rules.defs
-include /usr/src/linux-support-$(KERNELVERSION)/modules/rules.real.include
 
 binary-arch-arch: install-utils_$(ARCH)
 binary-arch-flavour: install-hypervisor_$(ARCH)_$(FLAVOUR)
@@ -18,7 +23,7 @@ $(STAMPS_DIR)/source:
 	@rm -rf $(DIR)
 	mkdir $(DIR)
 	cp -a $(srcfiles) $(DIR)
-	dpatch -d $(DIR) apply-all
+	cd $(DIR); QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
 	touch $@
 
 $(STAMPS_DIR)/setup-docs: SOURCE_DIR=$(BUILD_DIR)/source
@@ -53,9 +58,16 @@ $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/setup-hyperviso
 	$(MAKE) -C $(DIR)/xen XEN_TARGET_ARCH=$(XEN_ARCH) $(CONFIG)
 	touch $@
 
+$(STAMPS_DIR)/build-utils_$(ARCH) \
+install-utils_$(ARCH): CONFIG = \
+		XEN_COMPILE_ARCH=$(XEN_ARCH) \
+		XEN_TARGET_ARCH=$(XEN_ARCH) \
+		XEN_VERSION=$(VERSION)$(ABINAME) \
+		XENFB_TOOLS=y
+
 $(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
-	$(MAKE) -C $(DIR)/tools XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION_TOOLS=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(SHORT_VERSION)
+	$(MAKE) -C $(DIR)/tools $(CONFIG)
 	touch $@
 
 install-base:
@@ -69,7 +81,7 @@ install-base:
 	dh_builddeb
 
 install-docs: DIR=$(BUILD_DIR)/build-docs
-install-docs: PACKAGE_NAME = xen-docs-$(SHORT_VERSION)
+install-docs: PACKAGE_NAME = xen-docs-$(VERSION)
 install-docs: DH_OPTIONS = -p$(PACKAGE_NAME)
 install-docs: $(STAMPS_DIR)/build-docs
 	dh_testdir
@@ -90,26 +102,22 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)$(ABINAME)-$(FLAVOUR).gz
 	$(MAKE) -f debian/rules.real install-base
 
-install-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
-install-utils_$(ARCH): PACKAGE_NAME_UTILS = xen-utils-$(VERSION)$(ABINAME)
-install-utils_$(ARCH): PACKAGE_NAME_IOEMU = xen-ioemu-$(SHORT_VERSION)
-install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME_UTILS) -p$(PACKAGE_NAME_IOEMU)
+install-utils_$(ARCH): SOURCE_DIR = $(BUILD_DIR)/build-utils_$(ARCH)
+install-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
+install-utils_$(ARCH): PACKAGE_NAME = xen-utils-$(VERSION)$(ABINAME)
+install-utils_$(ARCH): PACKAGE_DIR = debian/$(PACKAGE_NAME)
+install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	install -D -m644 debian/xen-utils.NEWS debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/NEWS
-	install -D -m644 debian/xen-utils.README.Debian debian/$(PACKAGE_NAME_UTILS)/usr/share/doc/$(PACKAGE_NAME_UTILS)/README.Debian
-	$(MAKE) -C $(DIR)/tools install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp XEN_COMPILE_ARCH=$(XEN_ARCH) XEN_TARGET_ARCH=$(XEN_ARCH) XEN_VERSION_TOOLS=$(VERSION)$(ABINAME) XEN_VERSION_IOEMU=$(SHORT_VERSION)
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_UTILS) --sourcedir=debian/tmp usr/lib/xen-$(VERSION)$(ABINAME) usr/lib
-	DH_OPTIONS= dh_link -p$(PACKAGE_NAME_UTILS) usr/lib/xen-ioemu-$(SHORT_VERSION)/bin/qemu-dm usr/lib/xen-$(VERSION)$(ABINAME)/bin/qemu-dm
-	DH_OPTIONS= dh_link -p$(PACKAGE_NAME_UTILS) usr/lib/xen-ioemu-$(SHORT_VERSION)/boot usr/lib/xen-$(VERSION)$(ABINAME)/boot
-	# TODO: move to xen-common and /etc/xen/scripts
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp etc/xen/scripts/qemu-ifup etc/xen/scripts
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/lib/xen-ioemu-$(SHORT_VERSION) usr/lib
-	DH_OPTIONS= dh_install -p$(PACKAGE_NAME_IOEMU) --sourcedir=debian/tmp usr/share/xen-ioemu-$(SHORT_VERSION) usr/share
+	@rm -rf $(DIR)
+	$(MAKE) -C $(SOURCE_DIR)/tools install DESTDIR=$(CURDIR)/$(DIR) DISTDIR=$(CURDIR)/$(DIR) $(CONFIG)
+	install -D -m644 debian/xen-utils.NEWS $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/NEWS
+	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
+	dh_install --sourcedir=$(DIR) usr/lib
+	dh_install --sourcedir=$(DIR) usr/share/xen-$(VERSION)$(ABINAME)
 	dh_pycentral
-	dh_python
 	dh_strip
 	dh_shlibdeps
 	$(MAKE) -f debian/rules.real install-base
