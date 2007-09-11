@@ -1,5 +1,5 @@
---- xen-3.orig/tools/blktap/drivers/Makefile
-+++ xen-3/tools/blktap/drivers/Makefile
+--- xen-unstable.orig/tools/blktap/drivers/Makefile
++++ xen-unstable/tools/blktap/drivers/Makefile
 @@ -5,7 +5,7 @@
  
  IBIN         = blktapctrl tapdisk
@@ -9,7 +9,7 @@
  LIBAIO_DIR   = ../../libaio/src
  
  CFLAGS   += -Werror
-@@ -55,6 +55,7 @@
+@@ -52,6 +52,7 @@
  	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(AIOLIBS) $(LIBS)
  
  install: all
@@ -17,8 +17,8 @@
  	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(INST_DIR)
  
  clean:
---- xen-3.orig/tools/console/Makefile
-+++ xen-3/tools/console/Makefile
+--- xen-unstable.orig/tools/console/Makefile
++++ xen-unstable/tools/console/Makefile
 @@ -2,8 +2,7 @@
  XEN_ROOT=../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -39,8 +39,8 @@
 -	$(INSTALL_PROG) xenconsole $(DESTDIR)/$(CLIENT_INSTALL_DIR)
 +	$(INSTALL_DIR) $(DESTDIR)/$(DIR)
 +	$(INSTALL_PROG) xenconsole xenconsoled $(DESTDIR)/$(DIR)
---- xen-3.orig/tools/misc/Makefile
-+++ xen-3/tools/misc/Makefile
+--- xen-unstable.orig/tools/misc/Makefile
++++ xen-unstable/tools/misc/Makefile
 @@ -13,8 +13,7 @@
  TARGETS-$(CONFIG_X86) += xen-detect
  TARGETS := $(TARGETS-y)
@@ -64,8 +64,8 @@
  	$(MAKE) -C lomount install
  #       No sense in installing miniterm on the Xen box.
  #	$(MAKE) -C miniterm install
---- xen-3.orig/tools/misc/lomount/Makefile
-+++ xen-3/tools/misc/lomount/Makefile
+--- xen-unstable.orig/tools/misc/lomount/Makefile
++++ xen-unstable/tools/misc/lomount/Makefile
 @@ -16,7 +16,7 @@
  
  .PHONY: install
@@ -75,18 +75,18 @@
  
  .PHONY: clean
  clean:
---- xen-3.orig/tools/python/Makefile
-+++ xen-3/tools/python/Makefile
-@@ -16,7 +16,7 @@
+--- xen-unstable.orig/tools/python/Makefile
++++ xen-unstable/tools/python/Makefile
+@@ -24,7 +24,7 @@
  
  .PHONY: build buildpy
- buildpy:
--	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py build
-+	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py build
+ buildpy: xsm.py
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" XEN_SECURITY_MODULE="$(XEN_SECURITY_MODULE)" python setup.py build
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" XEN_SECURITY_MODULE="$(XEN_SECURITY_MODULE)" python setup.py build
  
  build: buildpy refresh-pot refresh-po $(CATALOGS)
  
-@@ -57,10 +57,10 @@
+@@ -77,10 +77,10 @@
  ifndef XEN_PYTHON_NATIVE_INSTALL
  install: LIBPATH=$(shell PYTHONPATH=xen/util python -c "import auxbin; print auxbin.libpath()")
  install: install-messages install-dtd
@@ -99,8 +99,8 @@
  endif
  
  install-dtd: all
---- xen-3.orig/tools/xcutils/Makefile
-+++ xen-3/tools/xcutils/Makefile
+--- xen-unstable.orig/tools/xcutils/Makefile
++++ xen-unstable/tools/xcutils/Makefile
 @@ -11,7 +11,7 @@
  XEN_ROOT	= ../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -110,8 +110,8 @@
  
  INCLUDES += -I $(XEN_LIBXC) -I $(XEN_XENSTORE)
  
---- xen-3.orig/tools/xenmon/Makefile
-+++ xen-3/tools/xenmon/Makefile
+--- xen-unstable.orig/tools/xenmon/Makefile
++++ xen-unstable/tools/xenmon/Makefile
 @@ -13,8 +13,6 @@
  XEN_ROOT=../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -134,8 +134,8 @@
  
  .PHONY: clean
  clean:
---- xen-3.orig/tools/xenstat/xentop/Makefile
-+++ xen-3/tools/xenstat/xentop/Makefile
+--- xen-unstable.orig/tools/xenstat/xentop/Makefile
++++ xen-unstable/tools/xenstat/xentop/Makefile
 @@ -21,7 +21,6 @@
  prefix=/usr
  mandir=$(prefix)/share/man
@@ -153,9 +153,9 @@
  	$(INSTALL_DIR) $(DESTDIR)$(man1dir)
  	$(INSTALL_DATA) xentop.1 $(DESTDIR)$(man1dir)/xentop.1
  
---- xen-3.orig/tools/xenstore/Makefile
-+++ xen-3/tools/xenstore/Makefile
-@@ -170,13 +170,9 @@
+--- xen-unstable.orig/tools/xenstore/Makefile
++++ xen-unstable/tools/xenstore/Makefile
+@@ -80,13 +80,9 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
@@ -171,8 +171,8 @@
  	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
  	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
---- xen-3.orig/tools/xentrace/Makefile
-+++ xen-3/tools/xentrace/Makefile
+--- xen-unstable.orig/tools/xentrace/Makefile
++++ xen-unstable/tools/xentrace/Makefile
 @@ -35,15 +35,11 @@
  
  .PHONY: install
@@ -194,9 +194,9 @@
  	$(INSTALL_DATA) $(MAN1) $(DESTDIR)/usr/share/man/man1
  	$(INSTALL_DATA) $(MAN8) $(DESTDIR)/usr/share/man/man8
  
---- xen-3.orig/tools/ioemu/Makefile.target
-+++ xen-3/tools/ioemu/Makefile.target
-@@ -192,6 +192,7 @@
+--- xen-unstable.orig/tools/ioemu/Makefile.target
++++ xen-unstable/tools/ioemu/Makefile.target
+@@ -206,6 +206,7 @@
  ifdef CONFIG_SOLARIS
  LIBS+=-lsocket -lnsl -lresolv
  endif
@@ -204,9 +204,9 @@
  
  # profiling code
  ifdef TARGET_GPROF
---- xen-3.orig/tools/ioemu/configure
-+++ xen-3/tools/ioemu/configure
-@@ -514,9 +514,9 @@
+--- xen-unstable.orig/tools/ioemu/configure
++++ xen-unstable/tools/ioemu/configure
+@@ -578,9 +578,9 @@
      prefix="/usr/local"
  fi
  mandir="$prefix/share/man"
@@ -218,8 +218,8 @@
  configdir="/etc/xen"
  fi
  
---- xen-3.orig/tools/firmware/Makefile
-+++ xen-3/tools/firmware/Makefile
+--- xen-unstable.orig/tools/firmware/Makefile
++++ xen-unstable/tools/firmware/Makefile
 @@ -4,7 +4,7 @@
  # hvmloader is a 32-bit protected mode binary.
  # It belongs in /usr/lib, not /usr/lib64.
@@ -229,8 +229,8 @@
  
  SUBDIRS :=
  SUBDIRS += rombios rombios/32bit
---- xen-3.orig/tools/blktap/lib/Makefile
-+++ xen-3/tools/blktap/lib/Makefile
+--- xen-unstable.orig/tools/blktap/lib/Makefile
++++ xen-unstable/tools/blktap/lib/Makefile
 @@ -5,7 +5,7 @@
  MINOR    = 0
  SONAME   = libblktap.so.$(MAJOR)

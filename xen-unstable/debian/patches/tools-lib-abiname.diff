@@ -1,5 +1,5 @@
---- xen-3.orig/tools/libxc/Makefile
-+++ xen-3/tools/libxc/Makefile
+--- xen-unstable.orig/tools/libxc/Makefile
++++ xen-unstable/tools/libxc/Makefile
 @@ -1,9 +1,6 @@
  XEN_ROOT = ../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -10,7 +10,7 @@
  CTRL_SRCS-y       :=
  CTRL_SRCS-y       += xc_core.c
  CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
-@@ -79,10 +76,10 @@
+@@ -78,10 +75,10 @@
  GUEST_PIC_OBJS := $(patsubst %.c,%.opic,$(GUEST_SRCS-y))
  
  LIB := libxenctrl.a
@@ -23,7 +23,7 @@
  
  .PHONY: all
  all: build
-@@ -104,16 +101,10 @@
+@@ -103,16 +100,10 @@
  install: build
  	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
@@ -42,7 +42,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include
  
  .PHONY: TAGS
-@@ -141,26 +132,16 @@
+@@ -140,26 +131,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -73,8 +73,8 @@
  
  -include $(DEPS)
  
---- xen-3.orig/tools/xenstore/Makefile
-+++ xen-3/tools/xenstore/Makefile
+--- xen-unstable.orig/tools/xenstore/Makefile
++++ xen-unstable/tools/xenstore/Makefile
 @@ -2,9 +2,6 @@
  include $(XEN_ROOT)/tools/Rules.mk
  XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
@@ -85,9 +85,9 @@
  PROFILE=#-pg
  BASECFLAGS=-Werror
  # Make gcc generate dependencies.
-@@ -85,13 +82,8 @@
- talloc_test.o: talloc.c
- 	$(COMPILE.c) -o $@ $<
+@@ -49,13 +46,8 @@
+ xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
  
 -libxenstore.so: libxenstore.so.$(MAJOR)
 -	ln -sf $< $@
@@ -101,9 +101,9 @@
  
  libxenstore.a: xs.o xs_lib.o
  	$(AR) rcs libxenstore.a $^
-@@ -177,9 +169,7 @@
- 	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/$(BINDIR)
+@@ -84,9 +76,7 @@
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/include
+ 	$(INSTALL_PROG) xenstore-control xenstore-ls xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
  	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
 -	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
 -	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
@@ -112,8 +112,8 @@
  	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
  	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
---- xen-3.orig/tools/blktap/lib/Makefile
-+++ xen-3/tools/blktap/lib/Makefile
+--- xen-unstable.orig/tools/blktap/lib/Makefile
++++ xen-unstable/tools/blktap/lib/Makefile
 @@ -1,9 +1,7 @@
  XEN_ROOT = ../../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -137,27 +137,28 @@
 @@ -43,19 +41,15 @@
  	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)/usr/include
- 	$(INSTALL_PROG) $(LIB) $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) $(LIB) $(DESTDIR)/usr/$(LIBDIR)
 -	ln -sf libblktap.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libblktap.so.$(MAJOR)
 -	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libblktap.so
- 	$(INSTALL_PROG) blktaplib.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) blktaplib.h $(DESTDIR)/usr/include
  
  clean:
  	rm -rf *.a *.so* *.o *.rpm $(LIB) *~ $(DEPS) xen TAGS
  
  libblktap.a: $(OBJS) 
 -	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,$(SONAME) $(SHLIB_CFLAGS) \
-+	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
- 	      -L$(XEN_XENSTORE) -l xenstore                                \
+-	      -L$(XEN_XENSTORE) -l xenstore                                \
 -	      -o libblktap.so.$(MAJOR).$(MINOR) $^ $(LIBS)
 -	ln -sf libblktap.so.$(MAJOR).$(MINOR) libblktap.so.$(MAJOR)
 -	ln -sf libblktap.so.$(MAJOR) libblktap.so
++	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
++	      -L$(XEN_XENSTORE) -lxenstore                                \
 +	      -o libblktap.so $^ $(LIBS)
  	$(AR) rc $@ libblktap.so
  
  .PHONY: TAGS all build clean install libblktap
---- xen-3.orig/tools/libfsimage/common/Makefile
-+++ xen-3/tools/libfsimage/common/Makefile
+--- xen-unstable.orig/tools/libfsimage/common/Makefile
++++ xen-unstable/tools/libfsimage/common/Makefile
 @@ -1,9 +1,6 @@
  XEN_ROOT = ../../..
  include $(XEN_ROOT)/tools/Rules.mk

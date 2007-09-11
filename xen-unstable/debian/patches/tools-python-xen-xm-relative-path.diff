@@ -1,6 +1,6 @@
---- xen-3.orig/tools/python/xen/xm/create.py
-+++ xen-3/tools/python/xen/xm/create.py
-@@ -530,6 +530,14 @@
+--- xen-unstable.orig/tools/python/xen/xm/create.py
++++ xen-unstable/tools/python/xen/xm/create.py
+@@ -534,6 +534,14 @@
      else:
          return s
  
@@ -15,7 +15,7 @@
  def configure_image(vals):
      """Create the image config.
      """
-@@ -537,9 +545,9 @@
+@@ -541,9 +549,9 @@
          return None
      config_image = [ vals.builder ]
      if vals.kernel:
@@ -27,7 +27,7 @@
      if vals.cmdline_ip:
          cmdline_ip = strip('ip=', vals.cmdline_ip)
          config_image.append(['ip', cmdline_ip])
-@@ -722,7 +730,7 @@
+@@ -717,7 +725,7 @@
  def configure_hvm(config_image, vals):
      """Create the config for HVM devices.
      """
@@ -36,12 +36,12 @@
               'localtime', 'serial', 'stdvga', 'isa', 'nographic', 'soundhw',
               'vnc', 'vncdisplay', 'vncunused', 'vncconsole', 'vnclisten',
               'sdl', 'display', 'xauthority', 'rtc_timeoffset', 'monitor',
-@@ -730,6 +738,8 @@
+@@ -725,6 +733,8 @@
      for a in args:
          if a in vals.__dict__ and vals.__dict__[a] is not None:
              config_image.append([a, vals.__dict__[a]])
-+    if vals.device_model:
++    if vals.device_model is not None:
 +        config_image.append([ 'device_model', abspath(vals.device_model, 'bin') ])
-     config_image.append(['vncpasswd', vals.vncpasswd])
- 
+     if vals.vncpasswd is not None:
+         config_image.append(['vncpasswd', vals.vncpasswd])
  
