@@ -50,6 +50,8 @@ class GenOrig(object):
         a = self.changelog_entry.version.upstream.split('+')[0]
         self.version = '%s+hg%s' % (a, changeset)
 
+        self.log("Use version %s.\n" % self.version)
+
     def do_archive(self):
         self.log("Create archive.\n")
         f = os.popen("cd %s; hg archive %s/%s" % (self.repo, os.path.realpath(self.dir), self.orig_dir))

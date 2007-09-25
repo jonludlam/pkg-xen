@@ -1,4 +1,4 @@
-xen-unstable (3.0-unstable+hg15837-1) UNRELEASED; urgency=low
+xen-unstable (3.0-unstable+hg15880-1) UNRELEASED; urgency=low
 
   * New upstream snapshot.
   * Don't longer try to maintain binary compatibility between unstable
