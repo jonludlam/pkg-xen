@@ -1,3 +1,10 @@
+xen-3 (3.1.0-3) UNRELEASED; urgency=high
+
+  * Don't use exec with untrusted values in pygrub. (closes: #444430)
+    See CVE-2007-4993.
+
+ -- Bastian Blank <waldi@debian.org>  Thu, 04 Oct 2007 08:46:48 +0200
+
 xen-3 (3.1.0-2) unstable; urgency=low
 
   * Switch to texlive for documentation.

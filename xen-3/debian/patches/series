@@ -15,3 +15,4 @@ disable-features.diff
 tools-xenfb-prefix.diff
 tools-misc-xend-race.diff
 doc-remove-unused.diff
+tools-pygrub-CVE-2007-4993.patch
