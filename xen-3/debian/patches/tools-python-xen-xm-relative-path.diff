@@ -41,7 +41,7 @@
          if a in vals.__dict__ and vals.__dict__[a] is not None:
              config_image.append([a, vals.__dict__[a]])
 +    if vals.device_model:
-+        config_image.append([ 'device_model', abspath(vals.device_model, 'bin') ])
-     config_image.append(['vncpasswd', vals.vncpasswd])
- 
++        config_image.append(['device_model', abspath(vals.device_model, 'bin')])
+     if vals.vncpasswd is not None:
+         config_image.append(['vncpasswd', vals.vncpasswd])
  

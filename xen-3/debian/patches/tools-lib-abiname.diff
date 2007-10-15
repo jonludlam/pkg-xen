@@ -10,7 +10,7 @@
  CTRL_SRCS-y       :=
  CTRL_SRCS-y       += xc_core.c
  CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
-@@ -79,10 +76,10 @@
+@@ -78,10 +75,10 @@
  GUEST_PIC_OBJS := $(patsubst %.c,%.opic,$(GUEST_SRCS-y))
  
  LIB := libxenctrl.a
@@ -23,7 +23,7 @@
  
  .PHONY: all
  all: build
-@@ -104,16 +101,10 @@
+@@ -103,16 +100,10 @@
  install: build
  	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
@@ -42,7 +42,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include
  
  .PHONY: TAGS
-@@ -141,26 +132,16 @@
+@@ -140,26 +131,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -85,9 +85,9 @@
  PROFILE=#-pg
  BASECFLAGS=-Werror
  # Make gcc generate dependencies.
-@@ -85,13 +82,8 @@
- talloc_test.o: talloc.c
- 	$(COMPILE.c) -o $@ $<
+@@ -49,13 +46,8 @@
+ xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
  
 -libxenstore.so: libxenstore.so.$(MAJOR)
 -	ln -sf $< $@
@@ -101,9 +101,9 @@
  
  libxenstore.a: xs.o xs_lib.o
  	$(AR) rcs libxenstore.a $^
-@@ -177,9 +169,7 @@
- 	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/$(BINDIR)
+@@ -84,9 +76,7 @@
+ 	$(INSTALL_DIR) $(DESTDIR)/usr/include
+ 	$(INSTALL_PROG) xenstore-control xenstore-ls xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
  	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
 -	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
 -	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
@@ -137,10 +137,10 @@
 @@ -43,19 +41,15 @@
  	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)/usr/include
- 	$(INSTALL_PROG) $(LIB) $(DESTDIR)/usr/$(LIBDIR)
+ 	$(INSTALL_DATA) $(LIB) $(DESTDIR)/usr/$(LIBDIR)
 -	ln -sf libblktap.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libblktap.so.$(MAJOR)
 -	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libblktap.so
- 	$(INSTALL_PROG) blktaplib.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) blktaplib.h $(DESTDIR)/usr/include
  
  clean:
  	rm -rf *.a *.so* *.o *.rpm $(LIB) *~ $(DEPS) xen TAGS
