@@ -2,11 +2,19 @@
 
 import os, os.path, re, shutil, sys
 
+sys.path.append(sys.path[0] + '/../lib/python')
+
+from debian_xen.debian import VersionXen
+from debian_linux.debian import Changelog
+
 class GenOrig(object):
     log = sys.stdout.write
 
-    def __init__(self, source, repo, tag = None, version = None):
-        self.source, self.repo, self.tag, self.version = source, repo, tag, version
+    def __init__(self, repo, tag, version):
+        self.repo, self.tag, self.version = repo, tag, version
+
+        self.changelog_entry = Changelog(version = VersionXen)[0]
+        self.source = self.changelog_entry.source
 
     def __call__(self):
         import tempfile
@@ -62,4 +70,4 @@ if __name__ == '__main__':
     p.add_option("-t", "--tag", dest = "tag")
     p.add_option("-v", "--version", dest = "version")
     options, args = p.parse_args(sys.argv)
-    GenOrig(args[1], args[2], options.tag, options.version)()
+    GenOrig(args[1], options.tag, options.version)()
