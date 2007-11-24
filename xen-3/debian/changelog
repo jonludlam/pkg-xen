@@ -1,4 +1,4 @@
-xen-3 (3.1.2-1) UNRELEASED; urgency=high
+xen-3 (3.1.2-1) unstable; urgency=high
 
   * New upstream release:
     - Move shared file into /var/run. (closes: #447795)
@@ -6,7 +6,7 @@ xen-3 (3.1.2-1) UNRELEASED; urgency=high
     - x86: Fix various problems with debug-register handling. (closes: #451626)
       See CVE-2007-5906.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 18 Nov 2007 19:03:00 +0000
+ -- Bastian Blank <waldi@debian.org>  Sat, 24 Nov 2007 13:24:45 +0000
 
 xen-3 (3.1.1-1) unstable; urgency=low
 
