@@ -64,8 +64,7 @@ $(STAMPS_DIR)/build-utils_$(ARCH) \
 install-utils_$(ARCH): CONFIG = \
 		XEN_COMPILE_ARCH=$(XEN_ARCH) \
 		XEN_TARGET_ARCH=$(XEN_ARCH) \
-		XEN_VERSION=$(VERSION)$(ABINAME) \
-		XENFB_TOOLS=y
+		XEN_VERSION=$(VERSION)$(ABINAME)
 
 $(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
