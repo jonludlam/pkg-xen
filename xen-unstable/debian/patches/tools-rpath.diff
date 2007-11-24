@@ -67,7 +67,18 @@
  
  %: %.c $(HDRS) Makefile
 -	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
-+	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) $(RPATH_ARG) -lxenctrl
++	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) $(LDFLAGS) -lxenctrl
  xentrace_%: %.c $(HDRS) Makefile
 -	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
-+	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) $(RPATH_ARG) -lxenctrl
++	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) $(LDFLAGS) -lxenctrl
+--- xen-unstable.orig/tools/blktap/drivers/Makefile
++++ xen-unstable/tools/blktap/drivers/Makefile
+@@ -49,7 +49,7 @@
+ qcow-util: img2qcow qcow2raw qcow-create
+ 
+ img2qcow qcow2raw qcow-create: %: $(BLK-OBJS)
+-	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(AIOLIBS) $(LIBS)
++	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(LDFLAGS) $(AIOLIBS) $(LIBS)
+ 
+ install: all
+ 	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(INST_DIR)
