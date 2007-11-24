@@ -46,8 +46,8 @@
  TARGETS := $(TARGETS-y)
  
 -INSTALL_BIN  = $(TARGETS) xencons
--INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf
-+INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend
+-INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf xsview
++INSTALL_TARGETS = $(TARGETS) xencons netfix xm xend xsview
  
  .PHONY: all
  all: build
@@ -155,7 +155,7 @@
  
 --- xen-unstable.orig/tools/xenstore/Makefile
 +++ xen-unstable/tools/xenstore/Makefile
-@@ -80,13 +80,9 @@
+@@ -81,13 +81,9 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
@@ -206,7 +206,7 @@
  ifdef TARGET_GPROF
 --- xen-unstable.orig/tools/ioemu/configure
 +++ xen-unstable/tools/ioemu/configure
-@@ -578,9 +578,9 @@
+@@ -594,9 +594,9 @@
      prefix="/usr/local"
  fi
  mandir="$prefix/share/man"

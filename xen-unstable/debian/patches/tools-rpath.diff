@@ -1,5 +1,5 @@
---- xen-3.orig/tools/Rules.mk
-+++ xen-3/tools/Rules.mk
+--- xen-unstable.orig/tools/Rules.mk
++++ xen-unstable/tools/Rules.mk
 @@ -10,6 +10,9 @@
  XEN_XENSTORE       = $(XEN_ROOT)/tools/xenstore
  XEN_LIBXENSTAT     = $(XEN_ROOT)/tools/xenstat/libxenstat/src
@@ -10,8 +10,8 @@
  X11_LDPATH = -L/usr/X11R6/$(LIBDIR)
  
  CFLAGS += -D__XEN_TOOLS__
---- xen-3.orig/tools/python/setup.py
-+++ xen-3/tools/python/setup.py
+--- xen-unstable.orig/tools/python/setup.py
++++ xen-unstable/tools/python/setup.py
 @@ -5,6 +5,7 @@
  XEN_ROOT = "../.."
  
@@ -52,7 +52,7 @@
                 include_dirs       = include_dirs + [ "xen/lowlevel/acm" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
-@@ -46,6 +51,7 @@
+@@ -54,6 +59,7 @@
  
  ptsname = Extension("ptsname",
                 extra_compile_args = extra_compile_args,
@@ -60,3 +60,14 @@
                 include_dirs       = include_dirs + [ "ptsname" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
+--- xen-unstable.orig/tools/xentrace/Makefile
++++ xen-unstable/tools/xentrace/Makefile
+@@ -52,6 +52,6 @@
+ 	$(RM) *.a *.so *.o *.rpm $(BIN) $(LIBBIN)
+ 
+ %: %.c $(HDRS) Makefile
+-	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
++	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) $(RPATH_ARG) -lxenctrl
+ xentrace_%: %.c $(HDRS) Makefile
+-	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) -lxenctrl
++	$(CC) $(CFLAGS) -o $@ $< -L$(XEN_LIBXC) $(RPATH_ARG) -lxenctrl
