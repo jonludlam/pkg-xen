@@ -6,7 +6,9 @@
 DEB_HOST_ARCH  := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 
-VERSION := $(shell dpkg-parsechangelog | perl -ne '/^Version:\s+(\S+)-[^-]+$$/ && print $$1;')
+SOURCE := $(shell dpkg-parsechangelog | sed -ne 's,^Source: *\(.*\)$$,\1,p')
+VERSION_DEBIAN := $(shell dpkg-parsechangelog | sed -ne 's,^Version: *\(.*\)$$,\1,p')
+VERSION := $(shell echo "$(VERSION_DEBIAN)" | sed -e 's,-[^-]*$$,,')
 
 include debian/rules.defs
 
@@ -44,10 +46,20 @@ binary-arch:
 
 binary:	binary-indep binary-arch
 
-DIR_ORIG = ../orig/xen-$(MAJOR)-$(VERSION)
+DIR_ORIG = ../orig/$(SOURCE)-$(VERSION)
+TAR_ORIG_NAME = $(SOURCE)_$(VERSION).orig.tar.gz
+TAR_ORIG = $(firstword $(wildcard ../$(TAR_ORIG_NAME)) $(wildcard ../orig/$(TAR_ORIG_NAME)))
 
 orig: $(DIR_ORIG)
-	rsync --delete --exclude debian --exclude .svn --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
+	rsync --delete --exclude debian --exclude .svk --exclude .svn --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
+
+$(DIR_ORIG):
+ifeq ($(TAR_ORIG),)
+	$(error Cannot find orig tarball $(TAR_ORIG_NAME))
+else
+	mkdir -p ../orig
+	tar -C ../orig -xzf $(TAR_ORIG)
+endif
 
 CONTROL_FILES += debian/changelog $(wildcard debian/templates/control.*) 
 CONTROL_FILES += $(wildcard debian/arch/defines) $(wildcard debian/arch/*/defines)
