@@ -52,7 +52,15 @@
                 include_dirs       = include_dirs + [ "xen/lowlevel/acm" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
-@@ -54,6 +59,7 @@
+@@ -46,6 +51,7 @@
+ 
+ flask = Extension("flask",
+                extra_compile_args = extra_compile_args,
++               extra_link_args    = extra_link_args,
+                include_dirs       = include_dirs + [ "xen/lowlevel/flask" ] + 
+                                         [ "../flask/libflask/include" ],
+                library_dirs       = library_dirs + [ "../flask/libflask" ],
+@@ -54,6 +60,7 @@
  
  ptsname = Extension("ptsname",
                 extra_compile_args = extra_compile_args,
@@ -82,3 +90,14 @@
  
  install: all
  	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(INST_DIR)
+--- xen-unstable.orig/tools/blktap/lib/Makefile
++++ xen-unstable/tools/blktap/lib/Makefile
+@@ -52,7 +52,7 @@
+ 
+ libblktap.a: $(OBJS) 
+ 	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,$(SONAME) $(SHLIB_CFLAGS) \
+-	      -L$(XEN_XENSTORE) -l xenstore                                \
++	      -L$(XEN_XENSTORE) $(LDFLAGS) -l xenstore                                \
+ 	      -o libblktap.so.$(MAJOR).$(MINOR) $^ $(LIBS)
+ 	ln -sf libblktap.so.$(MAJOR).$(MINOR) libblktap.so.$(MAJOR)
+ 	ln -sf libblktap.so.$(MAJOR) libblktap.so
