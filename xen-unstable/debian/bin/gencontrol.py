@@ -17,7 +17,7 @@ class Gencontrol(Base):
         makeflags.update({
             'MAJOR': self.version.xen_major,
             'VERSION': 'unstable',
-            'ABINAME': '',
+            'EXTRAVERSION': '-unstable',
         })
 
     def do_main_packages(self, packages, extra):
