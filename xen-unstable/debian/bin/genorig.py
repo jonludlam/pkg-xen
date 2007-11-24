@@ -41,14 +41,28 @@ class GenOrig(object):
         if self.version is not None:
             return
 
+        f = file('%s/xen/Makefile' % self.repo)
+        for l in f:
+            l = l.strip().split()
+            if not l:
+                continue
+            if l[0] == 'export':
+                l.pop(0)
+            if l[0] == 'XEN_VERSION':
+                xen_version = l[-1]
+            elif l[0] == 'XEN_SUBVERSION':
+                xen_subversion = l[-1]
+        f.close()
+        if xen_version is None or xen_subversion is None:
+            raise RuntimeError("Can't find version in Xen source")
+
         f = os.popen("cd '%s'; hg id" % self.repo)
         id = f.read().strip().split()[0]
         f.close()
         f = os.popen("cd '%s'; hg log -r %s" % (self.repo, id))
         changeset = f.read().strip().split()[1].split(':')[0]
 
-        a = self.changelog_entry.version.upstream.split('+')[0]
-        self.version = '%s+hg%s' % (a, changeset)
+        self.version = '%s.%s-unstable+hg%s' % (xen_version, xen_subversion, changeset)
 
         self.log("Use version %s.\n" % self.version)
 
