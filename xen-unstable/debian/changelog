@@ -3,6 +3,7 @@ xen-unstable (3.2-unstable+hg16439-1) UNRELEASED; urgency=low
   * New upstream snapshot.
   * Don't longer try to maintain binary compatibility between unstable
     snapshots.
+  * Build qemu with TLS and PCI support.
 
  -- Bastian Blank <waldi@debian.org>  Tue, 11 Sep 2007 12:36:42 +0000
 
