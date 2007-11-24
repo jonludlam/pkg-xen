@@ -26,7 +26,6 @@ $
         if match is None:
             raise ValueError("Invalid debian xen version")
         d = match.groupdict()
-        self.xen_major = 'unstable'
         self.xen_version = d['version']
 
 if __name__ == '__main__':

@@ -15,8 +15,9 @@ class Gencontrol(Base):
 
     def do_main_setup(self, vars, makeflags, extra):
         makeflags.update({
-            'MAJOR': self.version.xen_major,
+            'MAJOR': 'unstable',
             'VERSION': 'unstable',
+            'UPSTREAMVERSION': self.version.xen_version,
             'EXTRAVERSION': '-unstable',
         })
 
@@ -113,7 +114,7 @@ class Gencontrol(Base):
         changelog = Changelog(version = VersionXenUnstable)
         self.version = changelog[0].version
         self.vars = {
-            'major': self.version.xen_major,
+            'major': 'unstable',
             'version': 'unstable',
             'abiname': '',
         }

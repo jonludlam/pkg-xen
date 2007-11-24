@@ -64,7 +64,7 @@ $(STAMPS_DIR)/build-utils_$(ARCH) \
 install-utils_$(ARCH): CONFIG = \
 		XEN_COMPILE_ARCH=$(XEN_ARCH) \
 		XEN_TARGET_ARCH=$(XEN_ARCH) \
-		XEN_VERSION=$(VERSION)$(ABINAME)
+		XEN_VERSION=$(UPSTREAMVERSION)$(ABINAME)
 
 $(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
@@ -100,7 +100,7 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 	dh_testroot
 	dh_clean -k
 	dh_installdirs boot
-	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)$(ABINAME)-$(FLAVOUR).gz
+	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(UPSTREAMVERSION)$(ABINAME)-$(FLAVOUR).gz
 	$(MAKE) -f debian/rules.real install-base
 
 install-utils_$(ARCH): SOURCE_DIR = $(BUILD_DIR)/build-utils_$(ARCH)
@@ -117,7 +117,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	install -D -m644 debian/xen-utils.NEWS $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/NEWS
 	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
 	dh_install --sourcedir=$(DIR) usr/lib
-	dh_install --sourcedir=$(DIR) usr/share/xen-$(VERSION)$(ABINAME)
+	dh_install --sourcedir=$(DIR) usr/share/xen-$(UPSTREAMVERSION)$(ABINAME)
 	dh_pycentral
 	dh_strip
 	dh_shlibdeps
