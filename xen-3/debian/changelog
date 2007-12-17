@@ -1,3 +1,10 @@
+xen-3 (3.1.2-3) unstable; urgency=low
+
+  * Ship headers to allow building libvirt (closes: #402249)
+    Thanks to Guido Guenther.
+
+ -- Guido Trotter <ultrotter@debian.org>  Mon, 17 Dec 2007 16:19:54 +0000
+
 xen-3 (3.1.2-2) unstable; urgency=low
 
   * Add missing rpath definitions.
