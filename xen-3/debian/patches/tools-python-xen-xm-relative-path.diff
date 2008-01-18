@@ -1,6 +1,6 @@
 --- xen-3.orig/tools/python/xen/xm/create.py
 +++ xen-3/tools/python/xen/xm/create.py
-@@ -530,6 +530,14 @@
+@@ -542,6 +542,14 @@
      else:
          return s
  
@@ -15,7 +15,7 @@
  def configure_image(vals):
      """Create the image config.
      """
-@@ -537,9 +545,9 @@
+@@ -549,9 +557,9 @@
          return None
      config_image = [ vals.builder ]
      if vals.kernel:
@@ -27,16 +27,16 @@
      if vals.cmdline_ip:
          cmdline_ip = strip('ip=', vals.cmdline_ip)
          config_image.append(['ip', cmdline_ip])
-@@ -722,7 +730,7 @@
+@@ -719,7 +727,7 @@
  def configure_hvm(config_image, vals):
      """Create the config for HVM devices.
      """
--    args = [ 'device_model', 'pae', 'vcpus', 'boot', 'fda', 'fdb',
-+    args = [ 'pae', 'vcpus', 'boot', 'fda', 'fdb',
+-    args = [ 'device_model', 'pae', 'vcpus', 'boot', 'fda', 'fdb', 'timer_mode',
++    args = [ 'pae', 'vcpus', 'boot', 'fda', 'fdb', 'timer_mode',
               'localtime', 'serial', 'stdvga', 'isa', 'nographic', 'soundhw',
               'vnc', 'vncdisplay', 'vncunused', 'vncconsole', 'vnclisten',
               'sdl', 'display', 'xauthority', 'rtc_timeoffset', 'monitor',
-@@ -730,6 +738,8 @@
+@@ -729,6 +737,8 @@
      for a in args:
          if a in vals.__dict__ and vals.__dict__[a] is not None:
              config_image.append([a, vals.__dict__[a]])

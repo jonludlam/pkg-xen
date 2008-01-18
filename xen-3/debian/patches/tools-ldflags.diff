@@ -1,7 +1,7 @@
 --- xen-3.orig/tools/blktap/drivers/Makefile
 +++ xen-3/tools/blktap/drivers/Makefile
-@@ -42,11 +42,11 @@
- 
+@@ -39,11 +39,11 @@
+ all: $(IBIN) qcow-util
  
  blktapctrl: blktapctrl.c
 -	$(CC) $(CFLAGS) -o blktapctrl $(LIBS) blktapctrl.c
@@ -22,12 +22,12 @@
  xenconsoled: $(patsubst %.c,%.o,$(wildcard daemon/*.c))
 -	$(CC) $(CFLAGS) $^ -o $@ -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
 +	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
-               $(SOCKET_LIBS) -lxenctrl -lxenstore
+               $(UTIL_LIBS) $(SOCKET_LIBS) -lxenctrl -lxenstore
  
  xenconsole: $(patsubst %.c,%.o,$(wildcard client/*.c))
 -	$(CC) $(CFLAGS) $^ -o $@ -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
 +	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS) -L$(XEN_LIBXC) -L$(XEN_XENSTORE) \
- 	      $(SOCKET_LIBS) -lxenctrl -lxenstore
+ 	      $(UTIL_LIBS) $(SOCKET_LIBS) -lxenctrl -lxenstore
  
  .PHONY: install
 --- xen-3.orig/tools/misc/Makefile

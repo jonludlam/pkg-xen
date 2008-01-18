@@ -4,13 +4,13 @@
  XEN_ROOT = ../..
  include $(XEN_ROOT)/tools/Rules.mk
  
--MAJOR    = 3.0
+-MAJOR    = 3.2
 -MINOR    = 0
 -
  CTRL_SRCS-y       :=
  CTRL_SRCS-y       += xc_core.c
  CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
-@@ -78,10 +75,10 @@
+@@ -80,10 +77,10 @@
  GUEST_PIC_OBJS := $(patsubst %.c,%.opic,$(GUEST_SRCS-y))
  
  LIB := libxenctrl.a
@@ -23,7 +23,7 @@
  
  .PHONY: all
  all: build
-@@ -103,16 +100,10 @@
+@@ -105,16 +102,10 @@
  install: build
  	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
  	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
@@ -42,7 +42,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include
  
  .PHONY: TAGS
-@@ -140,26 +131,16 @@
+@@ -143,26 +134,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -85,7 +85,7 @@
  PROFILE=#-pg
  BASECFLAGS=-Werror
  # Make gcc generate dependencies.
-@@ -49,13 +46,8 @@
+@@ -50,13 +47,8 @@
  xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
  	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
  
@@ -101,7 +101,7 @@
  
  libxenstore.a: xs.o xs_lib.o
  	$(AR) rcs libxenstore.a $^
-@@ -84,9 +76,7 @@
+@@ -85,9 +77,7 @@
  	$(INSTALL_DIR) $(DESTDIR)/usr/include
  	$(INSTALL_PROG) xenstore-control xenstore-ls xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
  	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
@@ -190,7 +190,7 @@
  	$(INSTALL_DATA) fsimage_grub.h $(DESTDIR)/usr/include
 @@ -34,13 +29,8 @@
  clean distclean:
- 	rm -f $(PIC_OBJS) $(LIB)
+ 	rm -f $(PIC_OBJS) $(LIB) $(DEPS)
  
 -libfsimage.so: libfsimage.so.$(MAJOR)
 -	ln -sf $< $@

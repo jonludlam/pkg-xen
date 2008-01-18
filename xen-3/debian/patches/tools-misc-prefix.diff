@@ -1,16 +1,16 @@
 --- xen-3.orig/tools/misc/xend
 +++ xen-3/tools/misc/xend
-@@ -31,15 +31,10 @@
+@@ -33,15 +33,10 @@
  import time
  import commands
  
--result = commands.getstatusoutput(os.path.join(os.path.dirname(sys.argv[0]),
--                                               'xen-python-path'))
--if result[0] != 0:
--    print >>sys.stderr, result[1]
--    sys.exit(1)
--
--sys.path.append(result[1])
+-xpp = os.path.join(os.path.dirname(sys.argv[0]), 'xen-python-path')
+-if os.path.exists(xpp):
+-    result = commands.getstatusoutput(xpp)
+-    if result[0] != 0:
+-        print >>sys.stderr, result[1]
+-        sys.exit(1)
+-    sys.path.append(result[1])
 +sys.path.insert(1, sys.path[0] + '/../lib/python')
  
  from xen.xend.server import SrvDaemon
@@ -18,10 +18,10 @@
  
  class CheckError(ValueError):
      pass
-@@ -76,19 +71,19 @@
-         raise CheckError("invalid user")
- 
- def start_xenstored():
+@@ -95,20 +90,20 @@
+         f.close()
+     except:
+         pass
 -    XENSTORED_TRACE = os.getenv("XENSTORED_TRACE")
 -    cmd = "xenstored --pid-file /var/run/xenstore.pid"
 -    if XENSTORED_TRACE:
@@ -41,10 +41,12 @@
  def start_blktapctrl():
      if os.fork() == 0:
 -        os.execvp('blktapctrl', ['blktapctrl'])
+-            
 +        execute('blktapctrl')
-             
++
  def main():
      try:
+         check_logging()
 --- xen-3.orig/tools/misc/xm
 +++ xen-3/tools/misc/xm
 @@ -1,10 +1,7 @@

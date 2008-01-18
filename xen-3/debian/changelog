@@ -1,9 +1,8 @@
-xen-3 (3.1.2-3) unstable; urgency=low
+xen-3 (3.2.0-1) UNRELEASED; urgency=low
 
-  * Ship headers to allow building libvirt (closes: #402249)
-    Thanks to Guido Guenther.
+  * New upstream version.
 
- -- Guido Trotter <ultrotter@debian.org>  Mon, 17 Dec 2007 16:19:54 +0000
+ -- Bastian Blank <waldi@debian.org>  Fri, 18 Jan 2008 17:29:04 +0000
 
 xen-3 (3.1.2-2) unstable; urgency=low
 

@@ -7,7 +7,7 @@
 @DPATCH@
 --- xen-3.orig/xen/Makefile
 +++ xen-3/xen/Makefile
-@@ -105,16 +105,16 @@
+@@ -92,16 +92,16 @@
  include/xen/compile.h: include/xen/compile.h.in
  	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
  	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
@@ -30,7 +30,7 @@
  include/asm-$(TARGET_ARCH)/asm-offsets.h: arch/$(TARGET_ARCH)/asm-offsets.s
 --- xen-3.orig/xen/arch/powerpc/boot_of.c
 +++ xen-3/xen/arch/powerpc/boot_of.c
-@@ -1332,9 +1332,10 @@
+@@ -1225,9 +1225,10 @@
      of_getprop(bof_chosen, "stdout", &of_out, sizeof (of_out));
  
      of_printf("%s\n", "---------------------------------------------------");
@@ -42,10 +42,10 @@
 +              xen_compile_system_maintainer_local(), xen_compile_system_maintainer_domain(),
                xen_compiler(), xen_compile_date());
  
-     of_printf("%s args: 0x%lx 0x%lx 0x%lx 0x%lx 0x%lx\n"
+     boot_of_fix_maple();
 --- xen-3.orig/xen/common/kernel.c
 +++ xen-3/xen/common/kernel.c
-@@ -151,8 +151,8 @@
+@@ -159,8 +159,8 @@
      {
          struct xen_compile_info info;
          safe_strcpy(info.compiler,       xen_compiler());
@@ -99,22 +99,24 @@
 -}
 --- xen-3.orig/xen/drivers/char/console.c
 +++ xen-3/xen/drivers/char/console.c
-@@ -522,12 +522,10 @@
+@@ -552,14 +552,11 @@
      serial_set_rx_handler(sercon_handle, serial_rx);
  
      /* HELLO WORLD --- start-of-day banner text. */
--    printk(xen_banner());
--    printk(" http://www.cl.cam.ac.uk/netos/xen\n");
--    printk(" University of Cambridge Computer Laboratory\n\n");
--    printk(" Xen version %d.%d%s (%s@%s) (%s) %s\n",
-+    printk(" Xen version %d.%d%s (%s %s) (%s@%s) (%s) %s\n",
+-    spin_lock(&console_lock);
+-    __putstr(xen_banner());
+-    spin_unlock(&console_lock);
+-    printk("Xen version %d.%d%s (%s@%s) (%s) %s\n",
++    printk("Xen version %d.%d%s (%s %s) (%s@%s) (%s) %s\n",
             xen_major_version(), xen_minor_version(), xen_extra_version(),
 -           xen_compile_by(), xen_compile_domain(),
 +           xen_compile_system_distribution(), xen_compile_system_version(),
 +           xen_compile_system_maintainer_local(), xen_compile_system_maintainer_domain(),
             xen_compiler(), xen_compile_date());
-     printk(" Latest ChangeSet: %s\n\n", xen_changeset());
-     set_printk_prefix("(XEN) ");
+-    printk("Latest ChangeSet: %s\n", xen_changeset());
+ 
+     if ( opt_sync_console )
+     {
 --- xen-3.orig/xen/include/xen/compile.h.in
 +++ xen-3/xen/include/xen/compile.h.in
 @@ -1,8 +1,9 @@

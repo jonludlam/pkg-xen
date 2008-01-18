@@ -9,8 +9,8 @@
  LIBAIO_DIR   = ../../libaio/src
  
  CFLAGS   += -Werror
-@@ -55,6 +55,7 @@
- 	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(AIOLIBS) $(LIBS)
+@@ -52,6 +52,7 @@
+ 	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(LDFLAGS) $(AIOLIBS) $(LIBS)
  
  install: all
 +	$(INSTALL_DIR) $(DESTDIR)$(INST_DIR)
@@ -46,8 +46,8 @@
  TARGETS := $(TARGETS-y)
  
 -INSTALL_BIN  = $(TARGETS) xencons
--INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf
-+INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend
+-INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf xsview
++INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend xenperf xsview
  
  .PHONY: all
  all: build
@@ -77,16 +77,16 @@
  clean:
 --- xen-3.orig/tools/python/Makefile
 +++ xen-3/tools/python/Makefile
-@@ -16,7 +16,7 @@
+@@ -24,7 +24,7 @@
  
  .PHONY: build buildpy
- buildpy:
--	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py build
-+	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" python setup.py build
+ buildpy: xsm.py
+-	CC="$(CC)" CFLAGS="$(CFLAGS)" XEN_SECURITY_MODULE="$(XEN_SECURITY_MODULE)" python setup.py build
++	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR="$(LIBDIR)" XEN_SECURITY_MODULE="$(XEN_SECURITY_MODULE)" python setup.py build
  
  build: buildpy refresh-pot refresh-po $(CATALOGS)
  
-@@ -57,10 +57,10 @@
+@@ -77,10 +77,10 @@
  ifndef XEN_PYTHON_NATIVE_INSTALL
  install: LIBPATH=$(shell PYTHONPATH=xen/util python -c "import auxbin; print auxbin.libpath()")
  install: install-messages install-dtd
@@ -155,7 +155,7 @@
  
 --- xen-3.orig/tools/xenstore/Makefile
 +++ xen-3/tools/xenstore/Makefile
-@@ -170,13 +170,9 @@
+@@ -81,13 +81,9 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
@@ -196,7 +196,7 @@
  
 --- xen-3.orig/tools/ioemu/Makefile.target
 +++ xen-3/tools/ioemu/Makefile.target
-@@ -192,6 +192,7 @@
+@@ -206,6 +206,7 @@
  ifdef CONFIG_SOLARIS
  LIBS+=-lsocket -lnsl -lresolv
  endif
@@ -206,7 +206,7 @@
  ifdef TARGET_GPROF
 --- xen-3.orig/tools/ioemu/configure
 +++ xen-3/tools/ioemu/configure
-@@ -514,9 +514,9 @@
+@@ -594,9 +594,9 @@
      prefix="/usr/local"
  fi
  mandir="$prefix/share/man"
