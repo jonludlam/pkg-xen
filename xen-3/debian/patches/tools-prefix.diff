@@ -47,7 +47,7 @@
  
 -INSTALL_BIN  = $(TARGETS) xencons
 -INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf xsview
-+INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend xenperf xsview
++INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend xsview
  
  .PHONY: all
  all: build
