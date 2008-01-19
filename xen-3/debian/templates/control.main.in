@@ -4,3 +4,9 @@ Description: Documentation for Xen
  This package contains all the large documentation files for Xen.  This
  includes a description interface (both the api, and a nice explanation of
  how XEN works).
+
+Package: libxen-dev
+Section: libdevel
+Architecture: any
+Description: Public Xen headers
+ This package contains the public headers and static libraries for Xen.

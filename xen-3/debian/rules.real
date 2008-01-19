@@ -6,7 +6,7 @@ export DH_OPTIONS
 
 include debian/rules.defs
 
-binary-arch-arch: install-utils_$(ARCH)
+binary-arch-arch: install-lib-dev_$(ARCH) install-utils_$(ARCH)
 binary-arch-flavour: install-hypervisor_$(ARCH)_$(FLAVOUR)
 
 binary-indep: install-docs
@@ -105,6 +105,17 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)$(ABINAME)-$(FLAVOUR).gz
 	$(MAKE) -f debian/rules.real install-base
 
+install-lib-dev_$(ARCH): DIR = $(BUILD_DIR)/build-utils_$(ARCH)
+install-lib-dev_$(ARCH): PACKAGE_NAME = libxen-dev
+install-lib-dev_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
+install-lib-dev_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_install --sourcedir=$(DIR)
+	dh_strip
+	$(MAKE) -f debian/rules.real install-base
+
 install-utils_$(ARCH): SOURCE_DIR = $(BUILD_DIR)/build-utils_$(ARCH)
 install-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 install-utils_$(ARCH): PACKAGE_NAME = xen-utils-$(VERSION)$(ABINAME)
@@ -116,15 +127,9 @@ install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	dh_clean -k
 	@rm -rf $(DIR)
 	$(MAKE) -C $(SOURCE_DIR)/tools install DESTDIR=$(CURDIR)/$(DIR) DISTDIR=$(CURDIR)/$(DIR) $(CONFIG)
-	mkdir -p $(CURDIR)/$(DIR)/usr/include/xen/io $(CURDIR)/$(DIR)/usr/include/xen/hvm $(CURDIR)/$(DIR)/usr/include/xen/arch-x86
-	install -m 644 $(SOURCE_DIR)/xen/include/public/io/*.h $(CURDIR)/$(DIR)/usr/include/xen/io
-	install -m 644 $(SOURCE_DIR)/xen/include/public/hvm/*.h $(CURDIR)/$(DIR)/usr/include/xen/hvm
-	install -m 644 $(SOURCE_DIR)/xen/include/public/arch-x86/*.h $(CURDIR)/$(DIR)/usr/include/xen/arch-x86
-	install -m 644 $(SOURCE_DIR)/xen/include/public/*.h $(CURDIR)/$(DIR)/usr/include/xen/
 	install -D -m644 debian/xen-utils.NEWS $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/NEWS
 	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
 	dh_install --sourcedir=$(DIR) usr/lib
-	dh_install --sourcedir=$(DIR) usr/include
 	dh_install --sourcedir=$(DIR) usr/share/xen-$(VERSION)$(ABINAME)
 	dh_pycentral
 	dh_strip

@@ -1,6 +1,7 @@
 xen-3 (3.2.0-1) UNRELEASED; urgency=low
 
   * New upstream version.
+  * Add package libxen-dev. Including public headers and static libs.
 
  -- Bastian Blank <waldi@debian.org>  Fri, 18 Jan 2008 17:29:04 +0000
 

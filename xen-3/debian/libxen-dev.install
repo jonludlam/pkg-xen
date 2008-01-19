@@ -1,0 +1,6 @@
+tools/libxc/{libxenctrl.a,libxenguest.a} usr/lib
+tools/libxc/{xenctrl.h,xenguest.h} usr/include
+tools/xenstore/libxenstore.a usr/lib
+tools/xenstore/{xs.h,xs_lib.h} usr/include
+xen/include/public/*.h usr/include/xen
+xen/include/public/{arch-ia64,arch-x86,foreign,hvm,io,xsm} usr/include/xen
