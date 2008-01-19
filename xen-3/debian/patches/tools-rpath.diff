@@ -54,6 +54,14 @@
                 libraries          = libraries,
 @@ -46,6 +51,7 @@
  
+ flask = Extension("flask",
+                extra_compile_args = extra_compile_args,
++               extra_link_args    = extra_link_args,
+                include_dirs       = include_dirs + [ "xen/lowlevel/flask" ] + 
+                                         [ "../flask/libflask/include" ],
+                library_dirs       = library_dirs + [ "../flask/libflask" ],
+@@ -54,6 +60,7 @@
+ 
  ptsname = Extension("ptsname",
                 extra_compile_args = extra_compile_args,
 +               extra_link_args    = extra_link_args,
@@ -62,7 +70,7 @@
                 libraries          = libraries,
 --- xen-3.orig/tools/blktap/drivers/Makefile
 +++ xen-3/tools/blktap/drivers/Makefile
-@@ -51,7 +51,7 @@
+@@ -49,7 +49,7 @@
  qcow-util: img2qcow qcow2raw qcow-create
  
  img2qcow qcow2raw qcow-create: %: $(BLK-OBJS)
