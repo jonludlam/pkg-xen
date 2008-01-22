@@ -8,5 +8,5 @@ Description: Documentation for Xen
 Package: libxen-dev
 Section: libdevel
 Architecture: any
-Description: Public Xen headers
+Description: Public headers and libs for Xen
  This package contains the public headers and static libraries for Xen.
