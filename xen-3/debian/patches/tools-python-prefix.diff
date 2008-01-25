@@ -17,7 +17,7 @@
  import os.path
  import sys
  
-++_path = sys.path[0]
++_path = sys.path[0]
  
  def execute(exe, args = None):
      exepath = pathTo(exe)
