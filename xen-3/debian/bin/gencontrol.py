@@ -15,7 +15,6 @@ class Gencontrol(Base):
 
     def do_main_setup(self, vars, makeflags, extra):
         makeflags.update({
-            'MAJOR': self.version.xen_major,
             'VERSION': self.version.xen_version,
             'ABINAME': self.abiname,
         })
