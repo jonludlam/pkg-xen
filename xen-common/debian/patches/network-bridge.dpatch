@@ -14,6 +14,6 @@ diff -urNad xen-common~/tools/examples/network-bridge xen-common/tools/examples/
  
 +modprobe netloop > /dev/null 2>&1 || true
 +
- vifnum=${vifnum:-$(ip route list | awk '/^default / { print $NF }' | sed 's/^[^0-9]*//')}
- vifnum=${vifnum:-0}
- bridge=${bridge:-xenbr${vifnum}}
+ is_network_root () {
+     local rootfs=$(awk '{ if ($1 !~ /^[ \t]*#/ && $2 == "/") { print $3; }}' /etc/mtab)
+     local rootopts=$(awk '{ if ($1 !~ /^[ \t]*#/ && $2 == "/") { print $4; }}' /etc/mtab)

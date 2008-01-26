@@ -22,16 +22,8 @@ $(STAMPS_DIR)/source: $(STAMPS_DIR)
 	dpatch -d $(BUILD_DIR) apply-all
 	touch $@
 
-define build_man
-	mkdir -p $(BUILD_DIR)/docs/out
-	pod2man --release=$(VERSION) --name=$(3) -s $(4) -c Xen $(BUILD_DIR)/docs/man/$(1) $(BUILD_DIR)/docs/out/$(2)
-endef
-
 build: $(STAMPS_DIR)/source
-	mkdir -p $(BUILD_DIR)/docs/man
-	$(call build_man,xend-config.sxp.pod.5,xend-config.sxp.5,xend-config.sxp,5)
-	$(call build_man,xmdomain.cfg.pod.5,xmdomain.cfg.5,xmdomain.cfg,5)
-	$(call build_man,xm.pod.1,xm.1,xm,1)
+	make -C $(BUILD_DIR)/docs man-pages
 
 clean:
 	dh_testdir
@@ -80,7 +72,7 @@ binary-indep: install
 	dh_installexamples
 	dh_installinit -p xen-utils-common --name xend --no-restart-on-upgrade -- defaults 20 21
 	dh_installinit -p xen-utils-common --name xendomains --no-start -- defaults 21 20
-	dh_installman $(BUILD_DIR)/docs/man/*
+	dh_installman $(BUILD_DIR)/docs/man1/* $(BUILD_DIR)/docs/man5/*
 	dh_link
 	dh_strip
 	dh_compress
@@ -94,4 +86,4 @@ binary-indep: install
 binary-arch:
 
 binary: build binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install #PHONY_CONFIGURE#
+.PHONY: build clean binary-indep binary-arch binary install
