@@ -1,6 +1,6 @@
 xen-3 (3.2.0-2) unstable; urgency=low
 
-  * Fix broken patch.
+  * Fix broken patch. (closes: #462522)
 
  -- Bastian Blank <waldi@debian.org>  Sat, 26 Jan 2008 17:21:52 +0000
 
