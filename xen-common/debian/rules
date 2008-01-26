@@ -2,7 +2,12 @@
 
 #export DH_VERBOSE=1
 
-VERSION := $(shell dpkg-parsechangelog | perl -ne '/^Version:\s+(\S+)-[^-]+$$/ && print $$1;')
+DEB_HOST_ARCH  := $(shell dpkg-architecture -qDEB_HOST_ARCH)
+DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
+
+SOURCE := $(shell dpkg-parsechangelog | sed -ne 's,^Source: *\(.*\)$$,\1,p')
+VERSION_DEBIAN := $(shell dpkg-parsechangelog | sed -ne 's,^Version: *\(.*\)$$,\1,p')
+VERSION := $(shell echo "$(VERSION_DEBIAN)" | sed -e 's,-[^-]*$$,,')
 
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
@@ -36,12 +41,22 @@ clean:
 $(BUILD_DIR) $(STAMPS_DIR):
 	@[ -d $@ ] || mkdir -p $@
 
-NO_ORIG = .svn debian scripts
+NO_ORIG = .svn .svk debian scripts
 
-DIR_ORIG = ../orig/xen-common-$(VERSION)
+DIR_ORIG = ../orig/$(SOURCE)-$(VERSION)
+TAR_ORIG_NAME = $(SOURCE)_$(VERSION).orig.tar.gz
+TAR_ORIG = $(firstword $(wildcard ../$(TAR_ORIG_NAME)) $(wildcard ../orig/$(TAR_ORIG_NAME)))
 
 orig: $(DIR_ORIG)
 	rsync --delete $(foreach t, $(NO_ORIG), --exclude $(t)) --link-dest=$(DIR_ORIG)/ -a $(DIR_ORIG)/ .
+
+$(DIR_ORIG):
+ifeq ($(TAR_ORIG),)
+	$(error Cannot find orig tarball $(TAR_ORIG_NAME))
+else
+	mkdir -p ../orig
+	tar -C ../orig -xzf $(TAR_ORIG)
+endif
 
 # This is to make dpatch-edit-patch work
 unpatch: clean
