@@ -155,22 +155,34 @@
  
 --- xen-3.orig/tools/xenstore/Makefile
 +++ xen-3/tools/xenstore/Makefile
-@@ -81,13 +81,9 @@
+@@ -81,18 +81,16 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
 -	$(INSTALL_DIR) $(DESTDIR)/usr/bin
 -	$(INSTALL_DIR) $(DESTDIR)/usr/sbin
 +	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(PUBLIC_BINDIR)
  	$(INSTALL_DIR) $(DESTDIR)/usr/include
 -	$(INSTALL_PROG) xenstored $(DESTDIR)/usr/sbin
 -	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)/usr/bin
 -	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/bin
 -	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/bin
-+	$(INSTALL_PROG) xenstore-control xenstore-ls xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
- 	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
- 	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
+-	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
+-	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so
+-	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
++	$(INSTALL_PROG) xenstore-control xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) xenstore-ls $(CLIENTS) $(DESTDIR)/usr/$(PUBLIC_BINDIR)
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
++	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
++	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(PUBLIC_LIBDIR)/libxenstore.so.$(MAJOR)
++	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)/usr/$(PUBLIC_LIBDIR)/libxenstore.so
++	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
+ 	$(INSTALL_DATA) xs.h $(DESTDIR)/usr/include
+ 	$(INSTALL_DATA) xs_lib.h $(DESTDIR)/usr/include
+ 
 --- xen-3.orig/tools/xentrace/Makefile
 +++ xen-3/tools/xentrace/Makefile
 @@ -35,15 +35,11 @@
@@ -240,3 +252,24 @@
  
  INCLUDES += -I. -I.. -I $(XEN_LIBXC) -I $(XEN_XENSTORE)
  
+--- xen-3.orig/tools/libxc/Makefile
++++ xen-3/tools/libxc/Makefile
+@@ -104,15 +104,16 @@
+ .PHONY: install
+ install: build
+ 	[ -d $(DESTDIR)/usr/$(LIBDIR) ] || $(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
++	$(INSTALL_DIR) $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
+ 	[ -d $(DESTDIR)/usr/include ] || $(INSTALL_DIR) $(DESTDIR)/usr/include
+ 	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)/usr/$(LIBDIR)
++	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
+ 	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so.$(MAJOR)
+ 	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenctrl.so
+ 	$(INSTALL_DATA) xenctrl.h $(DESTDIR)/usr/include
+ 
+ 	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
+-	$(INSTALL_DATA) libxenguest.a $(DESTDIR)/usr/$(LIBDIR)
++	$(INSTALL_DATA) libxenguest.a $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
+ 	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so.$(MAJOR)
+ 	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenguest.so
+ 	$(INSTALL_DATA) xenguest.h $(DESTDIR)/usr/include

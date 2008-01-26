@@ -1,12 +1,15 @@
 --- xen-3.orig/Config.mk
 +++ xen-3/Config.mk
-@@ -31,6 +31,10 @@
+@@ -31,6 +31,13 @@
  include $(XEN_ROOT)/config/$(XEN_OS).mk
  include $(XEN_ROOT)/config/$(XEN_TARGET_ARCH).mk
  
 +PREFIX = lib/xen-$(XEN_VERSION)
 +BINDIR = $(PREFIX)/bin
 +LIBDIR = $(PREFIX)/lib
++
++PUBLIC_BINDIR = bin
++PUBLIC_LIBDIR = lib
 +
  ifneq ($(EXTRA_PREFIX),)
  EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
