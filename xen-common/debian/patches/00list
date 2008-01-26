@@ -2,4 +2,3 @@ network-dummy
 network-bridge
 xend-disable-relocation
 path-relative
-xendomains
