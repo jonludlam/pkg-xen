@@ -1,4 +1,5 @@
 Package: xen-docs-@version@
+Section: doc
 Architecture: all
 Description: Documentation for Xen
  This package contains all the large documentation files for Xen.  This
