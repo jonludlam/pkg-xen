@@ -6,14 +6,6 @@ GLOBAL_SCRIPTS = \
 	cpuperf-xen \
 	xend \
 	xenperf \
-	xenstore-chmod \
-	xenstore-control \
-	xenstore-exists \
-	xenstore-list \
-	xenstore-ls \
-	xenstore-read \
-	xenstore-rm \
-	xenstore-write \
 	xentop \
 	xentrace \
 	xentrace_format \
