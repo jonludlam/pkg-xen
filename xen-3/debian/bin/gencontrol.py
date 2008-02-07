@@ -1,16 +1,17 @@
 #!/usr/bin/env python
+
 import os, sys
 sys.path.append(os.path.join(sys.path[0], "../lib/python"))
+
 from debian_xen.debian import VersionXen
+from debian_linux.config import ConfigCoreHierarchy
+from debian_linux.debian import Changelog
 from debian_linux.gencontrol import Gencontrol as Base
-from debian_linux.config import *
-from debian_linux.debian import *
+from debian_linux.utils import Templates
 
 class Gencontrol(Base):
-    makefile_targets = ('binary-arch', 'build', 'setup')
-
     def __init__(self):
-        super(Gencontrol, self).__init__()
+        super(Gencontrol, self).__init__(ConfigCoreHierarchy(["debian/arch"]), Templates(["debian/templates"]))
         self.process_changelog()
 
     def do_main_setup(self, vars, makeflags, extra):
@@ -48,32 +49,21 @@ class Gencontrol(Base):
             j = self.substitute(self.templates["xen-utils.%s" % i], vars)
             file("debian/%s.%s" % (package_utils_name, i), 'w').write(j)
 
-        cmds_binary_arch = []
-        cmds_binary_arch.append(("$(MAKE) -f debian/rules.real binary-arch-arch %s" % makeflags))
-        cmds_build = []
-        cmds_build.append(("$(MAKE) -f debian/rules.real build-arch %s" % makeflags,))
-        cmds_setup = []
-        cmds_setup.append(("$(MAKE) -f debian/rules.real setup-arch %s" % makeflags,))
-        makefile.append(("binary-arch-%s-real:" % arch, cmds_binary_arch))
-        makefile.append(("build-%s-real:" % arch, cmds_build))
-        makefile.append(("setup-%s-real:" % arch, cmds_setup))
+        cmds_binary_arch = ["$(MAKE) -f debian/rules.real binary-arch-arch %s" % makeflags]
+        cmds_build = ["$(MAKE) -f debian/rules.real build-arch %s" % makeflags]
+        cmds_setup = ["$(MAKE) -f debian/rules.real setup-arch %s" % makeflags]
+        makefile.add('binary-arch_%s_real' % arch, cmds = cmds_binary_arch)
+        makefile.add('build_%s_real' % arch, cmds = cmds_build)
+        makefile.add('setup_%s_real' % arch, cmds = cmds_setup)
 
-    def do_subarch_makefile(self, makefile, arch, subarch, makeflags, extra):
-        pass
-
-    def do_flavour_setup(self, vars, makeflags, arch, subarch, flavour, extra):
+    def do_flavour_setup(self, vars, makeflags, arch, featureset, flavour, extra):
         for i in (
             ('config', 'CONFIG'),
         ):
             if vars.has_key(i[0]):
                 makeflags[i[1]] = vars[i[0]]
 
-    def do_flavour_makefile(self, makefile, arch, subarch, flavour, makeflags, extra):
-        for i in self.makefile_targets:
-            makefile.append("%s-%s:: %s-%s-%s" % (i, arch, i, arch, flavour))
-            makefile.append("%s-%s-%s:: %s-%s-%s-real" % (i, arch, flavour, i, arch, flavour))
-
-    def do_flavour_packages(self, packages, makefile, arch, subarch, flavour, vars, makeflags, extra):
+    def do_flavour_packages(self, packages, makefile, arch, featureset, flavour, vars, makeflags, extra):
         hypervisor = self.templates["control.hypervisor"]
 
         if not vars.has_key('desc'):
@@ -97,16 +87,12 @@ class Gencontrol(Base):
             j = self.substitute(self.templates["xen-hypervisor.%s" % i], vars)
             file("debian/%s.%s" % (package_name, i), 'w').write(j)
 
-        cmds_binary_arch = []
-        cmds_binary_arch.append(("$(MAKE) -f debian/rules.real binary-arch-flavour %s" % makeflags,))
-        cmds_build = []
-        cmds_build.append(("$(MAKE) -f debian/rules.real build-flavour %s" % makeflags,))
-        cmds_setup = []
-        cmds_setup.append(("$(MAKE) -f debian/rules.real setup-flavour %s" % makeflags,))
-        makefile.append(("binary-arch-%s-%s-real:" % (arch, flavour), cmds_binary_arch))
-        makefile.append(("build-%s-%s-real:" % (arch, flavour), cmds_build))
-        makefile.append(("setup-%s-%s-real:" % (arch, flavour), cmds_setup))
-        makefile.append(("source-%s-%s-real:" % (arch, flavour)))
+        cmds_binary_arch = ["$(MAKE) -f debian/rules.real binary-arch-flavour %s" % makeflags]
+        cmds_build = ["$(MAKE) -f debian/rules.real build-flavour %s" % makeflags]
+        cmds_setup = ["$(MAKE) -f debian/rules.real setup-flavour %s" % makeflags]
+        makefile.add("binary-arch_%s_%s_%s" % (arch, featureset, flavour), cmds = cmds_binary_arch)
+        makefile.add("build_%s_%s_%s" % (arch, featureset, flavour), cmds = cmds_build)
+        makefile.add("setup_%s_%s_%s" % (arch, featureset, flavour), cmds = cmds_setup)
 
     def process_changelog(self):
         changelog = Changelog(version = VersionXen)
