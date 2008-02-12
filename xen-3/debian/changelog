@@ -1,4 +1,4 @@
-xen-3 (3.2.0-3) UNRELEASED; urgency=low
+xen-3 (3.2.0-3) unstable; urgency=low
 
   * Clean environment for build.
   * Add packages libxenstore3.0 and xenstore-utils.
@@ -6,7 +6,7 @@ xen-3 (3.2.0-3) UNRELEASED; urgency=low
   * Make the hypervisor only recommend the utils.
   * Cleanup installation. (closes: #462989)
 
- -- Bastian Blank <waldi@debian.org>  Sat, 26 Jan 2008 22:18:23 +0000
+ -- Bastian Blank <waldi@debian.org>  Tue, 12 Feb 2008 12:40:56 +0000
 
 xen-3 (3.2.0-2) unstable; urgency=low
 
