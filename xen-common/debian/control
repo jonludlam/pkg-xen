@@ -2,7 +2,7 @@ Source: xen-common
 Section: admin
 Priority: optional
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
-Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Standards-Version: 3.7.2.0
 Build-Depends: debhelper (>= 5.0.37.2), dpatch
 
