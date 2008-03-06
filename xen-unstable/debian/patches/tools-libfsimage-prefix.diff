@@ -1,20 +1,20 @@
---- xen-3.orig/tools/libfsimage/Rules.mk
-+++ xen-3/tools/libfsimage/Rules.mk
+--- xen-unstable.orig/tools/libfsimage/Rules.mk
++++ xen-unstable/tools/libfsimage/Rules.mk
 @@ -7,11 +7,7 @@
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  
 -FSDIR-$(CONFIG_Linux) = $(LIBDIR)/fs/$(FS)
--FSDIR-$(CONFIG_SunOS)-x86_64 = lib/fs/$(FS)/64
--FSDIR-$(CONFIG_SunOS)-x86_32 = lib/fs/$(FS)/
+-FSDIR-$(CONFIG_SunOS)-x86_64 = $(PREFIX)/lib/fs/$(FS)/64
+-FSDIR-$(CONFIG_SunOS)-x86_32 = $(PREFIX)/lib/fs/$(FS)/
 -FSDIR-$(CONFIG_SunOS) = $(FSDIR-$(CONFIG_SunOS)-$(XEN_TARGET_ARCH))
 -FSDIR = $(FSDIR-y)
-+FSDIR = $(LIBDIR)/fs/$(FS)
++FSDIR = $(PRIVATE_LIBDIR)/fs/$(FS)
  
  FSLIB = fsimage.so
  
---- xen-3.orig/tools/libfsimage/common/Makefile
-+++ xen-3/tools/libfsimage/common/Makefile
+--- xen-unstable.orig/tools/libfsimage/common/Makefile
++++ xen-unstable/tools/libfsimage/common/Makefile
 @@ -1,7 +1,7 @@
  XEN_ROOT = ../../..
  include $(XEN_ROOT)/tools/Rules.mk
@@ -24,8 +24,8 @@
  DEPS = .*.d
  
  LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
---- xen-3.orig/tools/libfsimage/common/fsimage_plugin.c
-+++ xen-3/tools/libfsimage/common/fsimage_plugin.c
+--- xen-unstable.orig/tools/libfsimage/common/fsimage_plugin.c
++++ xen-unstable/tools/libfsimage/common/fsimage_plugin.c
 @@ -131,23 +131,8 @@
  	int err;
  	int ret = -1;

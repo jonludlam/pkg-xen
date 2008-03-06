@@ -1,6 +1,6 @@
 --- xen-unstable.orig/tools/ioemu/vl.c
 +++ xen-unstable/tools/ioemu/vl.c
-@@ -96,7 +96,7 @@
+@@ -108,7 +108,7 @@
  
  #include "exec-all.h"
  

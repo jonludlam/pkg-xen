@@ -7,7 +7,7 @@
 @DPATCH@
 --- xen-unstable.orig/xen/Makefile
 +++ xen-unstable/xen/Makefile
-@@ -92,16 +92,16 @@
+@@ -74,16 +74,16 @@
  include/xen/compile.h: include/xen/compile.h.in
  	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
  	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
@@ -99,7 +99,7 @@
 -}
 --- xen-unstable.orig/xen/drivers/char/console.c
 +++ xen-unstable/xen/drivers/char/console.c
-@@ -552,12 +552,10 @@
+@@ -552,14 +552,11 @@
      serial_set_rx_handler(sercon_handle, serial_rx);
  
      /* HELLO WORLD --- start-of-day banner text. */
@@ -113,8 +113,10 @@
 +           xen_compile_system_distribution(), xen_compile_system_version(),
 +           xen_compile_system_maintainer_local(), xen_compile_system_maintainer_domain(),
             xen_compiler(), xen_compile_date());
-     printk("Latest ChangeSet: %s\n", xen_changeset());
+-    printk("Latest ChangeSet: %s\n", xen_changeset());
  
+     if ( opt_sync_console )
+     {
 --- xen-unstable.orig/xen/include/xen/compile.h.in
 +++ xen-unstable/xen/include/xen/compile.h.in
 @@ -1,8 +1,9 @@

@@ -1,80 +1,39 @@
---- xen-unstable.orig/tools/blktap/drivers/Makefile
-+++ xen-unstable/tools/blktap/drivers/Makefile
-@@ -5,7 +5,7 @@
- 
- IBIN         = blktapctrl tapdisk
- QCOW_UTIL    = img2qcow qcow2raw qcow-create
--INST_DIR     = /usr/sbin
-+INST_DIR     = /usr/$(BINDIR)
- LIBAIO_DIR   = ../../libaio/src
- 
- CFLAGS   += -Werror
-@@ -52,6 +52,7 @@
- 	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(AIOLIBS) $(LIBS)
- 
- install: all
-+	$(INSTALL_DIR) $(DESTDIR)$(INST_DIR)
- 	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(INST_DIR)
- 
- clean:
 --- xen-unstable.orig/tools/console/Makefile
 +++ xen-unstable/tools/console/Makefile
-@@ -2,8 +2,7 @@
- XEN_ROOT=../..
- include $(XEN_ROOT)/tools/Rules.mk
- 
--DAEMON_INSTALL_DIR = /usr/sbin
--CLIENT_INSTALL_DIR = /usr/$(LIBDIR)/xen/bin
-+DIR = /usr/$(BINDIR)
- 
- CFLAGS  += -Werror
- 
-@@ -30,7 +29,5 @@
+@@ -29,7 +29,5 @@
  
  .PHONY: install
  install: $(BIN)
--	$(INSTALL_DIR) $(DESTDIR)/$(DAEMON_INSTALL_DIR)
--	$(INSTALL_PROG) xenconsoled $(DESTDIR)/$(DAEMON_INSTALL_DIR)
--	$(INSTALL_DIR) $(DESTDIR)/$(CLIENT_INSTALL_DIR)
--	$(INSTALL_PROG) xenconsole $(DESTDIR)/$(CLIENT_INSTALL_DIR)
-+	$(INSTALL_DIR) $(DESTDIR)/$(DIR)
-+	$(INSTALL_PROG) xenconsole xenconsoled $(DESTDIR)/$(DIR)
+-	$(INSTALL_DIR) $(DESTDIR)/$(SBINDIR)
+-	$(INSTALL_PROG) xenconsoled $(DESTDIR)/$(SBINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
+-	$(INSTALL_PROG) xenconsole $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) xenconsole xenconsoled $(DESTDIR)$(PRIVATE_BINDIR)
 --- xen-unstable.orig/tools/misc/Makefile
 +++ xen-unstable/tools/misc/Makefile
-@@ -13,8 +13,7 @@
- TARGETS-$(CONFIG_X86) += xen-detect
- TARGETS := $(TARGETS-y)
+@@ -18,8 +18,7 @@
+ SUBDIRS-$(CONFIG_MINITERM) += miniterm
+ SUBDIRS := $(SUBDIRS-y)
  
 -INSTALL_BIN  = $(TARGETS) xencons
 -INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf xsview
-+INSTALL_TARGETS = $(TARGETS) xencons netfix xm xend xsview
++INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend xsview
  
  .PHONY: all
  all: build
-@@ -26,10 +25,8 @@
+@@ -30,10 +29,8 @@
  
  .PHONY: install
  install: build
--	[ -d $(DESTDIR)/usr/bin ] || $(INSTALL_DIR) $(DESTDIR)/usr/bin
--	[ -d $(DESTDIR)/usr/sbin ] || $(INSTALL_DIR) $(DESTDIR)/usr/sbin
--	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)/usr/bin
--	$(INSTALL_PROG) $(INSTALL_SBIN) $(DESTDIR)/usr/sbin
-+	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
-+	$(INSTALL_PROG) $(INSTALL_TARGETS) $(DESTDIR)/usr/$(BINDIR)
- 	$(MAKE) -C lomount install
- #       No sense in installing miniterm on the Xen box.
- #	$(MAKE) -C miniterm install
---- xen-unstable.orig/tools/misc/lomount/Makefile
-+++ xen-unstable/tools/misc/lomount/Makefile
-@@ -16,7 +16,7 @@
- 
- .PHONY: install
- install: build
--	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/bin
-+	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/$(BINDIR)
+-	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_PROG) $(INSTALL_SBIN) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) $(INSTALL_TARGETS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	set -e; for d in $(SUBDIRS); do $(MAKE) -C $$d install-recurse; done
  
  .PHONY: clean
- clean:
 --- xen-unstable.orig/tools/python/Makefile
 +++ xen-unstable/tools/python/Makefile
 @@ -24,7 +24,7 @@
@@ -99,104 +58,9 @@
  endif
  
  install-dtd: all
---- xen-unstable.orig/tools/xcutils/Makefile
-+++ xen-unstable/tools/xcutils/Makefile
-@@ -11,7 +11,7 @@
- XEN_ROOT	= ../..
- include $(XEN_ROOT)/tools/Rules.mk
- 
--PROGRAMS_INSTALL_DIR = /usr/$(LIBDIR)/xen/bin
-+PROGRAMS_INSTALL_DIR = /usr/$(BINDIR)
- 
- INCLUDES += -I $(XEN_LIBXC) -I $(XEN_XENSTORE)
- 
---- xen-unstable.orig/tools/xenmon/Makefile
-+++ xen-unstable/tools/xenmon/Makefile
-@@ -13,8 +13,6 @@
- XEN_ROOT=../..
- include $(XEN_ROOT)/tools/Rules.mk
- 
--sbindir=/usr/sbin
--
- CFLAGS  += -Werror
- CFLAGS  += -I $(XEN_XC)
- CFLAGS  += -I $(XEN_LIBXC)
-@@ -31,10 +29,8 @@
- 
- .PHONY: install
- install: build
--	[ -d $(DESTDIR)$(sbindir) ] || $(INSTALL_DIR) $(DESTDIR)$(sbindir)
--	$(INSTALL_PROG) xenbaked $(DESTDIR)$(sbindir)/xenbaked
--	$(INSTALL_PROG) xentrace_setmask  $(DESTDIR)$(sbindir)/xentrace_setmask
--	$(INSTALL_PROG) xenmon.py  $(DESTDIR)$(sbindir)/xenmon.py
-+	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
-+	$(INSTALL_PROG) xenbaked xenmon.py xentrace_setmask $(DESTDIR)/usr/$(BINDIR)
- 
- .PHONY: clean
- clean:
---- xen-unstable.orig/tools/xenstat/xentop/Makefile
-+++ xen-unstable/tools/xenstat/xentop/Makefile
-@@ -21,7 +21,6 @@
- prefix=/usr
- mandir=$(prefix)/share/man
- man1dir=$(mandir)/man1
--sbindir=$(prefix)/sbin
- 
- CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
- LDFLAGS += -L$(XEN_LIBXENSTAT)
-@@ -33,7 +32,7 @@
- 
- .PHONY: install
- install: xentop xentop.1
--	$(INSTALL_PROG) xentop $(DESTDIR)$(sbindir)/xentop
-+	$(INSTALL_PROG) -D xentop $(DESTDIR)/usr/$(BINDIR)/xentop
- 	$(INSTALL_DIR) $(DESTDIR)$(man1dir)
- 	$(INSTALL_DATA) xentop.1 $(DESTDIR)$(man1dir)/xentop.1
- 
---- xen-unstable.orig/tools/xenstore/Makefile
-+++ xen-unstable/tools/xenstore/Makefile
-@@ -81,13 +81,9 @@
- install: all
- 	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
- 	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
--	$(INSTALL_DIR) $(DESTDIR)/usr/bin
--	$(INSTALL_DIR) $(DESTDIR)/usr/sbin
-+	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)/usr/include
--	$(INSTALL_PROG) xenstored $(DESTDIR)/usr/sbin
--	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)/usr/bin
--	$(INSTALL_PROG) xenstore-control $(DESTDIR)/usr/bin
--	$(INSTALL_PROG) xenstore-ls $(DESTDIR)/usr/bin
-+	$(INSTALL_PROG) xenstore-control xenstore-ls xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)
- 	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)
- 	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
---- xen-unstable.orig/tools/xentrace/Makefile
-+++ xen-unstable/tools/xentrace/Makefile
-@@ -35,15 +35,11 @@
- 
- .PHONY: install
- install: build
--	[ -d $(DESTDIR)/usr/bin ] || $(INSTALL_DIR) $(DESTDIR)/usr/bin
--	[ -z "$(LIBBIN)" ] || [ -d $(DESTDIR)/usr/$(LIBDIR)/xen/bin ] || \
--		$(INSTALL_DIR) $(DESTDIR)/usr/$(LIBDIR)/xen/bin
--	[ -d $(DESTDIR)/usr/share/man/man1 ] || \
--		$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man1
--	[ -d $(DESTDIR)/usr/share/man/man8 ] || \
--		$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man8
--	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/bin
--	[ -z "$(LIBBIN)" ] || $(INSTALL_PROG) $(LIBBIN) $(DESTDIR)/usr/$(LIBDIR)/xen/bin
-+	$(INSTALL_DIR) $(DESTDIR)/usr/$(BINDIR)
-+	$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man1
-+	$(INSTALL_DIR) $(DESTDIR)/usr/share/man/man8
-+	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)/usr/$(BINDIR)
-+	[ -z "$(LIBBIN)" ] || $(INSTALL_PROG) $(LIBBIN) $(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_DATA) $(MAN1) $(DESTDIR)/usr/share/man/man1
- 	$(INSTALL_DATA) $(MAN8) $(DESTDIR)/usr/share/man/man8
- 
 --- xen-unstable.orig/tools/ioemu/Makefile.target
 +++ xen-unstable/tools/ioemu/Makefile.target
-@@ -206,6 +206,7 @@
+@@ -211,6 +211,7 @@
  ifdef CONFIG_SOLARIS
  LIBS+=-lsocket -lnsl -lresolv
  endif
@@ -206,7 +70,7 @@
  ifdef TARGET_GPROF
 --- xen-unstable.orig/tools/ioemu/configure
 +++ xen-unstable/tools/ioemu/configure
-@@ -594,9 +594,9 @@
+@@ -576,9 +576,9 @@
      prefix="/usr/local"
  fi
  mandir="$prefix/share/man"
@@ -231,12 +95,138 @@
  SUBDIRS += rombios rombios/32bit
 --- xen-unstable.orig/tools/blktap/lib/Makefile
 +++ xen-unstable/tools/blktap/lib/Makefile
-@@ -5,7 +5,7 @@
- MINOR    = 0
- SONAME   = libblktap.so.$(MAJOR)
+@@ -38,11 +38,11 @@
+ libblktap: libblktap.a
  
--BLKTAP_INSTALL_DIR = /usr/sbin
-+BLKTAP_INSTALL_DIR = /usr/$(BINDIR)
+ install: all
+-	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+-	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(LIBDIR)
+-	ln -sf libblktap.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libblktap.so.$(MAJOR)
+-	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libblktap.so
++	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(PRIVATE_LIBDIR)
++	ln -sf libblktap.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so.$(MAJOR)
++	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so
+ 	$(INSTALL_DATA) blktaplib.h $(DESTDIR)$(INCLUDEDIR)
  
- INCLUDES += -I. -I.. -I $(XEN_LIBXC) -I $(XEN_XENSTORE)
+ clean:
+--- xen-unstable.orig/tools/xenstore/Makefile
++++ xen-unstable/tools/xenstore/Makefile
+@@ -93,18 +93,17 @@
+ install: all
+ 	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
+ 	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
+-	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+-	$(INSTALL_PROG) xenstored $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(BINDIR)
+-	$(INSTALL_PROG) xenstore-ls $(DESTDIR)$(BINDIR)
+-	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
+-	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
+-	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libxenstore.so.$(MAJOR)
+-	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libxenstore.so
+-	$(INSTALL_DATA) libxenstore.a $(DESTDIR)$(LIBDIR)
++	$(INSTALL_PROG) xenstored $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) xenstore-ls $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenstore.so.$(MAJOR)
++	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenstore.so
++	$(INSTALL_DATA) libxenstore.a $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DATA) xs.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) xs_lib.h $(DESTDIR)$(INCLUDEDIR)
+ 
+--- xen-unstable.orig/tools/xenmon/Makefile
++++ xen-unstable/tools/xenmon/Makefile
+@@ -29,10 +29,10 @@
+ 
+ .PHONY: install
+ install: build
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) xenbaked $(DESTDIR)$(SBINDIR)/xenbaked
+-	$(INSTALL_PROG) xentrace_setmask  $(DESTDIR)$(SBINDIR)/xentrace_setmask
+-	$(INSTALL_PROG) xenmon.py  $(DESTDIR)$(SBINDIR)/xenmon.py
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) xenbaked $(DESTDIR)$(PRIVATE_BINDIR)/xenbaked
++	$(INSTALL_PROG) xentrace_setmask  $(DESTDIR)$(PRIVATE_BINDIR)/xentrace_setmask
++	$(INSTALL_PROG) xenmon.py  $(DESTDIR)$(PRIVATE_BINDIR)/xenmon.py
+ 
+ .PHONY: clean
+ clean:
+--- xen-unstable.orig/tools/xentrace/Makefile
++++ xen-unstable/tools/xentrace/Makefile
+@@ -35,12 +35,10 @@
+ 
+ .PHONY: install
+ install: build
+-	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
+-	[ -z "$(LIBBIN)" ] || $(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(MAN1DIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(MAN8DIR)
+-	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
+-	[ -z "$(LIBBIN)" ] || $(INSTALL_PROG) $(LIBBIN) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) $(BIN) $(LIBBIN) $(SCRIPTS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DATA) $(MAN1) $(DESTDIR)$(MAN1DIR)
+ 	$(INSTALL_DATA) $(MAN8) $(DESTDIR)$(MAN8DIR)
+ 
+--- xen-unstable.orig/tools/libxc/Makefile
++++ xen-unstable/tools/libxc/Makefile
+@@ -101,18 +101,18 @@
+ 
+ .PHONY: install
+ install: build
+-	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+-	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
+-	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)$(LIBDIR)
+-	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libxenctrl.so.$(MAJOR)
+-	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libxenctrl.so
++	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)$(PRIVATE_LIBDIR)
++	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenctrl.so.$(MAJOR)
++	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenctrl.so
+ 	$(INSTALL_DATA) xenctrl.h $(DESTDIR)$(INCLUDEDIR)
+ 
+-	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
+-	$(INSTALL_DATA) libxenguest.a $(DESTDIR)$(LIBDIR)
+-	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libxenguest.so.$(MAJOR)
+-	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libxenguest.so
++	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	$(INSTALL_DATA) libxenguest.a $(DESTDIR)$(PRIVATE_LIBDIR)
++	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenguest.so.$(MAJOR)
++	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenguest.so
+ 	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
+ 
+ .PHONY: TAGS
+--- xen-unstable.orig/tools/misc/lomount/Makefile
++++ xen-unstable/tools/misc/lomount/Makefile
+@@ -16,7 +16,7 @@
+ 
+ .PHONY: install
+ install install-recurse: build
+-	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
++	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 
+ .PHONY: clean
+ clean:
+--- xen-unstable.orig/tools/xenstat/xentop/Makefile
++++ xen-unstable/tools/xenstat/xentop/Makefile
+@@ -28,8 +28,8 @@
+ 
+ .PHONY: install
+ install: xentop xentop.1
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) xentop $(DESTDIR)$(SBINDIR)/xentop
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) xentop $(DESTDIR)$(PRIVATE_BINDIR)/xentop
+ 	$(INSTALL_DIR) $(DESTDIR)$(MAN1DIR)
+ 	$(INSTALL_DATA) xentop.1 $(DESTDIR)$(MAN1DIR)/xentop.1
  

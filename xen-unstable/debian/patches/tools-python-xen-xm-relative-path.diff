@@ -1,6 +1,6 @@
 --- xen-unstable.orig/tools/python/xen/xm/create.py
 +++ xen-unstable/tools/python/xen/xm/create.py
-@@ -543,6 +543,14 @@
+@@ -561,6 +561,14 @@
      else:
          return s
  
@@ -15,7 +15,7 @@
  def configure_image(vals):
      """Create the image config.
      """
-@@ -550,9 +558,9 @@
+@@ -568,11 +576,11 @@
          return None
      config_image = [ vals.builder ]
      if vals.kernel:
@@ -23,11 +23,14 @@
 +        config_image.append([ 'kernel', abspath(vals.kernel, 'boot') ])
      if vals.ramdisk:
 -        config_image.append([ 'ramdisk', os.path.abspath(vals.ramdisk) ])
-+        config_image.append([ 'ramdisk', abspath(vals.ramdisk, 'boot') ])
++        config_image.append([ 'ramdisk', abspath(vals.kernel, 'boot') ])
+     if vals.loader:
+-        config_image.append([ 'loader', os.path.abspath(vals.loader) ])
++        config_image.append([ 'loader', abspath(vals.kernel, 'boot') ])
      if vals.cmdline_ip:
          cmdline_ip = strip('ip=', vals.cmdline_ip)
          config_image.append(['ip', cmdline_ip])
-@@ -729,7 +737,7 @@
+@@ -740,7 +748,7 @@
  def configure_hvm(config_image, vals):
      """Create the config for HVM devices.
      """
@@ -36,12 +39,12 @@
               'localtime', 'serial', 'stdvga', 'isa', 'nographic', 'soundhw',
               'vnc', 'vncdisplay', 'vncunused', 'vncconsole', 'vnclisten',
               'sdl', 'display', 'xauthority', 'rtc_timeoffset', 'monitor',
-@@ -737,6 +745,8 @@
+@@ -750,6 +758,8 @@
      for a in args:
          if a in vals.__dict__ and vals.__dict__[a] is not None:
              config_image.append([a, vals.__dict__[a]])
-+    if vals.device_model is not None:
-+        config_image.append([ 'device_model', abspath(vals.device_model, 'bin') ])
++    if vals.device_model:
++        config_image.append(['device_model', abspath(vals.device_model, 'bin')])
      if vals.vncpasswd is not None:
          config_image.append(['vncpasswd', vals.vncpasswd])
  

@@ -1,5 +1,5 @@
---- xen-unstable.orig/tools/python/xen/util/auxbin.py
-+++ xen-unstable/tools/python/xen/util/auxbin.py
+--- xen-3.orig/tools/python/xen/util/auxbin.py
++++ xen-3/tools/python/xen/util/auxbin.py
 @@ -16,19 +16,11 @@
  #============================================================================
  
