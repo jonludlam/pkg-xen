@@ -1,3 +1,9 @@
+xen-3 (3.2.0-4) UNRELEASED; urgency=low
+
+  * Pull in newer xen-utils-common.
+
+ -- Bastian Blank <waldi@debian.org>  Thu, 06 Mar 2008 20:46:15 +0100
+
 xen-3 (3.2.0-3) unstable; urgency=low
 
   * Clean environment for build.
