@@ -15,13 +15,13 @@ include debian/rules.defs
 setup: $(STAMPS_DIR)/setup-base
 $(STAMPS_DIR)/setup-base: debian/control $(BUILD_DIR) $(STAMPS_DIR)
 	dh_testdir
-	$(MAKE) -f debian/rules.gen setup-$(DEB_HOST_ARCH)
+	$(MAKE) -f debian/rules.gen setup_$(DEB_HOST_ARCH)
 	touch $@
 
 build: debian/control $(STAMPS_DIR)/build-base
 $(STAMPS_DIR)/build-base: $(STAMPS_DIR)/setup-base
 	dh_testdir
-	$(MAKE) -f debian/rules.gen build-$(DEB_HOST_ARCH)
+	$(MAKE) -f debian/rules.gen build_$(DEB_HOST_ARCH)
 	touch $@
 
 $(BUILD_DIR) $(STAMPS_DIR):
@@ -42,7 +42,7 @@ binary-indep:
 
 binary-arch:
 	dh_testdir
-	$(MAKE) -f debian/rules.gen binary-arch-$(DEB_HOST_ARCH)
+	$(MAKE) -f debian/rules.gen binary-arch_$(DEB_HOST_ARCH)
 
 binary:	binary-indep binary-arch
 
