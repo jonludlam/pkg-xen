@@ -12,7 +12,6 @@ MAKE_SELF = $(MAKE) -f debian/rules.real
 include debian/rules.defs
 
 binary-arch-arch: install-utils_$(ARCH)
-binary-arch-arch: install-xenstore-utils_$(ARCH)
 binary-arch-flavour: install-hypervisor_$(ARCH)_$(FLAVOUR)
 
 binary-indep:
@@ -157,6 +156,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_install --sourcedir=$(DIR) usr/share/xen-$(VERSION)$(ABINAME)
 	dh_pycentral
 	dh_strip
+	dh_makeshlibs
 	dh_shlibdeps
 	$(MAKE_SELF) install-base
 
