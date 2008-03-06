@@ -54,9 +54,9 @@
 -	ln -sf $< $@
 -
 -libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ $(PTHREAD_LIBS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $^ $(PTHREAD_LIBS)
 +libxenctrl.so: $(CTRL_PIC_OBJS)
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ $(PTHREAD_LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $^ $(PTHREAD_LIBS)
  
  # libxenguest
  
@@ -69,9 +69,9 @@
 -	ln -sf $< $@
 -
 -libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
 +libxenguest.so: $(GUEST_PIC_OBJS) libxenctrl.so
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
  
  -include $(DEPS)
  
@@ -142,12 +142,12 @@
  all: $(LIB)
 @@ -24,9 +21,7 @@
  install: all
- 	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
--	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
--	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libfsimage.so.$(MAJOR)
--	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libfsimage.so
-+	$(INSTALL_PROG) libfsimage.so $(DESTDIR)$(LIBDIR)
+-	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
+-	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libfsimage.so.$(MAJOR)
+-	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libfsimage.so
++	$(INSTALL_PROG) libfsimage.so $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DATA) fsimage.h $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) fsimage_plugin.h $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) fsimage_grub.h $(DESTDIR)$(INCLUDEDIR)
@@ -176,8 +176,7 @@
  XEN_ROOT = ../../..
  include $(XEN_ROOT)/tools/Rules.mk
  
-@@ -21,8 +18,8 @@
- LIB_OBJS := $(patsubst %.c,%.o,$(SRCS))
+@@ -22,7 +19,7 @@
  PIC_OBJS := $(patsubst %.c,%.opic,$(SRCS))
  
  LIB := libflask.a
@@ -186,7 +185,7 @@
  
  .PHONY: all
  all: build
-@@ -35,10 +31,8 @@
+@@ -35,10 +32,8 @@
  install: build
  	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
@@ -198,10 +197,7 @@
  	$(INSTALL_DATA) include/flask.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
-@@ -51,15 +45,10 @@
- 
- # libflask
- 
+@@ -54,12 +49,7 @@
  libflask.a: $(LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -216,3 +212,42 @@
 +	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^
  
  -include $(DEPS)
+--- xen-unstable.orig/tools/xenstore/Makefile
++++ xen-unstable/tools/xenstore/Makefile
+@@ -2,9 +2,6 @@
+ include $(XEN_ROOT)/tools/Rules.mk
+ XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
+ 
+-MAJOR = 3.0
+-MINOR = 0
+-
+ PROFILE=#-pg
+ BASECFLAGS=-Werror
+ # Make gcc generate dependencies.
+@@ -62,13 +59,8 @@
+ xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
+ 
+-libxenstore.so: libxenstore.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenstore.so.$(MAJOR): libxenstore.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenstore.so.$(MAJOR).$(MINOR): xs.opic xs_lib.opic
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenstore.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
++libxenstore.so: xs.opic xs_lib.opic
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
+ 
+ libxenstore.a: xs.o xs_lib.o
+ 	$(AR) rcs libxenstore.a $^
+@@ -100,9 +92,7 @@
+ 	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_PROG) xenstore-ls $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+-	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
+-	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenstore.so.$(MAJOR)
+-	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenstore.so
++	$(INSTALL_PROG) libxenstore.so $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DATA) libxenstore.a $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DATA) xs.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) xs_lib.h $(DESTDIR)$(INCLUDEDIR)

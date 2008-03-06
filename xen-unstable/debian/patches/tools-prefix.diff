@@ -1,6 +1,6 @@
 --- xen-unstable.orig/tools/console/Makefile
 +++ xen-unstable/tools/console/Makefile
-@@ -29,7 +29,5 @@
+@@ -30,7 +30,5 @@
  
  .PHONY: install
  install: $(BIN)
@@ -113,7 +113,7 @@
  clean:
 --- xen-unstable.orig/tools/xenstore/Makefile
 +++ xen-unstable/tools/xenstore/Makefile
-@@ -93,18 +93,17 @@
+@@ -95,18 +95,17 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
@@ -230,3 +230,21 @@
  	$(INSTALL_DIR) $(DESTDIR)$(MAN1DIR)
  	$(INSTALL_DATA) xentop.1 $(DESTDIR)$(MAN1DIR)/xentop.1
  
+--- xen-unstable.orig/tools/libfsimage/common/Makefile
++++ xen-unstable/tools/libfsimage/common/Makefile
+@@ -22,11 +22,11 @@
+ 
+ .PHONY: install
+ install: all
+-	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+-	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
+-	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libfsimage.so.$(MAJOR)
+-	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libfsimage.so
++	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libfsimage.so.$(MAJOR)
++	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libfsimage.so
+ 	$(INSTALL_DATA) fsimage.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) fsimage_plugin.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) fsimage_grub.h $(DESTDIR)$(INCLUDEDIR)

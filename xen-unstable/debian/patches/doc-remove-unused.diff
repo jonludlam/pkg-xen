@@ -1,5 +1,5 @@
---- xen-3.orig/docs/src/interface.tex
-+++ xen-3/docs/src/interface.tex
+--- xen-unstable.orig/docs/src/interface.tex
++++ xen-unstable/docs/src/interface.tex
 @@ -1,6 +1,6 @@
 -\documentclass[11pt,twoside,final,openright]{report}
 -\usepackage{a4,graphicx,html,setspace,times}

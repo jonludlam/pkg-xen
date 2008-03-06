@@ -4,31 +4,18 @@
  
  include $(XEN_ROOT)/Config.mk
  
-+LDFLAGS_RPATH := -Wl,-rpath,$(PRIVATE_LIBDIR)
++LDFLAGS_RPATH = -Wl,-rpath,'$${ORIGIN}$(if $(1),/$(1))'
 +
  XEN_INCLUDE        = $(XEN_ROOT)/tools/include
  XEN_XC             = $(XEN_ROOT)/tools/python/xen/lowlevel/xc
  XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
-@@ -14,10 +16,10 @@
- CFLAGS_include = -I$(XEN_INCLUDE)
- 
- CFLAGS_libxenctrl = -I$(XEN_LIBXC) $(CFLAGS_include)
--LDFLAGS_libxenctrl = -L$(XEN_LIBXC) -lxenctrl
-+LDFLAGS_libxenctrl = -L$(XEN_LIBXC) -lxenctrl $(LDFLAGS_RPATH)
- 
- CFLAGS_libxenguest = -I$(XEN_LIBXC) $(CFLAGS_include)
--LDFLAGS_libxenguest = -L$(XEN_LIBXC) -lxenguest
-+LDFLAGS_libxenguest = -L$(XEN_LIBXC) -lxenguest $(LDFLAGS_RPATH)
- 
- CFLAGS_libxenstore = -I$(XEN_XENSTORE) $(CFLAGS_include)
- LDFLAGS_libxenstore = -L$(XEN_XENSTORE) -lxenstore
 --- xen-unstable.orig/tools/python/setup.py
 +++ xen-unstable/tools/python/setup.py
 @@ -5,6 +5,7 @@
  XEN_ROOT = "../.."
  
  extra_compile_args  = [ "-fno-strict-aliasing", "-Werror" ]
-+extra_link_args = [ "-Wl,-rpath,/usr/%s" % os.environ['LIBDIR'] ]
++extra_link_args = [ "-Wl,-rpath,${ORIGIN}/../../../.." ]
  
  include_dirs = [ XEN_ROOT + "/tools/libxc",
                   XEN_ROOT + "/tools/xenstore",
@@ -86,8 +73,133 @@
  VL_LDFLAGS+=-Wl,-T,$(SRC_PATH)/sparc64.ld
  endif
  
-+VL_LDFLAGS+=$(LDFLAGS_RPATH)
++VL_LDFLAGS+=$(call LDFLAGS_RPATH,../lib)
 +
  ifdef CONFIG_WIN32
  SDL_LIBS := $(filter-out -mwindows, $(SDL_LIBS)) -mconsole
  endif
+--- xen-unstable.orig/tools/libxc/Makefile
++++ xen-unstable/tools/libxc/Makefile
+@@ -146,7 +146,7 @@
+ 	ln -sf $< $@
+ 
+ libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ $(PTHREAD_LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $^ $(PTHREAD_LIBS)
+ 
+ # libxenguest
+ 
+@@ -159,7 +159,7 @@
+ 	ln -sf $< $@
+ 
+ libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
+ 
+ -include $(DEPS)
+ 
+--- xen-unstable.orig/tools/xcutils/Makefile
++++ xen-unstable/tools/xcutils/Makefile
+@@ -20,7 +20,7 @@
+ 
+ PROGRAMS = xc_restore xc_save readnotes
+ 
+-LDLIBS   = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore)
++LDLIBS   = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib)
+ 
+ .PHONY: all
+ all: build
+--- xen-unstable.orig/tools/xenstat/xentop/Makefile
++++ xen-unstable/tools/xenstat/xentop/Makefile
+@@ -19,7 +19,7 @@
+ else
+ 
+ CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
+-LDFLAGS += -L$(XEN_LIBXENSTAT)
++LDFLAGS += -L$(XEN_LIBXENSTAT) $(call LDFLAGS_RPATH,../lib)
+ LDLIBS += -lxenstat $(CURSES_LIBS) $(SOCKET_LIBS)
+ CFLAGS += -DHOST_$(XEN_OS)
+ 
+--- xen-unstable.orig/tools/misc/Makefile
++++ xen-unstable/tools/misc/Makefile
+@@ -45,4 +45,4 @@
+ 	$(CC) -c $(CFLAGS) -o $@ $<
+ 
+ xenperf: %: %.o Makefile
+-	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) $(LDFLAGS_libxenctrl)
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH,../lib)
+--- xen-unstable.orig/tools/xentrace/Makefile
++++ xen-unstable/tools/xentrace/Makefile
+@@ -4,7 +4,7 @@
+ CFLAGS  += -Werror
+ 
+ CFLAGS  += $(CFLAGS_libxenctrl)
+-LDFLAGS += $(LDFLAGS_libxenctrl)
++LDFLAGS += $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH,../lib)
+ 
+ HDRS     = $(wildcard *.h)
+ OBJS     = $(patsubst %.c,%.o,$(wildcard *.c))
+--- xen-unstable.orig/tools/console/Makefile
++++ xen-unstable/tools/console/Makefile
+@@ -8,6 +8,7 @@
+ CFLAGS  += $(CFLAGS_libxenstore)
+ LDFLAGS += $(LDFLAGS_libxenctrl)
+ LDFLAGS += $(LDFLAGS_libxenstore)
++LDFLAGS += $(call LDFLAGS_RPATH,../lib)
+ 
+ BIN      = xenconsoled xenconsole
+ 
+--- xen-unstable.orig/tools/xenmon/Makefile
++++ xen-unstable/tools/xenmon/Makefile
+@@ -16,7 +16,7 @@
+ CFLAGS  += -Werror
+ CFLAGS  += -I $(XEN_XC)
+ CFLAGS  += $(CFLAGS_libxenctrl)
+-LDFLAGS += $(LDFLAGS_libxenctrl)
++LDFLAGS += $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH,../lib)
+ 
+ BIN = xentrace_setmask xenbaked
+ SCRIPTS = xenmon.py
+--- xen-unstable.orig/tools/libfsimage/Rules.mk
++++ xen-unstable/tools/libfsimage/Rules.mk
+@@ -3,7 +3,7 @@
+ DEPS = .*.d
+ 
+ CFLAGS += -I$(XEN_ROOT)/tools/libfsimage/common/ -Werror -Wp,-MD,.$(@F).d
+-LDFLAGS += -L../common/
++LDFLAGS += -L../common/ $(call LDFLAGS_RPATH,../../)
+ 
+ PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
+ 
+--- xen-unstable.orig/tools/xenstore/Makefile
++++ xen-unstable/tools/xenstore/Makefile
+@@ -17,6 +17,9 @@
+ CFLAGS  += $(BASECFLAGS)
+ LDFLAGS += $(PROFILE)
+ 
++LDFLAGS_libxenctrl += $(call LDFLAGS_RPATH,../lib)
++LDFLAGS_libxenstore = -L. -lxenstore $(call LDFLAGS_RPATH,../lib)
++
+ CLIENTS := xenstore-exists xenstore-list xenstore-read xenstore-rm xenstore-chmod
+ CLIENTS += xenstore-write
+ CLIENTS_OBJS := $(patsubst xenstore-%,xenstore_%.o,$(CLIENTS))
+@@ -48,16 +51,16 @@
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenctrl) $(SOCKET_LIBS) -o $@
+ 
+ $(CLIENTS): xenstore-%: xenstore_%.o libxenstore.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) -L. -lxenstore $(SOCKET_LIBS) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
+ 
+ $(CLIENTS_OBJS): xenstore_%.o: xenstore_client.c
+ 	$(COMPILE.c) -DCLIENT_$(*F) -o $@ $<
+ 
+ xenstore-control: xenstore_control.o libxenstore.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) -L. -lxenstore $(SOCKET_LIBS) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
+ 
+ xenstore-ls: xsls.o libxenstore.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) -L. -lxenstore $(SOCKET_LIBS) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
+ 
+ xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
