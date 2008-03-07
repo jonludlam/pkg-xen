@@ -15,7 +15,7 @@
  XEN_ROOT = "../.."
  
  extra_compile_args  = [ "-fno-strict-aliasing", "-Werror" ]
-+extra_link_args = [ "-Wl,-rpath,${ORIGIN}/../../../.." ]
++extra_link_args = [ "-Wl,-rpath,${ORIGIN}/../../.." ]
  
  include_dirs = [ XEN_ROOT + "/tools/libxc",
                   XEN_ROOT + "/tools/xenstore",
@@ -203,3 +203,19 @@
  
  xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
  	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
+--- xen-3.orig/tools/pygrub/setup.py
++++ xen-3/tools/pygrub/setup.py
+@@ -4,11 +4,13 @@
+ import sys
+ 
+ extra_compile_args  = [ "-fno-strict-aliasing", "-Werror" ]
++extra_link_args = [ "-Wl,-rpath,${ORIGIN}/.." ]
+ 
+ XEN_ROOT = "../.."
+ 
+ fsimage = Extension("fsimage",
+     extra_compile_args = extra_compile_args,
++    extra_link_args = extra_link_args,
+     include_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
+     library_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
+     libraries = ["fsimage"],
