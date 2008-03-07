@@ -1,4 +1,4 @@
-xen-common (3.2.0-2) UNRELEASED; urgency=low
+xen-common (3.2.0-2) unstable; urgency=low
 
   [ Guido Trotter ]
   * Fix init script LSB headers (closes: #458502)
@@ -6,7 +6,7 @@ xen-common (3.2.0-2) UNRELEASED; urgency=low
   [ Bastian Blank ]
   * Special case unstable versions.
 
- -- Guido Trotter <ultrotter@debian.org>  Mon, 03 Mar 2008 20:40:48 +0000
+ -- Bastian Blank <waldi@debian.org>  Fri, 07 Mar 2008 14:19:47 +0100
 
 xen-common (3.2.0-1) unstable; urgency=low
 
