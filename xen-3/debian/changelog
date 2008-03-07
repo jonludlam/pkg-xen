@@ -1,6 +1,8 @@
 xen-3 (3.2.0-4) UNRELEASED; urgency=low
 
   * Pull in newer xen-utils-common.
+  * Fix missing size checks in the ioemu block driver. (closes: #469654)
+    See: CVE-2008-0928
 
  -- Bastian Blank <waldi@debian.org>  Thu, 06 Mar 2008 20:46:15 +0100
 
