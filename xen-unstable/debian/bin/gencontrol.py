@@ -11,6 +11,7 @@ from debian_linux.utils import Templates
 
 class Gencontrol(Base):
     makeflags_base = {
+        'EXTRAVERSION': '-unstable',
         'VERSION': 'unstable',
         'ABINAME': '',
     }
