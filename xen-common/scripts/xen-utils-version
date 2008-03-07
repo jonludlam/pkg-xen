@@ -14,8 +14,13 @@ done
 if [ -z "$VERSION" ]; then
     if [ -d "/sys/hypervisor" ]; then
         if [ "$(cat /sys/hypervisor/type)" = xen ]; then
-            dir=/sys/hypervisor/version/
-            VERSION="$(cat $dir/major).$(cat $dir/minor)$(cat $dir/extra)"
+            DIR=/sys/hypervisor/version
+            VERSION_EXTRA=$(cat $DIR/extra)
+            if [ "$VERSION_EXTRA" = "-unstable" ]; then
+                VERSION=unstable
+            else
+                VERSION="$(cat $DIR/major).$(cat $DIR/minor)$VERSION_EXTRA"
+            fi
         else
             [ "$QUIET" ] || echo "WARING!  Can't read type from sysfs!" >&2
         fi
