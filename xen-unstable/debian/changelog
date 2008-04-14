@@ -1,3 +1,9 @@
+xen-unstable (3.3-unstable+hg17192-2) UNRELEASED; urgency=low
+
+  * Provide correct directory to dh_pycentral.
+
+ -- Bastian Blank <waldi@debian.org>  Mon, 14 Apr 2008 19:08:01 +0200
+
 xen-unstable (3.3-unstable+hg17192-1) unstable; urgency=low
 
   * New upstream snapshot.
