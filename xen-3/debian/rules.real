@@ -157,8 +157,9 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
 	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)$(ABINAME)
 	dh_install --sourcedir=$(DIR) usr/share/xen-$(VERSION)$(ABINAME)
-	dh_pycentral
+	dh_pycentral usr/lib/xen-$(VERSION)$(ABINAME)
 	dh_strip
+	dh_makeshlibs
 	dh_shlibdeps
 	$(MAKE_SELF) install-base
 
