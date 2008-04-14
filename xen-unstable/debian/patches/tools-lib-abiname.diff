@@ -10,7 +10,7 @@
  CTRL_SRCS-y       :=
  ifneq ($(stubdom),y)
  CTRL_SRCS-y       += xc_core.c
-@@ -81,12 +78,12 @@
+@@ -82,12 +79,12 @@
  
  LIB := libxenctrl.a
  ifneq ($(stubdom),y)
@@ -25,7 +25,7 @@
  endif
  
  .PHONY: all
-@@ -103,16 +100,12 @@
+@@ -104,16 +101,12 @@
  install: build
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
@@ -44,7 +44,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
-@@ -140,26 +133,16 @@
+@@ -141,26 +134,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -86,18 +86,18 @@
 -SONAME   = libblktap.so.$(MAJOR)
 +SONAME   = libblktap.so
  
- INCLUDES += -I. -I.. -I $(XEN_LIBXC) -I$(XEN_INCLUDE) $(CFLAGS_libxenstore)
- 
-@@ -26,7 +24,7 @@
- OBJS     = $(patsubst %.c,%.o,$(SRCS))
+ CFLAGS   += -I.
+ CFLAGS   += $(CFLAGS_libxenctrl)
+@@ -27,7 +25,7 @@
+ OBJS_PIC = $(SRCS:.c=.opic)
  IBINS   :=
  
 -LIB      = libblktap.a libblktap.so.$(MAJOR).$(MINOR)
 +LIB      = libblktap.a libblktap.so
  
  .PHONY: all
- all: build
-@@ -41,19 +39,15 @@
+ all: $(LIB)
+@@ -37,19 +35,15 @@
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(PRIVATE_LIBDIR)
@@ -105,20 +105,20 @@
 -	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so
  	$(INSTALL_DATA) blktaplib.h $(DESTDIR)$(INCLUDEDIR)
  
+ .PHONY: clean
  clean:
  	rm -rf *.a *.so* *.o *.rpm $(LIB) *~ $(DEPS) xen TAGS
  
- libblktap.a: $(OBJS) 
+-libblktap.so.$(MAJOR).$(MINOR): $(OBJS_PIC) 
 -	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,$(SONAME) $(SHLIB_CFLAGS) \
++libblktap.so: $(OBJS_PIC) 
 +	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
- 	      -L$(XEN_XENSTORE) $(LDFLAGS)                                 \
--	      -o libblktap.so.$(MAJOR).$(MINOR) $^ $(LIBS)
+ 	      $(LDFLAGS) -o $@ $^
 -	ln -sf libblktap.so.$(MAJOR).$(MINOR) libblktap.so.$(MAJOR)
 -	ln -sf libblktap.so.$(MAJOR) libblktap.so
-+	      -o libblktap.so $^ $(LIBS)
- 	$(AR) rc $@ libblktap.so
  
- .PHONY: TAGS all build clean install libblktap
+ libblktap.a: $(OBJS) 
+ 	$(AR) rc $@ $^
 --- xen-unstable.orig/tools/libfsimage/common/Makefile
 +++ xen-unstable/tools/libfsimage/common/Makefile
 @@ -1,9 +1,6 @@
@@ -214,35 +214,37 @@
  -include $(DEPS)
 --- xen-unstable.orig/tools/xenstore/Makefile
 +++ xen-unstable/tools/xenstore/Makefile
-@@ -2,9 +2,6 @@
+@@ -1,9 +1,6 @@
+ XEN_ROOT=../..
  include $(XEN_ROOT)/tools/Rules.mk
- XEN_LIBXC          = $(XEN_ROOT)/tools/libxc
  
 -MAJOR = 3.0
 -MINOR = 0
 -
- PROFILE=#-pg
- BASECFLAGS=-Werror
- # Make gcc generate dependencies.
-@@ -62,13 +59,8 @@
+ CFLAGS += -Werror
+ CFLAGS += -I.
+ CFLAGS += $(CFLAGS_libxenctrl)
+@@ -66,15 +63,10 @@
  xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
- 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
  
 -libxenstore.so: libxenstore.so.$(MAJOR)
 -	ln -sf $< $@
 -libxenstore.so.$(MAJOR): libxenstore.so.$(MAJOR).$(MINOR)
 -	ln -sf $< $@
 -
+ xs.opic: CFLAGS += -DUSE_PTHREAD
+ 
 -libxenstore.so.$(MAJOR).$(MINOR): xs.opic xs_lib.opic
 -	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenstore.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
 +libxenstore.so: xs.opic xs_lib.opic
 +	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ $(SOCKET_LIBS) -lpthread
  
  libxenstore.a: xs.o xs_lib.o
- 	$(AR) rcs libxenstore.a $^
-@@ -100,9 +92,7 @@
- 	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(PRIVATE_BINDIR)
- 	$(INSTALL_PROG) xenstore-ls $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(AR) rcs $@ $^
+@@ -108,9 +100,7 @@
+ 		ln -f xenstore $(DESTDIR)$(PRIVATE_BINDIR)/$${c} ; \
+ 	done
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
 -	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
 -	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenstore.so.$(MAJOR)

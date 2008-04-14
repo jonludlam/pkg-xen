@@ -69,7 +69,7 @@
                 libraries          = libraries,
 --- xen-unstable.orig/tools/ioemu/Makefile.target
 +++ xen-unstable/tools/ioemu/Makefile.target
-@@ -528,6 +528,8 @@
+@@ -532,6 +532,8 @@
  VL_LDFLAGS+=-Wl,-T,$(SRC_PATH)/sparc64.ld
  endif
  
@@ -80,7 +80,7 @@
  endif
 --- xen-unstable.orig/tools/libxc/Makefile
 +++ xen-unstable/tools/libxc/Makefile
-@@ -146,7 +146,7 @@
+@@ -147,7 +147,7 @@
  	ln -sf $< $@
  
  libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
@@ -89,7 +89,7 @@
  
  # libxenguest
  
-@@ -159,7 +159,7 @@
+@@ -160,7 +160,7 @@
  	ln -sf $< $@
  
  libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
@@ -102,7 +102,7 @@
 +++ xen-unstable/tools/xcutils/Makefile
 @@ -20,7 +20,7 @@
  
- PROGRAMS = xc_restore xc_save readnotes
+ PROGRAMS = xc_restore xc_save readnotes lsevtchn
  
 -LDLIBS   = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore)
 +LDLIBS   = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib)
@@ -173,38 +173,31 @@
  
 --- xen-unstable.orig/tools/xenstore/Makefile
 +++ xen-unstable/tools/xenstore/Makefile
-@@ -17,6 +17,9 @@
- CFLAGS  += $(BASECFLAGS)
- LDFLAGS += $(PROFILE)
+@@ -12,6 +12,9 @@
+ CFLAGS += -Wp,-MD,.$(@F).d
+ DEP    = .*.d
  
 +LDFLAGS_libxenctrl += $(call LDFLAGS_RPATH,../lib)
 +LDFLAGS_libxenstore = -L. -lxenstore $(call LDFLAGS_RPATH,../lib)
 +
  CLIENTS := xenstore-exists xenstore-list xenstore-read xenstore-rm xenstore-chmod
- CLIENTS += xenstore-write
- CLIENTS_OBJS := $(patsubst xenstore-%,xenstore_%.o,$(CLIENTS))
-@@ -48,16 +51,16 @@
- 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenctrl) $(SOCKET_LIBS) -o $@
+ CLIENTS += xenstore-write xenstore-ls
  
- $(CLIENTS): xenstore-%: xenstore_%.o libxenstore.so
--	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) -L. -lxenstore $(SOCKET_LIBS) -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
+@@ -55,10 +58,10 @@
+ 	ln -f xenstore $@
  
- $(CLIENTS_OBJS): xenstore_%.o: xenstore_client.c
- 	$(COMPILE.c) -DCLIENT_$(*F) -o $@ $<
+ xenstore: xenstore_client.o $(LIBXENSTORE)
+-	$(CC) $(CFLAGS) $(LDFLAGS) $< -L. -lxenstore $(SOCKET_LIBS) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
  
- xenstore-control: xenstore_control.o libxenstore.so
--	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) -L. -lxenstore $(SOCKET_LIBS) -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
- 
- xenstore-ls: xsls.o libxenstore.so
--	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) -L. -lxenstore $(SOCKET_LIBS) -o $@
-+	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LOADLIBES) $(LDLIBS) $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
+ xenstore-control: xenstore_control.o $(LIBXENSTORE)
+-	$(CC) $(CFLAGS) $(LDFLAGS) $< -L. -lxenstore $(SOCKET_LIBS) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LDFLAGS_libxenstore) $(SOCKET_LIBS) -o $@
  
  xs_tdb_dump: xs_tdb_dump.o utils.o tdb.o talloc.o
- 	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
---- xen-3.orig/tools/pygrub/setup.py
-+++ xen-3/tools/pygrub/setup.py
+ 	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+--- xen-unstable.orig/tools/pygrub/setup.py
++++ xen-unstable/tools/pygrub/setup.py
 @@ -4,11 +4,13 @@
  import sys
  

@@ -10,4 +10,3 @@ tools-ioemu-config.diff
 tools-pygrub-prefix.diff
 tools-libfsimage-prefix.diff
 tools-misc-xend-race.diff
-doc-remove-unused.diff

@@ -1,8 +1,8 @@
 # Wait a little bit before starting xenconsoled.
 
---- xen-3.orig/tools/misc/xend
-+++ xen-3/tools/misc/xend
-@@ -78,6 +78,8 @@
+--- xen-unstable.orig/tools/misc/xend
++++ xen-unstable/tools/misc/xend
+@@ -97,6 +97,8 @@
          execute('xenstored', args)
  
  def start_consoled():

@@ -53,7 +53,7 @@
  install-dtd: all
 --- xen-unstable.orig/tools/ioemu/Makefile.target
 +++ xen-unstable/tools/ioemu/Makefile.target
-@@ -211,6 +211,7 @@
+@@ -212,6 +212,7 @@
  ifdef CONFIG_SOLARIS
  LIBS+=-lsocket -lnsl -lresolv
  endif
@@ -63,7 +63,7 @@
  ifdef TARGET_GPROF
 --- xen-unstable.orig/tools/ioemu/configure
 +++ xen-unstable/tools/ioemu/configure
-@@ -576,9 +576,9 @@
+@@ -598,9 +598,9 @@
      prefix="/usr/local"
  fi
  mandir="$prefix/share/man"
@@ -85,12 +85,12 @@
 +INST_DIR := $(DESTDIR)/usr/$(PREFIX)/boot
  
  SUBDIRS :=
- SUBDIRS += rombios rombios/32bit
+ SUBDIRS += rombios
 --- xen-unstable.orig/tools/blktap/lib/Makefile
 +++ xen-unstable/tools/blktap/lib/Makefile
-@@ -38,11 +38,11 @@
- libblktap: libblktap.a
+@@ -34,11 +34,11 @@
  
+ .PHONY: install
  install: all
 -	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
@@ -103,10 +103,10 @@
 +	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so
  	$(INSTALL_DATA) blktaplib.h $(DESTDIR)$(INCLUDEDIR)
  
- clean:
+ .PHONY: clean
 --- xen-unstable.orig/tools/xenstore/Makefile
 +++ xen-unstable/tools/xenstore/Makefile
-@@ -96,18 +96,17 @@
+@@ -99,20 +99,19 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
@@ -115,18 +115,20 @@
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
 -	$(INSTALL_PROG) xenstored $(DESTDIR)$(SBINDIR)
--	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)$(BINDIR)
 -	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(BINDIR)
--	$(INSTALL_PROG) xenstore-ls $(DESTDIR)$(BINDIR)
+-	$(INSTALL_PROG) xenstore $(DESTDIR)/usr/bin
++	$(INSTALL_PROG) xenstored $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) xenstore $(DESTDIR)$(PRIVATE_BINDIR)
+ 	set -e ; for c in $(CLIENTS) ; do \
+-		ln -f $(DESTDIR)/usr/bin/xenstore $(DESTDIR)/usr/bin/$${c} ; \
++		ln -f $(DESTDIR)/usr/bin/xenstore $(DESTDIR)$(PRIVATE_BINDIR)/$${c} ; \
+ 	done
 -	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
 -	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
 -	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libxenstore.so.$(MAJOR)
 -	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libxenstore.so
 -	$(INSTALL_DATA) libxenstore.a $(DESTDIR)$(LIBDIR)
-+	$(INSTALL_PROG) xenstored $(DESTDIR)$(PRIVATE_BINDIR)
-+	$(INSTALL_PROG) $(CLIENTS) $(DESTDIR)$(PRIVATE_BINDIR)
-+	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(PRIVATE_BINDIR)
-+	$(INSTALL_PROG) xenstore-ls $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
 +	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
 +	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenstore.so.$(MAJOR)
@@ -171,7 +173,7 @@
  
 --- xen-unstable.orig/tools/libxc/Makefile
 +++ xen-unstable/tools/libxc/Makefile
-@@ -101,18 +101,18 @@
+@@ -102,18 +102,18 @@
  
  .PHONY: install
  install: build

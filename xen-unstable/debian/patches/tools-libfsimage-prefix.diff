@@ -1,6 +1,6 @@
 --- xen-unstable.orig/tools/libfsimage/Rules.mk
 +++ xen-unstable/tools/libfsimage/Rules.mk
-@@ -7,11 +7,7 @@
+@@ -7,12 +7,7 @@
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  
@@ -8,6 +8,7 @@
 -FSDIR-$(CONFIG_SunOS)-x86_64 = $(PREFIX)/lib/fs/$(FS)/64
 -FSDIR-$(CONFIG_SunOS)-x86_32 = $(PREFIX)/lib/fs/$(FS)/
 -FSDIR-$(CONFIG_SunOS) = $(FSDIR-$(CONFIG_SunOS)-$(XEN_TARGET_ARCH))
+-FSDIR-$(CONFIG_NetBSD) = $(LIBDIR)/fs/$(FS)
 -FSDIR = $(FSDIR-y)
 +FSDIR = $(PRIVATE_LIBDIR)/fs/$(FS)
  
@@ -26,12 +27,15 @@
  LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
 --- xen-unstable.orig/tools/libfsimage/common/fsimage_plugin.c
 +++ xen-unstable/tools/libfsimage/common/fsimage_plugin.c
-@@ -131,23 +131,8 @@
+@@ -131,26 +131,8 @@
  	int err;
  	int ret = -1;
  
--#ifdef __sun__
+-#if defined(FSIMAGE_FSDIR)
  	if (fsdir == NULL)
+-		fsdir = FSIMAGE_FSDIR;
+-#elif defined(__sun__)
+-	if (fsdir == NULL)
 -		fsdir = "/usr/lib/fs";
 -
 -	if (sizeof(void *) == 8)
