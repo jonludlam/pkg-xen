@@ -1,6 +1,7 @@
 xen-unstable (3.3-unstable+hg17445-1) UNRELEASED; urgency=low
 
   * Provide correct directory to dh_pycentral.
+  * Fix hvmloader installation. (closes: #471768)
 
  -- Bastian Blank <waldi@debian.org>  Mon, 14 Apr 2008 19:08:01 +0200
 

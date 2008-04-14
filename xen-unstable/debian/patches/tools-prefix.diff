@@ -82,7 +82,7 @@
  # It belongs in /usr/lib, not /usr/lib64.
  TARGET      := hvmloader/hvmloader
 -INST_DIR := $(DESTDIR)/usr/lib/xen/boot
-+INST_DIR := $(DESTDIR)/usr/$(PREFIX)/boot
++INST_DIR := $(DESTDIR)$(PRIVATE_PREFIX)/boot
  
  SUBDIRS :=
  SUBDIRS += rombios
@@ -122,7 +122,7 @@
 +	$(INSTALL_PROG) xenstore $(DESTDIR)$(PRIVATE_BINDIR)
  	set -e ; for c in $(CLIENTS) ; do \
 -		ln -f $(DESTDIR)/usr/bin/xenstore $(DESTDIR)/usr/bin/$${c} ; \
-+		ln -f $(DESTDIR)/usr/bin/xenstore $(DESTDIR)$(PRIVATE_BINDIR)/$${c} ; \
++		ln -f $(DESTDIR)$(PRIVATE_BINDIR)/xenstore $(DESTDIR)$(PRIVATE_BINDIR)/$${c} ; \
  	done
 -	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
 -	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
