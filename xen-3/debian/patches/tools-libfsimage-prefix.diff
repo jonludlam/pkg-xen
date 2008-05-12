@@ -1,6 +1,6 @@
 --- xen-3.orig/tools/libfsimage/Rules.mk
 +++ xen-3/tools/libfsimage/Rules.mk
-@@ -7,11 +7,7 @@
+@@ -8,11 +8,7 @@
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  

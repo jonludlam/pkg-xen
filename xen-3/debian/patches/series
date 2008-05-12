@@ -3,7 +3,6 @@ tools-rpath.diff
 tools-prefix.diff
 tools-misc-prefix.diff
 tools-python-prefix.diff
-tools-ldflags.diff
 version.patch
 tools-lib-abiname.diff
 tools-python-xen-xm-relative-path.diff

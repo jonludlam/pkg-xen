@@ -10,7 +10,7 @@
  
  CFLAGS   += -Werror
 @@ -52,6 +52,7 @@
- 	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(LDFLAGS) $(AIOLIBS) $(LIBS)
+ 	$(CC) $(CFLAGS) -o $* $(BLK-OBJS) $*.c $(AIOLIBS) $(LIBS)
  
  install: all
 +	$(INSTALL_DIR) $(DESTDIR)$(INST_DIR)
@@ -29,7 +29,7 @@
  
  CFLAGS  += -Werror
  
-@@ -30,7 +29,5 @@
+@@ -31,7 +30,5 @@
  
  .PHONY: install
  install: $(BIN)
@@ -121,7 +121,7 @@
  CFLAGS  += -Werror
  CFLAGS  += -I $(XEN_XC)
  CFLAGS  += -I $(XEN_LIBXC)
-@@ -31,10 +29,8 @@
+@@ -32,10 +30,8 @@
  
  .PHONY: install
  install: build
@@ -144,7 +144,7 @@
  
  CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
  LDFLAGS += -L$(XEN_LIBXENSTAT)
-@@ -33,7 +32,7 @@
+@@ -34,7 +33,7 @@
  
  .PHONY: install
  install: xentop xentop.1
@@ -185,7 +185,7 @@
  
 --- xen-3.orig/tools/xentrace/Makefile
 +++ xen-3/tools/xentrace/Makefile
-@@ -35,15 +35,11 @@
+@@ -36,15 +36,11 @@
  
  .PHONY: install
  install: build
