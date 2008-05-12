@@ -7,12 +7,12 @@
 @DPATCH@
 --- xen-unstable.orig/xen/Makefile
 +++ xen-unstable/xen/Makefile
-@@ -74,16 +74,16 @@
- include/xen/compile.h: include/xen/compile.h.in
+@@ -74,17 +74,16 @@
+ include/xen/compile.h: include/xen/compile.h.in .banner
  	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
  	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
--	    -e 's/@@whoami@@/$(USER)/g' \
--	    -e 's/@@domain@@/$(shell ([ -x /bin/dnsdomainname ] && /bin/dnsdomainname) || ([ -x /bin/domainname ] && /bin/domainname || echo [unknown]))/g' \
+-	    -e 's/@@whoami@@/$(XEN_WHOAMI)/g' \
+-	    -e 's/@@domain@@/$(XEN_DOMAIN)/g' \
 -	    -e 's/@@hostname@@/$(shell hostname)/g' \
  	    -e 's!@@compiler@@!$(shell $(CC) $(CFLAGS) -v 2>&1 | grep -i "gcc.*version")!g' \
  	    -e 's/@@version@@/$(XEN_VERSION)/g' \
@@ -24,25 +24,11 @@
 +	    -e 's/@@system_maintainer_local@@/$(shell cd ../../../..; dpkg-parsechangelog | sed -ne 's,^Maintainer: .[^<]*<\([^@>]*\)@.*>,\1,p')/g' \
 +	    -e 's/@@system_version@@/$(shell cd ../../../..; dpkg-parsechangelog | awk '/^Version:/ {print $$2}')/g' \
  	    < include/xen/compile.h.in > $@.new
--	tools/figlet/figlet -d tools/figlet Xen $(XEN_FULLVERSION) >> $@.new
+-	@grep \" .banner >> $@.new
+-	@grep -v \" .banner
  	@mv -f $@.new $@
  
  include/asm-$(TARGET_ARCH)/asm-offsets.h: arch/$(TARGET_ARCH)/asm-offsets.s
---- xen-unstable.orig/xen/arch/powerpc/boot_of.c
-+++ xen-unstable/xen/arch/powerpc/boot_of.c
-@@ -1225,9 +1225,10 @@
-     of_getprop(bof_chosen, "stdout", &of_out, sizeof (of_out));
- 
-     of_printf("%s\n", "---------------------------------------------------");
--    of_printf("OF: Xen/PPC version %d.%d%s (%s@%s) (%s) %s\n",
-+    of_printf("OF: Xen/PPC version %d.%d%s (%s %s) (%s@%s) (%s) %s\n",
-               xen_major_version(), xen_minor_version(), xen_extra_version(),
--              xen_compile_by(), xen_compile_domain(),
-+              xen_compile_system_distribution(), xen_compile_system_version(),
-+              xen_compile_system_maintainer_local(), xen_compile_system_maintainer_domain(),
-               xen_compiler(), xen_compile_date());
- 
-     boot_of_fix_maple();
 --- xen-unstable.orig/xen/common/kernel.c
 +++ xen-unstable/xen/common/kernel.c
 @@ -159,8 +159,8 @@
