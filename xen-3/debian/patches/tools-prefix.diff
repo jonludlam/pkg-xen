@@ -160,7 +160,7 @@
 -	ln -sf libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so.$(MAJOR)
 -	ln -sf libxenstore.so.$(MAJOR) $(DESTDIR)/usr/$(LIBDIR)/libxenstore.so
 -	$(INSTALL_DATA) libxenstore.a $(DESTDIR)/usr/$(LIBDIR)
-+	$(INSTALL_PROG) xenstore-control xenstored $(CLIENTS) $(DESTDIR)/usr/$(BINDIR)
++	$(INSTALL_PROG) xenstore-control xenstored $(DESTDIR)/usr/$(BINDIR)
 +	$(INSTALL_PROG) xenstore-ls $(CLIENTS) $(DESTDIR)/usr/$(PUBLIC_BINDIR)
 +	$(INSTALL_DIR) $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
 +	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)/usr/$(PUBLIC_LIBDIR)
