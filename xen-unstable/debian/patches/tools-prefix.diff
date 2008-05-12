@@ -51,16 +51,6 @@
  endif
  
  install-dtd: all
---- xen-unstable.orig/tools/ioemu/Makefile.target
-+++ xen-unstable/tools/ioemu/Makefile.target
-@@ -212,6 +212,7 @@
- ifdef CONFIG_SOLARIS
- LIBS+=-lsocket -lnsl -lresolv
- endif
-+LIBS+=$(RPATH_ARG)
- 
- # profiling code
- ifdef TARGET_GPROF
 --- xen-unstable.orig/tools/ioemu/configure
 +++ xen-unstable/tools/ioemu/configure
 @@ -598,9 +598,9 @@
