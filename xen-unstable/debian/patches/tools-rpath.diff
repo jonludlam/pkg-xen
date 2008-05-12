@@ -111,12 +111,11 @@
  all: build
 --- xen-unstable.orig/tools/xenstat/xentop/Makefile
 +++ xen-unstable/tools/xenstat/xentop/Makefile
-@@ -19,7 +19,7 @@
- else
+@@ -19,6 +19,7 @@
  
  CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
--LDFLAGS += -L$(XEN_LIBXENSTAT)
-+LDFLAGS += -L$(XEN_LIBXENSTAT) $(call LDFLAGS_RPATH,../lib)
+ LDFLAGS += -L$(XEN_LIBXENSTAT)
++LDFLAGS += $(call LDFLAGS_RPATH,../lib)
  LDLIBS += -lxenstat $(CURSES_LIBS) $(SOCKET_LIBS)
  CFLAGS += -DHOST_$(XEN_OS)
  
@@ -130,12 +129,11 @@
 +	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH,../lib)
 --- xen-unstable.orig/tools/xentrace/Makefile
 +++ xen-unstable/tools/xentrace/Makefile
-@@ -4,7 +4,7 @@
- CFLAGS  += -Werror
+@@ -4,6 +4,7 @@
  
  CFLAGS  += $(CFLAGS_libxenctrl)
--LDFLAGS += $(LDFLAGS_libxenctrl)
-+LDFLAGS += $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH,../lib)
+ LDFLAGS += $(LDFLAGS_libxenctrl)
++LDFLAGS += $(call LDFLAGS_RPATH,../lib)
  
  HDRS     = $(wildcard *.h)
  OBJS     = $(patsubst %.c,%.o,$(wildcard *.c))
@@ -151,23 +149,21 @@
  
 --- xen-unstable.orig/tools/xenmon/Makefile
 +++ xen-unstable/tools/xenmon/Makefile
-@@ -16,7 +16,7 @@
- CFLAGS  += -Werror
+@@ -16,6 +16,7 @@
  CFLAGS  += -I $(XEN_XC)
  CFLAGS  += $(CFLAGS_libxenctrl)
--LDFLAGS += $(LDFLAGS_libxenctrl)
-+LDFLAGS += $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH,../lib)
+ LDFLAGS += $(LDFLAGS_libxenctrl)
++LDFLAGS += $(call LDFLAGS_RPATH,../lib)
  
  BIN = xentrace_setmask xenbaked
  SCRIPTS = xenmon.py
 --- xen-unstable.orig/tools/libfsimage/Rules.mk
 +++ xen-unstable/tools/libfsimage/Rules.mk
-@@ -3,7 +3,7 @@
- DEPS = .*.d
+@@ -3,6 +3,7 @@
  
  CFLAGS += -I$(XEN_ROOT)/tools/libfsimage/common/ -Werror -Wp,-MD,.$(@F).d
--LDFLAGS += -L../common/
-+LDFLAGS += -L../common/ $(call LDFLAGS_RPATH,../../)
+ LDFLAGS += -L../common/
++LDFLAGS += $(call LDFLAGS_RPATH,../../)
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  

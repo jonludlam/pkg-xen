@@ -10,7 +10,7 @@
  CTRL_SRCS-y       :=
  ifneq ($(stubdom),y)
  CTRL_SRCS-y       += xc_core.c
-@@ -82,12 +79,12 @@
+@@ -81,12 +78,12 @@
  
  LIB := libxenctrl.a
  ifneq ($(stubdom),y)
@@ -25,7 +25,7 @@
  endif
  
  .PHONY: all
-@@ -104,16 +101,12 @@
+@@ -103,16 +100,12 @@
  install: build
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
@@ -44,7 +44,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
-@@ -141,26 +134,16 @@
+@@ -140,26 +133,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -88,7 +88,7 @@
  
  CFLAGS   += -I.
  CFLAGS   += $(CFLAGS_libxenctrl)
-@@ -27,7 +25,7 @@
+@@ -28,7 +26,7 @@
  OBJS_PIC = $(SRCS:.c=.opic)
  IBINS   :=
  
@@ -97,7 +97,7 @@
  
  .PHONY: all
  all: $(LIB)
-@@ -37,19 +35,15 @@
+@@ -38,19 +36,15 @@
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(PRIVATE_LIBDIR)
@@ -243,7 +243,7 @@
  libxenstore.a: xs.o xs_lib.o
  	$(AR) rcs $@ $^
 @@ -108,9 +100,7 @@
- 		ln -f xenstore $(DESTDIR)$(PRIVATE_BINDIR)/$${c} ; \
+ 		ln -f $(DESTDIR)$(PRIVATE_BINDIR)/xenstore $(DESTDIR)$(PRIVATE_BINDIR)/$${c} ; \
  	done
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
 -	$(INSTALL_PROG) libxenstore.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
