@@ -35,7 +35,9 @@ class GenOrig(object):
     def do_update(self):
         if self.tag is None:
             return
-        raise NotImplementedError
+        f = os.popen("cd %s; hg update -r %s" % (self.repo, self.tag))
+        if f.close() is not None:
+            raise RuntimeError
 
     def do_version(self):
         if self.version is not None:
