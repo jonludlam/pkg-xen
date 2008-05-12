@@ -80,7 +80,7 @@
  endif
 --- xen-unstable.orig/tools/libxc/Makefile
 +++ xen-unstable/tools/libxc/Makefile
-@@ -147,7 +147,7 @@
+@@ -146,7 +146,7 @@
  	ln -sf $< $@
  
  libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
@@ -89,7 +89,7 @@
  
  # libxenguest
  
-@@ -160,7 +160,7 @@
+@@ -159,7 +159,7 @@
  	ln -sf $< $@
  
  libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
@@ -212,3 +212,13 @@
      include_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
      library_dirs = [ XEN_ROOT + "/tools/libfsimage/common/" ],
      libraries = ["fsimage"],
+--- xen-unstable.orig/tools/blktap/lib/Makefile
++++ xen-unstable/tools/blktap/lib/Makefile
+@@ -9,6 +9,7 @@
+ CFLAGS   += $(CFLAGS_libxenctrl)
+ CFLAGS   += $(CFLAGS_libxenstore)
+ LDFLAGS  += $(LDFLAGS_libxenstore)
++LDFLAGS  += $(call LDFLAGS_RPATH)
+ 
+ SRCS     :=
+ SRCS     += xenbus.c blkif.c xs_api.c
