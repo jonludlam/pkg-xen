@@ -7,8 +7,8 @@
 @DPATCH@
 --- xen-3.orig/xen/Makefile
 +++ xen-3/xen/Makefile
-@@ -92,16 +92,16 @@
- include/xen/compile.h: include/xen/compile.h.in
+@@ -92,17 +92,16 @@
+ include/xen/compile.h: include/xen/compile.h.in .banner
  	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
  	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
 -	    -e 's/@@whoami@@/$(USER)/g' \
@@ -24,7 +24,8 @@
 +	    -e 's/@@system_maintainer_local@@/$(shell cd ../../../..; dpkg-parsechangelog | sed -ne 's,^Maintainer: .[^<]*<\([^@>]*\)@.*>,\1,p')/g' \
 +	    -e 's/@@system_version@@/$(shell cd ../../../..; dpkg-parsechangelog | awk '/^Version:/ {print $$2}')/g' \
  	    < include/xen/compile.h.in > $@.new
--	tools/figlet/figlet -d tools/figlet Xen $(XEN_FULLVERSION) >> $@.new
+-	@grep \" .banner >> $@.new
+-	@grep -v \" .banner
  	@mv -f $@.new $@
  
  include/asm-$(TARGET_ARCH)/asm-offsets.h: arch/$(TARGET_ARCH)/asm-offsets.s

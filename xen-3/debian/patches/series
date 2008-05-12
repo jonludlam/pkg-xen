@@ -14,4 +14,3 @@ tools-libfsimage-prefix.diff
 disable-features.diff
 tools-misc-xend-race.diff
 doc-remove-unused.diff
-CVE-2008-0928
