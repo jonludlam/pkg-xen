@@ -186,7 +186,7 @@
  
  CFLAGS += -I$(XEN_ROOT)/tools/libfsimage/common/ -Werror -Wp,-MD,.$(@F).d
  LDFLAGS += -L../common/
-+LDFLAGS += $(call LDFLAGS_RPATH,../../)
++LDFLAGS += $(call LDFLAGS_RPATH,../..)
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  
