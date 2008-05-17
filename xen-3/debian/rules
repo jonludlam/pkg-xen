@@ -61,7 +61,7 @@ else
 	tar -C ../orig -xzf $(TAR_ORIG)
 endif
 
-CONTROL_FILES += debian/changelog debian/bin/gencontrol.py $(wildcard debian/templates/control.*) 
+CONTROL_FILES += debian/changelog debian/bin/gencontrol.py $(wildcard debian/templates/*.in) 
 CONTROL_FILES += $(wildcard debian/arch/defines) $(wildcard debian/arch/*/defines)
 GENCONTROL = $(__MODULES_DIR)gencontrol.py
 debian/control debian/rules.gen: $(CONTROL_FILES)
