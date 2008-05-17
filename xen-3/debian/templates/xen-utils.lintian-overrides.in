@@ -31,3 +31,4 @@ binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/python/xen/lo
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/python/xen/lowlevel/ptsname.so ${ORIGIN}/../../..
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/python/xen/lowlevel/xc.so ${ORIGIN}/../../..
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/python/xen/lowlevel/xs.so ${ORIGIN}/../../..
+statically-linked-binary ./usr/lib/xen-@version@@abiname@/boot/hvmloader
