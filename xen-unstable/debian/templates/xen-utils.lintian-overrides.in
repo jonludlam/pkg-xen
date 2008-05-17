@@ -1,5 +1,6 @@
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/blktapctrl ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/img2qcow ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/lsevtchn ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/qcow-create ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/qcow2raw ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/qemu-dm ${ORIGIN}/../lib
@@ -12,6 +13,15 @@ binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenconsole ${
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenconsoled ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenctx ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenperf ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-chmod ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-control ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-exists ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-list ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-ls ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-read ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-rm ${ORIGIN}/../lib
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstore-write ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xenstored ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xentop ${ORIGIN}/../lib
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/bin/xentrace ${ORIGIN}/../lib
@@ -22,6 +32,7 @@ binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/fs/fat/fsimag
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/fs/iso9660/fsimage.so ${ORIGIN}/../..
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/fs/reiserfs/fsimage.so ${ORIGIN}/../..
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/fs/ufs/fsimage.so ${ORIGIN}/../..
+binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/fs/zfs/fsimage.so ${ORIGIN}/../..
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/libblktap.so ${ORIGIN}
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/libxenctrl.so ${ORIGIN}
 binary-or-shlib-defines-rpath ./usr/lib/xen-@version@@abiname@/lib/libxenguest.so ${ORIGIN}
