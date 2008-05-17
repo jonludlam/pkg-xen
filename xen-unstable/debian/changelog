@@ -1,9 +1,10 @@
-xen-unstable (3.3-unstable+hg17602-1) UNRELEASED; urgency=low
+xen-unstable (3.3-unstable+hg17602-1) unstable; urgency=low
 
+  * New upstream snapshot.
   * Provide correct directory to dh_pycentral.
   * Fix hvmloader installation. (closes: #471768)
 
- -- Bastian Blank <waldi@debian.org>  Mon, 14 Apr 2008 19:08:01 +0200
+ -- Bastian Blank <waldi@debian.org>  Sat, 17 May 2008 16:32:57 +0200
 
 xen-unstable (3.3-unstable+hg17192-1) unstable; urgency=low
 
