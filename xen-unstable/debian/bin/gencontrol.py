@@ -52,7 +52,7 @@ class Gencontrol(Base):
 
         package_utils_name = packages_utils[0]['Package']
 
-        for i in ('postinst', 'prerm'):
+        for i in ('postinst', 'prerm', 'lintian-overrides'):
             j = self.substitute(self.templates["xen-utils.%s" % i], vars)
             file("debian/%s.%s" % (package_utils_name, i), 'w').write(j)
 
