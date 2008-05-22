@@ -1,10 +1,10 @@
-xen-3 (3.2.1-1) UNRELEASED; urgency=low
+xen-3 (3.2.1-1) unstable; urgency=low
 
   * New upstream version.
   * Set rpath relative to ${ORIGIN}.
   * Add lintian override to xen-utils package.
 
- -- Bastian Blank <waldi@debian.org>  Mon, 12 May 2008 13:03:38 +0200
+ -- Bastian Blank <waldi@debian.org>  Thu, 22 May 2008 14:01:47 +0200
 
 xen-3 (3.2.0-5) unstable; urgency=low
 
