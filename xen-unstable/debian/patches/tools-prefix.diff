@@ -19,18 +19,18 @@
 -INSTALL_SBIN = netfix xm xen-bugtool xen-python-path xend xenperf xsview
 +INSTALL_TARGETS = $(TARGETS) xencons netfix xm xen-bugtool xen-python-path xend xsview
  
- .PHONY: all
- all: build
-@@ -30,10 +29,8 @@
+ DEFAULT_PYTHON_PATH := $(shell $(XEN_ROOT)/tools/python/get-path)
+ PYTHON_PATH ?= $(DEFAULT_PYTHON_PATH)
+@@ -35,10 +34,8 @@
  
  .PHONY: install
  install: build
 -	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
 -	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
--	$(INSTALL_PROG) $(INSTALL_BIN) $(DESTDIR)$(BINDIR)
--	$(INSTALL_PROG) $(INSTALL_SBIN) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PYTHON_PROG) $(INSTALL_BIN) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_PYTHON_PROG) $(INSTALL_SBIN) $(DESTDIR)$(SBINDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
-+	$(INSTALL_PROG) $(INSTALL_TARGETS) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PYTHON_PROG) $(INSTALL_TARGETS) $(DESTDIR)$(PRIVATE_BINDIR)
  	set -e; for d in $(SUBDIRS); do $(MAKE) -C $$d install-recurse; done
  
  .PHONY: clean
@@ -129,7 +129,7 @@
  
 --- xen-unstable.orig/tools/xenmon/Makefile
 +++ xen-unstable/tools/xenmon/Makefile
-@@ -29,10 +29,10 @@
+@@ -30,10 +30,10 @@
  
  .PHONY: install
  install: build
@@ -146,7 +146,7 @@
  clean:
 --- xen-unstable.orig/tools/xentrace/Makefile
 +++ xen-unstable/tools/xentrace/Makefile
-@@ -35,12 +35,10 @@
+@@ -36,12 +36,10 @@
  
  .PHONY: install
  install: build
@@ -163,7 +163,7 @@
  
 --- xen-unstable.orig/tools/libxc/Makefile
 +++ xen-unstable/tools/libxc/Makefile
-@@ -101,18 +101,18 @@
+@@ -94,18 +94,18 @@
  
  .PHONY: install
  install: build
@@ -204,7 +204,7 @@
  clean:
 --- xen-unstable.orig/tools/xenstat/xentop/Makefile
 +++ xen-unstable/tools/xenstat/xentop/Makefile
-@@ -28,8 +28,8 @@
+@@ -29,8 +29,8 @@
  
  .PHONY: install
  install: xentop xentop.1

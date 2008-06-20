@@ -8,9 +8,9 @@
 -MINOR    = 0
 -
  CTRL_SRCS-y       :=
- ifneq ($(stubdom),y)
  CTRL_SRCS-y       += xc_core.c
-@@ -81,12 +78,12 @@
+ CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
+@@ -74,12 +71,12 @@
  
  LIB := libxenctrl.a
  ifneq ($(stubdom),y)
@@ -25,7 +25,7 @@
  endif
  
  .PHONY: all
-@@ -103,16 +100,12 @@
+@@ -96,16 +93,12 @@
  install: build
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
@@ -44,7 +44,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
-@@ -140,26 +133,16 @@
+@@ -133,26 +126,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  

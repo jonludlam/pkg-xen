@@ -7,7 +7,7 @@
 @DPATCH@
 --- xen-unstable.orig/xen/Makefile
 +++ xen-unstable/xen/Makefile
-@@ -74,17 +74,16 @@
+@@ -84,17 +84,16 @@
  include/xen/compile.h: include/xen/compile.h.in .banner
  	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
  	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
