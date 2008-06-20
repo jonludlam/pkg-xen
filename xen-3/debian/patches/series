@@ -1,4 +1,5 @@
 CVE-2008-1952.patch
+tools-libxc-loder-bzimage.patch
 config-prefix.diff
 tools-rpath.diff
 tools-prefix.diff
