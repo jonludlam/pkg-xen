@@ -1,3 +1,4 @@
+CVE-2008-1952.patch
 config-prefix.diff
 tools-rpath.diff
 tools-prefix.diff

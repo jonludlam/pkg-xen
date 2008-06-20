@@ -1,6 +1,8 @@
 xen-3 (3.2.1-2) UNRELEASED; urgency=low
 
   * Use e2fslibs based ext2 support for pygrub. (closes: #476366)
+  * Fix missing checks in pvfb code.
+    See CVE-2008-1952. (closes: #487095)
 
  -- Bastian Blank <waldi@debian.org>  Mon, 09 Jun 2008 18:50:59 +0200
 
