@@ -38,14 +38,14 @@ $(STAMPS_DIR)/setup-docs: SOURCE_DIR=$(BUILD_DIR)/source
 $(STAMPS_DIR)/setup-docs: DIR=$(BUILD_DIR)/build-docs
 $(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	cp -a $(SOURCE_DIR) $(DIR)
+	cp -al $(SOURCE_DIR) $(DIR)
 	touch $@
 
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): SOURCE_DIR=$(BUILD_DIR)/source
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	cp -a $(SOURCE_DIR) $(DIR)
+	cp -al $(SOURCE_DIR) $(DIR)
 	echo "XEN_EXTRAVERSION := $(EXTRAVERSION)$(ABINAME)" > $(DIR)/xen/xen-version
 	touch $@
 
@@ -53,7 +53,7 @@ $(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_DIR=$(BUILD_DIR)/source
 $(STAMPS_DIR)/setup-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/setup-utils_$(ARCH): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	cp -a $(SOURCE_DIR) $(DIR)
+	cp -al $(SOURCE_DIR) $(DIR)
 	touch $@
 
 $(STAMPS_DIR)/build-docs: DIR=$(BUILD_DIR)/build-docs
