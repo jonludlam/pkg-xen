@@ -9,6 +9,7 @@ Build-Depends:
  bcc,
  gcc-multilib [amd64],
  e2fslibs-dev,
+ libgnutls-dev, pkg-config,
  libjpeg-dev,
  libncurses5-dev,
  libsdl1.2-dev,
