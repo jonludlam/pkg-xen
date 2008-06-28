@@ -15,3 +15,4 @@ tools-libfsimage-prefix.diff
 disable-features.diff
 tools-misc-xend-race.diff
 doc-remove-unused.diff
+tools-blktap-crypto.patch

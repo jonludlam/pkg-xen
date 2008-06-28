@@ -13,7 +13,6 @@ Build-Depends:
  libjpeg-dev,
  libncurses5-dev,
  libsdl1.2-dev,
- libssl-dev,
  libvncserver-dev,
  zlib1g-dev
 Build-Depends-Indep: graphviz, gs-common, texlive-fonts-recommended, texlive-latex-recommended

@@ -5,6 +5,8 @@ xen-3 (3.2.1-2) UNRELEASED; urgency=low
     See CVE-2008-1952. (closes: #487095)
   * Add support for loading bzImage files. (closes: #474509)
   * Enable TLS support in ioemu code.
+  * Drop libcrypto usage because of GPL-incompatibility.
+  * Remove AES code from blktap drivers. Considered broken.
 
  -- Bastian Blank <waldi@debian.org>  Mon, 09 Jun 2008 18:50:59 +0200
 
