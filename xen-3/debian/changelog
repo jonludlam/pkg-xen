@@ -1,4 +1,4 @@
-xen-3 (3.2.1-2) UNRELEASED; urgency=low
+xen-3 (3.2.1-2) unstable; urgency=low
 
   * Use e2fslibs based ext2 support for pygrub. (closes: #476366)
   * Fix missing checks in pvfb code.
@@ -8,7 +8,7 @@ xen-3 (3.2.1-2) UNRELEASED; urgency=low
   * Drop libcrypto usage because of GPL-incompatibility.
   * Remove AES code from blktap drivers. Considered broken.
 
- -- Bastian Blank <waldi@debian.org>  Mon, 09 Jun 2008 18:50:59 +0200
+ -- Bastian Blank <waldi@debian.org>  Sat, 28 Jun 2008 11:30:43 +0200
 
 xen-3 (3.2.1-1) unstable; urgency=low
 
