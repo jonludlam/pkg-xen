@@ -57,18 +57,18 @@ class GenOrig(object):
             raise RuntimeError("Can't find version in Xen source")
 
         f = os.popen("cd '%s'; hg id" % self.repo)
-        id = f.read().strip().split()[0]
+        id = f.read()[:12]
         f.close()
         f = os.popen("cd '%s'; hg log -r %s" % (self.repo, id))
-        changeset = f.read().strip().split()[1].split(':')[0]
+        self.changeset = f.read().strip().split()[1].split(':')[0]
 
-        self.version = '%s.%s-unstable+hg%s' % (xen_version, xen_subversion, changeset)
+        self.version = '%s.%s-unstable+hg%s' % (xen_version, xen_subversion, self.changeset)
 
         self.log("Use version %s.\n" % self.version)
 
     def do_archive(self):
         self.log("Create archive.\n")
-        f = os.popen("cd %s; hg archive %s/%s" % (self.repo, os.path.realpath(self.dir), self.orig_dir))
+        f = os.popen("cd %s; hg archive -r %s %s/%s" % (self.repo, self.changeset, os.path.realpath(self.dir), self.orig_dir))
         if f.close() is not None:
             raise RuntimeError
 
