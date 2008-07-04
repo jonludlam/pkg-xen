@@ -1,59 +1,128 @@
-diff -r 3da148fb7d9b tools/blktap/drivers/Makefile
---- a/tools/blktap/drivers/Makefile	Thu Jun 19 11:09:10 2008 +0100
-+++ b/tools/blktap/drivers/Makefile	Sat Jun 28 12:13:49 2008 +0200
-@@ -18,7 +18,7 @@ DEPS      = .*.d
+diff -r 9cf72db44ee9 tools/blktap/drivers/Makefile
+--- a/tools/blktap/drivers/Makefile	Fri Jul 04 11:54:21 2008 +0100
++++ b/tools/blktap/drivers/Makefile	Fri Jul 04 20:03:59 2008 +0200
+@@ -17,16 +17,8 @@ CFLAGS   += -Wp,-MD,.$(@F).d
+ CFLAGS   += -Wp,-MD,.$(@F).d
  DEPS      = .*.d
  
+-ifeq ($(shell . ./check_gcrypt),"yes")
+-CFLAGS += -DUSE_GCRYPT
+-CRYPT_LIB := -lgcrypt
+-else
+-CRYPT_LIB := -lcrypto
+-$(warning *** libgcrypt not installed: falling back to libcrypto ***)
+-endif
+-
  LDFLAGS_blktapctrl := $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore) -L../lib -lblktap
--LDFLAGS_img := $(LIBAIO_DIR)/libaio.a -lcrypto -lpthread -lz
+-LDFLAGS_img := $(LIBAIO_DIR)/libaio.a $(CRYPT_LIB) -lpthread -lz
 +LDFLAGS_img := $(LIBAIO_DIR)/libaio.a -lgcrypt -lpthread -lz
  
  BLK-OBJS-y  := block-aio.o
  BLK-OBJS-y  += block-sync.o
-diff -r 3da148fb7d9b tools/blktap/drivers/block-qcow.c
---- a/tools/blktap/drivers/block-qcow.c	Thu Jun 19 11:09:10 2008 +0100
-+++ b/tools/blktap/drivers/block-qcow.c	Sat Jun 28 12:13:49 2008 +0200
-@@ -33,7 +33,7 @@
+diff -r 9cf72db44ee9 tools/blktap/drivers/block-qcow.c
+--- a/tools/blktap/drivers/block-qcow.c	Fri Jul 04 11:54:21 2008 +0100
++++ b/tools/blktap/drivers/block-qcow.c	Fri Jul 04 20:03:59 2008 +0200
+@@ -33,6 +33,7 @@
  #include <zlib.h>
  #include <inttypes.h>
  #include <libaio.h>
--#include <openssl/md5.h>
 +#include <gcrypt.h>
  #include "bswap.h"
  #include "aes.h"
  #include "tapdisk.h"
-@@ -149,31 +149,22 @@ static uint32_t gen_cksum(char *ptr, int
+@@ -145,10 +146,6 @@ struct tdqcow_state {
+ 
+ static int decompress_cluster(struct tdqcow_state *s, uint64_t cluster_offset);
+ 
+-#ifdef USE_GCRYPT
+-
+-#include <gcrypt.h>
+-
  static uint32_t gen_cksum(char *ptr, int len)
  {
  	int i;
+@@ -169,41 +166,6 @@ static uint32_t gen_cksum(char *ptr, int
+ 
+ 	return md[0];
+ }
+-
+-#else /* use libcrypto */
+-
+-#include <openssl/md5.h>
+-
+-static uint32_t gen_cksum(char *ptr, int len)
+-{
+-	int i;
 -	unsigned char *md;
 -	uint32_t ret;
-+	uint32_t md[4];
- 
--	md = malloc(MD5_DIGEST_LENGTH);
 -
+-	md = malloc(MD5_DIGEST_LENGTH);
 -	if(!md) return 0;
--	
- 	/* Convert L1 table to big endian */
- 	for(i = 0; i < len / sizeof(uint64_t); i++) {
- 		cpu_to_be64s(&((uint64_t*) ptr)[i]);
- 	}
- 
- 	/* Generate checksum */
+-
+-	/* Convert L1 table to big endian */
+-	for(i = 0; i < len / sizeof(uint64_t); i++) {
+-		cpu_to_be64s(&((uint64_t*) ptr)[i]);
+-	}
+-
+-	/* Generate checksum */
 -	if (MD5((unsigned char *)ptr, len, md) != md)
 -		ret = 0;
 -	else
 -		memcpy(&ret, md, sizeof(uint32_t));
-+	gcry_md_hash_buffer(GCRY_MD_MD5, md, ptr, len);
- 
- 	/* Convert L1 table back to native endianess */
- 	for(i = 0; i < len / sizeof(uint64_t); i++) {
- 		be64_to_cpus(&((uint64_t*) ptr)[i]);
- 	}
- 
+-
+-	/* Convert L1 table back to native endianess */
+-	for(i = 0; i < len / sizeof(uint64_t); i++) {
+-		be64_to_cpus(&((uint64_t*) ptr)[i]);
+-	}
+-
 -	free(md);
 -	return ret;
-+	return md[0];
- }
+-}
+-
+-#endif
  
  static int get_filesize(char *filename, uint64_t *size, struct stat *st)
+ {
+diff -r 9cf72db44ee9 tools/blktap/drivers/check_gcrypt
+--- a/tools/blktap/drivers/check_gcrypt	Fri Jul 04 11:54:21 2008 +0100
++++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+@@ -1,14 +0,0 @@
+-#!/bin/sh
+-
+-cat > .gcrypt.c << EOF
+-#include <gcrypt.h>
+-int main(void) { return 0; }
+-EOF
+-
+-if $1 -o .gcrypt .gcrypt.c -lgcrypt 2>/dev/null ; then
+-  echo "yes"
+-else
+-  echo "no"
+-fi
+-
+-rm -f .gcrypt*
+diff -r 9cf72db44ee9 tools/check/check_crypto_lib
+--- a/tools/check/check_crypto_lib	Fri Jul 04 11:54:21 2008 +0100
++++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+@@ -1,11 +0,0 @@
+-#!/bin/sh
+-# CHECK-BUILD CHECK-INSTALL
+-
+-. ./funcs.sh
+-
+-case $OS in
+-FreeBSD|NetBSD|OpenBSD)
+-	exit 0 ;;
+-esac
+-
+-has_lib libcrypto.so || fail "missing libcrypto.so"
+diff -r 9cf72db44ee9 tools/check/check_openssl_devel
+--- a/tools/check/check_openssl_devel	Fri Jul 04 11:54:21 2008 +0100
++++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+@@ -1,6 +0,0 @@
+-#!/bin/sh
+-# CHECK-BUILD
+-
+-. ./funcs.sh
+-
+-has_header openssl/md5.h || fail "missing openssl headers"
