@@ -1,18 +1,11 @@
 [base]
 flavours:
  i386
- i386-nonpae
 xen-arch: x86_32
 
 [i386_base]
 class: i386
-config: pae=y
 desc:
  This version of the hypervisor is built with PAE enabled. If you have a cpu
  without pae support install the -nonpae version instead.
-
-[i386-nonpae_base]
-class: i386 without pae
-desc:
- This version of the hypervisor is built without PAE.
 
