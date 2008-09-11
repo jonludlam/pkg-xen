@@ -2,12 +2,12 @@
 
 --- xen-unstable.orig/tools/misc/xend
 +++ xen-unstable/tools/misc/xend
-@@ -97,6 +97,8 @@
+@@ -101,6 +101,8 @@
          execute('xenstored', args)
  
  def start_consoled():
 +    import time
 +    time.sleep(2)
-     if os.fork() == 0:
-         execute('xenconsoled')
- 
+     trace = os.getenv("XENCONSOLED_TRACE")
+     args = []
+     if trace:

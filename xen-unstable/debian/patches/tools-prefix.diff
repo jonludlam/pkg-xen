@@ -141,9 +141,9 @@
 +	$(INSTALL_PROG) xenbaked $(DESTDIR)$(PRIVATE_BINDIR)/xenbaked
 +	$(INSTALL_PROG) xentrace_setmask  $(DESTDIR)$(PRIVATE_BINDIR)/xentrace_setmask
 +	$(INSTALL_PROG) xenmon.py  $(DESTDIR)$(PRIVATE_BINDIR)/xenmon.py
+ 	$(INSTALL_DIR) $(DESTDIR)$(DOCDIR)
+ 	$(INSTALL_DATA) README $(DESTDIR)$(DOCDIR)/README.xenmon
  
- .PHONY: clean
- clean:
 --- xen-unstable.orig/tools/xentrace/Makefile
 +++ xen-unstable/tools/xentrace/Makefile
 @@ -36,12 +36,10 @@
@@ -253,3 +253,14 @@
  	$(INSTALL_DATA) include/flask.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
+--- xen-unstable.orig/tools/blktap/drivers/Makefile
++++ xen-unstable/tools/blktap/drivers/Makefile
+@@ -56,7 +56,7 @@
+ 	$(CC) $(CFLAGS) -o $* $^ $(LDFLAGS) $(LDFLAGS_img)
+ 
+ install: all
+-	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_PROG) $(IBIN) $(QCOW_UTIL) $(VHD_UTIL) $(DESTDIR)$(PRIVATE_BINDIR)
+ 
+ clean:
+ 	rm -rf *.o *~ $(DEPS) xen TAGS $(IBIN) $(LIB) $(QCOW_UTIL) $(VHD_UTIL)

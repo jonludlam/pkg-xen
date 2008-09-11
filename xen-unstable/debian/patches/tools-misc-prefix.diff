@@ -1,5 +1,5 @@
---- xen-3.orig/tools/misc/xend
-+++ xen-3/tools/misc/xend
+--- xen-unstable.orig/tools/misc/xend
++++ xen-unstable/tools/misc/xend
 @@ -33,15 +33,10 @@
  import time
  import commands
@@ -18,7 +18,7 @@
  
  class CheckError(ValueError):
      pass
-@@ -95,20 +90,20 @@
+@@ -99,21 +94,23 @@
          f.close()
      except:
          pass
@@ -34,21 +34,27 @@
 +        execute('xenstored', args)
  
  def start_consoled():
-     if os.fork() == 0:
--        os.execvp('xenconsoled', ['xenconsoled'])
-+        execute('xenconsoled')
+-    XENCONSOLED_TRACE = os.getenv("XENCONSOLED_TRACE")
+-    args = ""
+-    if XENCONSOLED_TRACE:
+-        args += "--log=" + XENCONSOLED_TRACE
+-    start_daemon("xenconsoled", args)
++    trace = os.getenv("XENCONSOLED_TRACE")
++    args = []
++    if trace:
++        args.append("--log=" + trace)
++    if os.fork() == 0:
++        execute('xenconsoled', args)
  
  def start_blktapctrl():
-     if os.fork() == 0:
--        os.execvp('blktapctrl', ['blktapctrl'])
--            
+-    start_daemon("blktapctrl", "")
++    if os.fork() == 0:
 +        execute('blktapctrl')
-+
+ 
  def main():
      try:
-         check_logging()
---- xen-3.orig/tools/misc/xm
-+++ xen-3/tools/misc/xm
+--- xen-unstable.orig/tools/misc/xm
++++ xen-unstable/tools/misc/xm
 @@ -1,10 +1,7 @@
  #!/usr/bin/env python
  #  -*- mode: python; -*-
