@@ -27,15 +27,15 @@ class Gencontrol(Base):
     def do_main_setup(self, vars, makeflags, extra):
         makeflags.update(self.makeflags_base)
 
-    def do_main_packages(self, packages, extra):
-        packages.extend(self.process_packages(self.templates["control.main"], self.vars))
+    def do_main_packages(self, packages, vars, makeflags, extra):
+        packages.extend(self.process_packages(self.templates["control.main"], vars))
 
     def do_arch_setup(self, vars, makeflags, arch, extra):
+        config_base = self.config.merge('base', arch)
         for i in (
             ('xen-arch', 'XEN_ARCH'),
         ):
-            if vars.has_key(i[0]):
-                makeflags[i[1]] = vars[i[0]]
+            makeflags[i[1]] = config_base[i[0]]
 
     def do_arch_packages(self, packages, makefile, arch, vars, makeflags, extra):
         utils = self.templates["control.utils"]
