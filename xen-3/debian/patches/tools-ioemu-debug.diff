@@ -1,0 +1,10 @@
+--- a/tools/ioemu/Makefile.target
++++ b/tools/ioemu/Makefile.target
+@@ -632,7 +632,6 @@
+ ifneq ($(PROGS),)
+ 	$(INSTALL_PROG) $(PROGS) "$(DESTDIR)$(bindir)"
+ endif
+-	$(INSTALL_PROG) $(TARGET_PATH)/qemu-dm.debug "$(DESTDIR)$(bindir)"
+ 	$(INSTALL_PROG) $(TARGET_PATH)/qemu-ifup "$(DESTDIR)$(configdir)"
+ 
+ ifneq ($(wildcard .depend),)

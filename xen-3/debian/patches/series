@@ -16,4 +16,4 @@ disable-features.diff
 tools-misc-xend-race.diff
 doc-remove-unused.diff
 tools-blktap-crypto.patch
-tools-ioemu-dm.diff
+tools-ioemu-debug.diff
