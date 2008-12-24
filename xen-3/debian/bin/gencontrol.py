@@ -24,11 +24,12 @@ class Gencontrol(Base):
         packages.extend(self.process_packages(self.templates["control.main"], vars))
 
     def do_arch_setup(self, vars, makeflags, arch, extra):
+        config_entry = self.config.merge('base', arch)
+
         for i in (
             ('xen-arch', 'XEN_ARCH'),
         ):
-            if vars.has_key(i[0]):
-                makeflags[i[1]] = vars[i[0]]
+            makeflags[i[1]] = config_entry[i[0]]
 
     def do_arch_packages(self, packages, makefile, arch, vars, makeflags, extra):
         utils = self.templates["control.utils"]
