@@ -17,3 +17,6 @@ tools-misc-xend-race.diff
 doc-remove-unused.diff
 tools-blktap-crypto.patch
 tools-ioemu-debug.diff
+CVE-2008-2004.1.diff
+CVE-2008-2004.2.diff
+CVE-2008-2004.3.diff
