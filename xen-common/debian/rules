@@ -19,7 +19,7 @@ $(STAMPS_DIR)/source: $(STAMPS_DIR)
 	@rm -rf $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
 	cp -a $(srcfiles) $(BUILD_DIR)
-	dpatch -d $(BUILD_DIR) apply-all
+	cd $(BUILD_DIR); QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
 	touch $@
 
 build: $(STAMPS_DIR)/source
@@ -49,9 +49,6 @@ else
 	mkdir -p ../orig
 	tar -C ../orig -xzf $(TAR_ORIG)
 endif
-
-# This is to make dpatch-edit-patch work
-unpatch: clean
 
 maintainerclean:
 	rm -rf $(filter-out $(NO_ORIG), $(wildcard * .[^.]*))
