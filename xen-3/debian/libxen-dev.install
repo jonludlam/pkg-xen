@@ -3,10 +3,3 @@ usr/lib/libxenstore.{a,so}
 usr/include/{xenctrl.h,xenguest.h}
 usr/include/{xs.h,xs_lib.h}
 usr/include/xen
-../../../xen/include/public/*.h usr/include/xen
-../../../xen/include/public/arch-ia64/*.h usr/include/xen/arch-ia64
-../../../xen/include/public/arch-x86/*.h usr/include/xen/arch-x86
-../../../xen/include/public/foreign/*.h usr/include/xen/foreign
-../../../xen/include/public/hvm/*.h usr/include/xen/hvm
-../../../xen/include/public/io/*.h usr/include/xen/io
-../../../xen/include/public/xsm/*.h usr/include/xen/xsm
