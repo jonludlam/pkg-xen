@@ -98,7 +98,7 @@ class Gencontrol(Base):
     def process_changelog(self):
         changelog = Changelog(version = VersionXen)
         self.version = changelog[0].version
-        self.abiname = '-%s' % self.config['abi',]['abiname']
+        self.abiname = 'abiname' in self.config['abi',] and '-%s' % self.config['abi',]['abiname'] or ''
         self.vars = {
             'major': self.version.xen_major,
             'version': self.version.xen_version,
