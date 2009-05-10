@@ -2,6 +2,7 @@ xen-common (3.3.1-1) UNRELEASED; urgency=low
 
   * New upstream version.
   * Use quilt instead of dpatch.
+  * Disable network setup instead of using dummy script.
 
  -- Bastian Blank <waldi@debian.org>  Sun, 10 May 2009 14:32:18 +0200
 
