@@ -88,7 +88,7 @@ $(STAMPS_DIR)/install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	touch $@
 
 install-base:
-	dh_installchangelogs
+	dh_installchangelogs -XChangelog
 	dh_installdocs
 	dh_compress
 	dh_fixperms
