@@ -58,12 +58,12 @@ $(STAMPS_DIR)/setup-utils_$(ARCH): $(STAMPS_DIR)/source
 
 $(STAMPS_DIR)/build-docs: DIR=$(BUILD_DIR)/build-docs
 $(STAMPS_DIR)/build-docs: $(STAMPS_DIR)/setup-docs
-	$(MAKE_CLEAN) -C $(DIR)/docs
+	+$(MAKE_CLEAN) -C $(DIR)/docs
 	touch $@
 
 $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR)
-	$(MAKE_CLEAN) -C $(DIR)/xen \
+	+$(MAKE_CLEAN) -C $(DIR)/xen \
 		$(CONFIG) \
 		XEN_COMPILE_ARCH=$(XEN_ARCH) \
 		XEN_TARGET_ARCH=$(XEN_ARCH)
@@ -77,14 +77,14 @@ $(STAMPS_DIR)/install-utils_$(ARCH): CONFIG = \
 
 $(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/build-utils_$(ARCH): $(STAMPS_DIR)/setup-utils_$(ARCH)
-	$(MAKE_CLEAN) -C $(DIR)/tools $(CONFIG)
+	+$(MAKE_CLEAN) -C $(DIR)/tools $(CONFIG)
 	touch $@
 
 $(STAMPS_DIR)/install-utils_$(ARCH): DIR = $(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/install-utils_$(ARCH): INSTALL_DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 $(STAMPS_DIR)/install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	@rm -rf $(INSTALL_DIR)
-	$(MAKE_CLEAN) -C $(DIR)/tools install DESTDIR=$(CURDIR)/$(INSTALL_DIR) $(CONFIG)
+	+$(MAKE_CLEAN) -C $(DIR)/tools install DESTDIR=$(CURDIR)/$(INSTALL_DIR) $(CONFIG)
 	touch $@
 
 install-base:
@@ -104,9 +104,9 @@ install-docs: $(STAMPS_DIR)/build-docs
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	$(MAKE_CLEAN) -C $(DIR)/docs install DESTDIR=$(CURDIR)/debian/tmp
+	+$(MAKE_CLEAN) -C $(DIR)/docs install DESTDIR=$(CURDIR)/debian/tmp
 	dh_install --sourcedir=debian/tmp usr/share/doc/xen/pdf/* usr/share/doc/$(PACKAGE_NAME)
-	$(MAKE_SELF) install-base
+	+$(MAKE_SELF) install-base
 
 install-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 install-hypervisor_$(ARCH)_$(FLAVOUR): PACKAGE_NAME = xen-hypervisor-$(VERSION)$(ABINAME)-$(FLAVOUR)
@@ -117,7 +117,7 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 	dh_clean -k
 	dh_installdirs boot
 	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)$(ABINAME)-$(FLAVOUR).gz
-	$(MAKE_SELF) install-base
+	+$(MAKE_SELF) install-base
 
 install-lib-dev_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 install-lib-dev_$(ARCH): PACKAGE_NAME = libxen-dev
@@ -129,7 +129,7 @@ install-lib-dev_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_install --sourcedir=$(DIR)
 	dh_strip
 	dh_shlibdeps
-	$(MAKE_SELF) install-base
+	+$(MAKE_SELF) install-base
 
 install-libxenstore_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 install-libxenstore_$(ARCH): PACKAGE_NAME = libxenstore3.0
@@ -142,7 +142,7 @@ install-libxenstore_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_strip
 	dh_makeshlibs
 	dh_shlibdeps
-	$(MAKE_SELF) install-base
+	+$(MAKE_SELF) install-base
 
 install-utils_$(ARCH): SOURCE_DIR = $(BUILD_DIR)/build-utils_$(ARCH)
 install-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
@@ -162,7 +162,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_strip
 	dh_makeshlibs
 	dh_shlibdeps
-	$(MAKE_SELF) install-base
+	+$(MAKE_SELF) install-base
 
 install-xenstore-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 install-xenstore-utils_$(ARCH): PACKAGE_NAME = xenstore-utils
@@ -174,6 +174,6 @@ install-xenstore-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_install --sourcedir=$(DIR)
 	dh_strip
 	dh_shlibdeps
-	$(MAKE_SELF) install-base
+	+$(MAKE_SELF) install-base
 
 # vim: filetype=make
