@@ -1,0 +1,21 @@
+--- a/tools/blktap/lib/Makefile
++++ b/tools/blktap/lib/Makefile
+@@ -9,6 +9,7 @@
+ CFLAGS   += $(CFLAGS_libxenctrl)
+ CFLAGS   += $(CFLAGS_libxenstore)
+ LDFLAGS  += $(LDFLAGS_libxenstore)
++LDFLAGS  += $(call LDFLAGS_RPATH)
+ 
+ SRCS     :=
+ SRCS     += xenbus.c blkif.c xs_api.c
+--- a/tools/blktap/drivers/Makefile
++++ b/tools/blktap/drivers/Makefile
+@@ -25,7 +25,7 @@
+ $(warning *** libgcrypt not installed: falling back to libcrypto ***)
+ endif
+ 
+-LDFLAGS_blktapctrl := $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore) -L../lib -lblktap
++LDFLAGS_blktapctrl := $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib) -L../lib -lblktap
+ LDFLAGS_img := $(LIBAIO_DIR)/libaio.a $(CRYPT_LIB) -lpthread -lz
+ 
+ BLK-OBJS-y  := block-aio.o

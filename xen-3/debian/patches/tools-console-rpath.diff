@@ -1,0 +1,10 @@
+--- a/tools/console/Makefile
++++ b/tools/console/Makefile
+@@ -8,6 +8,7 @@
+ CFLAGS  += $(CFLAGS_libxenstore)
+ LDFLAGS += $(LDFLAGS_libxenctrl)
+ LDFLAGS += $(LDFLAGS_libxenstore)
++LDFLAGS += $(call LDFLAGS_RPATH,../lib)
+ 
+ BIN      = xenconsoled xenconsole
+ 

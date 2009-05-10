@@ -1,0 +1,44 @@
+--- a/tools/blktap/lib/Makefile
++++ b/tools/blktap/lib/Makefile
+@@ -1,9 +1,7 @@
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR    = 3.0
+-MINOR    = 0
+-SONAME   = libblktap.so.$(MAJOR)
++SONAME   = libblktap.so
+ 
+ CFLAGS   += -I.
+ CFLAGS   += $(CFLAGS_libxenctrl)
+@@ -28,7 +26,7 @@
+ OBJS_PIC = $(SRCS:.c=.opic)
+ IBINS   :=
+ 
+-LIB      = libblktap.a libblktap.so.$(MAJOR).$(MINOR)
++LIB      = libblktap.a libblktap.so
+ 
+ .PHONY: all
+ all: $(LIB)
+@@ -38,19 +36,15 @@
+ 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(PRIVATE_LIBDIR)
+-	ln -sf libblktap.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so.$(MAJOR)
+-	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so
+ 	$(INSTALL_DATA) blktaplib.h $(DESTDIR)$(INCLUDEDIR)
+ 
+ .PHONY: clean
+ clean:
+ 	rm -rf *.a *.so* *.o *.opic *.rpm $(LIB) *~ $(DEPS) xen TAGS
+ 
+-libblktap.so.$(MAJOR).$(MINOR): $(OBJS_PIC) 
+-	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,$(SONAME) $(SHLIB_CFLAGS) \
++libblktap.so: $(OBJS_PIC) 
++	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
+ 	      $(LDFLAGS) -o $@ $^
+-	ln -sf libblktap.so.$(MAJOR).$(MINOR) libblktap.so.$(MAJOR)
+-	ln -sf libblktap.so.$(MAJOR) libblktap.so
+ 
+ libblktap.a: $(OBJS) 
+ 	$(AR) rc $@ $^

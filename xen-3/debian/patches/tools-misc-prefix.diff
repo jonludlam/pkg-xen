@@ -1,63 +1,44 @@
---- xen-3.orig/tools/misc/xend
-+++ xen-3/tools/misc/xend
-@@ -33,15 +33,10 @@
- import time
- import commands
+--- a/tools/misc/Makefile
++++ b/tools/misc/Makefile
+@@ -18,13 +18,10 @@
+ SUBDIRS-$(CONFIG_MINITERM) += miniterm
+ SUBDIRS := $(SUBDIRS-y)
  
--xpp = os.path.join(os.path.dirname(sys.argv[0]), 'xen-python-path')
--if os.path.exists(xpp):
--    result = commands.getstatusoutput(xpp)
--    if result[0] != 0:
--        print >>sys.stderr, result[1]
--        sys.exit(1)
--    sys.path.append(result[1])
-+sys.path.insert(1, sys.path[0] + '/../lib/python')
- 
- from xen.xend.server import SrvDaemon
-+from xen.util.auxbin import execute
- 
- class CheckError(ValueError):
-     pass
-@@ -95,20 +90,20 @@
-         f.close()
-     except:
-         pass
--    XENSTORED_TRACE = os.getenv("XENSTORED_TRACE")
--    cmd = "xenstored --pid-file /var/run/xenstore.pid"
--    if XENSTORED_TRACE:
--        cmd += " -T /var/log/xen/xenstored-trace.log"
--    s,o = commands.getstatusoutput(cmd)
-+    args = ["--pid-file", "/var/run/xenstore.pid"]
-+    if os.getenv("XENSTORED_TRACE"):
-+        args.extend(["-T", "/var/log/xen/xenstored-trace.log"])
-+    if os.fork() == 0:
-+        execute('xenstored', args)
- 
- def start_consoled():
-     if os.fork() == 0:
--        os.execvp('xenconsoled', ['xenconsoled'])
-+        execute('xenconsoled')
- 
- def start_blktapctrl():
-     if os.fork() == 0:
--        os.execvp('blktapctrl', ['blktapctrl'])
--            
-+        execute('blktapctrl')
-+
- def main():
-     try:
-         check_logging()
---- xen-3.orig/tools/misc/xm
-+++ xen-3/tools/misc/xm
-@@ -1,10 +1,7 @@
- #!/usr/bin/env python
- #  -*- mode: python; -*-
- import sys
+-INSTALL_BIN-y := xencons
+-INSTALL_BIN-$(CONFIG_X86) += xen-detect
+-INSTALL_BIN := $(INSTALL_BIN-y)
 -
--# add fallback path for non-native python path installs if needed
--sys.path.append('/usr/lib/python')
--sys.path.append('/usr/lib64/python')
-+sys.path.insert(1, sys.path[0] + '/../lib/python')
- from xen.xm import main
+-INSTALL_SBIN-y := netfix xm xen-bugtool xen-python-path xend xenperf xsview
+-INSTALL_SBIN-$(CONFIG_X86) += xenpm
+-INSTALL_SBIN := $(INSTALL_SBIN-y)
++INSTALL_TARGETS-y := xencons
++INSTALL_TARGETS-y := netfix xm xen-bugtool xen-python-path xend xenperf xsview
++INSTALL_TARGETS-$(CONFIG_X86) += xenpm
++INSTALL_TARGETS := $(INSTALL_TARGETS-y)
  
- main.main(sys.argv)
+ DEFAULT_PYTHON_PATH := $(shell $(XEN_ROOT)/tools/python/get-path)
+ PYTHON_PATH ?= $(DEFAULT_PYTHON_PATH)
+@@ -40,10 +37,8 @@
+ 
+ .PHONY: install
+ install: build
+-	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PYTHON_PROG) $(INSTALL_BIN) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_PYTHON_PROG) $(INSTALL_SBIN) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PYTHON_PROG) $(INSTALL_TARGETS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	set -e; for d in $(SUBDIRS); do $(MAKE) -C $$d install-recurse; done
+ 
+ .PHONY: clean
+--- a/tools/misc/lomount/Makefile
++++ b/tools/misc/lomount/Makefile
+@@ -16,7 +16,7 @@
+ 
+ .PHONY: install
+ install install-recurse: build
+-	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
++	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 
+ .PHONY: clean
+ clean:

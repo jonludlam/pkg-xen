@@ -1,6 +1,6 @@
---- xen-3.orig/tools/ioemu/vl.c
-+++ xen-3/tools/ioemu/vl.c
-@@ -99,7 +99,7 @@
+--- a/tools/ioemu/vl.c
++++ b/tools/ioemu/vl.c
+@@ -108,7 +108,7 @@
  
  #include "exec-all.h"
  

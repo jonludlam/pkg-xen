@@ -1,0 +1,29 @@
+--- a/config/ia64.mk
++++ b/config/ia64.mk
+@@ -1,6 +1,5 @@
+ CONFIG_IA64 := y
+ CONFIG_IA64_$(XEN_OS) := y
+ 
+-CONFIG_IOEMU := y
+ CONFIG_XCUTILS := y
+ CONFIG_XENCOMM := y
+--- a/config/x86_32.mk
++++ b/config/x86_32.mk
+@@ -5,7 +5,6 @@
+ CONFIG_HVM := y
+ CONFIG_MIGRATE := y
+ CONFIG_XCUTILS := y
+-CONFIG_IOEMU := y
+ 
+ CFLAGS += -m32 -march=i686
+ 
+--- a/config/x86_64.mk
++++ b/config/x86_64.mk
+@@ -6,7 +6,6 @@
+ CONFIG_HVM := y
+ CONFIG_MIGRATE := y
+ CONFIG_XCUTILS := y
+-CONFIG_IOEMU := y
+ 
+ CFLAGS += -m64
+ 

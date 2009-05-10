@@ -1,51 +1,35 @@
---- xen-3.orig/Config.mk
-+++ xen-3/Config.mk
-@@ -31,6 +31,13 @@
- include $(XEN_ROOT)/config/$(XEN_OS).mk
- include $(XEN_ROOT)/config/$(XEN_TARGET_ARCH).mk
+--- a/config/StdGNU.mk
++++ b/config/StdGNU.mk
+@@ -25,16 +25,15 @@
+ BINDIR = $(PREFIX)/bin
+ INCLUDEDIR = $(PREFIX)/include
+ LIBLEAFDIR = lib
+-LIBLEAFDIR_x86_64 = lib64
+ LIBDIR = $(PREFIX)/$(LIBLEAFDIR)
+-LIBDIR_x86_64 = $(PREFIX)/$(LIBLEAFDIR_x86_64)
+ MANDIR = $(PREFIX)/share/man
+ MAN1DIR = $(MANDIR)/man1
+ MAN8DIR = $(MANDIR)/man8
+ SBINDIR = $(PREFIX)/sbin
  
-+PREFIX = lib/xen-$(XEN_VERSION)
-+BINDIR = $(PREFIX)/bin
-+LIBDIR = $(PREFIX)/lib
-+
-+PUBLIC_BINDIR = bin
-+PUBLIC_LIBDIR = lib
-+
- ifneq ($(EXTRA_PREFIX),)
- EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
- EXTRA_LIB += $(EXTRA_PREFIX)/$(LIBDIR)
---- xen-3.orig/config/ia64.mk
-+++ xen-3/config/ia64.mk
-@@ -4,5 +4,3 @@
- CONFIG_IOEMU := y
- CONFIG_XCUTILS := y
- CONFIG_XENCOMM := y
--
--LIBDIR := lib
---- xen-3.orig/config/powerpc64.mk
-+++ xen-3/config/powerpc64.mk
-@@ -4,4 +4,3 @@
- CONFIG_XENCOMM := y
+-PRIVATE_PREFIX = $(LIBDIR)/xen
++PRIVATE_PREFIX = $(LIBDIR)/xen-$(XEN_VERSION)
+ PRIVATE_BINDIR = $(PRIVATE_PREFIX)/bin
++PRIVATE_LIBDIR = $(PRIVATE_PREFIX)/lib
  
- CFLAGS += -DELFSIZE=64
--LIBDIR := lib
---- xen-3.orig/config/x86_32.mk
-+++ xen-3/config/x86_32.mk
-@@ -8,7 +8,6 @@
- CONFIG_IOEMU := y
- 
- CFLAGS += -m32 -march=i686
--LIBDIR := lib
- 
- # Use only if calling $(LD) directly.
- LDFLAGS_DIRECT_OpenBSD = _obsd
---- xen-3.orig/config/x86_64.mk
-+++ xen-3/config/x86_64.mk
-@@ -9,7 +9,6 @@
- CONFIG_IOEMU := y
+ SOCKET_LIBS =
+ CURSES_LIBS = -lncurses
+--- a/config/x86_64.mk
++++ b/config/x86_64.mk
+@@ -10,11 +10,6 @@
  
  CFLAGS += -m64
--LIBDIR = $(LIB64DIR)
  
+-LIBLEAFDIR = $(LIBLEAFDIR_x86_64)
+-LIBDIR = $(LIBDIR_x86_64)
+-
+-SunOS_LIBDIR = $(SunOS_LIBDIR_x86_64)
+-
  # Use only if calling $(LD) directly.
  ifeq ($(XEN_OS),OpenBSD)
+ LDFLAGS_DIRECT += -melf_x86_64_obsd

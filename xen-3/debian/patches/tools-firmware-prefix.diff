@@ -1,0 +1,11 @@
+--- a/tools/firmware/Makefile
++++ b/tools/firmware/Makefile
+@@ -4,7 +4,7 @@
+ # hvmloader is a 32-bit protected mode binary.
+ # It belongs in /usr/lib, not /usr/lib64.
+ TARGET      := hvmloader/hvmloader
+-INST_DIR := $(DESTDIR)/usr/lib/xen/boot
++INST_DIR := $(DESTDIR)$(PRIVATE_PREFIX)/boot
+ 
+ SUBDIRS :=
+ SUBDIRS += rombios

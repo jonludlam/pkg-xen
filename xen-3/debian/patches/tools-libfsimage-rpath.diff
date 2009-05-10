@@ -1,0 +1,10 @@
+--- a/tools/libfsimage/Rules.mk
++++ b/tools/libfsimage/Rules.mk
+@@ -4,6 +4,7 @@
+ 
+ CFLAGS += -I$(XEN_ROOT)/tools/libfsimage/common/ -Werror -Wp,-MD,.$(@F).d
+ LDFLAGS += -L../common/
++LDFLAGS += $(call LDFLAGS_RPATH,../..)
+ 
+ PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
+ 

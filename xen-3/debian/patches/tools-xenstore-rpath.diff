@@ -1,0 +1,11 @@
+--- a/tools/xenstore/Makefile
++++ b/tools/xenstore/Makefile
+@@ -12,6 +12,8 @@
+ CFLAGS += -Wp,-MD,.$(@F).d
+ DEP    = .*.d
+ 
++LDFLAGS_libxenctrl += $(call LDFLAGS_RPATH,../lib)
++
+ CLIENTS := xenstore-exists xenstore-list xenstore-read xenstore-rm xenstore-chmod
+ CLIENTS += xenstore-write xenstore-ls
+ 

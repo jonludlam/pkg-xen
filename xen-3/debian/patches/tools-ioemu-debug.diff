@@ -1,6 +1,6 @@
 --- a/tools/ioemu/Makefile.target
 +++ b/tools/ioemu/Makefile.target
-@@ -632,7 +632,6 @@
+@@ -666,7 +666,6 @@
  ifneq ($(PROGS),)
  	$(INSTALL_PROG) $(PROGS) "$(DESTDIR)$(bindir)"
  endif

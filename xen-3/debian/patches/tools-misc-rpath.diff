@@ -1,0 +1,8 @@
+--- a/tools/misc/Makefile
++++ b/tools/misc/Makefile
+@@ -50,4 +50,4 @@
+ 	$(CC) -c $(CFLAGS) -o $@ $<
+ 
+ xenperf xenpm: %: %.o Makefile
+-	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) $(LDFLAGS_libxenctrl)
++	$(CC) $(CFLAGS) -o $@ $< $(LDFLAGS) $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH,../lib)

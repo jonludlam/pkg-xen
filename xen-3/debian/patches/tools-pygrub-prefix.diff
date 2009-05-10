@@ -1,5 +1,5 @@
---- xen-3.orig/tools/pygrub/Makefile
-+++ xen-3/tools/pygrub/Makefile
+--- a/tools/pygrub/Makefile
++++ b/tools/pygrub/Makefile
 @@ -6,13 +6,12 @@
  all: build
  .PHONY: build
@@ -16,13 +16,13 @@
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xend/boot
  else
  install: all
---- xen-3.orig/tools/pygrub/src/pygrub
-+++ xen-3/tools/pygrub/src/pygrub
+--- a/tools/pygrub/src/pygrub
++++ b/tools/pygrub/src/pygrub
 @@ -21,7 +21,7 @@
  import curses, _curses, curses.wrapper, curses.textpad, curses.ascii
  import getopt
  
--sys.path = [ '/usr/lib/python' ] + sys.path
+-sys.path = [ '/usr/lib/python', '/usr/lib64/python' ] + sys.path
 +sys.path.insert(1, sys.path[0] + '/../lib/python')
  
  import fsimage
