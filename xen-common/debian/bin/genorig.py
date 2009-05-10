@@ -3,7 +3,9 @@
 import sys
 sys.path.append(sys.path[0] + '/../lib/python')
 
-import os, os.path, re, shutil
+import itertools
+import os, os.path
+import shutil
 import subprocess
 
 from debian_xen.debian import VersionXen, Changelog
@@ -11,7 +13,7 @@ from debian_xen.debian import VersionXen, Changelog
 class Main(object):
     log = sys.stdout.write
 
-    files = ['config', 'Config.mk', 'docs/Docs.mk', 'docs/Makefile', 'docs/man', 'tools/Rules.mk', 'tools/examples']
+    files = ('config', 'Config.mk', 'docs/Docs.mk', 'docs/Makefile', 'docs/man', 'tools/Rules.mk', 'tools/examples')
 
     def __init__(self, options, repo):
         self.options, self.repo = options, repo
@@ -39,6 +41,7 @@ class Main(object):
         if not self.options.tag:
             return
 
+        self.log('Updating to tag %s.\n' % self.options.tag)
         p = subprocess.Popen(('hg', 'update', '-r', self.options.tag), cwd=self.repo)
         if p.wait():
             raise RuntimeError
@@ -51,20 +54,24 @@ class Main(object):
 
     def do_archive(self):
         self.log("Create archive.\n")
-        include_args = ' '.join(('-I %s' % i for i in self.files))
-        f = os.popen("cd %s; hg archive %s %s/%s" % (self.repo, include_args, os.path.realpath(self.dir), self.orig_dir))
-        if f.close() is not None:
+
+        arg_dir = os.path.join(os.path.realpath(self.dir), self.orig_dir)
+        args = ('hg', 'archive', arg_dir) + tuple(itertools.chain(*(('-I', i) for i in self.files)))
+        p = subprocess.Popen(args, cwd=self.repo)
+        if p.wait():
             raise RuntimeError
 
     def do_changelog(self):
         self.log("Exporting changelog.\n")
-        file_args = ' '.join(self.files)
-        f = os.popen("cd %s; hg log %s" % (self.repo, file_args))
-        f_out = file("%s/%s/Changelog" % (self.dir, self.orig_dir), 'w')
-        shutil.copyfileobj(f, f_out)
-        if f.close() is not None:
+
+        log = open("%s/%s/Changelog" % (self.dir, self.orig_dir), 'w')
+
+        args = ('hg', 'log') + tuple(self.files)
+        p = subprocess.Popen(args, cwd=self.repo, stdout=log)
+        if p.wait():
             raise RuntimeError
-        f_out.close()
+
+        log.close()
 
     def do_tar(self):
         out = "../orig/%s" % self.orig_tar
