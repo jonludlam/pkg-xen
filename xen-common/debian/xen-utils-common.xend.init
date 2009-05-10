@@ -11,56 +11,123 @@
 
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="XEN control daemon"
-XENSTORED_RUN_DIR="/var/run/xenstored"
+
 VERSION=$(xen-utils-version -q 2>/dev/null || true)
 ROOT=/usr/lib/xen-$VERSION
-DAEMON=$ROOT/bin/xend
+
+XEND="$ROOT"/bin/xend
+XENCONSOLED="$ROOT"/bin/xenconsoled
+XENCONSOLED_PIDFILE="/var/run/xenconsoled.pid"
+XENSTORED="$ROOT"/bin/xenstored
+XENSTORED_DIR="/var/run/xenstored"
+XENSTORED_PIDFILE="/var/run/xenstored.pid"
 
 test "$VERSION" || exit 0
-test -x $DAEMON || exit 0
+test -x "$XEND" || exit 0
 test -e /proc/xen/privcmd || exit 0
 grep -q "control_d" /proc/xen/capabilities || exit 0
 
+[ -r /etc/default/xend ] && . /etc/default/xend
+
+. /lib/init/vars.sh
 . /lib/lsb/init-functions
 
-start()
+xend_start()
 {
-	$DAEMON status && return 0
-	$DAEMON start || return 1
+	log_progress_msg "xend"
+	$XEND status && return 1
+	$XEND start || return 2
 
 	i=0
 	while [ $i -lt 10 ]; do
-		$DAEMON status && return 0 || true
+		$XEND status && return 0 || true
 		i=$(($i + 1))
 		sleep 1
 	done
-	return 1
+	return 2
 }
 
-stop()
+xend_stop()
 {
 	$DAEMON status || return 0
 	$DAEMON stop || return 1
 }
 
+xenconsoled_start()
+{
+	log_progress_msg "xenconsoled"
+	start-stop-daemon --start --quiet --pidfile "$XENCONSOLED_PIDFILE" --exec "$XENCONSOLED" --test > /dev/null \
+		|| return 1
+	start-stop-daemon --start --quiet --pidfile "$XENCONSOLED_PIDFILE" --exec "$XENCONSOLED" -- \
+		$XENCONSOLED_ARGS --pid-file="$XENCONSOLED_PIDFILE" \
+		|| return 2
+}
+
+xenstored_start()
+{
+	log_progress_msg "xenstored"
+	start-stop-daemon --start --quiet --pidfile "$XENSTORED_PIDFILE" --exec "$XENSTORED" --test > /dev/null \
+		|| return 1
+	[ -d "$XENSTORED_DIR" ] || mkdir -p "$XENSTORED_DIR"
+	start-stop-daemon --start --quiet --pidfile "$XENSTORED_PIDFILE" --exec "$XENSTORED" -- \
+		$XENSTORED_ARGS --pid-file="$XENSTORED_PIDFILE" \
+		|| return 2
+}
+
 case "$1" in
   start)
-	[ -d "$XENSTORED_RUN_DIR" ] || mkdir -p "$XENSTORED_RUN_DIR"
-	log_daemon_msg "Starting $DESC" "xend"
-	start && log_end_msg 0 || log_end_msg 1
+	log_daemon_msg "Starting $DESC"
+	xenstored_start
+	case "$?" in
+		0|1) ;;
+		*)
+	       	log_end_msg 1
+		exit
+	       	;;
+	esac
+	xenconsoled_start
+	case "$?" in
+		0|1) ;;
+		*)
+	       	log_end_msg 1
+		exit
+	       	;;
+	esac
+	xend_start
+	case "$?" in
+		0|1) ;;
+		*)
+	       	log_end_msg 1
+		exit
+	       	;;
+	esac
+	log_end_msg 0
 	;;
   stop)
-	log_daemon_msg "Stopping $DESC" "xend"
-	stop && log_end_msg 0 || log_end_msg 1
+	log_daemon_msg "Stopping $DESC"
+	xend_stop
+	case "$?" in
+		0|1) log_end_msg 0 ;;
+		*) log_end_msg 1 ;;
+	esac
 	;;
   restart|force-reload)
-	log_daemon_msg "Restarting $DESC" "xend"
-	stop || true
-	start && log_end_msg 0 || log_end_msg 1
+	log_daemon_msg "Restarting $DESC"
+	xend_stop
+	case "$?" in
+		0|1)
+		xend_start
+		case "$?" in
+			0) log_end_msg 0 ;;
+			*) log_end_msg 1 ;;
+		esac
+		;;
+		*) log_end_msg 1 ;;
+	esac
 	;;
   *)
 	echo "Usage: $0 {start|stop|restart|force-reload}" >&2
-	exit 1
+	exit 3
 	;;
 esac
 
