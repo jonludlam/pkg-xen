@@ -18,7 +18,7 @@ class Main(object):
     def __init__(self, options, repo):
         self.options, self.repo = options, repo
 
-        self.changelog_entry = Changelog(version = VersionXen)[0]
+        self.changelog_entry = Changelog(version=VersionXen)[0]
         self.source = self.changelog_entry.source
 
     def __call__(self):
@@ -76,8 +76,9 @@ class Main(object):
     def do_tar(self):
         out = "../orig/%s" % self.orig_tar
         self.log("Generate tarball %s\n" % out)
-        f = os.popen("tar -C %s -czf %s %s" % (self.dir, out, self.orig_dir))
-        if f.close() is not None:
+
+        p = subprocess.Popen(('tar', '-C', self.dir, '-czf', out, self.orig_dir))
+        if p.wait():
             raise RuntimeError
 
 if __name__ == '__main__':
