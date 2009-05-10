@@ -1,25 +1,27 @@
 #!/usr/bin/env python
 
-import os, os.path, re, shutil, sys
-
+import sys
 sys.path.append(sys.path[0] + '/../lib/python')
+
+import os, os.path, re, shutil
+import subprocess
 
 from debian_xen.debian import VersionXen, Changelog
 
-class GenOrig(object):
+class Main(object):
     log = sys.stdout.write
 
     files = ['config', 'Config.mk', 'docs/Docs.mk', 'docs/Makefile', 'docs/man', 'tools/Rules.mk', 'tools/examples']
 
-    def __init__(self, repo, tag, version):
-        self.repo, self.tag, self.version = repo, tag, version
+    def __init__(self, options, repo):
+        self.options, self.repo = options, repo
 
         self.changelog_entry = Changelog(version = VersionXen)[0]
         self.source = self.changelog_entry.source
 
     def __call__(self):
         import tempfile
-        self.dir = tempfile.mkdtemp(prefix = 'genorig', dir = 'debian')
+        self.dir = tempfile.mkdtemp(prefix='genorig', dir='debian')
         try:
             self.do_update()
             self.do_version()
@@ -34,12 +36,16 @@ class GenOrig(object):
             shutil.rmtree(self.dir)
 
     def do_update(self):
-        if self.tag is None:
+        if not self.options.tag:
             return
-        raise NotImplementedError
+
+        p = subprocess.Popen('cd %s; hg update -r %s' % (self.repo, self.options.tag), shell=True)
+        if p.wait():
+            raise RuntimeError
 
     def do_version(self):
-        if self.version is not None:
+        if self.options.version:
+            self.version = self.options.version
             return
         raise NotImplementedError
 
@@ -69,8 +75,10 @@ class GenOrig(object):
 
 if __name__ == '__main__':
     from optparse import OptionParser
-    p = OptionParser()
-    p.add_option("-t", "--tag", dest = "tag")
-    p.add_option("-v", "--version", dest = "version")
-    options, args = p.parse_args(sys.argv)
-    GenOrig(args[1], options.tag, options.version)()
+    p = OptionParser(usage='%prog [OPTION]... DIR')
+    p.add_option("-t", "--tag", dest="tag")
+    p.add_option("-v", "--version", dest="version")
+    options, args = p.parse_args()
+    if len(args) != 1:
+        raise RuntimeError
+    Main(options, *args)()
