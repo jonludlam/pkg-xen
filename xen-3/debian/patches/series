@@ -37,6 +37,7 @@ tools-libfsimage-abiname.diff
 tools-libxc-abiname.diff
 
 tools-python-xen-xm-relative-path.diff
+tools-misc-xend-startup.diff
 
 config-ioemu-disable.diff
 
