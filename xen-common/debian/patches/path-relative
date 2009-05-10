@@ -1,13 +1,5 @@
-#! /bin/sh /usr/share/dpatch/dpatch-run
-## path-relative.dpatch by Bastian Blank <waldi@debian.org>
-##
-## All lines beginning with `## DP:' are a description of the patch.
-## DP: No description.
-
-@DPATCH@
-diff -urNad xen-common~/tools/examples/xmexample.hvm xen-common/tools/examples/xmexample.hvm
---- xen-common~/tools/examples/xmexample.hvm	2006-08-22 11:56:30.000000000 +0200
-+++ xen-common/tools/examples/xmexample.hvm	2006-09-21 23:45:52.000000000 +0200
+--- a/tools/examples/xmexample.hvm
++++ b/tools/examples/xmexample.hvm
 @@ -6,16 +6,9 @@
  # you can set the parameters for the domain on the xm command line.
  #============================================================================
@@ -26,19 +18,18 @@ diff -urNad xen-common~/tools/examples/xmexample.hvm xen-common/tools/examples/x
  
  # The domain build function. HVM domain uses 'hvm'.
  builder='hvm'
-@@ -112,7 +105,7 @@
+@@ -120,7 +113,7 @@
  #============================================================================
  
- # New stuff
+ # Device Model to be used
 -device_model = '/usr/' + arch_libdir + '/xen/bin/qemu-dm'
 +device_model = 'qemu-dm'
  
  #-----------------------------------------------------------------------------
- # boot on floppy (a), hard disk (c) or CD-ROM (d) 
-diff -urNad xen-common~/tools/examples/xmexample.vti xen-common/tools/examples/xmexample.vti
---- xen-common~/tools/examples/xmexample.vti	2006-08-22 11:56:30.000000000 +0200
-+++ xen-common/tools/examples/xmexample.vti	2006-09-21 23:46:29.000000000 +0200
-@@ -6,10 +6,6 @@
+ # boot on floppy (a), hard disk (c), Network (n) or CD-ROM (d) 
+--- a/tools/examples/xmexample.vti
++++ b/tools/examples/xmexample.vti
+@@ -6,13 +6,9 @@
  # you can set the parameters for the domain on the xm command line.
  #============================================================================
  
@@ -48,13 +39,17 @@ diff -urNad xen-common~/tools/examples/xmexample.vti xen-common/tools/examples/x
 -
  #----------------------------------------------------------------------------
  # Kernel image file.
- kernel = "/usr/lib/xen/boot/guest_firmware.bin"
-@@ -64,7 +60,7 @@
+-kernel = "/usr/lib/xen/boot/guest_firmware.bin"
++kernel = "guest_firmware.bin"
+ 
+ # The domain build function. VTI domain uses 'hvm'.
+ builder='hvm'
+@@ -67,7 +63,7 @@
  #============================================================================
  
  # New stuff
 -device_model = '/usr/' + arch_libdir + '/xen/bin/qemu-dm'
 +device_model = 'qemu-dm'
  
- # Advanced users only. Don't touch if you don't know what you're doing
- memmap = '/usr/lib/xen/boot/mem-map.sxp'
+ #-----------------------------------------------------------------------------
+ # boot on floppy (a), hard disk (c) or CD-ROM (d) 
