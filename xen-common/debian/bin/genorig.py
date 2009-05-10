@@ -39,7 +39,7 @@ class Main(object):
         if not self.options.tag:
             return
 
-        p = subprocess.Popen('cd %s; hg update -r %s' % (self.repo, self.options.tag), shell=True)
+        p = subprocess.Popen(('hg', 'update', '-r', self.options.tag), cwd=self.repo)
         if p.wait():
             raise RuntimeError
 
