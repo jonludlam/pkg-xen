@@ -75,7 +75,7 @@ class Main(object):
 
 if __name__ == '__main__':
     from optparse import OptionParser
-    p = OptionParser(usage='%prog [OPTION]... DIR')
+    p = OptionParser(prog=sys.argv[0], usage='%prog [OPTION]... DIR')
     p.add_option("-t", "--tag", dest="tag")
     p.add_option("-v", "--version", dest="version")
     options, args = p.parse_args()
