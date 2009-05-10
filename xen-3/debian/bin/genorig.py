@@ -1,19 +1,23 @@
 #!/usr/bin/env python
 
-import os, os.path, re, shutil, sys
-
+import sys
 sys.path.append(sys.path[0] + '/../lib/python')
+
+import itertools
+import os, os.path
+import shutil
+import subprocess
 
 from debian_xen.debian import VersionXen
 from debian_linux.debian import Changelog
 
-class GenOrig(object):
+class Main(object):
     log = sys.stdout.write
 
-    def __init__(self, repo, tag, version):
-        self.repo, self.tag, self.version = repo, tag, version
+    def __init__(self, options, repo):
+        self.options, self.repo = options, repo
 
-        self.changelog_entry = Changelog(version = VersionXen)[0]
+        self.changelog_entry = Changelog(version=VersionXen)[0]
         self.source = self.changelog_entry.source
 
     def __call__(self):
@@ -33,43 +37,54 @@ class GenOrig(object):
             shutil.rmtree(self.dir)
 
     def do_update(self):
-        if self.tag is None:
+        if not self.options.tag:
             return
-        f = os.popen("cd %s; hg update -r %s" % (self.repo, self.tag))
-        if f.close() is not None:
+
+        self.log('Updating to tag %s.\n' % self.options.tag)
+        p = subprocess.Popen(('hg', 'update', '-r', self.options.tag), cwd=self.repo)
+        if p.wait():
             raise RuntimeError
 
     def do_version(self):
-        if self.version is not None:
+        if self.options.version:
+            self.version = self.options.version
             return
         raise NotImplementedError
 
     def do_archive(self):
         self.log("Create archive.\n")
-        f = os.popen("cd %s; hg archive %s/%s" % (self.repo, os.path.realpath(self.dir), self.orig_dir))
-        if f.close() is not None:
+
+        arg_dir = os.path.join(os.path.realpath(self.dir), self.orig_dir)
+        args = ('hg', 'archive', arg_dir)
+        p = subprocess.Popen(args, cwd=self.repo)
+        if p.wait():
             raise RuntimeError
 
     def do_changelog(self):
         self.log("Exporting changelog.\n")
-        f = os.popen("cd %s; hg log" % (self.repo))
-        f_out = file("%s/%s/Changelog" % (self.dir, self.orig_dir), 'w')
-        shutil.copyfileobj(f, f_out)
-        if f.close() is not None:
+
+        log = open("%s/%s/Changelog" % (self.dir, self.orig_dir), 'w')
+        args = ('hg', 'log')
+        p = subprocess.Popen(args, cwd=self.repo, stdout=log)
+        if p.wait():
             raise RuntimeError
-        f_out.close()
+
+        log.close()
 
     def do_tar(self):
         out = "../orig/%s" % self.orig_tar
         self.log("Generate tarball %s\n" % out)
-        f = os.popen("tar -C %s -czf %s %s" % (self.dir, out, self.orig_dir))
-        if f.close() is not None:
+
+        p = subprocess.Popen(('tar', '-C', self.dir, '-czf', out, self.orig_dir))
+        if p.wait():
             raise RuntimeError
 
 if __name__ == '__main__':
     from optparse import OptionParser
-    p = OptionParser()
-    p.add_option("-t", "--tag", dest = "tag")
-    p.add_option("-v", "--version", dest = "version")
-    options, args = p.parse_args(sys.argv)
-    GenOrig(args[1], options.tag, options.version)()
+    p = OptionParser(prog=sys.argv[0], usage='%prog [OPTION]... DIR')
+    p.add_option("-t", "--tag", dest="tag")
+    p.add_option("-v", "--version", dest="version")
+    options, args = p.parse_args()
+    if len(args) != 1:
+        raise RuntimeError
+    Main(options, *args)()
