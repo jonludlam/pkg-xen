@@ -7,10 +7,10 @@
 -MAJOR = 1.0
 -MINOR = 0
 -
- CFLAGS += -Werror -Wp,-MD,.$(@F).d -DLIBDIR="\"$(LIBDIR)\""
- DEPS = .*.d
+ CFLAGS += -DLIBDIR="\"$(LIBDIR)\""
  
-@@ -15,7 +12,7 @@
+ LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
+@@ -14,7 +11,7 @@
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  
@@ -19,7 +19,7 @@
  
  .PHONY: all
  all: $(LIB)
-@@ -24,9 +21,7 @@
+@@ -23,9 +20,7 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
@@ -30,7 +30,7 @@
  	$(INSTALL_DATA) fsimage.h $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) fsimage_plugin.h $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) fsimage_grub.h $(DESTDIR)$(INCLUDEDIR)
-@@ -34,13 +29,8 @@
+@@ -33,13 +28,8 @@
  clean distclean:
  	rm -f $(PIC_OBJS) $(LIB) $(DEPS)
  

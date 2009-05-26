@@ -1,8 +1,8 @@
 --- a/tools/libfsimage/Rules.mk
 +++ b/tools/libfsimage/Rules.mk
-@@ -4,6 +4,7 @@
+@@ -2,6 +2,7 @@
  
- CFLAGS += -I$(XEN_ROOT)/tools/libfsimage/common/ -Werror -Wp,-MD,.$(@F).d
+ CFLAGS += -I$(XEN_ROOT)/tools/libfsimage/common/ -Werror
  LDFLAGS += -L../common/
 +LDFLAGS += $(call LDFLAGS_RPATH,../..)
  

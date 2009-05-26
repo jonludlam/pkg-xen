@@ -1,6 +1,6 @@
 --- a/tools/libxc/Makefile
 +++ b/tools/libxc/Makefile
-@@ -139,7 +139,7 @@
+@@ -137,7 +137,7 @@
  	ln -sf $< $@
  
  libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
@@ -9,7 +9,7 @@
  
  # libxenguest
  
-@@ -152,7 +152,7 @@
+@@ -150,7 +150,7 @@
  	ln -sf $< $@
  
  libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so

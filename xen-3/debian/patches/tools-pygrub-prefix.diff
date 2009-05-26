@@ -1,29 +1,11 @@
---- a/tools/pygrub/Makefile
-+++ b/tools/pygrub/Makefile
-@@ -6,13 +6,12 @@
- all: build
- .PHONY: build
- build:
--	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py build
-+	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR=$(LIBDIR) python setup.py build
- 
- .PHONY: install
- ifndef XEN_PYTHON_NATIVE_INSTALL
--install: LIBPATH=$(shell PYTHONPATH=../python/xen/util python -c "import auxbin; print auxbin.libpath()")
- install: all
--	CC="$(CC)" CFLAGS="$(CFLAGS)" python setup.py install --home="$(DESTDIR)/usr" --prefix="" --install-lib="$(DESTDIR)$(LIBPATH)/python"
-+	CC="$(CC)" CFLAGS="$(CFLAGS)" LIBDIR=$(LIBDIR) python setup.py install --home="$(DESTDIR)/usr/$(LIBDIR)" --prefix="" --install-lib="$(DESTDIR)/usr/$(LIBDIR)/python" --install-scripts=$(DESTDIR)/usr/$(BINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)/var/run/xend/boot
- else
- install: all
 --- a/tools/pygrub/src/pygrub
 +++ b/tools/pygrub/src/pygrub
-@@ -21,7 +21,7 @@
+@@ -21,6 +21,8 @@
  import curses, _curses, curses.wrapper, curses.textpad, curses.ascii
  import getopt
  
--sys.path = [ '/usr/lib/python', '/usr/lib64/python' ] + sys.path
 +sys.path.insert(1, sys.path[0] + '/../lib/python')
- 
++
  import fsimage
  import grub.GrubConf
+ import grub.LiloConf

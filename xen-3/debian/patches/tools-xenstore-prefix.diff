@@ -1,6 +1,6 @@
 --- a/tools/xenstore/Makefile
 +++ b/tools/xenstore/Makefile
-@@ -96,14 +96,14 @@
+@@ -92,14 +92,14 @@
  install: all
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
@@ -10,12 +10,12 @@
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
 -	$(INSTALL_PROG) xenstored $(DESTDIR)$(SBINDIR)
 -	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(BINDIR)
--	$(INSTALL_PROG) xenstore $(DESTDIR)/usr/bin
+-	$(INSTALL_PROG) xenstore $(DESTDIR)$(BINDIR)
 +	$(INSTALL_PROG) xenstored $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_PROG) xenstore $(DESTDIR)$(SBINDIR)
  	set -e ; for c in $(CLIENTS) ; do \
--		ln -f $(DESTDIR)/usr/bin/xenstore $(DESTDIR)/usr/bin/$${c} ; \
+-		ln -f $(DESTDIR)$(BINDIR)/xenstore $(DESTDIR)$(BINDIR)/$${c} ; \
 +		ln -f xenstore $(DESTDIR)$(SBINDIR)/$${c} ; \
  	done
  	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)

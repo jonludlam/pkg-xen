@@ -7,7 +7,7 @@
 @DPATCH@
 --- a/xen/Makefile
 +++ b/xen/Makefile
-@@ -84,17 +84,16 @@
+@@ -85,17 +85,16 @@
  include/xen/compile.h: include/xen/compile.h.in .banner
  	@sed -e 's/@@date@@/$(shell LC_ALL=C date)/g' \
  	    -e 's/@@time@@/$(shell LC_ALL=C date +%T)/g' \
@@ -85,7 +85,7 @@
 -}
 --- a/xen/drivers/char/console.c
 +++ b/xen/drivers/char/console.c
-@@ -560,14 +560,11 @@
+@@ -578,14 +578,11 @@
      serial_set_rx_handler(sercon_handle, serial_rx);
  
      /* HELLO WORLD --- start-of-day banner text. */

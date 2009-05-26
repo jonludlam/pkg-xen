@@ -1,6 +1,6 @@
 --- a/tools/console/Makefile
 +++ b/tools/console/Makefile
-@@ -29,7 +29,5 @@
+@@ -29,9 +29,7 @@
  
  .PHONY: install
  install: $(BIN)
@@ -9,3 +9,5 @@
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
 -	$(INSTALL_PROG) xenconsole $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_PROG) xenconsole xenconsoled $(DESTDIR)$(PRIVATE_BINDIR)
+ 
+ -include $(DEPS)

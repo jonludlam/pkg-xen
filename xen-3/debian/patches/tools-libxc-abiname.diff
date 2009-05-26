@@ -4,13 +4,13 @@
  XEN_ROOT = ../..
  include $(XEN_ROOT)/tools/Rules.mk
  
--MAJOR    = 3.2
+-MAJOR    = 3.4
 -MINOR    = 0
 -
  CTRL_SRCS-y       :=
  CTRL_SRCS-y       += xc_core.c
  CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
-@@ -74,12 +71,12 @@
+@@ -72,12 +69,12 @@
  
  LIB := libxenctrl.a
  ifneq ($(stubdom),y)
@@ -25,7 +25,7 @@
  endif
  
  .PHONY: all
-@@ -96,16 +93,12 @@
+@@ -94,16 +91,12 @@
  install: build
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
@@ -44,7 +44,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
-@@ -133,26 +126,16 @@
+@@ -131,26 +124,16 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  

@@ -1,8 +1,8 @@
 --- a/tools/Rules.mk
 +++ b/tools/Rules.mk
-@@ -5,6 +5,8 @@
- 
- include $(XEN_ROOT)/Config.mk
+@@ -8,6 +8,8 @@
+ export _INSTALL := $(INSTALL)
+ INSTALL = $(XEN_ROOT)/tools/cross-install
  
 +LDFLAGS_RPATH = -Wl,-rpath,'$${ORIGIN}$(if $(1),/$(1))'
 +

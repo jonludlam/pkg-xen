@@ -1,6 +1,6 @@
 --- a/tools/misc/xend
 +++ b/tools/misc/xend
-@@ -76,40 +76,6 @@
+@@ -75,40 +75,6 @@
      if os.fork() == 0:
          os.execvp(daemon, (daemon,) + args)
  
@@ -41,7 +41,7 @@
  def main():
      try:
          check_logging()
-@@ -121,24 +87,14 @@
+@@ -120,24 +86,14 @@
      if not sys.argv[1:]:
          print 'usage: %s {start|stop|reload|restart}' % sys.argv[0]
      elif sys.argv[1] == 'start':

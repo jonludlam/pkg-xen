@@ -7,7 +7,7 @@
  XEN_ROOT = ../../..
  include $(XEN_ROOT)/tools/Rules.mk
  
-@@ -22,7 +19,7 @@
+@@ -21,7 +18,7 @@
  PIC_OBJS := $(patsubst %.c,%.opic,$(SRCS))
  
  LIB := libflask.a
@@ -16,7 +16,7 @@
  
  .PHONY: all
  all: build
-@@ -35,10 +32,8 @@
+@@ -34,10 +31,8 @@
  install: build
  	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
@@ -28,7 +28,7 @@
  	$(INSTALL_DATA) include/flask.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
-@@ -54,12 +49,7 @@
+@@ -53,12 +48,7 @@
  libflask.a: $(LIB_OBJS)
  	$(AR) rc $@ $^
  

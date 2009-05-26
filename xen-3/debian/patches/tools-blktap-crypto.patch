@@ -1,27 +1,21 @@
-diff -r 9cf72db44ee9 tools/blktap/drivers/Makefile
---- a/tools/blktap/drivers/Makefile	Fri Jul 04 11:54:21 2008 +0100
-+++ b/tools/blktap/drivers/Makefile	Fri Jul 04 20:03:59 2008 +0200
-@@ -17,16 +17,8 @@ CFLAGS   += -Wp,-MD,.$(@F).d
- CFLAGS   += -Wp,-MD,.$(@F).d
- DEPS      = .*.d
+--- a/tools/blktap/drivers/Makefile
++++ b/tools/blktap/drivers/Makefile
+@@ -13,13 +13,8 @@
+ CFLAGS   += -I $(LIBAIO_DIR)
+ CFLAGS   += -D_GNU_SOURCE
  
--ifeq ($(shell . ./check_gcrypt),"yes")
--CFLAGS += -DUSE_GCRYPT
--CRYPT_LIB := -lgcrypt
+-ifeq ($(shell . ./check_gcrypt $(CC)),yes)
+ CFLAGS += -DUSE_GCRYPT
+ CRYPT_LIB := -lgcrypt
 -else
 -CRYPT_LIB := -lcrypto
--$(warning *** libgcrypt not installed: falling back to libcrypto ***)
+-$(warning === libgcrypt not installed: falling back to libcrypto ===)
 -endif
--
- LDFLAGS_blktapctrl := $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib) -L../lib -lblktap
--LDFLAGS_img := $(LIBAIO_DIR)/libaio.a $(CRYPT_LIB) -lpthread -lz
-+LDFLAGS_img := $(LIBAIO_DIR)/libaio.a -lgcrypt -lpthread -lz
  
- BLK-OBJS-y  := block-aio.o
- BLK-OBJS-y  += block-sync.o
-diff -r 9cf72db44ee9 tools/blktap/drivers/block-qcow.c
---- a/tools/blktap/drivers/block-qcow.c	Fri Jul 04 11:54:21 2008 +0100
-+++ b/tools/blktap/drivers/block-qcow.c	Fri Jul 04 20:03:59 2008 +0200
+ LDFLAGS_blktapctrl := $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib) -L../lib -lblktap
+ LDFLAGS_img := $(LIBAIO_DIR)/libaio.a $(CRYPT_LIB) -lpthread -lz
+--- a/tools/blktap/drivers/block-qcow.c
++++ b/tools/blktap/drivers/block-qcow.c
 @@ -33,6 +33,7 @@
  #include <zlib.h>
  #include <inttypes.h>
@@ -30,7 +24,7 @@ diff -r 9cf72db44ee9 tools/blktap/drivers/block-qcow.c
  #include "bswap.h"
  #include "aes.h"
  #include "tapdisk.h"
-@@ -145,10 +146,6 @@ struct tdqcow_state {
+@@ -145,10 +146,6 @@
  
  static int decompress_cluster(struct tdqcow_state *s, uint64_t cluster_offset);
  
@@ -41,11 +35,10 @@ diff -r 9cf72db44ee9 tools/blktap/drivers/block-qcow.c
  static uint32_t gen_cksum(char *ptr, int len)
  {
  	int i;
-@@ -169,41 +166,6 @@ static uint32_t gen_cksum(char *ptr, int
- 
+@@ -170,41 +167,6 @@
  	return md[0];
  }
--
+ 
 -#else /* use libcrypto */
 -
 -#include <openssl/md5.h>
@@ -80,12 +73,12 @@ diff -r 9cf72db44ee9 tools/blktap/drivers/block-qcow.c
 -}
 -
 -#endif
- 
+-
  static int get_filesize(char *filename, uint64_t *size, struct stat *st)
  {
-diff -r 9cf72db44ee9 tools/blktap/drivers/check_gcrypt
---- a/tools/blktap/drivers/check_gcrypt	Fri Jul 04 11:54:21 2008 +0100
-+++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+ 	int fd;
+--- a/tools/blktap/drivers/check_gcrypt
++++ /dev/null
 @@ -1,14 +0,0 @@
 -#!/bin/sh
 -
@@ -101,9 +94,8 @@ diff -r 9cf72db44ee9 tools/blktap/drivers/check_gcrypt
 -fi
 -
 -rm -f .gcrypt*
-diff -r 9cf72db44ee9 tools/check/check_crypto_lib
---- a/tools/check/check_crypto_lib	Fri Jul 04 11:54:21 2008 +0100
-+++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+--- a/tools/check/check_crypto_lib
++++ /dev/null
 @@ -1,11 +0,0 @@
 -#!/bin/sh
 -# CHECK-BUILD CHECK-INSTALL
@@ -116,9 +108,8 @@ diff -r 9cf72db44ee9 tools/check/check_crypto_lib
 -esac
 -
 -has_lib libcrypto.so || fail "missing libcrypto.so"
-diff -r 9cf72db44ee9 tools/check/check_openssl_devel
---- a/tools/check/check_openssl_devel	Fri Jul 04 11:54:21 2008 +0100
-+++ /dev/null	Thu Jan 01 00:00:00 1970 +0000
+--- a/tools/check/check_openssl_devel
++++ /dev/null
 @@ -1,6 +0,0 @@
 -#!/bin/sh
 -# CHECK-BUILD

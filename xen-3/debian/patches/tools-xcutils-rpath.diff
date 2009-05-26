@@ -1,6 +1,6 @@
 --- a/tools/xcutils/Makefile
 +++ b/tools/xcutils/Makefile
-@@ -20,7 +20,7 @@
+@@ -16,7 +16,7 @@
  
  PROGRAMS = xc_restore xc_save readnotes lsevtchn
  

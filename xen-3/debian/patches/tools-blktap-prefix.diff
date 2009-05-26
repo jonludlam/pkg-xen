@@ -18,7 +18,7 @@
  .PHONY: clean
 --- a/tools/blktap/drivers/Makefile
 +++ b/tools/blktap/drivers/Makefile
-@@ -56,7 +56,7 @@
+@@ -52,7 +52,7 @@
  	$(CC) $(CFLAGS) -o $* $^ $(LDFLAGS) $(LDFLAGS_img)
  
  install: all

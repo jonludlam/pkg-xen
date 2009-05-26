@@ -1,6 +1,6 @@
 --- a/tools/libfsimage/Rules.mk
 +++ b/tools/libfsimage/Rules.mk
-@@ -7,12 +7,7 @@
+@@ -5,12 +5,7 @@
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  
@@ -16,16 +16,16 @@
  
 --- a/tools/libfsimage/common/Makefile
 +++ b/tools/libfsimage/common/Makefile
-@@ -4,7 +4,7 @@
+@@ -4,6 +4,8 @@
  MAJOR = 1.0
  MINOR = 0
  
--CFLAGS += -Werror -Wp,-MD,.$(@F).d
-+CFLAGS += -Werror -Wp,-MD,.$(@F).d -DLIBDIR="\"$(LIBDIR)\""
- DEPS = .*.d
- 
++CFLAGS += -DLIBDIR="\"$(LIBDIR)\""
++
  LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
-@@ -22,11 +22,11 @@
+ LDFLAGS-$(CONFIG_Linux) = -Wl,mapfile-GNU
+ LDFLAGS = $(LDFLAGS-y)
+@@ -19,11 +21,11 @@
  
  .PHONY: install
  install: all

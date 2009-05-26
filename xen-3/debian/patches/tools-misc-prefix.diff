@@ -1,6 +1,6 @@
 --- a/tools/misc/Makefile
 +++ b/tools/misc/Makefile
-@@ -18,13 +18,10 @@
+@@ -18,12 +18,10 @@
  SUBDIRS-$(CONFIG_MINITERM) += miniterm
  SUBDIRS := $(SUBDIRS-y)
  
@@ -8,17 +8,16 @@
 -INSTALL_BIN-$(CONFIG_X86) += xen-detect
 -INSTALL_BIN := $(INSTALL_BIN-y)
 -
--INSTALL_SBIN-y := netfix xm xen-bugtool xen-python-path xend xenperf xsview
--INSTALL_SBIN-$(CONFIG_X86) += xenpm
+-INSTALL_SBIN-y := xm xen-bugtool xen-python-path xend xenperf xsview xenpm
 -INSTALL_SBIN := $(INSTALL_SBIN-y)
 +INSTALL_TARGETS-y := xencons
-+INSTALL_TARGETS-y := netfix xm xen-bugtool xen-python-path xend xenperf xsview
-+INSTALL_TARGETS-$(CONFIG_X86) += xenpm
++INSTALL_TARGETS-$(CONFIG_X86) += xen-detect
++INSTALL_TARGETS-y += xm xen-bugtool xen-python-path xend xenperf xsview xenpm
 +INSTALL_TARGETS := $(INSTALL_TARGETS-y)
  
  DEFAULT_PYTHON_PATH := $(shell $(XEN_ROOT)/tools/python/get-path)
  PYTHON_PATH ?= $(DEFAULT_PYTHON_PATH)
-@@ -40,10 +37,8 @@
+@@ -39,10 +37,8 @@
  
  .PHONY: install
  install: build
@@ -44,35 +43,22 @@
  clean:
 --- a/tools/misc/xend
 +++ b/tools/misc/xend
-@@ -33,15 +33,10 @@
+@@ -33,6 +33,8 @@
  import time
  import commands
  
--xpp = os.path.join(os.path.dirname(sys.argv[0]), 'xen-python-path')
--if os.path.exists(xpp):
--    result = commands.getstatusoutput(xpp)
--    if result[0] != 0:
--        print >>sys.stderr, result[1]
--        sys.exit(1)
--    sys.path.append(result[1])
 +sys.path.insert(1, sys.path[0] + '/../lib/python')
- 
++
  from xen.xend.server import SrvDaemon
-+from xen.util.auxbin import execute
  
  class CheckError(ValueError):
-     pass
 --- a/tools/misc/xm
 +++ b/tools/misc/xm
-@@ -1,10 +1,7 @@
+@@ -1,6 +1,7 @@
  #!/usr/bin/env python
  #  -*- mode: python; -*-
  import sys
--
--# add fallback path for non-native python path installs if needed
--sys.path.append('/usr/lib/python')
--sys.path.append('/usr/lib64/python')
 +sys.path.insert(1, sys.path[0] + '/../lib/python')
+ 
  from xen.xm import main
  
- main.main(sys.argv)

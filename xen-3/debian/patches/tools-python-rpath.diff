@@ -32,15 +32,15 @@
                 include_dirs       = include_dirs + [ "xen/lowlevel/scf" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
-@@ -40,6 +44,7 @@
-              
+@@ -47,6 +51,7 @@
+ 
  acm = Extension("acm",
                 extra_compile_args = extra_compile_args,
 +               extra_link_args    = extra_link_args,
                 include_dirs       = include_dirs + [ "xen/lowlevel/acm" ],
                 library_dirs       = library_dirs,
                 libraries          = libraries,
-@@ -47,6 +52,7 @@
+@@ -54,6 +59,7 @@
  
  flask = Extension("flask",
                 extra_compile_args = extra_compile_args,
@@ -48,7 +48,7 @@
                 include_dirs       = include_dirs + [ "xen/lowlevel/flask" ] + 
                                          [ "../flask/libflask/include" ],
                 library_dirs       = library_dirs + [ "../flask/libflask" ],
-@@ -55,6 +61,7 @@
+@@ -62,6 +68,7 @@
  
  ptsname = Extension("ptsname",
                 extra_compile_args = extra_compile_args,

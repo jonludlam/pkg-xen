@@ -1,6 +1,6 @@
 --- a/tools/libxc/Makefile
 +++ b/tools/libxc/Makefile
-@@ -94,18 +94,18 @@
+@@ -92,18 +92,18 @@
  
  .PHONY: install
  install: build

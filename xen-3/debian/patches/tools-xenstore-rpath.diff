@@ -1,8 +1,8 @@
 --- a/tools/xenstore/Makefile
 +++ b/tools/xenstore/Makefile
-@@ -12,6 +12,8 @@
- CFLAGS += -Wp,-MD,.$(@F).d
- DEP    = .*.d
+@@ -8,6 +8,8 @@
+ CFLAGS += -I.
+ CFLAGS += $(CFLAGS_libxenctrl)
  
 +LDFLAGS_libxenctrl += $(call LDFLAGS_RPATH,../lib)
 +
