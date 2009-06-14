@@ -23,10 +23,10 @@
 +        config_image.append([ 'kernel', abspath(vals.kernel, 'boot') ])
      if vals.ramdisk:
 -        config_image.append([ 'ramdisk', os.path.abspath(vals.ramdisk) ])
-+        config_image.append([ 'ramdisk', abspath(vals.kernel, 'boot') ])
++        config_image.append([ 'ramdisk', abspath(vals.ramdisk, 'boot') ])
      if vals.loader:
 -        config_image.append([ 'loader', os.path.abspath(vals.loader) ])
-+        config_image.append([ 'loader', abspath(vals.kernel, 'boot') ])
++        config_image.append([ 'loader', abspath(vals.loader, 'boot') ])
      if vals.cmdline_ip:
          cmdline_ip = strip('ip=', vals.cmdline_ip)
          config_image.append(['ip', cmdline_ip])
