@@ -1,4 +1,4 @@
-xen-3 (3.4.0-1) UNRELEASED; urgency=low
+xen-3 (3.4.0-1) unstable; urgency=low
 
   [ Bastian Blank ]
   * New upstream version.
@@ -7,7 +7,7 @@ xen-3 (3.4.0-1) UNRELEASED; urgency=low
   * Use debhelper compat level 7.
   * Make the init script start all daemons.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 10 May 2009 15:38:21 +0200
+ -- Bastian Blank <waldi@debian.org>  Tue, 30 Jun 2009 22:33:22 +0200
 
 xen-3 (3.2.1-2) unstable; urgency=low
 
