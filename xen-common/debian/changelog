@@ -1,11 +1,11 @@
-xen-common (3.3.1-1) UNRELEASED; urgency=low
+xen-common (3.3.1-1) unstable; urgency=low
 
   * New upstream version.
   * Use quilt instead of dpatch.
   * Disable network setup instead of using dummy script.
   * Make the init script start all daemons.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 10 May 2009 14:32:18 +0200
+ -- Bastian Blank <waldi@debian.org>  Tue, 30 Jun 2009 22:29:37 +0200
 
 xen-common (3.2.0-2) unstable; urgency=low
 
