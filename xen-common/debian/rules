@@ -27,7 +27,7 @@ build: $(STAMPS_DIR)/source
 
 clean:
 	dh_testdir
-	rm -rf $(BUILD_DIR) $(STAMPS_DIR)
+	rm -rf $(BUILD_DIR) $(STAMPS_DIR) debian/lib/python/*/*.pyc
 	dh_clean
 
 $(BUILD_DIR) $(STAMPS_DIR):
