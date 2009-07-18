@@ -7,7 +7,7 @@
 -MAJOR = 1.0
 -MINOR = 0
 -
- CFLAGS += -DLIBDIR="\"$(LIBDIR)\""
+ CFLAGS += -DFSDIR="\"$(PRIVATE_LIBDIR)/fs\""
  
  LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
 @@ -14,7 +11,7 @@
