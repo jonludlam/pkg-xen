@@ -1,3 +1,9 @@
+xen-common (3.3.1-2) UNRELEASED; urgency=low
+
+  * Fix xenstored pidfile path.
+
+ -- Bastian Blank <waldi@debian.org>  Sat, 18 Jul 2009 14:58:19 +0200
+
 xen-common (3.3.1-1) unstable; urgency=low
 
   * New upstream version.

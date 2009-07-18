@@ -20,7 +20,7 @@ XENCONSOLED="$ROOT"/bin/xenconsoled
 XENCONSOLED_PIDFILE="/var/run/xenconsoled.pid"
 XENSTORED="$ROOT"/bin/xenstored
 XENSTORED_DIR="/var/run/xenstored"
-XENSTORED_PIDFILE="/var/run/xenstored.pid"
+XENSTORED_PIDFILE="/var/run/xenstore.pid"
 
 test "$VERSION" || exit 0
 test -x "$XEND" || exit 0
