@@ -20,7 +20,7 @@
  MAJOR = 1.0
  MINOR = 0
  
-+CFLAGS += -DLIBDIR="\"$(LIBDIR)\""
++CFLAGS += -DFSDIR="\"$(PRIVATE_LIBDIR)/fs\""
 +
  LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
  LDFLAGS-$(CONFIG_Linux) = -Wl,mapfile-GNU
@@ -67,7 +67,7 @@
 -			fsdir = "/usr/lib/fs";
 -	}
 -#endif
-+		fsdir = "/usr/" LIBDIR "/fs";
++		fsdir = FSDIR;
  
  	if ((name_max = pathconf(fsdir, _PC_NAME_MAX)) == -1)
  		goto fail;
