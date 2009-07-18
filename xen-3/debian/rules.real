@@ -140,7 +140,7 @@ install-libxenstore_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_clean -k
 	dh_install --sourcedir=$(DIR)
 	dh_strip
-	dh_makeshlibs
+	dh_makeshlibs -V
 	dh_shlibdeps
 	+$(MAKE_SELF) install-base
 
@@ -159,7 +159,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)$(ABINAME)
 	dh_pycentral usr/lib/xen-$(VERSION)$(ABINAME)
 	dh_strip
-	dh_makeshlibs
+	dh_makeshlibs -V
 	dh_shlibdeps
 	+$(MAKE_SELF) install-base
 

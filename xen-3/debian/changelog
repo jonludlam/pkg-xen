@@ -1,3 +1,9 @@
+xen-3 (3.4.0-2) UNRELEASED; urgency=low
+
+  * Add symbols file for libxenstore3.0. (closes: #536173)
+
+ -- Bastian Blank <waldi@debian.org>  Sat, 18 Jul 2009 14:09:32 +0200
+
 xen-3 (3.4.0-1) unstable; urgency=low
 
   [ Bastian Blank ]
