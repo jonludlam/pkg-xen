@@ -149,7 +149,7 @@ install-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 install-utils_$(ARCH): PACKAGE_NAME = xen-utils-$(VERSION)$(ABINAME)
 install-utils_$(ARCH): PACKAGE_DIR = debian/$(PACKAGE_NAME)
 install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
-install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
+install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$(ARCH)
 	dh_testdir
 	dh_testroot
 	dh_clean -k
@@ -166,7 +166,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 install-xenstore-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
 install-xenstore-utils_$(ARCH): PACKAGE_NAME = xenstore-utils
 install-xenstore-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
-install-xenstore-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
+install-xenstore-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$(ARCH)
 	dh_testdir
 	dh_testroot
 	dh_clean -k
