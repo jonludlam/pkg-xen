@@ -49,8 +49,8 @@ xend_start()
 
 xend_stop()
 {
-	$DAEMON status || return 0
-	$DAEMON stop || return 1
+	$XEND status || return 0
+	$XEND stop || return 1
 }
 
 xenconsoled_start()
