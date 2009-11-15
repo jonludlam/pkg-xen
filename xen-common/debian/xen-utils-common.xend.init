@@ -49,6 +49,7 @@ xend_start()
 
 xend_stop()
 {
+	log_progress_msg "xend"
 	$XEND status || return 0
 	$XEND stop || return 1
 }
