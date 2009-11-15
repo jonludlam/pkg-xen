@@ -53,12 +53,14 @@ endif
 maintainerclean:
 	rm -rf $(filter-out $(NO_ORIG), $(wildcard * .[^.]*))
 
+install: export DESTDIR=$(CURDIR)/debian/tmp
 install: $(STAMPS_DIR)/source
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	$(MAKE) -C $(BUILD_DIR)/tools/examples install DESTDIR=$(CURDIR)/debian/tmp DISTDIR=$(CURDIR)/debian/tmp
-	$(MAKE) -C $(BUILD_DIR)/scripts install DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) -C $(BUILD_DIR)/tools/examples install-configs
+	$(MAKE) -C $(BUILD_DIR)/tools/hotplug/Linux install-udev install-scripts
+	$(MAKE) -C $(BUILD_DIR)/scripts install
 
 binary-indep: install
 	dh_testdir
