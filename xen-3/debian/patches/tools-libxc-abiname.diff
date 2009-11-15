@@ -44,7 +44,7 @@
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
  
  .PHONY: TAGS
-@@ -131,26 +124,16 @@
+@@ -131,24 +124,14 @@
  libxenctrl.a: $(CTRL_LIB_OBJS)
  	$(AR) rc $@ $^
  
@@ -68,8 +68,17 @@
 -libxenguest.so.$(MAJOR): libxenguest.so.$(MAJOR).$(MINOR)
 -	ln -sf $< $@
 -
+ ifeq ($(CONFIG_MiniOS),y)
+ zlib-options =
+ else
+@@ -167,9 +150,9 @@
+ xc_dom_bzimageloader.o: CFLAGS += $(call zlib-options,D)
+ xc_dom_bzimageloader.opic: CFLAGS += $(call zlib-options,D)
+ 
+-libxenguest.so.$(MAJOR).$(MINOR): LDFLAGS += $(call zlib-options,l)
 -libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
 -	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
++libxenguest.so: LDFLAGS += $(call zlib-options,l)
 +libxenguest.so: $(GUEST_PIC_OBJS) libxenctrl.so
 +	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
  
