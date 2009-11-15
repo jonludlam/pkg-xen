@@ -13,7 +13,9 @@ from debian_xen.debian import VersionXen, Changelog
 class Main(object):
     log = sys.stdout.write
 
-    files = ('config', 'Config.mk', 'docs/Docs.mk', 'docs/Makefile', 'docs/man', 'tools/Rules.mk', 'tools/examples')
+    files = ('config', 'Config.mk',
+            'docs/Docs.mk', 'docs/Makefile', 'docs/man',
+            'tools/Rules.mk', 'tools/cross-install', 'tools/examples', 'tools/hotplug')
 
     def __init__(self, options, repo):
         self.options, self.repo = options, repo
