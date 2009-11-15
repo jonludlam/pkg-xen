@@ -12,7 +12,7 @@ while getopts "qv:" OPT; do
 done
 
 if [ -z "$VERSION" ]; then
-    if [ -d "/sys/hypervisor" ]; then
+    if [ -e "/sys/hypervisor/type" ]; then
         if [ "$(cat /sys/hypervisor/type)" = xen ]; then
             DIR=/sys/hypervisor/version
             VERSION_EXTRA=$(cat $DIR/extra)
