@@ -36,12 +36,6 @@ modules_setup()
 	modprobe evtchn 2>/dev/null
 }
 
-modules_setup_control()
-{
-	modprobe blkbk 2>/dev/null
-	modprobe netbk 2>/dev/null
-}
-
 xenfs_setup()
 {
 	[ "$(awk '($2 == "/proc/xen") { print $2 }' /proc/mounts)" ] && return 0
@@ -115,7 +109,6 @@ case "$1" in
 		0) ;;
 		*) log_end_msg 255; exit ;;
 	esac
-	modules_setup_control
 	xenstored_start
 	case "$?" in
 		0|1) ;;
