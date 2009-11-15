@@ -1,6 +1,6 @@
 --- a/tools/examples/xend-config.sxp
 +++ b/tools/examples/xend-config.sxp
-@@ -149,7 +149,7 @@
+@@ -154,7 +154,7 @@
  # two fake interfaces per guest domain.  To do things like this, write
  # yourself a wrapper script, and call network-bridge from it, as appropriate.
  #
