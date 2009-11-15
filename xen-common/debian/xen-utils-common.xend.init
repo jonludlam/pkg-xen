@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
-DESC="XEN control daemon"
+DESC="Xen daemons"
 
 VERSION=$(xen-utils-version -q 2>/dev/null || true)
 ROOT=/usr/lib/xen-$VERSION
