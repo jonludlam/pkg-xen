@@ -4,11 +4,6 @@ set -e
 
 case "$1" in
 configure)
-	if [ -z "$2" ]; then
-		L="/etc/udev/rules.d/z60_xen-backend.rules"
-		[ -e "$L" ] || ln -s ../xen-backend.rules "$L"
-	fi
-
 	install -d -m 0700 /var/lib/xenstored
 	install -d -m 2750 -g adm /var/log/xen
 	;;

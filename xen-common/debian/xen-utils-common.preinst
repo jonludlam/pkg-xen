@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -e
+
+case "$1" in
+install|upgrade)
+	if [ -L "/etc/udev/rules.d/z60_xen-backend.rules" ]; then
+		rm -f "/etc/udev/rules.d/z60_xen-backend.rules"
+	fi
+	;;
+
+abort-upgrade)
+	;;
+
+*)
+        echo "preinst called with unknown argument \`$1'" >&2
+        exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
