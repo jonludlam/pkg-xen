@@ -1,6 +1,7 @@
 xen-3 (3.4.2-1) UNRELEASED; urgency=low
 
   * New upstream version.
+  * Strip hvmloader by hand.
 
  -- Bastian Blank <waldi@debian.org>  Sun, 15 Nov 2009 14:44:48 +0000
 
