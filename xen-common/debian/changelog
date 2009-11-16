@@ -1,4 +1,4 @@
-xen-common (3.4.2-1) UNRELEASED; urgency=low
+xen-common (3.4.2-1) unstable; urgency=low
 
   * New upstream version.
   * Check for correct hypervisor type.
@@ -6,7 +6,7 @@ xen-common (3.4.2-1) UNRELEASED; urgency=low
   * Load modules and setup xenfs in xend init script.
   * Move udev rules to /lib/udev/rules.d.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 23 Aug 2009 13:07:18 +0200
+ -- Bastian Blank <waldi@debian.org>  Mon, 16 Nov 2009 19:50:50 +0100
 
 xen-common (3.3.1-2) unstable; urgency=low
 
