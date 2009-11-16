@@ -124,7 +124,7 @@ There are other exceptions:
 The files under extras/mini-os are under a BSD licence.
 
 The following files are under the LGPL licence version 2.1, which on a Debian
-system resides in /usr/share/common-licenses/LGPL-2.1. Unless explicitely
+system resides in /usr/share/common-licenses/LGPL-2.1. Unless explicitly
 specified only version 2.1 of the licence can be used.
 
 tools/examples/block-common.sh
