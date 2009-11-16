@@ -40,3 +40,5 @@ tools-misc-xend-startup.diff
 config-ioemu-disable.diff
 
 tools-blktap-crypto.patch
+
+tools-include-install.diff
