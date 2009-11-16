@@ -1,10 +1,10 @@
-xen-3 (3.4.2-1) UNRELEASED; urgency=low
+xen-3 (3.4.2-1) unstable; urgency=low
 
   * New upstream version.
   * Strip hvmloader by hand.
   * Remove extra license file from libxen-dev.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 15 Nov 2009 14:44:48 +0000
+ -- Bastian Blank <waldi@debian.org>  Mon, 16 Nov 2009 20:57:07 +0100
 
 xen-3 (3.4.1-1) unstable; urgency=low
 
