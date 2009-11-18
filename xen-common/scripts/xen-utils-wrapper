@@ -19,4 +19,4 @@ else
     exit 127
 fi
 
-exec "$libdir/xen-$version/bin/$command" "$@"
+exec "$DIR/bin/$COMMAND" "$@"
