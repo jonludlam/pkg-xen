@@ -1,48 +1,28 @@
 #!/bin/bash
 
-while getopts "qv:" OPT; do
+while getopts "v" OPT; do
     case "$OPT" in
-	q)
-	QUIET=1
-	;;
 	v)
-	VERSION="$OPTARG"
+	VERBOSE=1
 	;;
     esac
 done
 
-if [ -z "$VERSION" ]; then
-    if [ -e "/sys/hypervisor/type" ]; then
-        if [ "$(cat /sys/hypervisor/type)" = xen ]; then
-            DIR=/sys/hypervisor/version
-            VERSION_EXTRA=$(cat $DIR/extra)
-            if [ "$VERSION_EXTRA" = "-unstable" ]; then
-                VERSION=unstable
-            else
-                VERSION="$(cat $DIR/major).$(cat $DIR/minor)$VERSION_EXTRA"
-            fi
+if [ -e "/sys/hypervisor/type" ]; then
+    if [ "$(cat /sys/hypervisor/type)" = xen ]; then
+        DIR=/sys/hypervisor/version
+        VERSION_EXTRA=$(cat $DIR/extra)
+        if [ "$VERSION_EXTRA" = "-unstable" ]; then
+            VERSION=unstable
         else
-            [ "$QUIET" ] || echo "WARING!  Can't read type from sysfs!" >&2
+            VERSION="$(cat $DIR/major).$(cat $DIR/minor)$VERSION_EXTRA"
         fi
     else
-        [ "$QUIET" ] || echo "WARING!  Can't find hypervisor information in sysfs!" >&2
+        [ "$VERBOSE" ] && echo "WARING!  Can't read type from sysfs!" >&2
     fi
+else
+    [ "$VERBOSE" ] && echo "WARING!  Can't find hypervisor information in sysfs!" >&2
 fi
 
-if [ -z "$VERSION" ]; then
-    VERSION="default"
-fi
-
-if [ -d "/usr/lib/xen-$VERSION" ]; then
-    echo "$VERSION"
-    exit 0
-fi
-
-if [ -d "/usr/lib/xen-default" ]; then
-    [ "$QUIET" ] || echo "WARING!  Can't find version $VERSION of xen utils, fallback to default version!" >&2
-    echo "default"
-    exit 0
-fi
-
-[ "$QUIET" ] || echo "ERROR!  Can't find default version of xen utils, bailing out!" >&2
-exit 1
+echo "$VERSION"
+exit 0

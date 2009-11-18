@@ -12,7 +12,7 @@
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DESC="Xen daemons"
 
-VERSION=$(xen-utils-version -q 2>/dev/null || true)
+VERSION=$(xen-utils-version)
 ROOT=/usr/lib/xen-$VERSION
 
 XEND="$ROOT"/bin/xend
@@ -22,8 +22,8 @@ XENSTORED="$ROOT"/bin/xenstored
 XENSTORED_DIR="/var/run/xenstored"
 XENSTORED_PIDFILE="/var/run/xenstore.pid"
 
-test "$VERSION" || exit 0
-test -x "$XEND" || exit 0
+[ "$VERSION" ] || exit 0
+[ -x "$XEND" ] || exit 0
 
 [ -r /etc/default/xend ] && . /etc/default/xend
 

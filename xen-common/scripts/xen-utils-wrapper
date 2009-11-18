@@ -1,7 +1,22 @@
 #!/bin/bash
 
-libdir=/usr/lib
-command="$(basename $0)"
-version=$($libdir/xen-common/bin/xen-utils-version -v "$XEN_VERSION")
-[ "$version" ] && exec "$libdir/xen-$version/bin/$command" "$@"
-exit 127
+set -e
+
+COMMAND="$(basename $0)"
+VERSION=$(/usr/lib/xen-common/bin/xen-utils-version -v)
+
+if [ -z "$VERSION" ]; then
+    VERSION="default"
+fi
+
+if [ -d "/usr/lib/xen-$VERSION" ]; then
+    DIR="/usr/lib/xen-$VERSION"
+elif [ -d "/usr/lib/xen-default" ]; then
+    echo "WARING!  Can't find version $VERSION of xen utils, fallback to default version!" >&2
+    DIR="/usr/lib/xen-default"
+else
+    echo "ERROR!  Can't find default version of xen utils, bailing out!" >&2
+    exit 127
+fi
+
+exec "$libdir/xen-$version/bin/$command" "$@"
