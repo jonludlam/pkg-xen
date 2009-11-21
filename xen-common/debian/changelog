@@ -2,6 +2,7 @@ xen-common (3.4.2-2) UNRELEASED; urgency=low
 
   * Redefine Xen version tests to allow detection of bare metal.
     (closes: #556859)
+  * Support new source formats. (closes: #538683)
 
  -- Bastian Blank <waldi@debian.org>  Wed, 18 Nov 2009 13:45:26 +0100
 

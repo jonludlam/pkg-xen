@@ -18,7 +18,7 @@ $(STAMPS_DIR)/source: $(STAMPS_DIR)
 	dh_testdir
 	@rm -rf $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
-	cp -a $(srcfiles) $(BUILD_DIR)
+	cp -al $(srcfiles) $(BUILD_DIR)
 	cd $(BUILD_DIR); QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
 	touch $@
 
