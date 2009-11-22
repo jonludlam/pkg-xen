@@ -2,7 +2,7 @@ Source: xen-@major@
 Section: misc
 Priority: extra
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
-Uploaders: Julien Danjou <acid@debian.org>, Jeremy T. Bouse <jbouse@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Build-Depends:
  debhelper (>> 7), lsb-release, quilt,
  python-dev (>= 2.3), python-central (>= 0.5),
