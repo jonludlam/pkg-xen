@@ -58,11 +58,13 @@ class Gencontrol(Base):
         makefile.add('setup_%s_real' % arch, cmds = cmds_setup)
 
     def do_flavour_setup(self, vars, makeflags, arch, featureset, flavour, extra):
+        config_entry = self.config.merge('base', arch, featureset, flavour)
+
         for i in (
-            ('config', 'CONFIG'),
+            ('xen-arch', 'XEN_ARCH'),
         ):
-            if vars.has_key(i[0]):
-                makeflags[i[1]] = vars[i[0]]
+            if config_entry.has_key(i[0]):
+                makeflags[i[1]] = config_entry[i[0]]
 
     def do_flavour_packages(self, packages, makefile, arch, featureset, flavour, vars, makeflags, extra):
         hypervisor = self.templates["control.hypervisor"]

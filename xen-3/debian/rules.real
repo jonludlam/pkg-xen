@@ -64,7 +64,6 @@ $(STAMPS_DIR)/build-docs: $(STAMPS_DIR)/setup-docs
 $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR)
 	+$(MAKE_CLEAN) -C $(DIR)/xen \
-		$(CONFIG) \
 		XEN_COMPILE_ARCH=$(XEN_ARCH) \
 		XEN_TARGET_ARCH=$(XEN_ARCH)
 	touch $@
