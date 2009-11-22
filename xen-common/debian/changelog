@@ -5,6 +5,7 @@ xen-common (3.4.2-2) UNRELEASED; urgency=low
   * Support oldstyle Xen kernel without xenfs. (closes: #557151)
   * Use debhelper compat level 7.
   * Remove oldstable-only conflicts.
+  * Add wrapper for xenpm.
 
  -- Bastian Blank <waldi@debian.org>  Wed, 18 Nov 2009 13:45:26 +0100
 
