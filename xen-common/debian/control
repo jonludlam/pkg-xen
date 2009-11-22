@@ -9,8 +9,6 @@ Build-Depends: debhelper (>> 7), quilt
 Package: xen-utils-common
 Architecture: all
 Depends: lsb-base (>= 3.0-6), udev (>> 0.060), xenstore-utils
-Conflicts: xen-utils-3.0, xen, libxen-python, libxen2.0, libxen2.0-dev
-Replaces: xen-utils-3.0, xen-ioemu-3.0, xen-ioemu-3.0-unstable, xen
 Description: XEN administrative tools - common files
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
