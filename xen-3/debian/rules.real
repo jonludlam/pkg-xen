@@ -30,7 +30,7 @@ $(STAMPS_DIR)/source: DIR=$(BUILD_DIR)/source
 $(STAMPS_DIR)/source:
 	@rm -rf $(DIR)
 	mkdir $(DIR)
-	cp -al $(srcfiles) $(DIR)
+	cp -a $(srcfiles) $(DIR)
 	cd $(DIR); QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
 	touch $@
 
