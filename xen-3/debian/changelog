@@ -1,10 +1,10 @@
-xen-3 (3.4.2-2) UNRELEASED; urgency=low
+xen-3 (3.4.2-2) unstable; urgency=low
 
   * Remove Jeremy T. Bouse from uploaders.
   * Export blktap lib and headers.
   * Build amd64 hypervisor on i386. (closes: #366315)
 
- -- Bastian Blank <waldi@debian.org>  Sun, 22 Nov 2009 15:35:41 +0100
+ -- Bastian Blank <waldi@debian.org>  Sun, 22 Nov 2009 16:54:47 +0100
 
 xen-3 (3.4.2-1) unstable; urgency=low
 
