@@ -3,7 +3,7 @@
 set -e
 
 COMMAND="$(basename $0)"
-VERSION=$(/usr/lib/xen-common/bin/xen-utils-version -v)
+VERSION=$(/usr/lib/xen-common/bin/xen-version -v)
 
 if [ -z "$VERSION" ]; then
     VERSION="default"

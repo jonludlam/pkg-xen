@@ -14,7 +14,7 @@ GLOBAL_SCRIPTS = \
 	xm
 
 PRIVATE_SCRIPTS = \
-	xen-utils-version \
+	xen-version \
 	$(WRAPPER)
 
 WRAPPER = xen-utils-wrapper

@@ -14,7 +14,7 @@
 # Default-Enabled:   yes
 
 PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
-VERSION=$(xen-utils-version)
+VERSION=$(xen-version)
 ROOT=/usr/lib/xen-$VERSION
 
 test "$VERSION" || exit 0
