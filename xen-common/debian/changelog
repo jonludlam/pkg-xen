@@ -1,4 +1,4 @@
-xen-common (3.4.2-2) UNRELEASED; urgency=low
+xen-common (3.4.2-2) unstable; urgency=low
 
   * Redefine Xen version tests to allow detection of bare metal.
     (closes: #556859)
@@ -7,7 +7,7 @@ xen-common (3.4.2-2) UNRELEASED; urgency=low
   * Remove oldstable-only conflicts.
   * Add wrapper for xenpm.
 
- -- Bastian Blank <waldi@debian.org>  Wed, 18 Nov 2009 13:45:26 +0100
+ -- Bastian Blank <waldi@debian.org>  Sun, 22 Nov 2009 16:51:53 +0100
 
 xen-common (3.4.2-1) unstable; urgency=low
 
