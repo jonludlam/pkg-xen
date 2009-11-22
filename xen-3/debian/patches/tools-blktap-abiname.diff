@@ -11,19 +11,19 @@
  
  CFLAGS   += -I.
  CFLAGS   += $(CFLAGS_libxenctrl)
-@@ -28,7 +26,7 @@
- OBJS_PIC = $(SRCS:.c=.opic)
+@@ -29,7 +27,7 @@
  IBINS   :=
  
--LIB      = libblktap.a libblktap.so.$(MAJOR).$(MINOR)
-+LIB      = libblktap.a libblktap.so
+ LIB_STATIC = libblktap.a
+-LIB_SHARED = libblktap.so.$(MAJOR).$(MINOR)
++LIB_SHARED = libblktap.so
  
  .PHONY: all
  all: $(LIB)
-@@ -38,19 +36,15 @@
- 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+@@ -41,19 +39,15 @@
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
- 	$(INSTALL_DATA) $(LIB) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DATA) $(LIB_STATIC) $(DESTDIR)$(LIBDIR)
+ 	$(INSTALL_DATA) $(LIB_SHARED) $(DESTDIR)$(PRIVATE_LIBDIR)
 -	ln -sf libblktap.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so.$(MAJOR)
 -	ln -sf libblktap.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libblktap.so
  	$(INSTALL_DATA) blktaplib.h $(DESTDIR)$(INCLUDEDIR)
@@ -34,7 +34,7 @@
  
 -libblktap.so.$(MAJOR).$(MINOR): $(OBJS_PIC) 
 -	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,$(SONAME) $(SHLIB_CFLAGS) \
-+libblktap.so: $(OBJS_PIC) 
++libblktap.so: $(OBJS_PIC)
 +	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
  	      $(LDFLAGS) -o $@ $^
 -	ln -sf libblktap.so.$(MAJOR).$(MINOR) libblktap.so.$(MAJOR)

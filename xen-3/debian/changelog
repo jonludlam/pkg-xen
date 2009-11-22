@@ -1,6 +1,7 @@
 xen-3 (3.4.2-2) UNRELEASED; urgency=low
 
   * Remove Jeremy T. Bouse from uploaders.
+  * Export blktap lib and headers.
 
  -- Bastian Blank <waldi@debian.org>  Sun, 22 Nov 2009 15:35:41 +0100
 
