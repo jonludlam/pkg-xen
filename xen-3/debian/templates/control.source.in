@@ -7,7 +7,7 @@ Build-Depends:
  debhelper (>> 7), lsb-release, quilt,
  python-dev (>= 2.3), python-central (>= 0.5),
  bcc,
- gcc-multilib [amd64],
+ gcc-multilib,
  e2fslibs-dev,
  libgnutls-dev, pkg-config,
  libjpeg-dev,

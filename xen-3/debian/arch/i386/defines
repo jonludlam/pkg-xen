@@ -1,7 +1,12 @@
 [base]
 flavours:
+ amd64
  i386
 xen-arch: x86_32
+
+[amd64_base]
+class: AMD64
+xen-arch: x86_64
 
 [i386_base]
 class: i386
