@@ -33,7 +33,7 @@ XENSTORED_PIDFILE="/var/run/xenstore.pid"
 modules_setup()
 {
 	modprobe xenfs 2>/dev/null
-	modprobe evtchn 2>/dev/null
+	modprobe xen-evtchn 2>/dev/null
 }
 
 xenfs_setup()
