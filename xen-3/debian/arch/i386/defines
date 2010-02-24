@@ -4,9 +4,11 @@ flavours:
  i386
 xen-arch: x86_32
 
+[amd64_description]
+hardware: AMD64
+
 [amd64_base]
-class: AMD64
 xen-arch: x86_64
 
-[i386_base]
-class: i386
+[i386_description]
+hardware: i386

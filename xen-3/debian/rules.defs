@@ -1,4 +1,4 @@
-KERNELVERSION := 2.6.30-1
+KERNELVERSION := 2.6.32-2
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
 TEMPLATES_DIR = debian/templates
