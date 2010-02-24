@@ -5,8 +5,7 @@ class VersionXen(Version):
     _version_xen_rules = ur"""
 ^
 (?P<version>
-    (?P<major>\d+)
-    \.\d+
+    \d+\.\d+
 )
 \.\d+
 (?:
@@ -27,7 +26,6 @@ $
         if match is None:
             raise ValueError("Invalid debian xen version")
         d = match.groupdict()
-        self.xen_major = d['major']
         self.xen_version = d['version']
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 Package: xen-hypervisor-@version@@abiname@@localversion@
-Provides: xen-hypervisor, xen-hypervisor-@major@, xen-hypervisor-@version@@abiname@, xen-hypervisor@localversion@
+Provides: xen-hypervisor, xen-hypervisor-@version@@abiname@, xen-hypervisor@localversion@
 Recommends: xen-utils-@version@@abiname@
 Suggests: xen-docs-@version@
 Description: The Xen Hypervisor on @class@

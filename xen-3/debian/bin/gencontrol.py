@@ -107,7 +107,6 @@ class Gencontrol(Base):
         self.version = changelog[0].version
         self.abiname = 'abiname' in self.config['abi',] and '-%s' % self.config['abi',]['abiname'] or ''
         self.vars = {
-            'major': self.version.xen_major,
             'version': self.version.xen_version,
             'abiname': self.abiname,
         }
