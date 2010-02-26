@@ -1,6 +1,7 @@
 xen-common (3.4.2-3) UNRELEASED; urgency=low
 
   * Load xen-evtchn module.
+  * Really include xenpm wrapper.
 
  -- Bastian Blank <waldi@debian.org>  Wed, 24 Feb 2010 18:20:42 +0100
 

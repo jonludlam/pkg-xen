@@ -6,7 +6,7 @@ GLOBAL_SCRIPTS = \
 	cpuperf-xen \
 	xend \
 	xenperf \
-	xempm \
+	xenpm \
 	xentop \
 	xentrace \
 	xentrace_format \
