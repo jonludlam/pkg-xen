@@ -9,10 +9,9 @@ class VersionXen(Version):
 )
 \.\d+
 (?:
-    \+hg
-    (?P<hg_rev>
-        \d+
-    )
+    \+hg\d+
+    |
+    ~rc\d+
 )?
 -
 (?:[^-]+)
