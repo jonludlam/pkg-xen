@@ -1,5 +1,7 @@
 #!/bin/bash
 
+VERBOSE=
+
 while getopts "v" OPT; do
     case "$OPT" in
 	v)
@@ -7,6 +9,12 @@ while getopts "v" OPT; do
 	;;
     esac
 done
+
+warn() {
+    if [ "$VERBOSE" ]; then
+        echo "WARNING! " "$@" >&2
+    fi
+}
 
 if [ -e "/sys/hypervisor/type" ]; then
     if [ "$(cat /sys/hypervisor/type)" = xen ]; then
@@ -18,10 +26,10 @@ if [ -e "/sys/hypervisor/type" ]; then
             VERSION="$(cat $DIR/major).$(cat $DIR/minor)$VERSION_EXTRA"
         fi
     else
-        [ "$VERBOSE" ] && echo "WARING!  Can't read type from sysfs!" >&2
+        warn "Can't read type from sysfs!"
     fi
 else
-    [ "$VERBOSE" ] && echo "WARING!  Can't find hypervisor information in sysfs!" >&2
+    warn "Can't find hypervisor information in sysfs!"
 fi
 
 echo "$VERSION"
