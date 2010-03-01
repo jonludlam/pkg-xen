@@ -12,26 +12,26 @@ VERSION := $(shell echo "$(VERSION_DEBIAN)" | sed -e 's,-[^-]*$$,,')
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
 
-srcfiles := $(filter-out debian, $(wildcard * .[^.]*))
-source: $(STAMPS_DIR)/source
-$(STAMPS_DIR)/source: $(STAMPS_DIR)
-	dh_testdir
-	@rm -rf $(BUILD_DIR)
-	mkdir -p $(BUILD_DIR)
-	cp -a $(srcfiles) $(BUILD_DIR)
-	cd $(BUILD_DIR); QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
+$(STAMPS_DIR)/source:
+	@mkdir -p $(STAMPS_DIR)
+	QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
 	touch $@
 
-build: $(STAMPS_DIR)/source
+$(STAMPS_DIR)/setup: SOURCE_FILES = $(filter-out debian, $(wildcard *))
+$(STAMPS_DIR)/setup: DIR=$(BUILD_DIR)
+$(STAMPS_DIR)/setup: $(STAMPS_DIR)/source
+	@rm -rf $(DIR)
+	mkdir $(DIR)
+	cp -al $(SOURCE_FILES) $(DIR)
+	touch $@
+
+build: $(STAMPS_DIR)/setup
 	make -C $(BUILD_DIR)/docs man-pages
 
 clean:
 	dh_testdir
 	rm -rf $(BUILD_DIR) $(STAMPS_DIR) debian/lib/python/*/*.pyc
 	dh_clean
-
-$(BUILD_DIR) $(STAMPS_DIR):
-	@[ -d $@ ] || mkdir -p $@
 
 NO_ORIG = .svn .svk debian scripts
 
