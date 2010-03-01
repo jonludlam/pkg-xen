@@ -1,6 +1,7 @@
 xen-3 (3.4.3~rc3-1) UNRELEASED; urgency=low
 
   * New upstream release candidate.
+  * Use 3.0 (quilt) source format.
 
  -- Bastian Blank <waldi@debian.org>  Wed, 24 Feb 2010 15:17:30 +0100
 
