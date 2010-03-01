@@ -4,7 +4,7 @@ DEB_BUILD_ARCH    := $(shell dpkg-architecture -a$(ARCH) -qDEB_BUILD_ARCH)
 
 export DH_OPTIONS
 
-setup_env := env -u ABINAME -u ARCH -u FLAVOUR -u VERSION -u MAKEFLAGS
+setup_env := env -u ARCH -u FLAVOUR -u VERSION -u MAKEFLAGS
 
 MAKE_CLEAN = $(setup_env) $(MAKE)
 MAKE_SELF = $(MAKE) -f debian/rules.real
@@ -43,7 +43,7 @@ $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
 	mkdir $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
-	echo "XEN_EXTRAVERSION := $(EXTRAVERSION)$(ABINAME)" > $(DIR)/xen/xen-version
+	echo "XEN_EXTRAVERSION := $(EXTRAVERSION)" > $(DIR)/xen/xen-version
 	touch $@
 
 $(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_FILES = $(filter-out debian, $(wildcard *))
@@ -70,7 +70,7 @@ $(STAMPS_DIR)/build-utils_$(ARCH) \
 $(STAMPS_DIR)/install-utils_$(ARCH): CONFIG = \
 		XEN_COMPILE_ARCH=$(XEN_ARCH) \
 		XEN_TARGET_ARCH=$(XEN_ARCH) \
-		XEN_VERSION=$(VERSION)$(ABINAME) \
+		XEN_VERSION=$(VERSION) \
 		PYTHON=$(shell pyversions -d)
 
 $(STAMPS_DIR)/build-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
@@ -109,14 +109,14 @@ install-docs: $(STAMPS_DIR)/build-docs
 	+$(MAKE_SELF) install-base
 
 install-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
-install-hypervisor_$(ARCH)_$(FLAVOUR): PACKAGE_NAME = xen-hypervisor-$(VERSION)$(ABINAME)-$(FLAVOUR)
+install-hypervisor_$(ARCH)_$(FLAVOUR): PACKAGE_NAME = xen-hypervisor-$(VERSION)-$(FLAVOUR)
 install-hypervisor_$(ARCH)_$(FLAVOUR): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs boot
-	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)$(ABINAME)-$(FLAVOUR).gz
+	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)-$(FLAVOUR).gz
 	+$(MAKE_SELF) install-base
 
 install-lib-dev_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
@@ -146,7 +146,7 @@ install-libxenstore_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 
 install-utils_$(ARCH): SOURCE_DIR = $(BUILD_DIR)/build-utils_$(ARCH)
 install-utils_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
-install-utils_$(ARCH): PACKAGE_NAME = xen-utils-$(VERSION)$(ABINAME)
+install-utils_$(ARCH): PACKAGE_NAME = xen-utils-$(VERSION)
 install-utils_$(ARCH): PACKAGE_DIR = debian/$(PACKAGE_NAME)
 install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$(ARCH)
@@ -155,9 +155,9 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$
 	dh_clean -k
 	install -D -m644 debian/xen-utils.NEWS $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/NEWS
 	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
-	install -D -m644 debian/xen-utils-$(VERSION)$(ABINAME).lintian-overrides $(PACKAGE_DIR)/usr/share/lintian/overrides/$(PACKAGE_NAME)
-	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)$(ABINAME)
-	dh_pycentral usr/lib/xen-$(VERSION)$(ABINAME)
+	install -D -m644 debian/xen-utils-$(VERSION).lintian-overrides $(PACKAGE_DIR)/usr/share/lintian/overrides/$(PACKAGE_NAME)
+	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)
+	dh_pycentral usr/lib/xen-$(VERSION)
 	dh_strip
 	dh_makeshlibs -V
 	dh_shlibdeps
