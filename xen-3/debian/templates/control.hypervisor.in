@@ -1,7 +1,7 @@
-Package: xen-hypervisor-@version@@abiname@@localversion@
+Package: xen-hypervisor-@version@@localversion@
 Depends: ${misc:Depends}
-Provides: xen-hypervisor, xen-hypervisor-@version@@abiname@, xen-hypervisor@localversion@
-Recommends: xen-utils-@version@@abiname@
+Provides: xen-hypervisor, xen-hypervisor-@version@, xen-hypervisor@localversion@
+Recommends: xen-utils-@version@
 Suggests: xen-docs-@version@
 Description: The Xen Hypervisor on @class@
  The hypervisor is the "core" for XEN itself. It gets booted by the boot loader

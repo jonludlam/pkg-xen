@@ -1,6 +1,6 @@
-Package: xen-utils-@version@@abiname@
+Package: xen-utils-@version@
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, xen-utils-common (>= 3.3.1-1), iproute, udev (>> 0.060)
-Recommends: bridge-utils, libc6-xen [i386], xen-hypervisor-@version@@abiname@
+Recommends: bridge-utils, libc6-xen [i386], xen-hypervisor-@version@
 Provides: xen-utils
 Suggests: xen-docs-@version@
 XB-Python-Version: ${python:Versions}

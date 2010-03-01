@@ -4,7 +4,7 @@ set -e
 
 case "$1" in
     configure)
-        update-alternatives --install /usr/lib/xen-default xen-default /usr/lib/xen-@version@@abiname@ 1 || true
+        update-alternatives --install /usr/lib/xen-default xen-default /usr/lib/xen-@version@ 1 || true
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

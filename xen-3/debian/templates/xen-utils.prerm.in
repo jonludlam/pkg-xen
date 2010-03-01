@@ -4,7 +4,7 @@ set -e
 
 case "$1" in
     remove)
-        update-alternatives --remove xen-default /usr/lib/xen-@version@@abiname@
+        update-alternatives --remove xen-default /usr/lib/xen-@version@
     ;;
 
     upgrade|deconfigure|failed-upgrade)

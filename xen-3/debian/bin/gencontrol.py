@@ -17,7 +17,6 @@ class Gencontrol(Base):
     def do_main_setup(self, vars, makeflags, extra):
         makeflags.update({
             'VERSION': self.version.xen_version,
-            'ABINAME': self.abiname,
         })
 
     def do_main_packages(self, packages, vars, makeflags, extra):
@@ -105,10 +104,8 @@ class Gencontrol(Base):
     def process_changelog(self):
         changelog = Changelog(version = VersionXen)
         self.version = changelog[0].version
-        self.abiname = 'abiname' in self.config['abi',] and '-%s' % self.config['abi',]['abiname'] or ''
         self.vars = {
             'version': self.version.xen_version,
-            'abiname': self.abiname,
         }
 
 if __name__ == '__main__':
