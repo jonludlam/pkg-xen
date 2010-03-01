@@ -3,6 +3,7 @@ xen-common (3.4.2-3) UNRELEASED; urgency=low
   * Load xen-evtchn module.
   * Really include xenpm wrapper.
   * Use /bin/sh.
+  * Use 3.0 (quilt) source format.
 
  -- Bastian Blank <waldi@debian.org>  Wed, 24 Feb 2010 18:20:42 +0100
 
