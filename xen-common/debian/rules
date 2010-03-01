@@ -23,6 +23,7 @@ $(STAMPS_DIR)/setup: $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
 	mkdir $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
+	cp -al debian/scripts $(DIR)
 	touch $@
 
 build: $(STAMPS_DIR)/setup
@@ -33,7 +34,7 @@ clean:
 	rm -rf $(BUILD_DIR) $(STAMPS_DIR) debian/lib/python/*/*.pyc
 	dh_clean
 
-NO_ORIG = .svn .svk debian scripts
+NO_ORIG = .svn .svk debian
 
 DIR_ORIG = ../orig/$(SOURCE)-$(VERSION)
 TAR_ORIG_NAME = $(SOURCE)_$(VERSION).orig.tar.gz
