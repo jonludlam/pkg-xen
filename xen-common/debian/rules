@@ -58,7 +58,7 @@ install: export DESTDIR=$(CURDIR)/debian/tmp
 install: $(STAMPS_DIR)/source
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	$(MAKE) -C $(BUILD_DIR)/tools/examples install-configs
 	$(MAKE) -C $(BUILD_DIR)/tools/hotplug/Linux install-udev install-scripts UDEV_RULES_DIR=/lib/udev/rules.d
 	$(MAKE) -C $(BUILD_DIR)/scripts install
