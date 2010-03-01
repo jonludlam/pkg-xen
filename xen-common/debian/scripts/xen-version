@@ -19,11 +19,10 @@ warn() {
 if [ -e "/sys/hypervisor/type" ]; then
     if [ "$(cat /sys/hypervisor/type)" = xen ]; then
         DIR=/sys/hypervisor/version
-        VERSION_EXTRA=$(cat $DIR/extra)
-        if [ "$VERSION_EXTRA" = "-unstable" ]; then
+        if [ "$(cat $DIR/extra)" = "-unstable" ]; then
             VERSION=unstable
         else
-            VERSION="$(cat $DIR/major).$(cat $DIR/minor)$VERSION_EXTRA"
+            VERSION="$(cat $DIR/major).$(cat $DIR/minor)"
         fi
     else
         warn "Can't read type from sysfs!"
