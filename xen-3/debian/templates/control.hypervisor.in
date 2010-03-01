@@ -1,4 +1,5 @@
 Package: xen-hypervisor-@version@@abiname@@localversion@
+Depends: ${misc:Depends}
 Provides: xen-hypervisor, xen-hypervisor-@version@@abiname@, xen-hypervisor@localversion@
 Recommends: xen-utils-@version@@abiname@
 Suggests: xen-docs-@version@
