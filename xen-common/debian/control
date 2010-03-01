@@ -1,5 +1,5 @@
 Source: xen-common
-Section: admin
+Section: kernel
 Priority: optional
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
 Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
