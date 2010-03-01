@@ -8,7 +8,7 @@ Build-Depends: debhelper (>> 7), quilt
 
 Package: xen-utils-common
 Architecture: all
-Depends: lsb-base (>= 3.0-6), udev (>> 0.060), xenstore-utils
+Depends: lsb-base (>= 3.0-6), udev (>> 0.060), xenstore-utils, ${misc:Depends}
 Description: XEN administrative tools - common files
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
