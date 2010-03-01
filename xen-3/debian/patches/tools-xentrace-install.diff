@@ -1,0 +1,23 @@
+--- a/tools/xentrace/Makefile
++++ b/tools/xentrace/Makefile
+@@ -1,6 +1,10 @@
+ XEN_ROOT=../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
++DEFAULT_PYTHON_PATH := $(shell $(XEN_ROOT)/tools/python/get-path)
++PYTHON_PATH ?= $(DEFAULT_PYTHON_PATH)
++INSTALL_PYTHON_PROG = $(XEN_ROOT)/tools/python/install-wrap "$(PYTHON_PATH)" $(INSTALL_PROG)
++
+ CFLAGS  += -Werror
+ 
+ CFLAGS  += $(CFLAGS_libxenctrl)
+@@ -39,7 +43,8 @@
+ 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(MAN1DIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(MAN8DIR)
+-	$(INSTALL_PROG) $(BIN) $(LIBBIN) $(SCRIPTS) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) $(BIN) $(LIBBIN) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PYTHON_PROG) $(SCRIPTS)
+ 	$(INSTALL_DATA) $(MAN1) $(DESTDIR)$(MAN1DIR)
+ 	$(INSTALL_DATA) $(MAN8) $(DESTDIR)$(MAN8DIR)
+ 
