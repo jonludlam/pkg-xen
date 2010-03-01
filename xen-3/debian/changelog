@@ -1,10 +1,10 @@
-xen-3 (3.4.3~rc3-1) UNRELEASED; urgency=low
+xen-3 (3.4.3~rc3-1) unstable; urgency=low
 
   * New upstream release candidate.
   * Use 3.0 (quilt) source format.
   * Always use current python version.
 
- -- Bastian Blank <waldi@debian.org>  Wed, 24 Feb 2010 15:17:30 +0100
+ -- Bastian Blank <waldi@debian.org>  Mon, 01 Mar 2010 22:14:22 +0100
 
 xen-3 (3.4.2-2) unstable; urgency=low
 
