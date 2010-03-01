@@ -1,11 +1,11 @@
-xen-common (3.4.2-3) UNRELEASED; urgency=low
+xen-common (3.4.2-3) unstable; urgency=low
 
   * Load xen-evtchn module.
   * Really include xenpm wrapper.
   * Use /bin/sh.
   * Use 3.0 (quilt) source format.
 
- -- Bastian Blank <waldi@debian.org>  Wed, 24 Feb 2010 18:20:42 +0100
+ -- Bastian Blank <waldi@debian.org>  Mon, 01 Mar 2010 21:05:26 +0000
 
 xen-common (3.4.2-2) unstable; urgency=low
 
