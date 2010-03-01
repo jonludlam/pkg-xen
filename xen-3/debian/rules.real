@@ -25,35 +25,33 @@ build-flavour: $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 setup-arch: $(STAMPS_DIR)/setup-utils_$(ARCH)
 setup-flavour: $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR)
 
-srcfiles := $(filter-out debian, $(wildcard * .[^.]*))
-$(STAMPS_DIR)/source: DIR=$(BUILD_DIR)/source
 $(STAMPS_DIR)/source:
-	@rm -rf $(DIR)
-	mkdir $(DIR)
-	cp -a $(srcfiles) $(DIR)
-	cd $(DIR); QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
+	QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
 	touch $@
 
-$(STAMPS_DIR)/setup-docs: SOURCE_DIR=$(BUILD_DIR)/source
+$(STAMPS_DIR)/setup-docs: SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-docs: DIR=$(BUILD_DIR)/build-docs
 $(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	cp -al $(SOURCE_DIR) $(DIR)
+	mkdir $(DIR)
+	cp -al $(SOURCE_FILES) $(DIR)
 	touch $@
 
-$(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): SOURCE_DIR=$(BUILD_DIR)/source
+$(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	cp -al $(SOURCE_DIR) $(DIR)
+	mkdir $(DIR)
+	cp -al $(SOURCE_FILES) $(DIR)
 	echo "XEN_EXTRAVERSION := $(EXTRAVERSION)$(ABINAME)" > $(DIR)/xen/xen-version
 	touch $@
 
-$(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_DIR=$(BUILD_DIR)/source
+$(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/setup-utils_$(ARCH): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	cp -al $(SOURCE_DIR) $(DIR)
+	mkdir $(DIR)
+	cp -al $(SOURCE_FILES) $(DIR)
 	touch $@
 
 $(STAMPS_DIR)/build-docs: DIR=$(BUILD_DIR)/build-docs
@@ -97,15 +95,16 @@ install-base:
 	dh_md5sums
 	dh_builddeb
 
-install-docs: DIR=$(BUILD_DIR)/build-docs
+install-docs: SOURCE_DIR = $(BUILD_DIR)/build-docs
+install-docs: DIR = $(BUILD_DIR)/install-docs
 install-docs: PACKAGE_NAME = xen-docs-$(VERSION)
 install-docs: DH_OPTIONS = -p$(PACKAGE_NAME)
 install-docs: $(STAMPS_DIR)/build-docs
 	dh_testdir
 	dh_testroot
 	dh_clean -k
-	+$(MAKE_CLEAN) -C $(DIR)/docs install DESTDIR=$(CURDIR)/debian/tmp
-	dh_install --sourcedir=debian/tmp usr/share/doc/xen/pdf/* usr/share/doc/$(PACKAGE_NAME)
+	+$(MAKE_CLEAN) -C $(SOURCE_DIR)/docs install DESTDIR=$(CURDIR)/$(DIR)
+	dh_install --sourcedir=$(DIR) usr/share/doc/xen/pdf/* usr/share/doc/$(PACKAGE_NAME)
 	+$(MAKE_SELF) install-base
 
 install-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
