@@ -1,8 +1,8 @@
-xen-common (3.4.2-4) UNRELEASED; urgency=low
+xen-common (3.4.2-4) unstable; urgency=low
 
   * Ignore extra version in version lookup.
 
- -- Bastian Blank <waldi@debian.org>  Mon, 01 Mar 2010 22:52:04 +0100
+ -- Bastian Blank <waldi@debian.org>  Fri, 26 Mar 2010 10:02:20 +0100
 
 xen-common (3.4.2-3) unstable; urgency=low
 
