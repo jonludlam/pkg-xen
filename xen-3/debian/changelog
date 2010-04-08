@@ -1,6 +1,6 @@
 xen-3 (3.4.3~rc3-2) UNRELEASED; urgency=low
 
-  * Again ship the complete version in the hypervisor.
+  * Again list the complete version in the hypervisor.
   * Fix path detection for bootloader. (closes: #481105)
   * Rewrite README.
 
