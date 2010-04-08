@@ -1,10 +1,10 @@
-xen-3 (3.4.3~rc3-2) UNRELEASED; urgency=low
+xen-3 (3.4.3~rc3-2) unstable; urgency=low
 
   * Again list the complete version in the hypervisor.
   * Fix path detection for bootloader, document it. (closes: #481105)
   * Rewrite README.
 
- -- Bastian Blank <waldi@debian.org>  Mon, 01 Mar 2010 23:41:38 +0100
+ -- Bastian Blank <waldi@debian.org>  Thu, 08 Apr 2010 16:14:58 +0200
 
 xen-3 (3.4.3~rc3-1) unstable; urgency=low
 
