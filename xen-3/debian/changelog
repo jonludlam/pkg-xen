@@ -1,3 +1,9 @@
+xen-3 (3.4.3~rc3-2) UNRELEASED; urgency=low
+
+  * Again ship the complete version in the hypervisor.
+
+ -- Bastian Blank <waldi@debian.org>  Mon, 01 Mar 2010 23:41:38 +0100
+
 xen-3 (3.4.3~rc3-1) unstable; urgency=low
 
   * New upstream release candidate.

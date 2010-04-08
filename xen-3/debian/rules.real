@@ -43,7 +43,7 @@ $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
 	mkdir $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
-	echo "XEN_EXTRAVERSION := $(EXTRAVERSION)" > $(DIR)/xen/xen-version
+	echo "XEN_VENDORVERSION := $(EXTRAVERSION)" > $(DIR)/xen/xen-version
 	touch $@
 
 $(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_FILES = $(filter-out debian, $(wildcard *))
