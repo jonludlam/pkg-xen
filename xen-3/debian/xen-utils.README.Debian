@@ -1,6 +1,18 @@
 Xen for Debian
 ==============
 
+Config behaviour
+----------------
+
+The Debian packages changes the behaviour of some config options.
+
+The options "kernel", "initrd" and "loader" searchs in the Xen private boot
+directory (/usr/lib/xen-$version/boot) first. "bootloader" and "device_model"
+also searchs the Xen private bin directory (/usr/lib/xen-$version/bin). This
+means that the following entries will properly find anything:
+  loader = 'hvmloader'
+  bootloader = 'pygrub'
+
 Network setup
 -------------
 

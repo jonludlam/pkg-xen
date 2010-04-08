@@ -1,7 +1,7 @@
 xen-3 (3.4.3~rc3-2) UNRELEASED; urgency=low
 
   * Again list the complete version in the hypervisor.
-  * Fix path detection for bootloader. (closes: #481105)
+  * Fix path detection for bootloader, document it. (closes: #481105)
   * Rewrite README.
 
  -- Bastian Blank <waldi@debian.org>  Mon, 01 Mar 2010 23:41:38 +0100
