@@ -1,0 +1,86 @@
+--- a/tools/libxc/Makefile
++++ b/tools/libxc/Makefile
+@@ -1,9 +1,6 @@
+ XEN_ROOT = ../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR    = 4.0
+-MINOR    = 0
+-
+ CTRL_SRCS-y       :=
+ CTRL_SRCS-y       += xc_core.c
+ CTRL_SRCS-$(CONFIG_X86) += xc_core_x86.c
+@@ -77,12 +74,12 @@
+ 
+ LIB := libxenctrl.a
+ ifneq ($(stubdom),y)
+-LIB += libxenctrl.so libxenctrl.so.$(MAJOR) libxenctrl.so.$(MAJOR).$(MINOR)
++LIB += libxenctrl.so
+ endif
+ 
+ LIB += libxenguest.a
+ ifneq ($(stubdom),y)
+-LIB += libxenguest.so libxenguest.so.$(MAJOR) libxenguest.so.$(MAJOR).$(MINOR)
++LIB += libxenguest.so
+ endif
+ 
+ .PHONY: all
+@@ -99,16 +96,12 @@
+ install: build
+ 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+-	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	$(INSTALL_PROG) libxenctrl.so $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)$(LIBDIR)
+-	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenctrl.so.$(MAJOR)
+-	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenctrl.so
+ 	$(INSTALL_DATA) xenctrl.h $(DESTDIR)$(INCLUDEDIR)
+ 
+-	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	$(INSTALL_PROG) libxenguest.so $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DATA) libxenguest.a $(DESTDIR)$(LIBDIR)
+-	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenguest.so.$(MAJOR)
+-	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenguest.so
+ 	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
+ 
+ .PHONY: TAGS
+@@ -136,24 +129,14 @@
+ libxenctrl.a: $(CTRL_LIB_OBJS)
+ 	$(AR) rc $@ $^
+ 
+-libxenctrl.so: libxenctrl.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenctrl.so.$(MAJOR): libxenctrl.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $^ $(PTHREAD_LIBS)
++libxenctrl.so: $(CTRL_PIC_OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $^ $(PTHREAD_LIBS)
+ 
+ # libxenguest
+ 
+ libxenguest.a: $(GUEST_LIB_OBJS)
+ 	$(AR) rc $@ $^
+ 
+-libxenguest.so: libxenguest.so.$(MAJOR)
+-	ln -sf $< $@
+-libxenguest.so.$(MAJOR): libxenguest.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+ ifeq ($(CONFIG_MiniOS),y)
+ zlib-options =
+ else
+@@ -172,9 +155,9 @@
+ xc_dom_bzimageloader.o: CFLAGS += $(call zlib-options,D)
+ xc_dom_bzimageloader.opic: CFLAGS += $(call zlib-options,D)
+ 
+-libxenguest.so.$(MAJOR).$(MINOR): LDFLAGS += $(call zlib-options,l)
+-libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
++libxenguest.so: LDFLAGS += $(call zlib-options,l)
++libxenguest.so: $(GUEST_PIC_OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
+ 
+ -include $(DEPS)
+ 

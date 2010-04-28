@@ -1,0 +1,22 @@
+Section: kernel
+Priority: optional
+Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
+Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
+Build-Depends:
+ debhelper (>> 7), lsb-release, quilt,
+ python-dev (>= 2.3), python-central (>= 0.5),
+ bcc,
+ gcc-multilib,
+ e2fslibs-dev,
+ iasl,
+ libgnutls-dev, pkg-config,
+ libjpeg-dev,
+ libncurses5-dev,
+ libsdl1.2-dev,
+ libvncserver-dev,
+ uuid-dev,
+ zlib1g-dev
+Build-Depends-Indep: graphviz, gs-common, texlive-fonts-recommended, texlive-latex-recommended
+Standards-Version: 3.8.4
+XS-Python-Version: current
+

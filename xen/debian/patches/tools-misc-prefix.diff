@@ -1,0 +1,67 @@
+--- a/tools/misc/Makefile
++++ b/tools/misc/Makefile
+@@ -18,13 +18,12 @@
+ SUBDIRS-$(CONFIG_MINITERM) += miniterm
+ SUBDIRS := $(SUBDIRS-y)
+ 
+-INSTALL_BIN-y := xencons
+-INSTALL_BIN-$(CONFIG_X86) += xen-detect
+-INSTALL_BIN := $(INSTALL_BIN-y)
+-
+-INSTALL_SBIN-y := xm xen-bugtool xen-python-path xend xenperf xsview xenpm xen-tmem-list-parse gtraceview gtracestat xenlockprof
+-INSTALL_SBIN-$(CONFIG_X86) += xen-hvmctx
+-INSTALL_SBIN := $(INSTALL_SBIN-y)
++INSTALL_TARGETS-y += xencons
++INSTALL_TARGETS-$(CONFIG_X86) += xen-detect
++
++INSTALL_TARGETS-y += xm xen-bugtool xen-python-path xend xenperf xsview xenpm xen-tmem-list-parse gtraceview gtracestat xenlockprof
++INSTALL_TARGETS-$(CONFIG_X86) += xen-hvmctx
++INSTALL_TARGETS := $(INSTALL_TARGETS-y)
+ 
+ .PHONY: all
+ all: build
+@@ -35,10 +34,8 @@
+ 
+ .PHONY: install
+ install: build
+-	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PYTHON_PROG) $(INSTALL_BIN) $(DESTDIR)$(BINDIR)
+-	$(INSTALL_PYTHON_PROG) $(INSTALL_SBIN) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PYTHON_PROG) $(INSTALL_TARGETS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	set -e; for d in $(SUBDIRS); do $(MAKE) -C $$d install-recurse; done
+ 
+ .PHONY: clean
+--- a/tools/misc/lomount/Makefile
++++ b/tools/misc/lomount/Makefile
+@@ -16,7 +16,7 @@
+ 
+ .PHONY: install
+ install install-recurse: build
+-	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
++	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 
+ .PHONY: clean
+ clean:
+--- a/tools/misc/xend
++++ b/tools/misc/xend
+@@ -33,6 +33,8 @@
+ import time
+ import commands
+ 
++sys.path.insert(1, sys.path[0] + '/../lib/python')
++
+ from xen.xend.server import SrvDaemon
+ 
+ class CheckError(ValueError):
+--- a/tools/misc/xm
++++ b/tools/misc/xm
+@@ -1,6 +1,7 @@
+ #!/usr/bin/env python
+ #  -*- mode: python; -*-
+ import sys
++sys.path.insert(1, sys.path[0] + '/../lib/python')
+ 
+ from xen.xm import main
+ 

@@ -1,0 +1,37 @@
+--- a/tools/blktap2/Makefile
++++ b/tools/blktap2/Makefile
+@@ -1,9 +1,6 @@
+ XEN_ROOT = ../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-CFLAGS  += $(CFLAGS_libxenctrl)
+-LDFLAGS += $(LDFLAGS_libxenctrl)
+-
+ SUBDIRS-y :=
+ SUBDIRS-y += include
+ SUBDIRS-y += lvm
+--- a/tools/blktap2/vhd/Makefile
++++ b/tools/blktap2/vhd/Makefile
+@@ -12,6 +12,7 @@
+ CFLAGS            += -Wno-unused
+ CFLAGS            += -I../include
+ CFLAGS            += -D_GNU_SOURCE
++CFLAGS  += $(CFLAGS_libxenctrl)
+ 
+ ifeq ($(CONFIG_X86_64),y)
+ CFLAGS            += -fPIC
+--- a/tools/blktap2/vhd/lib/Makefile
++++ b/tools/blktap2/vhd/lib/Makefile
+@@ -16,10 +16,12 @@
+ CFLAGS          += -D_GNU_SOURCE
+ CFLAGS          += -fPIC
+ CFLAGS          += -g
++CFLAGS  += $(CFLAGS_libxenctrl)
+ 
+ ifeq ($(CONFIG_Linux),y)
+ LIBS            := -luuid
+ endif
++LDFLAGS += $(LDFLAGS_libxenctrl)
+ 
+ # Get gcc to generate the dependencies for us.
+ CFLAGS          += -Wp,-MD,.$(@F).d

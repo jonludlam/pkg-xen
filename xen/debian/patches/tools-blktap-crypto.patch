@@ -1,0 +1,119 @@
+--- a/tools/blktap/drivers/Makefile
++++ b/tools/blktap/drivers/Makefile
+@@ -15,13 +15,8 @@
+ CFLAGS   += -I $(MEMSHR_DIR)
+ CFLAGS   += -D_GNU_SOURCE
+ 
+-ifeq ($(shell . ./check_gcrypt $(CC)),yes)
+ CFLAGS += -DUSE_GCRYPT
+ CRYPT_LIB := -lgcrypt
+-else
+-CRYPT_LIB := -lcrypto
+-$(warning === libgcrypt not installed: falling back to libcrypto ===)
+-endif
+ 
+ MEMSHRLIBS :=
+ ifeq ($(CONFIG_Linux), y)
+--- a/tools/blktap/drivers/block-qcow.c
++++ b/tools/blktap/drivers/block-qcow.c
+@@ -33,6 +33,7 @@
+ #include <zlib.h>
+ #include <inttypes.h>
+ #include <libaio.h>
++#include <gcrypt.h>
+ #include "bswap.h"
+ #include "aes.h"
+ #include "tapdisk.h"
+@@ -145,10 +146,6 @@
+ 
+ static int decompress_cluster(struct tdqcow_state *s, uint64_t cluster_offset);
+ 
+-#ifdef USE_GCRYPT
+-
+-#include <gcrypt.h>
+-
+ static uint32_t gen_cksum(char *ptr, int len)
+ {
+ 	int i;
+@@ -170,41 +167,6 @@
+ 	return md[0];
+ }
+ 
+-#else /* use libcrypto */
+-
+-#include <openssl/md5.h>
+-
+-static uint32_t gen_cksum(char *ptr, int len)
+-{
+-	int i;
+-	unsigned char *md;
+-	uint32_t ret;
+-
+-	md = malloc(MD5_DIGEST_LENGTH);
+-	if(!md) return 0;
+-
+-	/* Convert L1 table to big endian */
+-	for(i = 0; i < len / sizeof(uint64_t); i++) {
+-		cpu_to_be64s(&((uint64_t*) ptr)[i]);
+-	}
+-
+-	/* Generate checksum */
+-	if (MD5((unsigned char *)ptr, len, md) != md)
+-		ret = 0;
+-	else
+-		memcpy(&ret, md, sizeof(uint32_t));
+-
+-	/* Convert L1 table back to native endianess */
+-	for(i = 0; i < len / sizeof(uint64_t); i++) {
+-		be64_to_cpus(&((uint64_t*) ptr)[i]);
+-	}
+-
+-	free(md);
+-	return ret;
+-}
+-
+-#endif
+-
+ static int get_filesize(char *filename, uint64_t *size, struct stat *st)
+ {
+ 	int fd;
+--- a/tools/blktap/drivers/check_gcrypt
++++ /dev/null
+@@ -1,14 +0,0 @@
+-#!/bin/sh
+-
+-cat > .gcrypt.c << EOF
+-#include <gcrypt.h>
+-int main(void) { return 0; }
+-EOF
+-
+-if $1 -o .gcrypt .gcrypt.c -lgcrypt 2>/dev/null ; then
+-  echo "yes"
+-else
+-  echo "no"
+-fi
+-
+-rm -f .gcrypt*
+--- a/tools/check/check_crypto_lib
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#!/bin/sh
+-# CHECK-BUILD CHECK-INSTALL
+-
+-. ./funcs.sh
+-
+-case $OS in
+-FreeBSD|NetBSD|OpenBSD)
+-	exit 0 ;;
+-esac
+-
+-has_lib libcrypto.so || fail "missing libcrypto.so"
+--- a/tools/check/check_openssl_devel
++++ /dev/null
+@@ -1,6 +0,0 @@
+-#!/bin/sh
+-# CHECK-BUILD
+-
+-. ./funcs.sh
+-
+-has_header openssl/md5.h || fail "missing openssl headers"

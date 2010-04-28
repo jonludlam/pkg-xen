@@ -1,0 +1,64 @@
+--- a/config/StdGNU.mk
++++ b/config/StdGNU.mk
+@@ -26,22 +26,19 @@
+ PREFIX ?= /usr
+ BINDIR = $(PREFIX)/bin
+ INCLUDEDIR = $(PREFIX)/include
+-LIBLEAFDIR = lib
+-LIBLEAFDIR_x86_32 = lib
+-LIBLEAFDIR_x86_64 = lib64
+-LIBDIR = $(PREFIX)/$(LIBLEAFDIR)
+-LIBDIR_x86_32 = $(PREFIX)/$(LIBLEAFDIR_x86_32)
+-LIBDIR_x86_64 = $(PREFIX)/$(LIBLEAFDIR_x86_64)
+-LIBEXEC = $(LIBDIR_x86_32)/xen/bin
++LIBDIR = $(PREFIX)/lib
+ SHAREDIR = $(PREFIX)/share
+ MANDIR = $(SHAREDIR)/man
+ MAN1DIR = $(MANDIR)/man1
+ MAN8DIR = $(MANDIR)/man8
+ SBINDIR = $(PREFIX)/sbin
+-XENFIRMWAREDIR = $(LIBDIR_x86_32)/xen/boot
+ 
+-PRIVATE_PREFIX = $(LIBDIR)/xen
++PRIVATE_PREFIX = $(LIBDIR)/xen-$(XEN_VERSION)
+ PRIVATE_BINDIR = $(PRIVATE_PREFIX)/bin
++PRIVATE_LIBDIR = $(PRIVATE_PREFIX)/lib
++
++XENFIRMWAREDIR = $(PRIVATE_PREFIX)/boot
++LIBEXEC = $(PRIVATE_LIBDIR)
+ 
+ ifeq ($(PREFIX),/usr)
+ CONFIG_DIR = /etc
+--- a/config/x86_64.mk
++++ b/config/x86_64.mk
+@@ -10,11 +10,6 @@
+ 
+ CFLAGS += -m64
+ 
+-LIBLEAFDIR = $(LIBLEAFDIR_x86_64)
+-LIBDIR = $(LIBDIR_x86_64)
+-
+-SunOS_LIBDIR = $(SunOS_LIBDIR_x86_64)
+-
+ # Use only if calling $(LD) directly.
+ ifeq ($(XEN_OS),OpenBSD)
+ LDFLAGS_DIRECT += -melf_x86_64_obsd
+--- a/Config.mk
++++ b/Config.mk
+@@ -32,14 +32,14 @@
+ 
+ ifneq ($(EXTRA_PREFIX),)
+ EXTRA_INCLUDES += $(EXTRA_PREFIX)/include
+-EXTRA_LIB += $(EXTRA_PREFIX)/$(LIBLEAFDIR)
++EXTRA_LIB += $(EXTRA_LIBDIR)
+ endif
+ 
+ BISON	?= bison
+ FLEX	?= flex
+ 
+ PYTHON      ?= python
+-PYTHON_PREFIX_ARG ?= --prefix="$(PREFIX)"
++PYTHON_PREFIX_ARG ?= --home="$(PRIVATE_PREFIX)"
+ # The above requires that PREFIX contains *no spaces*. This variable is here
+ # to permit the user to set PYTHON_PREFIX_ARG to '' to workaround this bug:
+ #  https://bugs.launchpad.net/ubuntu/+bug/362570

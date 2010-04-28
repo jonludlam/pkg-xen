@@ -1,0 +1,251 @@
+Xen was initially debianized by Adam Heath <doogie@brainfood.com>
+
+It was downloaded from http://www.cl.cam.ac.uk/netos/xen
+
+The project is partially hosted on sourceforge.  It's homepage on sf redirects
+to the above url. Part of the development is carried on at http://www.xensource.com
+
+Copyright:
+
+   This package is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; version 2 dated June, 1991.
+
+   This package is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this package; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+This is the header of Xen 3.0 upstream COPYING file which clarifies a bit how
+the licence is meant to be applied. The file continues with the complete text
+of the GNU General Public Licence version 2, which is not included here as it
+can be found on Debian GNU/Linux systems in `/usr/share/common-licenses/GPL-2'.
+
+<file "COPYING">
+ XEN NOTICE
+ ==========
+
+This license does *not* cover guest operating systems that use
+Xen services via normal hypercalls - this is merely considered normal
+use of Xen, and does *not* fall under the heading of "derived work".
+Also note that the GPL below is copyrighted by the Free Software
+Foundation, but the instance of code that it refers to (the Xen
+virtual machine monitor) is copyrighted by me and others who actually
+wrote it.
+
+Further note that the guest-OS interfacing header files, which
+includes all files within the subdirectory include/public, are
+*not* covered by the GPL but by a much weaker license:
+ include/public/COPYING
+
+Also note that the only valid version of the GPL as far as Xen is
+concerned is _this_ particular version of the license (i.e., *only*
+v2, not v2.2 or v3.x or whatever), unless explicitly otherwise
+stated.
+
+ -- Keir Fraser (on behalf of the Xen team)
+
+=====================================================================
+</file>
+
+As an exception, for the convenience of users who want to port other operating
+systems to Xen, some files are licensed under a BSD-style licence. This licence
+applies to all the files under the xen/include/public directory inside the
+upstream tarball. This is the content of the COPYING file in that directory:
+
+<file "xen/include/public/COPYING">
+XEN NOTICE
+==========
+
+This copyright applies to all files within this subdirectory. All
+other files in the Xen source distribution are covered by version 2 of
+the GNU General Public License.
+
+ -- Keir Fraser (on behalf of the Xen team)
+
+=====================================================================
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+</file>
+
+And this, for reference, is the list of the files it applies to:
+
+xen/include/public/acm.h
+xen/include/public/acm_ops.h
+xen/include/public/arch-ia64.h
+xen/include/public/arch-x86_32.h
+xen/include/public/arch-x86_64.h
+xen/include/public/dom0_ops.h
+xen/include/public/event_channel.h
+xen/include/public/grant_table.h
+xen/include/public/hvm/hvm_info_table.h
+xen/include/public/hvm/ioreq.h
+xen/include/public/hvm/vmx_assist.h
+xen/include/public/io/blkif.h
+xen/include/public/io/console.h
+xen/include/public/io/netif.h
+xen/include/public/io/ring.h
+xen/include/public/io/tpmif.h
+xen/include/public/io/xenbus.h
+xen/include/public/io/xs_wire.h
+xen/include/public/memory.h
+xen/include/public/nmi.h
+xen/include/public/physdev.h
+xen/include/public/sched.h
+xen/include/public/sched_ctl.h
+xen/include/public/trace.h
+xen/include/public/vcpu.h
+xen/include/public/version.h
+xen/include/public/xen.h
+
+and all the files under tools/python/logging
+
+=====================================================================
+There are other exceptions:
+=====================================================================
+
+The files under extras/mini-os are under a BSD licence.
+
+The following files are under the LGPL licence version 2.1, which on a Debian
+system resides in /usr/share/common-licenses/LGPL-2.1. Unless explicitly
+specified only version 2.1 of the licence can be used.
+
+tools/examples/block-common.sh
+tools/examples/locking.sh
+tools/examples/logging.sh
+tools/examples/vif-common.sh
+tools/examples/vtpm-hotplug-common.sh
+tools/examples/xen-hotplug-common.sh
+tools/examples/xen-network-common.sh
+tools/examples/xen-script-common.sh
+tools/firmware/rombios/apmbios.S
+tools/firmware/rombios/rombios.c
+ioemu/COPYING.LIB
+ioemu/cpu-all.h
+ioemu/cpu-defs.h
+ioemu/cpu.h
+ioemu/exec-all.h
+ioemu/exec.c
+ioemu/hw/fmopl.c
+ioemu/target-i386-dm/helper2.c
+ioemu/thunk.c
+ioemu/thunk.h
+
+all the files under tools/firmware/vgabios (licence v2.1 or above)
+all the files under tools/python/xen
+all the files under tools/xenstore
+all the files under tools/vnet
+all the files under tools/xenstat
+
+=====================================================================
+tools/vtpm_manager license
+
+Copyright (c) 2005, Intel Corp.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+  * Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  * Redistributions in binary form must reproduce the above
+    copyright notice, this list of conditions and the following
+    disclaimer in the documentation and/or other materials provided
+    with the distribution.
+  * Neither the name of Intel Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.
+
+=====================================================================
+Files tools/python/ license
+
+  This software is Copyright (c) Zope Corporation (tm) and
+  Contributors. All rights reserved.
+
+This license has been certified as open source. It has also
+been designated as GPL compatible by the Free Software
+Foundation (FSF).
+
+Redistribution and use in source and binary forms, with or
+without modification, are permitted provided that the
+following conditions are met:
+
+1. Redistributions in source code must retain the above
+   copyright notice, this list of conditions, and the following
+   disclaimer.
+
+2. Redistributions in binary form must reproduce the above
+   copyright notice, this list of conditions, and the following
+   disclaimer in the documentation and/or other materials
+   provided with the distribution.
+
+3. The name Zope Corporation (tm) must not be used to
+   endorse or promote products derived from this software
+   without prior written permission from Zope Corporation.
+
+4. The right to distribute this software or to use it for
+   any purpose does not give you the right to use Servicemarks
+   (sm) or Trademarks (tm) of Zope Corporation. Use of them is
+   covered in a separate agreement (see
+   http://www.zope.com/Marks).
+
+5. If any files are modified, you must cause the modified
+   files to carry prominent notices stating that you changed
+   the files and the date of any change.
+
+Disclaimer
+  
+  THIS SOFTWARE IS PROVIDED BY ZOPE CORPORATION ``AS IS''
+  AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT
+  NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN
+  NO EVENT SHALL ZOPE CORPORATION OR ITS CONTRIBUTORS BE
+  LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+  EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+  LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+  OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
+  DAMAGE.
+
+This software consists of contributions made by Zope
+Corporation and many individuals on behalf of Zope
+Corporation.  Specific attributions are listed in the
+accompanying credits file.
+

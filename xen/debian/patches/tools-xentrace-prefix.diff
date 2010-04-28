@@ -1,0 +1,17 @@
+--- a/tools/xentrace/Makefile
++++ b/tools/xentrace/Makefile
+@@ -35,12 +35,10 @@
+ 
+ .PHONY: install
+ install: build
+-	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
+-	[ -z "$(LIBBIN)" ] || $(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(MAN1DIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(MAN8DIR)
+-	$(INSTALL_PROG) $(BIN) $(SCRIPTS) $(DESTDIR)$(BINDIR)
+-	[ -z "$(LIBBIN)" ] || $(INSTALL_PROG) $(LIBBIN) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) $(BIN) $(LIBBIN) $(SCRIPTS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DATA) $(MAN1) $(DESTDIR)$(MAN1DIR)
+ 	$(INSTALL_DATA) $(MAN8) $(DESTDIR)$(MAN8DIR)
+ 

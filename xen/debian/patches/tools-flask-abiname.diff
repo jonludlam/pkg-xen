@@ -1,0 +1,45 @@
+--- a/tools/flask/libflask/Makefile
++++ b/tools/flask/libflask/Makefile
+@@ -1,6 +1,3 @@
+-MAJOR    = 1.0
+-MINOR    = 0
+-
+ XEN_ROOT = ../../..
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+@@ -21,7 +18,7 @@
+ PIC_OBJS := $(patsubst %.c,%.opic,$(SRCS))
+ 
+ LIB := libflask.a
+-LIB += libflask.so libflask.so.$(MAJOR) libflask.so.$(MAJOR).$(MINOR)
++LIB += libflask.so
+ 
+ .PHONY: all
+ all: build
+@@ -34,10 +31,8 @@
+ install: build
+ 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+-	$(INSTALL_PROG) libflask.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	$(INSTALL_PROG) libflask.so $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DATA) libflask.a $(DESTDIR)$(PRIVATE_LIBDIR)
+-	ln -sf libflask.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libflask.so.$(MAJOR)
+-	ln -sf libflask.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libflask.so
+ 	$(INSTALL_DATA) include/libflask.h $(DESTDIR)$(INCLUDEDIR)/xen/xsm
+ 
+ .PHONY: TAGS
+@@ -53,12 +48,7 @@
+ libflask.a: $(LIB_OBJS)
+ 	$(AR) rc $@ $^
+ 
+-libflask.so: libflask.so.$(MAJOR)
+-	ln -sf $< $@
+-libflask.so.$(MAJOR): libflask.so.$(MAJOR).$(MINOR)
+-	ln -sf $< $@
+-
+-libflask.so.$(MAJOR).$(MINOR): $(PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libflask.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^
++libflask.so: $(PIC_OBJS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^
+ 
+ -include $(DEPS)

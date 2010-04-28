@@ -1,0 +1,44 @@
+--- a/tools/python/xen/util/auxbin.py
++++ b/tools/python/xen/util/auxbin.py
+@@ -19,10 +19,24 @@
+ import os
+ import os.path
+ import sys
+-from xen.util.path import *
++import xen.util.path
++
++
++class _Path(object):
++    def __init__(self, path=[]):
++        self._path = path
++    def __call__(self, name):
++        for dir in self.path:
++            real = os.path.join(dir, name)
++            if os.path.exists(real):
++                return real
++
++
++path_bin = _Path([xen.util.path.PRIVATE_BINDIR, '/usr/lib/xen/bin', '/usr/sbin', '/sbin', '/usr/bin', '/bin'])
++path_boot = _Path([xen.util.path.XENFIRMWAREDIR, '/usr/lib/xen/boot', '/boot'])
+ 
+ def execute(exe, args = None):
+-    exepath = pathTo(exe)
++    exepath = path_bin(exe)
+     a = [ exepath ]
+     if args:
+         a.extend(args)
+@@ -32,14 +46,6 @@
+         print exepath, ": ", exn
+         sys.exit(1)
+ 
+-SEARCHDIRS = [ BINDIR, SBINDIR, LIBEXEC, PRIVATE_BINDIR, XENFIRMWAREDIR ]
+-def pathTo(exebin):
+-    for dir in SEARCHDIRS:
+-        exe = os.path.join(dir, exebin)
+-        if os.path.exists(exe):
+-            return exe
+-    return None
+-
+ def xen_configdir():
+     return XEN_CONFIG_DIR
+ 

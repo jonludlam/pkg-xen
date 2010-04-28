@@ -1,0 +1,73 @@
+--- a/tools/libfsimage/Rules.mk
++++ b/tools/libfsimage/Rules.mk
+@@ -5,12 +5,7 @@
+ 
+ PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
+ 
+-FSDIR-$(CONFIG_Linux) = $(LIBDIR)/fs/$(FS)
+-FSDIR-$(CONFIG_SunOS)-x86_64 = $(PREFIX)/lib/fs/$(FS)/64
+-FSDIR-$(CONFIG_SunOS)-x86_32 = $(PREFIX)/lib/fs/$(FS)/
+-FSDIR-$(CONFIG_SunOS) = $(FSDIR-$(CONFIG_SunOS)-$(XEN_TARGET_ARCH))
+-FSDIR-$(CONFIG_NetBSD) = $(LIBDIR)/fs/$(FS)
+-FSDIR = $(FSDIR-y)
++FSDIR = $(PRIVATE_LIBDIR)/fs/$(FS)
+ 
+ FSLIB = fsimage.so
+ 
+--- a/tools/libfsimage/common/Makefile
++++ b/tools/libfsimage/common/Makefile
+@@ -4,6 +4,8 @@
+ MAJOR = 1.0
+ MINOR = 0
+ 
++CFLAGS += -DFSDIR="\"$(PRIVATE_LIBDIR)/fs\""
++
+ LDFLAGS-$(CONFIG_SunOS) = -Wl,-M -Wl,mapfile-SunOS
+ LDFLAGS-$(CONFIG_Linux) = -Wl,mapfile-GNU
+ LDFLAGS = $(LDFLAGS-y)
+@@ -19,11 +21,11 @@
+ 
+ .PHONY: install
+ install: all
+-	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
+-	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
+-	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libfsimage.so.$(MAJOR)
+-	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libfsimage.so
++	$(INSTALL_PROG) libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	ln -sf libfsimage.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libfsimage.so.$(MAJOR)
++	ln -sf libfsimage.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libfsimage.so
+ 	$(INSTALL_DATA) fsimage.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) fsimage_plugin.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) fsimage_grub.h $(DESTDIR)$(INCLUDEDIR)
+--- a/tools/libfsimage/common/fsimage_plugin.c
++++ b/tools/libfsimage/common/fsimage_plugin.c
+@@ -131,26 +131,8 @@
+ 	int err;
+ 	int ret = -1;
+ 
+-#if defined(FSIMAGE_FSDIR)
+ 	if (fsdir == NULL)
+-		fsdir = FSIMAGE_FSDIR;
+-#elif defined(__sun__)
+-	if (fsdir == NULL)
+-		fsdir = "/usr/lib/fs";
+-
+-	if (sizeof(void *) == 8)
+-		isadir = "64/";
+-#elif defined(__ia64__)
+-	if (fsdir == NULL)
+-		fsdir = "/usr/lib/fs";
+-#else
+-	if (fsdir == NULL) {
+-		if (sizeof(void *) == 8)
+-			fsdir = "/usr/lib64/fs";
+-		else
+-			fsdir = "/usr/lib/fs";
+-	}
+-#endif
++		fsdir = FSDIR;
+ 
+ 	if ((name_max = pathconf(fsdir, _PC_NAME_MAX)) == -1)
+ 		goto fail;

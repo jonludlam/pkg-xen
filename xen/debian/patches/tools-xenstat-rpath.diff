@@ -1,0 +1,10 @@
+--- a/tools/xenstat/xentop/Makefile
++++ b/tools/xenstat/xentop/Makefile
+@@ -20,6 +20,7 @@
+ 
+ CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
+ LDFLAGS += -L$(XEN_LIBXENSTAT)
++LDFLAGS += $(call LDFLAGS_RPATH,../lib)
+ LDLIBS += -lxenstat $(CURSES_LIBS) $(SOCKET_LIBS)
+ CFLAGS += -DHOST_$(XEN_OS)
+ 
