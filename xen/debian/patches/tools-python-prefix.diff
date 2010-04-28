@@ -1,6 +1,6 @@
 --- a/tools/python/xen/util/auxbin.py
 +++ b/tools/python/xen/util/auxbin.py
-@@ -19,10 +19,24 @@
+@@ -19,29 +19,31 @@
  import os
  import os.path
  import sys
@@ -27,10 +27,12 @@
      a = [ exepath ]
      if args:
          a.extend(args)
-@@ -32,14 +46,6 @@
-         print exepath, ": ", exn
-         sys.exit(1)
- 
+-    try:
+-        os.execv(exepath, a)
+-    except OSError, exn:
+-        print exepath, ": ", exn
+-        sys.exit(1)
+-
 -SEARCHDIRS = [ BINDIR, SBINDIR, LIBEXEC, PRIVATE_BINDIR, XENFIRMWAREDIR ]
 -def pathTo(exebin):
 -    for dir in SEARCHDIRS:
@@ -38,7 +40,12 @@
 -        if os.path.exists(exe):
 -            return exe
 -    return None
--
- def xen_configdir():
-     return XEN_CONFIG_DIR
++    os.execv(exepath, a)
  
+ def xen_configdir():
+-    return XEN_CONFIG_DIR
++    return xen.util.path.XEN_CONFIG_DIR
+ 
+ def scripts_dir():
+-    return XEN_SCRIPT_DIR
++    return xen.util.path.XEN_SCRIPT_DIR
