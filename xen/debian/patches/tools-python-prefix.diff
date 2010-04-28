@@ -12,7 +12,7 @@
 +    def __init__(self, path=[]):
 +        self._path = path
 +    def __call__(self, name):
-+        for dir in self.path:
++        for dir in self._path:
 +            real = os.path.join(dir, name)
 +            if os.path.exists(real):
 +                return real
