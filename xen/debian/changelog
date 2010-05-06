@@ -1,7 +1,7 @@
 xen (4.0.0-1~experimental.1) UNRELEASED; urgency=low
 
   * New upstream version.
-  * Rename package to xen.
+  * Rename source package to xen.
   * Build depend against iasl and uuid-dev.
   * Disable blktap2 support, it links against OpenSSL.
   * Update copyright file.
