@@ -1,4 +1,4 @@
-xen (4.0.0-1~experimental.1) unstable; urgency=low
+xen (4.0.0-1~experimental.1) experimental; urgency=low
 
   * New upstream version.
   * Rename source package to xen.
