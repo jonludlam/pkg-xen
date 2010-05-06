@@ -1,4 +1,4 @@
-xen (4.0.0-1~experimental.1) UNRELEASED; urgency=low
+xen (4.0.0-1~experimental.1) unstable; urgency=low
 
   * New upstream version.
   * Rename source package to xen.
@@ -6,7 +6,7 @@ xen (4.0.0-1~experimental.1) UNRELEASED; urgency=low
   * Disable blktap2 support, it links against OpenSSL.
   * Update copyright file.
 
- -- Bastian Blank <waldi@debian.org>  Sat, 10 Apr 2010 22:51:21 +0200
+ -- Bastian Blank <waldi@debian.org>  Thu, 06 May 2010 15:47:38 +0200
 
 xen-3 (3.4.3~rc3-2) unstable; urgency=low
 
