@@ -1,0 +1,15 @@
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -19,12 +19,9 @@
+ SUBDIRS-$(VTPM_TOOLS) += vtpm_manager
+ SUBDIRS-$(VTPM_TOOLS) += vtpm
+ SUBDIRS-y += xenstat
+-SUBDIRS-$(CONFIG_Linux) += libaio
+-SUBDIRS-$(CONFIG_Linux) += blktap
+ SUBDIRS-y += libfsimage
+ SUBDIRS-$(LIBXENAPI_BINDINGS) += libxen
+ SUBDIRS-$(CONFIG_Linux) += fs-back
+-SUBDIRS-$(CONFIG_IOEMU) += ioemu-dir
+ SUBDIRS-y += xenpmd
+ 
+ # These don't cross-compile

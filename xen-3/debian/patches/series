@@ -37,7 +37,7 @@ tools-libxc-abiname.diff
 tools-python-xen-xm-relative-path.diff
 tools-misc-xend-startup.diff
 
-config-ioemu-disable.diff
+tools-disable.diff
 
 tools-blktap-crypto.patch
 
