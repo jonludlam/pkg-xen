@@ -1,8 +1,8 @@
-xen (4.0.0-1~experimental.2) UNRELEASED; urgency=low
+xen (4.0.0-1~experimental.2) experimental; urgency=low
 
   * Merge changes from 3.4.3-1.
 
- -- Bastian Blank <waldi@debian.org>  Fri, 28 May 2010 12:42:22 +0200
+ -- Bastian Blank <waldi@debian.org>  Fri, 28 May 2010 12:58:12 +0200
 
 xen (4.0.0-1~experimental.1) experimental; urgency=low
 
