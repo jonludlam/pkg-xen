@@ -1,11 +1,11 @@
-xen-3 (3.4.3-1) UNRELEASED; urgency=low
+xen-3 (3.4.3-1) unstable; urgency=low
 
   * New upstream version.
   * Disable blktap support, it is unusable with current kernels.
   * Disable libaio, was only used by blktap.
   * Drop device creation support. (closes: #583283)
 
- -- Bastian Blank <waldi@debian.org>  Fri, 28 May 2010 11:13:22 +0200
+ -- Bastian Blank <waldi@debian.org>  Fri, 28 May 2010 11:43:18 +0200
 
 xen-3 (3.4.3~rc6-1) unstable; urgency=low
 
