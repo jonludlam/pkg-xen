@@ -38,8 +38,7 @@ tools-libxc-abiname.diff
 tools-python-xen-xm-relative-path.diff
 tools-misc-xend-startup.diff
 
-config-ioemu-disable.diff
-tools-blktap2-disable.patch
+tools-disable.diff
 
 tools-blktap-crypto.patch
 
@@ -48,3 +47,5 @@ tools-xenmon-install.diff
 tools-xentrace-install.diff
 
 tools-python-shebang.diff
+
+tools-libxc-device.diff

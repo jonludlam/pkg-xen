@@ -1,3 +1,9 @@
+xen (4.0.0-1~experimental.2) UNRELEASED; urgency=low
+
+  * Merge changes from 3.4.3-1.
+
+ -- Bastian Blank <waldi@debian.org>  Fri, 28 May 2010 12:42:22 +0200
+
 xen (4.0.0-1~experimental.1) experimental; urgency=low
 
   * New upstream version.
@@ -7,6 +13,23 @@ xen (4.0.0-1~experimental.1) experimental; urgency=low
   * Update copyright file.
 
  -- Bastian Blank <waldi@debian.org>  Thu, 06 May 2010 15:47:38 +0200
+
+xen-3 (3.4.3-1) unstable; urgency=low
+
+  * New upstream version.
+  * Disable blktap support, it is unusable with current kernels.
+  * Disable libaio, was only used by blktap.
+  * Drop device creation support. (closes: #583283)
+
+ -- Bastian Blank <waldi@debian.org>  Fri, 28 May 2010 11:43:18 +0200
+
+xen-3 (3.4.3~rc6-1) unstable; urgency=low
+
+  * New upstream release candidate.
+    - Relocate multiboot modules. (closes: #580045)
+    - Support grub2 in pygrub. (closes: #573311)
+
+ -- Bastian Blank <waldi@debian.org>  Sat, 08 May 2010 11:32:29 +0200
 
 xen-3 (3.4.3~rc3-2) unstable; urgency=low
 
