@@ -46,3 +46,5 @@ tools-xenmon-install.diff
 tools-xentrace-install.diff
 
 tools-python-shebang.diff
+
+tools-libxc-device.diff
