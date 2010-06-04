@@ -9,10 +9,7 @@ Build-Depends:
  gcc-multilib,
  e2fslibs-dev,
  libgnutls-dev, pkg-config,
- libjpeg-dev,
  libncurses5-dev,
- libsdl1.2-dev,
- libvncserver-dev,
  zlib1g-dev
 Build-Depends-Indep: graphviz, gs-common, texlive-fonts-recommended, texlive-latex-recommended
 Standards-Version: 3.8.4
