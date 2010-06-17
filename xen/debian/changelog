@@ -1,6 +1,8 @@
-xen (4.0.0-1~experimental.3) UNRELEASED; urgency=low
+xen (4.0.0-1) UNRELEASED; urgency=low
 
-  * Merge changes from 3.4.3-2.
+  * Update to unstable.
+  * Fix spelling in README.
+  * Remove unnecessary build-depends.
 
  -- Bastian Blank <waldi@debian.org>  Fri, 04 Jun 2010 17:42:31 +0200
 
@@ -19,13 +21,6 @@ xen (4.0.0-1~experimental.1) experimental; urgency=low
   * Update copyright file.
 
  -- Bastian Blank <waldi@debian.org>  Thu, 06 May 2010 15:47:38 +0200
-
-xen-3 (3.4.3-2) UNRELEASED; urgency=low
-
-  * Fix spelling in README.
-  * Remove unnecessary build-depends.
-
- -- Bastian Blank <waldi@debian.org>  Fri, 28 May 2010 12:21:34 +0200
 
 xen-3 (3.4.3-1) unstable; urgency=low
 
