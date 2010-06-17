@@ -1,11 +1,11 @@
-xen (4.0.0-1) UNRELEASED; urgency=low
+xen (4.0.0-1) unstable; urgency=low
 
   * Update to unstable.
   * Fix spelling in README.
   * Remove unnecessary build-depends.
   * Fixup xend to use different filename lookup.
 
- -- Bastian Blank <waldi@debian.org>  Fri, 04 Jun 2010 17:42:31 +0200
+ -- Bastian Blank <waldi@debian.org>  Thu, 17 Jun 2010 11:16:55 +0200
 
 xen (4.0.0-1~experimental.2) experimental; urgency=low
 
