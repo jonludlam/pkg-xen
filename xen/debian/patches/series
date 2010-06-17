@@ -35,7 +35,7 @@ tools-flask-abiname.diff
 tools-libfsimage-abiname.diff
 tools-libxc-abiname.diff
 
-tools-python-xen-xm-relative-path.diff
+tools-python-xen-relative-path.diff
 tools-misc-xend-startup.diff
 
 tools-disable.diff

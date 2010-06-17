@@ -3,6 +3,7 @@ xen (4.0.0-1) UNRELEASED; urgency=low
   * Update to unstable.
   * Fix spelling in README.
   * Remove unnecessary build-depends.
+  * Fixup xend to use different filename lookup.
 
  -- Bastian Blank <waldi@debian.org>  Fri, 04 Jun 2010 17:42:31 +0200
 
