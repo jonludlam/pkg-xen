@@ -14,5 +14,5 @@ Build-Depends:
  zlib1g-dev
 Build-Depends-Indep: graphviz, gs-common, texlive-fonts-recommended, texlive-latex-recommended
 Standards-Version: 3.8.4
-XS-Python-Version: current
+XS-Python-Version: 2.5
 
