@@ -1,10 +1,10 @@
-xen (4.0.0-2) UNRELEASED; urgency=low
+xen (4.0.0-2) unstable; urgency=low
 
   * Fix python dependency. (closes: #586666)
     - Use python-support.
     - Hardcode to use python 2.5 for now.
 
- -- Bastian Blank <waldi@debian.org>  Mon, 21 Jun 2010 16:34:00 +0200
+ -- Bastian Blank <waldi@debian.org>  Mon, 21 Jun 2010 17:23:16 +0200
 
 xen (4.0.0-1) unstable; urgency=low
 
