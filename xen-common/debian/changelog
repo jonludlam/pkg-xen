@@ -1,3 +1,9 @@
+xen-common (4.0.0-1) UNRELEASED; urgency=low
+
+  * New upstream version.
+
+ -- Bastian Blank <waldi@debian.org>  Mon, 21 Jun 2010 15:46:15 +0200
+
 xen-common (3.4.2-4) unstable; urgency=low
 
   * Ignore extra version in version lookup.
