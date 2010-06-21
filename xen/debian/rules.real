@@ -103,7 +103,7 @@ install-docs: DH_OPTIONS = -p$(PACKAGE_NAME)
 install-docs: $(STAMPS_DIR)/build-docs
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	+$(MAKE_CLEAN) -C $(SOURCE_DIR)/docs install DESTDIR=$(CURDIR)/$(DIR)
 	dh_install --sourcedir=$(DIR) usr/share/doc/xen/pdf/* usr/share/doc/$(PACKAGE_NAME)
 	+$(MAKE_SELF) install-base
@@ -114,7 +114,7 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_installdirs boot
 	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)-$(FLAVOUR).gz
 	+$(MAKE_SELF) install-base
@@ -125,7 +125,7 @@ install-lib-dev_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-lib-dev_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_install --sourcedir=$(DIR)
 	dh_strip
 	dh_shlibdeps
@@ -137,7 +137,7 @@ install-libxenstore_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-libxenstore_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_install --sourcedir=$(DIR)
 	dh_strip
 	dh_makeshlibs -V
@@ -152,7 +152,7 @@ install-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$(ARCH)
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	install -D -m644 debian/xen-utils.NEWS $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/NEWS
 	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
 	install -D -m644 debian/xen-utils-$(VERSION).lintian-overrides $(PACKAGE_DIR)/usr/share/lintian/overrides/$(PACKAGE_NAME)
@@ -169,7 +169,7 @@ install-xenstore-utils_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
 install-xenstore-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$(ARCH)
 	dh_testdir
 	dh_testroot
-	dh_clean -k
+	dh_prep
 	dh_install --sourcedir=$(DIR)
 	dh_strip
 	dh_shlibdeps
