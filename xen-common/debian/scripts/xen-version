@@ -19,8 +19,13 @@ warn() {
 if [ -e "/sys/hypervisor/type" ]; then
     if [ "$(cat /sys/hypervisor/type)" = xen ]; then
         DIR=/sys/hypervisor/version
-        if [ "$(cat $DIR/extra)" = "-unstable" ]; then
+	VERSION_EXTRA="$(cat $DIR/extra)"
+        if [ "$VERSION_EXTRA" = "-unstable" ]; then
+            # Old xen-unstable
             VERSION=unstable
+        elif [ "$VERSION_EXTRA" != "${VERSION_EXTRA#-}" ]; then
+            # ABI for Lenny and smaller
+            VERSION="$(cat $DIR/major).$(cat $DIR/minor)$VERSION_EXTRA"
         else
             VERSION="$(cat $DIR/major).$(cat $DIR/minor)"
         fi
