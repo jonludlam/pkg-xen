@@ -1,4 +1,4 @@
-xen-common (4.0.0-1) UNRELEASED; urgency=low
+xen-common (4.0.0-1) unstable; urgency=low
 
   * New upstream version.
   * Move README from versioned packages.
@@ -6,7 +6,7 @@ xen-common (4.0.0-1) UNRELEASED; urgency=low
   * Again support versions with ABI used up to Lenny. (closes: #584804)
   * Depend against gawk. (closes: #578302)
 
- -- Bastian Blank <waldi@debian.org>  Mon, 21 Jun 2010 15:46:15 +0200
+ -- Bastian Blank <waldi@debian.org>  Mon, 21 Jun 2010 17:09:01 +0200
 
 xen-common (3.4.2-4) unstable; urgency=low
 
