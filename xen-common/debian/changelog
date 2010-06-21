@@ -2,6 +2,7 @@ xen-common (4.0.0-1) UNRELEASED; urgency=low
 
   * New upstream version.
   * Move README from versioned packages.
+  * Add note about own README to xend config.
 
  -- Bastian Blank <waldi@debian.org>  Mon, 21 Jun 2010 15:46:15 +0200
 
