@@ -1,10 +1,10 @@
-xen (4.0.1~rc3-1) UNRELEASED; urgency=low
+xen (4.0.1~rc3-1) unstable; urgency=low
 
   * New upstream release candidate.
   * Call dh_pyversion with the correct version.
-  * Restart xen daemons on upgrade.
+  * Restart xen daemon on upgrade.
 
- -- Bastian Blank <waldi@debian.org>  Sun, 27 Jun 2010 12:11:12 +0200
+ -- Bastian Blank <waldi@debian.org>  Wed, 30 Jun 2010 16:30:47 +0200
 
 xen (4.0.0-2) unstable; urgency=low
 
