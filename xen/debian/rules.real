@@ -157,7 +157,7 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$
 	install -D -m644 debian/xen-utils.README.Debian $(PACKAGE_DIR)/usr/share/doc/$(PACKAGE_NAME)/README.Debian
 	install -D -m644 debian/xen-utils-$(VERSION).lintian-overrides $(PACKAGE_DIR)/usr/share/lintian/overrides/$(PACKAGE_NAME)
 	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)
-	dh_pysupport /usr/lib/xen-$(VERSION)
+	dh_pysupport -V$(shell pyversions -rv) /usr/lib/xen-$(VERSION)
 	dh_strip
 	dh_makeshlibs -V
 	dh_shlibdeps
