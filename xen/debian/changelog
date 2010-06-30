@@ -2,6 +2,7 @@ xen (4.0.1~rc3-1) UNRELEASED; urgency=low
 
   * New upstream release candidate.
   * Call dh_pyversion with the correct version.
+  * Restart xen daemons on upgrade.
 
  -- Bastian Blank <waldi@debian.org>  Sun, 27 Jun 2010 12:11:12 +0200
 

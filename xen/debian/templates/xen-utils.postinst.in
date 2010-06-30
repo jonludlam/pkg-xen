@@ -5,6 +5,9 @@ set -e
 case "$1" in
     configure)
         update-alternatives --install /usr/lib/xen-default xen-default /usr/lib/xen-@version@ 1 || true
+        if [ -x "/etc/init.d/xend" ]; then
+	    invoke-rc.d xend start || exit $?
+        fi
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
