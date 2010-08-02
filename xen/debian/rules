@@ -7,25 +7,25 @@ DEB_HOST_ARCH  := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_BUILD_ARCH)
 
 SOURCE := $(shell dpkg-parsechangelog | sed -ne 's,^Source: *\(.*\)$$,\1,p')
-VERSION_DEBIAN := $(shell dpkg-parsechangelog | sed -ne 's,^Version: *\(.*\)$$,\1,p')
-VERSION := $(shell echo "$(VERSION_DEBIAN)" | sed -e 's,-[^-]*$$,,')
+VERSION := $(shell dpkg-parsechangelog | sed -ne 's,^Version: *\(.*\)$$,\1,p')
+VERSION_UPSTREAM := $(shell echo "$(VERSION)" | sed -e 's,-[^-]*$$,,')
+VERSION_BINNMU := $(shell echo "$(VERSION)" | sed -ne 's,.*\+b\(.*\)$$,\1,p')
+
+stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
 
 include debian/rules.defs
 
-setup: $(STAMPS_DIR)/setup-base
-$(STAMPS_DIR)/setup-base: debian/control $(BUILD_DIR) $(STAMPS_DIR)
+setup: debian/control $(STAMPS_DIR)/setup-base
+$(STAMPS_DIR)/setup-base:
 	dh_testdir
 	$(MAKE) -f debian/rules.gen setup_$(DEB_HOST_ARCH)
-	touch $@
+	@$(stamp)
 
 build: debian/control $(STAMPS_DIR)/build-base
 $(STAMPS_DIR)/build-base: $(STAMPS_DIR)/setup-base
 	dh_testdir
 	$(MAKE) -f debian/rules.gen build_$(DEB_HOST_ARCH)
-	touch $@
-
-$(BUILD_DIR) $(STAMPS_DIR):
-	@[ -d $@ ] || mkdir $@
+	@$(stamp)
 
 maintainerclean:
 	rm -f debian/control* debian/rules.gen debian/xen-hypervisor-* debian/xen-utils-*
@@ -46,8 +46,8 @@ binary-arch:
 
 binary:	binary-indep binary-arch
 
-DIR_ORIG = ../orig/$(SOURCE)-$(VERSION)
-TAR_ORIG_NAME = $(SOURCE)_$(VERSION).orig.tar.gz
+DIR_ORIG = ../orig/$(SOURCE)-$(VERSION_UPSTREAM)
+TAR_ORIG_NAME = $(SOURCE)_$(VERSION_UPSTREAM).orig.tar.gz
 TAR_ORIG = $(firstword $(wildcard ../$(TAR_ORIG_NAME)) $(wildcard ../orig/$(TAR_ORIG_NAME)))
 
 orig: $(DIR_ORIG)
@@ -65,14 +65,15 @@ CONTROL_FILES += debian/changelog debian/bin/gencontrol.py $(wildcard debian/tem
 CONTROL_FILES += $(wildcard debian/arch/defines) $(wildcard debian/arch/*/defines)
 GENCONTROL = $(__MODULES_DIR)gencontrol.py
 debian/control debian/rules.gen: $(CONTROL_FILES)
-	if [ -f debian/control ] && [ -f debian/control.md5sum ] && [ -f debian/rules.gen ]; then \
-		if md5sum $^ | diff - debian/control.md5sum > /dev/null; then true; else \
-			$(MAKE) -f debian/rules debian/control-real; \
-		fi \
-	else \
-		$(MAKE) -f debian/rules debian/control-real; \
-	fi
-
+ifeq ($(wildcard debian/control.md5sum),)
+	$(MAKE) -f debian/rules debian/control-real
+else ifeq ($(VERSION_BINNMU),)
+	md5sum --check debian/control.md5sum --status || \
+		$(MAKE) -f debian/rules debian/control-real
+else
+	grep -v debian/changelog debian/control.md5sum | md5sum --check - --status || \
+		$(MAKE) -f debian/rules debian/control-real
+endif
 
 debian/control-real: $(CONTROL_FILES)
 	debian/bin/gencontrol.py

@@ -11,6 +11,8 @@ MAKE_SELF = $(MAKE) -f debian/rules.real
 
 include debian/rules.defs
 
+stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
+
 binary-arch-arch: install-lib-dev_$(ARCH)
 binary-arch-arch: install-libxenstore_$(ARCH)
 binary-arch-arch: install-utils_$(ARCH)
@@ -27,32 +29,32 @@ setup-flavour: $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR)
 
 $(STAMPS_DIR)/source:
 	QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
-	touch $@
+	@$(stamp)
 
 $(STAMPS_DIR)/setup-docs: SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-docs: DIR=$(BUILD_DIR)/build-docs
 $(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	mkdir $(DIR)
+	mkdir -p $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
-	touch $@
+	@$(stamp)
 
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	mkdir $(DIR)
+	mkdir -p $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
 	echo "XEN_VENDORVERSION := $(EXTRAVERSION)" > $(DIR)/xen/xen-version
-	touch $@
+	@$(stamp)
 
 $(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
 $(STAMPS_DIR)/setup-utils_$(ARCH): $(STAMPS_DIR)/source
 	@rm -rf $(DIR)
-	mkdir $(DIR)
+	mkdir -p $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
-	touch $@
+	@$(stamp)
 
 $(STAMPS_DIR)/build-docs: DIR=$(BUILD_DIR)/build-docs
 $(STAMPS_DIR)/build-docs: $(STAMPS_DIR)/setup-docs
