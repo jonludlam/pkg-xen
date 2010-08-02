@@ -1,14 +1,18 @@
 --- a/tools/python/xen/xm/create.py
 +++ b/tools/python/xen/xm/create.py
-@@ -704,37 +704,31 @@
+@@ -704,45 +704,39 @@
          return None
      config_image = [ vals.builder ]
      if vals.kernel:
--        if os.path.dirname(vals.kernel) != "" and os.path.exists(vals.kernel):
--            config_image.append([ 'kernel', vals.kernel ])
--        elif vals.kernel == 'hvmloader':
 +        t = auxbin.path_boot(vals.kernel)
-+        if vals.kernel == 'hvmloader':
+         if vals.bootloader:
+             # If bootloader is specified, vals.kernel will be used
+             # by bootloader when boots DomU. So it is needless to
+             # check the path is existent or not.
+             config_image.append([ 'kernel', vals.kernel ])
+-        elif os.path.dirname(vals.kernel) != "" and os.path.exists(vals.kernel):
+-            config_image.append([ 'kernel', vals.kernel ])
+         elif vals.kernel == 'hvmloader':
              # Keep hvmloader w/o a path and let xend find it.
              # This allows guest migration to a Dom0 having different
              # xen install pathes.
@@ -21,13 +25,16 @@
          else:
              raise ValueError('Cannot find kernel "%s"' % vals.kernel)
      if vals.ramdisk:
--        if os.path.dirname(vals.ramdisk) != "" and os.path.exists(vals.ramdisk):
++        t = auxbin.path_boot(vals.ramdisk)
+         if vals.bootloader:
+             # Same with 'kernel' above
+             config_image.append([ 'ramdisk', vals.ramdisk ])
+-        elif os.path.dirname(vals.ramdisk) != "" and os.path.exists(vals.ramdisk):
 -            config_image.append([ 'ramdisk', vals.ramdisk ])
 -        elif os.path.exists(os.path.abspath(vals.ramdisk)):
 -            # Keep old behaviour, if path is valid.
 -            config_image.append([ 'ramdisk', os.path.abspath(vals.ramdisk) ])
-+        t = auxbin.path_boot(vals.ramdisk)
-+        if t:
++        elif t:
 +            config_image.append([ 'ramdisk', t ])
          else:
              raise ValueError('Cannot find ramdisk "%s"' % vals.ramdisk)
@@ -49,7 +56,7 @@
          else:
              raise ValueError('Cannot find loader "%s"' % vals.loader)
      if vals.cmdline_ip:
-@@ -1062,7 +1056,7 @@
+@@ -1072,7 +1066,7 @@
      args = [ 'acpi', 'apic',
               'boot',
               'cpuid', 'cpuid_check',
@@ -58,7 +65,7 @@
               'fda', 'fdb',
               'gfx_passthru', 'guest_os_type',
               'hap', 'hpet',
-@@ -1084,6 +1078,8 @@
+@@ -1094,6 +1088,8 @@
      for a in args:
          if a in vals.__dict__ and vals.__dict__[a] is not None:
              config_image.append([a, vals.__dict__[a]])
@@ -67,7 +74,7 @@
      if vals.vncpasswd is not None:
          config_image.append(['vncpasswd', vals.vncpasswd])
  
-@@ -1150,10 +1146,9 @@
+@@ -1160,10 +1156,9 @@
  
      config_image = configure_image(vals)
      if vals.bootloader:

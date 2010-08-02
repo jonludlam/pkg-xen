@@ -7,6 +7,7 @@ libxenstore.so.3.0 libxenstore3.0 #MINVER#
  xs_daemon_close@Base 3.2.0
  xs_daemon_open@Base 3.2.0
  xs_daemon_open_readonly@Base 3.2.0
+ xs_daemon_destroy_postfork@Base 4.0.1~rc4
  xs_daemon_rootdir@Base 3.2.0
  xs_daemon_rundir@Base 3.2.0
  xs_daemon_socket@Base 3.2.0
