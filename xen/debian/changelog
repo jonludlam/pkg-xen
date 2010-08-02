@@ -1,8 +1,8 @@
-xen (4.0.1~rc5-1) UNRELEASED; urgency=low
+xen (4.0.1~rc5-1) unstable; urgency=low
 
   * New upstream release candidate.
 
- -- Bastian Blank <waldi@debian.org>  Mon, 02 Aug 2010 11:08:13 +0000
+ -- Bastian Blank <waldi@debian.org>  Mon, 02 Aug 2010 17:06:27 +0200
 
 xen (4.0.1~rc3-1) unstable; urgency=low
 
