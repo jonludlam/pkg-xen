@@ -7,6 +7,7 @@ xen (4.0.1~rc6-1) UNRELEASED; urgency=low
     - Add check for GRUB2 commandline behaviour.
     - Fix handling of invalid kernel images.
     - Allow usage of powernow.
+  * Remove lowlevel python modules usage from pygrub. (closes: #588811)
 
  -- Bastian Blank <waldi@debian.org>  Tue, 17 Aug 2010 21:40:17 +0200
 
