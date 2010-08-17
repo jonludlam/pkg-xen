@@ -1,4 +1,4 @@
-xen (4.0.1~rc6-1) UNRELEASED; urgency=low
+xen (4.0.1~rc6-1) unstable; urgency=low
 
   * New upstream release candidate.
     - Add some missing locks for page table walk.
@@ -9,7 +9,7 @@ xen (4.0.1~rc6-1) UNRELEASED; urgency=low
     - Allow usage of powernow.
   * Remove lowlevel python modules usage from pygrub. (closes: #588811)
 
- -- Bastian Blank <waldi@debian.org>  Tue, 17 Aug 2010 21:40:17 +0200
+ -- Bastian Blank <waldi@debian.org>  Tue, 17 Aug 2010 23:15:34 +0200
 
 xen (4.0.1~rc5-1) unstable; urgency=low
 
