@@ -1,4 +1,4 @@
-xen (4.0.1-2) UNRELEASED; urgency=low
+xen (4.0.1-2) unstable; urgency=low
 
   * Fix races in memory management.
   * Make sure that frame-table compression leaves enough alligned.
@@ -21,7 +21,7 @@ xen (4.0.1-2) UNRELEASED; urgency=low
   * Fix some error paths in vtd support. Memory leak.
   * Reinstate ACPI DMAR table.
 
- -- Bastian Blank <waldi@debian.org>  Wed, 12 Jan 2011 11:54:36 +0100
+ -- Bastian Blank <waldi@debian.org>  Wed, 12 Jan 2011 15:01:40 +0100
 
 xen (4.0.1-1) unstable; urgency=low
 
