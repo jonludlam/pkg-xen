@@ -1,0 +1,170 @@
+# HG changeset patch
+# User Keir Fraser <keir.fraser@citrix.com>
+# Date 1283155186 -3600
+# Node ID 993458f6c5a0df2cfeeda9552ece6d18839798dc
+# Parent  0aafca182acf609bff75425ed85bd5c06d455073
+ept: Put locks around ept_get_entry
+
+There's a subtle race in ept_get_entry, such that if tries to read an
+entry that ept_set_entry is modifying, it gets neither the old entry
+nor the new entry, but empty.  In the case of multi-cpu
+populate-on-demand guests, this manifests as a guest crash when one
+vcpu tries to read a page which another page is trying to populate,
+and ept_get_entry returns p2m_mmio_dm.
+
+This bug can also be fixed by making both ept_set_entry and
+ept_next_level access-once (i.e., ept_next_level reads full ept_entry
+and then works with local value; ept_set_entry construct the entry
+locally and then sets it in one write).  But there doesn't seem to be
+any major performance implications of just making ept_get_entry use
+locks; so the simpler, the better.
+
+Signed-off-by: George Dunlap <george.dunlap@eu.citrix.com>
+xen-unstable changeset:   22071:c5aed2e049bc
+xen-unstable date:        Mon Aug 30 08:39:52 2010 +0100
+
+# HG changeset patch
+# User Keir Fraser <keir@xen.org>
+# Date 1292410072 0
+# Node ID ae381a864b4f38edf0c672160091b612346c88d1
+# Parent  9c7b9e65bc37b15b4a227937eee5b2e4368e5ce4
+ept: Remove lock in ept_get_entry, replace with access-once semantics.
+
+This mirrors the RVI/shadow situation, where p2m read access is
+lockless because it's done in the hardware (linear map of the p2m
+table).
+
+This fixes the original bug (call it bug A) without introducing bug B
+(a deadlock).
+
+Bug A was caused by a race when updating p2m entries: between testing
+if it's valid, and testing if it's populate-on-demand, it may have
+been changed from populate-on-demand to valid.
+
+My original patch simply introduced a lock into ept_get_entry, but
+that caused bug B, caused by circular locking order: p2m_change_type
+[grabs p2m lock] -> set_p2m_entry -> ept_set_entry ->
+ept_set_middle_level -> p2m_alloc [grabs hap lock] write cr4 ->
+hap_update_paging_modes [grabes hap lock] -> hap_update_cr3 ->
+gfn_to_mfn -> ept_get_entry -> [grabs p2m lock]
+
+Signed-off-by: George Dunlap <george.dunlap@eu.citrix.com>
+xen-unstable changeset:   22526:7a5ee3800417
+xen-unstable date:        Wed Dec 15 10:47:05 2010 +0000
+
+--- a/xen/arch/x86/mm/hap/p2m-ept.c
++++ b/xen/arch/x86/mm/hap/p2m-ept.c
+@@ -137,7 +137,7 @@
+                           ept_entry_t **table, unsigned long *gfn_remainder,
+                           u32 shift)
+ {
+-    ept_entry_t *ept_entry;
++    ept_entry_t *ept_entry, e;
+     ept_entry_t *next;
+     u32 index;
+ 
+@@ -145,9 +145,11 @@
+ 
+     ept_entry = (*table) + index;
+ 
+-    if ( !is_epte_present(ept_entry) )
++    e=*ept_entry;
++
++    if ( !is_epte_present(&e) )
+     {
+-        if ( ept_entry->avail1 == p2m_populate_on_demand )
++        if ( e.avail1 == p2m_populate_on_demand )
+             return GUEST_TABLE_POD_PAGE;
+ 
+         if ( read_only )
+@@ -155,15 +157,17 @@
+ 
+         if ( !ept_set_middle_entry(d, ept_entry) )
+             return GUEST_TABLE_MAP_FAILED;
++        else
++            e=*ept_entry;
+     }
+ 
+     /* The only time sp would be set here is if we had hit a superpage */
+-    if ( is_epte_superpage(ept_entry) )
++    if ( is_epte_superpage(&e) )
+         return GUEST_TABLE_SUPER_PAGE;
+     else
+     {
+         *gfn_remainder &= (1UL << shift) - 1;
+-        next = map_domain_page(ept_entry->mfn);
++        next = map_domain_page(e.mfn);
+         unmap_domain_page(*table);
+         *table = next;
+         return GUEST_TABLE_NORMAL_PAGE;
+@@ -235,35 +239,39 @@
+         if ( mfn_valid(mfn_x(mfn)) || direct_mmio || p2m_is_paged(p2mt) ||
+              (p2mt == p2m_ram_paging_in_start) )
+         {
+-            ept_entry->emt = epte_get_entry_emt(d, gfn, mfn, &ipat,
++            ept_entry_t new_entry;
++
++            new_entry.emt = epte_get_entry_emt(d, gfn, mfn, &ipat,
+                                                 direct_mmio);
+-            ept_entry->ipat = ipat;
+-            ept_entry->sp = order ? 1 : 0;
++            new_entry.ipat = ipat;
++            new_entry.sp = order ? 1 : 0;
+ 
+             if ( ret == GUEST_TABLE_SUPER_PAGE )
+             {
+-                if ( ept_entry->mfn == (mfn_x(mfn) - offset) )
++                if ( new_entry.mfn == (mfn_x(mfn) - offset) )
+                     need_modify_vtd_table = 0;  
+                 else                  
+-                    ept_entry->mfn = mfn_x(mfn) - offset;
++                    new_entry.mfn = mfn_x(mfn) - offset;
+ 
+-                if ( (ept_entry->avail1 == p2m_ram_logdirty)
++                if ( (new_entry.avail1 == p2m_ram_logdirty)
+                      && (p2mt == p2m_ram_rw) )
+                     for ( i = 0; i < 512; i++ )
+                         paging_mark_dirty(d, mfn_x(mfn) - offset + i);
+             }
+             else
+             {
+-                if ( ept_entry->mfn == mfn_x(mfn) )
++                if ( new_entry.mfn == mfn_x(mfn) )
+                     need_modify_vtd_table = 0;
+                 else
+-                    ept_entry->mfn = mfn_x(mfn);
++                    new_entry.mfn = mfn_x(mfn);
+             }
+ 
+-            ept_entry->avail1 = p2mt;
+-            ept_entry->avail2 = 0;
++            new_entry.avail1 = p2mt;
++            new_entry.avail2 = 0;
++
++            ept_p2m_type_to_flags(&new_entry, p2mt);
+ 
+-            ept_p2m_type_to_flags(ept_entry, p2mt);
++            ept_entry->epte = new_entry.epte;
+         }
+         else
+             ept_entry->epte = 0;
+@@ -387,6 +395,10 @@
+     int i;
+     int ret = 0;
+     mfn_t mfn = _mfn(INVALID_MFN);
++    int do_locking = !p2m_locked_by_me(d->arch.p2m);
++
++    if ( do_locking )
++        p2m_lock(d->arch.p2m);
+ 
+     *t = p2m_mmio_dm;
+ 
+@@ -464,6 +476,8 @@
+     }
+ 
+ out:
++    if ( do_locking )
++        p2m_unlock(d->arch.p2m);
+     unmap_domain_page(table);
+     return mfn;
+ }

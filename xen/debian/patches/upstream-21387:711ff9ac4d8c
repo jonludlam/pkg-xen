@@ -1,0 +1,24 @@
+# HG changeset patch
+# User Keir Fraser <keir@xen.org>
+# Date 1290453249 0
+# Node ID 711ff9ac4d8cb973c1f908c92a43ce06f63a1fad
+# Parent  e9156d9d996b75b4251a30d2d7eb1ccc7c3009cb
+x86: Check for MWAIT in CPUID before using it in ACPI idle code.
+
+Signed-off-by: Keir Fraser <keir@xen.org>
+xen-unstable changeset:   22416:0cc4ed1ce1f3
+xen-unstable date:        Mon Nov 22 19:13:00 2010 +0000
+
+diff -r e9156d9d996b -r 711ff9ac4d8c xen/arch/x86/acpi/cpu_idle.c
+--- a/xen/arch/x86/acpi/cpu_idle.c	Tue Nov 16 11:54:48 2010 +0000
++++ b/xen/arch/x86/acpi/cpu_idle.c	Mon Nov 22 19:14:09 2010 +0000
+@@ -717,7 +717,8 @@
+     {
+     case ACPI_ADR_SPACE_FIXED_HARDWARE:
+         if ( xen_cx->reg.bit_width == VENDOR_INTEL &&
+-             xen_cx->reg.bit_offset == NATIVE_CSTATE_BEYOND_HALT )
++             xen_cx->reg.bit_offset == NATIVE_CSTATE_BEYOND_HALT &&
++             boot_cpu_has(X86_FEATURE_MWAIT) )
+             cx->entry_method = ACPI_CSTATE_EM_FFH;
+         else
+             cx->entry_method = ACPI_CSTATE_EM_HALT;

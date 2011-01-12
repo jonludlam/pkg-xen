@@ -1,3 +1,28 @@
+xen (4.0.1-2) UNRELEASED; urgency=low
+
+  * Fix races in memory management.
+  * Make sure that frame-table compression leaves enough alligned.
+  * Disable XSAVE support. (closes: #595490)
+  * Check for dying domain instead of raising an assertion.
+  * Add C6 state with EOI errata for Intel.
+  * Make some memory management interrupt safe. Unsure if really needed.
+  * Raise bar for inter-socket migrations on mostly-idle systems.
+  * Fix interrupt handling for legacy routed interrupts.
+  * Allow to set maximal domain memory even during a running change.
+  * Support new partition name in pygrub. (closes: #599243)
+  * Fix some comparisions "< 0" that may be optimized away.
+  * Check for MWAIT support before using it.
+  * Fix endless loop on interrupts on Nehalem cpus.
+  * Don't crash upon direct GDT/LDT access. (closes: #609531)
+    CVE-2010-4255  
+  * Don't loose timer ticks after domain restore.
+  * Reserve some space for IOMMU area in dom0.
+  * Fix hypercall arguments after trace callout.
+  * Fix some error paths in vtd support. Memory leak.
+  * Reinstate ACPI DMAR table.
+
+ -- Bastian Blank <waldi@debian.org>  Wed, 12 Jan 2011 11:54:36 +0100
+
 xen (4.0.1-1) unstable; urgency=low
 
   * New upstream release.

@@ -1,0 +1,43 @@
+# HG changeset patch
+# User Keir Fraser <keir@xen.org>
+# Date 1292409119 0
+# Node ID e7d9d8d46730f3ca0cd60efd2e55181e2bd4e863
+# Parent  612eb10ba78b5ca72ca9c26fb68f1e003bdba34a
+x86/iommu: account for necessary allocations when calculating Dom0's
+initial allocation size
+
+As of c/s 21812:e382656e4dcc, IOMMU related allocations for Dom0
+happen only after it got all of its memory allocated, and hence the
+reserve (mainly for setting up its swiotlb) may get exhausted without
+accounting for the necessary allocations up front.
+
+While not precise, the estimate has been found to be within a couple
+of pages for the systems it got tested on.
+
+For the calculation to be reasonably correct, this depends on the
+patch titled "x86/iommu: don't map RAM holes above 4G" sent out
+yesterday.
+
+Signed-off-by: Jan Beulich <jbeulich@novell.com>
+xen-unstable changeset:   22506:618ba64260fa
+xen-unstable date:        Tue Dec 14 09:54:10 2010 +0000
+
+diff -r 612eb10ba78b -r e7d9d8d46730 xen/arch/x86/domain_build.c
+--- a/xen/arch/x86/domain_build.c	Wed Dec 15 10:31:08 2010 +0000
++++ b/xen/arch/x86/domain_build.c	Wed Dec 15 10:31:59 2010 +0000
+@@ -188,6 +188,15 @@
+     if ( is_pv_32on64_domain(d) )
+         avail -= opt_dom0_max_vcpus - 1;
+ 
++    /* Reserve memory for iommu_dom0_init() (rough estimate). */
++    if ( iommu_enabled )
++    {
++        unsigned int s;
++
++        for ( s = 9; s < BITS_PER_LONG; s += 9 )
++            avail -= max_page >> s;
++    }
++
+     /*
+      * If domain 0 allocation isn't specified, reserve 1/16th of available
+      * memory for things like DMA buffers. This reservation is clamped to 

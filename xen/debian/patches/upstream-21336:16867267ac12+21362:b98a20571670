@@ -1,0 +1,75 @@
+# HG changeset patch
+# User Keir Fraser <keir.fraser@citrix.com>
+# Date 1283332925 -3600
+# Node ID 16867267ac126043712703455b81c16f2549ee23
+# Parent  e854f11d392d13e5302a219bcc9e6e352a4f1c1b
+x86 intel: Disable XSAVE support.
+
+It breaks HVM save/restore.
+
+Signed-off-by: Keir Fraser <keir.fraser@citrix.com>
+xen-unstable changeset:   ae0cd4e5cc01
+xen-unstable date:        Wed Sep 01 10:19:14 2010 +0100
+
+# HG changeset patch
+# User Keir Fraser <keir@xen.org>
+# Date 1285340308 -3600
+# Node ID b98a20571670d905bb32eef98e2991a563e9f4fa
+# Parent  c9f461d6ea1db06e3434f8c1a29f2568f2b45f54
+x86: check CPUID level before enabling xsave
+
+While not as relevant after c/s 21894, is still seems safer to check
+the CPUID level here, just like Linux does. The is particularly
+relevant for the 4.0 tree (which doesn't have said c/s), but also
+possibly for nested environments where writing MSR_IA32_MISC_ENABLE
+may not actually take effect (Xen itself ignores such writes).
+
+Signed-off-by: Jan Beulich <jbeulich@novell.com>
+xen-unstable changeset:   22213:eb247ea9db8c
+xen-unstable date:        Fri Sep 24 15:53:31 2010 +0100
+
+--- a/xen/arch/x86/cpu/intel.c
++++ b/xen/arch/x86/cpu/intel.c
+@@ -30,7 +30,7 @@
+ integer_param("cpuid_mask_ecx", opt_cpuid_mask_ecx);
+ integer_param("cpuid_mask_edx", opt_cpuid_mask_edx);
+ 
+-static int use_xsave = 1;
++static int use_xsave;
+ boolean_param("xsave", use_xsave);
+ 
+ #ifdef CONFIG_X86_INTEL_USERCOPY
+--- a/xen/arch/x86/i387.c
++++ b/xen/arch/x86/i387.c
+@@ -132,6 +132,8 @@
+     }
+ }
+ 
++#define XSTATE_CPUID 0xd
++
+ /*
+  * Maximum size (in byte) of the XSAVE/XRSTOR save area required by all
+  * the supported and enabled features on the processor, including the
+@@ -148,7 +150,12 @@
+     int cpu = smp_processor_id();
+     u32 min_size;
+ 
+-    cpuid_count(0xd, 0, &eax, &ebx, &ecx, &edx);
++    if ( boot_cpu_data.cpuid_level < XSTATE_CPUID ) {
++        printk(XENLOG_ERR "XSTATE_CPUID missing\n");
++        return;
++    }
++
++    cpuid_count(XSTATE_CPUID, 0, &eax, &ebx, &ecx, &edx);
+ 
+     printk("%s: cpu%d: cntxt_max_size: 0x%x and states: %08x:%08x\n",
+         __func__, cpu, ecx, edx, eax);
+@@ -169,7 +176,7 @@
+      */
+     set_in_cr4(X86_CR4_OSXSAVE);
+     set_xcr0(eax & XCNTXT_MASK);
+-    cpuid_count(0xd, 0, &eax, &ebx, &ecx, &edx);
++    cpuid_count(XSTATE_CPUID, 0, &eax, &ebx, &ecx, &edx);
+     clear_in_cr4(X86_CR4_OSXSAVE);
+ 
+     if ( cpu == 0 )

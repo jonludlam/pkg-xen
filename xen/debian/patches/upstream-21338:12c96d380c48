@@ -1,0 +1,52 @@
+# HG changeset patch
+# User Keir Fraser <keir.fraser@citrix.com>
+# Date 1284394746 -3600
+# Node ID 12c96d380c48789d6d4c8955af7e014075abf3d9
+# Parent  5ca1d7547a42cc469d856b62f1894408ea8e1723
+page_alloc: Hold heap_lock while adjusting page states to/from PGC_state_free.
+
+This avoids races with buddy-merging logic in free_heap_pages().
+
+Signed-off-by: Keir Fraser <keir.fraser@citrix.com>
+xen-unstable changeset:   22135:69e8bb164683
+xen-unstable date:        Mon Sep 13 17:08:31 2010 +0100
+
+diff -r 5ca1d7547a42 -r 12c96d380c48 xen/common/page_alloc.c
+--- a/xen/common/page_alloc.c	Mon Sep 13 17:18:07 2010 +0100
++++ b/xen/common/page_alloc.c	Mon Sep 13 17:19:06 2010 +0100
+@@ -378,8 +378,6 @@
+     total_avail_pages -= request;
+     ASSERT(total_avail_pages >= 0);
+ 
+-    spin_unlock(&heap_lock);
+-
+     cpus_clear(mask);
+ 
+     for ( i = 0; i < (1 << order); i++ )
+@@ -401,6 +399,8 @@
+         page_set_owner(&pg[i], NULL);
+     }
+ 
++    spin_unlock(&heap_lock);
++
+     if ( unlikely(!cpus_empty(mask)) )
+     {
+         perfc_incr(need_flush_tlb_flush);
+@@ -496,6 +496,8 @@
+     ASSERT(order <= MAX_ORDER);
+     ASSERT(node >= 0);
+ 
++    spin_lock(&heap_lock);
++
+     for ( i = 0; i < (1 << order); i++ )
+     {
+         /*
+@@ -523,8 +525,6 @@
+             pg[i].tlbflush_timestamp = tlbflush_current_time();
+     }
+ 
+-    spin_lock(&heap_lock);
+-
+     avail[node][zone] += 1 << order;
+     total_avail_pages += 1 << order;
+ 

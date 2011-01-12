@@ -1,0 +1,151 @@
+# HG changeset patch
+# User Keir Fraser <keir@xen.org>
+# Date 1292582910 0
+# Node ID b05fa0652463d322c125acdb945341e953616e59
+# Parent  eebc0881bdf7dc37e07102101d76c47892623b37
+vtd: Reinstate ACPI DMAR on system shutdown or S3/S4/S5.
+
+Signed-off-by: Keir Fraser <keir@xen.org>
+xen-unstable changeset:   22570:f2dba7ff0828
+xen-unstable date:        Fri Dec 17 10:46:43 2010 +0000
+
+diff -r eebc0881bdf7 -r b05fa0652463 xen/arch/x86/acpi/power.c
+--- a/xen/arch/x86/acpi/power.c	Thu Dec 16 20:18:11 2010 +0000
++++ b/xen/arch/x86/acpi/power.c	Fri Dec 17 10:48:30 2010 +0000
+@@ -12,7 +12,6 @@
+ 
+ #include <xen/config.h>
+ #include <asm/io.h>
+-#include <asm/acpi.h>
+ #include <xen/acpi.h>
+ #include <xen/errno.h>
+ #include <xen/iocap.h>
+@@ -159,6 +158,8 @@
+ 
+     freeze_domains();
+ 
++    acpi_dmar_reinstate();
++
+     disable_nonboot_cpus();
+     if ( num_online_cpus() != 1 )
+     {
+@@ -229,6 +230,7 @@
+     cpufreq_add_cpu(0);
+     microcode_resume_cpu(0);
+     enable_nonboot_cpus();
++    acpi_dmar_zap();
+     thaw_domains();
+     spin_unlock(&pm_lock);
+     return error;
+diff -r eebc0881bdf7 -r b05fa0652463 xen/arch/x86/shutdown.c
+--- a/xen/arch/x86/shutdown.c	Thu Dec 16 20:18:11 2010 +0000
++++ b/xen/arch/x86/shutdown.c	Fri Dec 17 10:48:30 2010 +0000
+@@ -308,6 +308,8 @@
+     console_start_sync();
+     spin_debug_disable();
+ 
++    acpi_dmar_reinstate();
++
+     local_irq_enable();
+ 
+     /* Ensure we are the boot CPU. */
+diff -r eebc0881bdf7 -r b05fa0652463 xen/arch/x86/tboot.c
+--- a/xen/arch/x86/tboot.c	Thu Dec 16 20:18:11 2010 +0000
++++ b/xen/arch/x86/tboot.c	Fri Dec 17 10:48:30 2010 +0000
+@@ -5,6 +5,7 @@
+ #include <xen/sched.h>
+ #include <xen/domain_page.h>
+ #include <xen/iommu.h>
++#include <xen/acpi.h>
+ #include <asm/fixmap.h>
+ #include <asm/page.h>
+ #include <asm/processor.h>
+@@ -479,13 +480,7 @@
+ 
+     /* acpi_parse_dmar() zaps APCI DMAR signature in TXT heap table */
+     /* but dom0 will read real table, so must zap it there too */
+-    dmar_table = NULL;
+-    acpi_get_table(ACPI_SIG_DMAR, 0, &dmar_table);
+-    if ( dmar_table != NULL )
+-    {
+-        dmar_table->signature[0] = 'X';
+-        dmar_table->checksum -= 'X'-'D';
+-    }
++    acpi_dmar_zap();
+ 
+     return rc;
+ }
+diff -r eebc0881bdf7 -r b05fa0652463 xen/common/kexec.c
+--- a/xen/common/kexec.c	Thu Dec 16 20:18:11 2010 +0000
++++ b/xen/common/kexec.c	Fri Dec 17 10:48:30 2010 +0000
+@@ -109,20 +109,13 @@
+     return out;
+ }
+ 
+-static int acpi_dmar_reinstate(struct acpi_table_header *table)
+-{
+-    table->signature[0] = 'D';
+-    table->checksum += 'X'-'D';
+-    return 0;
+-}
+-
+ static void kexec_common_shutdown(void)
+ {
+     watchdog_disable();
+     console_start_sync();
+     spin_debug_disable();
+     one_cpu_only();
+-    acpi_table_parse(ACPI_SIG_DMAR, acpi_dmar_reinstate);
++    acpi_dmar_reinstate();
+ }
+ 
+ void kexec_crash(void)
+diff -r eebc0881bdf7 -r b05fa0652463 xen/drivers/passthrough/vtd/dmar.c
+--- a/xen/drivers/passthrough/vtd/dmar.c	Thu Dec 16 20:18:11 2010 +0000
++++ b/xen/drivers/passthrough/vtd/dmar.c	Fri Dec 17 10:48:30 2010 +0000
+@@ -768,3 +768,34 @@
+ {
+     return parse_dmar_table(acpi_parse_dmar);
+ }
++
++static struct acpi_table_header *get_dmar(void)
++{
++    struct acpi_table_header *dmar_table = NULL;
++    unsigned long flags;
++
++    /* Disabling IRQs avoids cross-CPU TLB flush in map_pages_to_xen(). */
++    local_irq_save(flags);
++    acpi_get_table(ACPI_SIG_DMAR, 0, &dmar_table);
++    local_irq_restore(flags);
++
++    return dmar_table;
++}
++
++void acpi_dmar_reinstate(void)
++{
++    struct acpi_table_header *dmar_table = get_dmar();
++    if ( dmar_table == NULL )
++        return;
++    dmar_table->signature[0] = 'D';
++    dmar_table->checksum += 'X'-'D';
++}
++
++void acpi_dmar_zap(void)
++{
++    struct acpi_table_header *dmar_table = get_dmar();
++    if ( dmar_table == NULL )
++        return;
++    dmar_table->signature[0] = 'X';
++    dmar_table->checksum -= 'X'-'D';
++}
+diff -r eebc0881bdf7 -r b05fa0652463 xen/include/xen/acpi.h
+--- a/xen/include/xen/acpi.h	Thu Dec 16 20:18:11 2010 +0000
++++ b/xen/include/xen/acpi.h	Fri Dec 17 10:48:30 2010 +0000
+@@ -421,4 +421,7 @@
+ 
+ void acpi_reboot(void);
+ 
++void acpi_dmar_zap(void);
++void acpi_dmar_reinstate(void);
++
+ #endif /*_LINUX_ACPI_H*/

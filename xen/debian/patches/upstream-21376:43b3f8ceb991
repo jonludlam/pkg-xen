@@ -1,0 +1,83 @@
+# HG changeset patch
+# User Keir Fraser <keir@xen.org>
+# Date 1288374294 -3600
+# Node ID 43b3f8ceb991c8410541fa763d2265dc3a539baa
+# Parent  179150c0b36614a6a596ca5e872fea80d852a819
+Xen: fix various checks of unsigned integers < 0
+
+Some of these could be benignly discarded by the compiler but some are
+actual bugs.
+
+Signed-off-by: Tim Deegan <Tim.Deegan@citrix.com>
+xen-unstable changeset:   22336:49803ac994f4
+xen-unstable date:        Fri Oct 29 18:05:50 2010 +0100
+
+diff -r 179150c0b366 -r 43b3f8ceb991 xen/arch/x86/mm.c
+--- a/xen/arch/x86/mm.c	Fri Oct 29 10:44:23 2010 +0100
++++ b/xen/arch/x86/mm.c	Fri Oct 29 18:44:54 2010 +0100
+@@ -4223,7 +4223,7 @@
+         ent.size = (uint64_t)(s - ctxt->s) << PAGE_SHIFT;
+         ent.type = E820_RESERVED;
+         buffer = guest_handle_cast(ctxt->map.buffer, e820entry_t);
+-        if ( __copy_to_guest_offset(buffer, ctxt->n, &ent, 1) < 0 )
++        if ( __copy_to_guest_offset(buffer, ctxt->n, &ent, 1) )
+             return -EFAULT;
+         ctxt->n++;
+     }
+@@ -4439,7 +4439,7 @@
+             }
+             if ( ctxt.map.nr_entries <= ctxt.n + (e820.nr_map - i) )
+                 return -EINVAL;
+-            if ( __copy_to_guest_offset(buffer, ctxt.n, e820.map + i, 1) < 0 )
++            if ( __copy_to_guest_offset(buffer, ctxt.n, e820.map + i, 1) )
+                 return -EFAULT;
+             ctxt.s = PFN_UP(e820.map[i].addr + e820.map[i].size);
+         }
+diff -r 179150c0b366 -r 43b3f8ceb991 xen/arch/x86/physdev.c
+--- a/xen/arch/x86/physdev.c	Fri Oct 29 10:44:23 2010 +0100
++++ b/xen/arch/x86/physdev.c	Fri Oct 29 18:44:54 2010 +0100
+@@ -202,7 +202,7 @@
+         if ( copy_from_guest(&eoi, arg, 1) != 0 )
+             break;
+         ret = -EINVAL;
+-        if ( eoi.irq < 0 || eoi.irq >= v->domain->nr_pirqs )
++        if ( eoi.irq >= v->domain->nr_pirqs )
+             break;
+         if ( v->domain->arch.pirq_eoi_map )
+             evtchn_unmask(v->domain->pirq_to_evtchn[eoi.irq]);
+diff -r 179150c0b366 -r 43b3f8ceb991 xen/arch/x86/platform_hypercall.c
+--- a/xen/arch/x86/platform_hypercall.c	Fri Oct 29 10:44:23 2010 +0100
++++ b/xen/arch/x86/platform_hypercall.c	Fri Oct 29 18:44:54 2010 +0100
+@@ -413,7 +413,6 @@
+         }
+ 
+         if ( (g_info->xen_cpuid >= NR_CPUS) ||
+-             (g_info->xen_cpuid < 0) ||
+              !cpu_present(g_info->xen_cpuid) )
+         {
+             g_info->flags |= XEN_PCPU_FLAGS_INVALID;
+diff -r 179150c0b366 -r 43b3f8ceb991 xen/arch/x86/x86_emulate/x86_emulate.c
+--- a/xen/arch/x86/x86_emulate/x86_emulate.c	Fri Oct 29 10:44:23 2010 +0100
++++ b/xen/arch/x86/x86_emulate/x86_emulate.c	Fri Oct 29 18:44:54 2010 +0100
+@@ -2102,7 +2102,7 @@
+             _regs.edx = (uint32_t)(((int32_t)_regs.eax < 0) ? -1 : 0);
+             break;
+         case 8:
+-            _regs.edx = (_regs.eax < 0) ? -1 : 0;
++            _regs.edx = ((int64_t)_regs.eax < 0) ? -1 : 0;
+             break;
+         }
+         break;
+diff -r 179150c0b366 -r 43b3f8ceb991 xen/drivers/cpufreq/cpufreq.c
+--- a/xen/drivers/cpufreq/cpufreq.c	Fri Oct 29 10:44:23 2010 +0100
++++ b/xen/drivers/cpufreq/cpufreq.c	Fri Oct 29 18:44:54 2010 +0100
+@@ -115,8 +115,7 @@
+     if (!cpu_online(cpu) || !data || !processor_pminfo[cpu])
+         return -ENODEV;
+ 
+-    if ((perf->platform_limit < 0) || 
+-        (perf->platform_limit >= perf->state_count))
++    if (perf->platform_limit >= perf->state_count)
+         return -EINVAL;
+ 
+     memcpy(&policy, data, sizeof(struct cpufreq_policy)); 
