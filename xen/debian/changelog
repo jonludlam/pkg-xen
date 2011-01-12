@@ -16,7 +16,7 @@ xen (4.0.1-2) UNRELEASED; urgency=low
   * Don't crash upon direct GDT/LDT access. (closes: #609531)
     CVE-2010-4255  
   * Don't loose timer ticks after domain restore.
-  * Reserve some space for IOMMU area in dom0.
+  * Reserve some space for IOMMU area in dom0. (closes: #608715)
   * Fix hypercall arguments after trace callout.
   * Fix some error paths in vtd support. Memory leak.
   * Reinstate ACPI DMAR table.
