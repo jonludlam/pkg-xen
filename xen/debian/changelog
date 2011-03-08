@@ -1,3 +1,9 @@
+xen (4.0.2~rc2-1) UNRELEASED; urgency=low
+
+  * New upstream release candidate.
+
+ -- Bastian Blank <waldi@debian.org>  Tue, 08 Mar 2011 13:21:34 +0100
+
 xen (4.0.1-2) unstable; urgency=low
 
   * Fix races in memory management.

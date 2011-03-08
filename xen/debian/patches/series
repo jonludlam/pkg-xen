@@ -47,24 +47,3 @@ tools-include-install.diff
 tools-xenmon-install.diff
 
 tools-python-shebang.diff
-
-upstream-21334:993458f6c5a0+21405:ae381a864b4f
-upstream-21335:e854f11d392d
-upstream-21336:16867267ac12+21362:b98a20571670
-upstream-21338:12c96d380c48
-upstream-21347:081ba5a13718
-upstream-21348:aced00366822
-upstream-21353:59917443fc50
-upstream-21354:67af28519aed
-upstream-21364:f7d54e1d7044
-upstream-21371:aabda497d83f
-upstream-21375:179150c0b366
-upstream-21376:43b3f8ceb991
-upstream-21387:711ff9ac4d8c
-upstream-21388:b6d75c255bf6
-upstream-21389:2901cbe2eccc
-upstream-21395:2548598d110d
-upstream-21403:e7d9d8d46730
-upstream-21407:4e689840622f
-upstream-21409:a45388506790
-upstream-21413:b05fa0652463
