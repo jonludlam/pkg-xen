@@ -1,5 +1,7 @@
 version.patch
 
+docs-pdflatex.patch
+
 config-prefix.diff
 tools-blktap-prefix.diff
 tools-blktap2-prefix.patch

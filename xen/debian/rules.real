@@ -107,7 +107,7 @@ install-docs: $(STAMPS_DIR)/build-docs
 	dh_testroot
 	dh_prep
 	+$(MAKE_CLEAN) -C $(SOURCE_DIR)/docs install DESTDIR=$(CURDIR)/$(DIR)
-	dh_install --sourcedir=$(DIR) usr/share/doc/xen/pdf/* usr/share/doc/$(PACKAGE_NAME)
+	dh_install --sourcedir=$(DIR) usr/share/doc/xen/\*.pdf usr/share/doc/$(PACKAGE_NAME)
 	+$(MAKE_SELF) install-base
 
 install-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)

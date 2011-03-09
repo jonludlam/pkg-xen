@@ -1,6 +1,7 @@
 xen (4.0.2~rc2-1) UNRELEASED; urgency=low
 
   * New upstream release candidate.
+  * Build documentation using pdflatex.
 
  -- Bastian Blank <waldi@debian.org>  Tue, 08 Mar 2011 13:21:34 +0100
 

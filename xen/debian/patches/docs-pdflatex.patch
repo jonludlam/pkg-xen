@@ -1,0 +1,197 @@
+--- a/docs/Docs.mk
++++ b/docs/Docs.mk
+@@ -1,7 +1,5 @@
+-PS2PDF		:= ps2pdf
+-DVIPS		:= dvips
+-LATEX		:= latex
+-FIG2DEV		:= fig2dev
++PDFLATEX	:= pdflatex
++EPSTOPDF	:= epstopdf
+ LATEX2HTML	:= latex2html
+ DOXYGEN		:= doxygen
+ POD2MAN		:= pod2man
+--- a/docs/Makefile
++++ b/docs/Makefile
+@@ -11,28 +11,24 @@
+ DOC_MAN1	:= $(patsubst man/%.pod.1,man1/%.1,$(DOC_MAN1SRC))
+ DOC_MAN5	:= $(patsubst man/%.pod.5,man5/%.5,$(DOC_MAN5SRC))
+ DOC_TEX		:= src/user.tex src/interface.tex
+-DOC_PS		:= $(patsubst src/%.tex,ps/%.ps,$(DOC_TEX))
+-DOC_PDF		:= $(patsubst src/%.tex,pdf/%.pdf,$(DOC_TEX))
++DOC_PDF		:= $(patsubst src/%.tex,%.pdf,$(DOC_TEX))
+ DOC_HTML	:= $(patsubst src/%.tex,html/%/index.html,$(DOC_TEX))
+ 
+-GFX = $(patsubst %.fig, %.eps, $(wildcard figs/*.fig))
++GFX = $(patsubst %.eps, %.pdf, $(wildcard figs/*.eps))
+ 
+ .PHONY: all
+ all: build
+ 
+ .PHONY: build
+-build: ps pdf html man-pages
++build: pdf html man-pages
+ 	@if which $(DOT) 1>/dev/null 2>/dev/null ; then              \
+ 	$(MAKE) -C xen-api build ; else                              \
+         echo "Graphviz (dot) not installed; skipping xen-api." ; fi
+-	rm -f *.aux *.dvi *.bbl *.blg *.glo *.idx *.ilg *.log *.ind *.toc
++	rm -f *.aux *.bbl *.blg *.glo *.idx *.ilg *.log *.ind *.toc
+ 
+ .PHONY: dev-docs
+ dev-docs: python-dev-docs
+ 
+-.PHONY: ps
+-ps: $(DOC_PS)
+-
+ .PHONY: pdf
+ pdf: $(DOC_PDF)
+ 
+@@ -68,9 +64,9 @@
+ .PHONY: clean
+ clean:
+ 	$(MAKE) -C xen-api clean
+-	rm -rf .word_count *.aux *.dvi *.bbl *.blg *.glo *.idx *~ 
+-	rm -rf *.ilg *.log *.ind *.toc *.bak core
+-	rm -rf $(GFX) ps pdf html
++	rm -rf .word_count *.aux *.bbl *.blg *.glo *.idx *~ 
++	rm -rf *.ilg *.log *.ind *.pdf *.toc *.bak core
++	rm -rf $(GFX) html
+ 	rm -rf api
+ 	rm -rf man5
+ 	rm -rf man1
+@@ -85,29 +81,18 @@
+ 
+ 	$(MAKE) -C xen-api install
+ 
+-	cp -dR ps $(DESTDIR)$(DOCDIR)
+-	cp -dR pdf $(DESTDIR)$(DOCDIR)
++	cp -dR *.pdf $(DESTDIR)$(DOCDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(MANDIR)
+ 	cp -dR man1 $(DESTDIR)$(MANDIR)
+ 	cp -dR man5 $(DESTDIR)$(MANDIR)
+ 	[ ! -d html ] || cp -dR html $(DESTDIR)$(DOCDIR)
+ 
+-pdf/%.pdf: ps/%.ps
+-	$(INSTALL_DIR) $(@D)
+-	$(PS2PDF) $< $@.new
+-	mv $@.new $@
+-
+-ps/%.ps: %.dvi
+-	$(INSTALL_DIR) $(@D)
+-	$(DVIPS) -Ppdf -G0 -o $@.new $<
+-	mv $@.new $@
+-
+-%.dvi: src/%.tex $(GFX)
+-	$(LATEX) $< >/dev/null
+-	if [ -e $*.toc ] ; then $(LATEX) $< >/dev/null ; fi
++%.pdf: src/%.tex $(GFX)
++	$(PDFLATEX) $<
++	if [ -e $*.toc ] ; then $(PDFLATEX) $< ; fi
+ 
+-%.eps: %.fig
+-	$(FIG2DEV) -L eps $< $@
++%.pdf: %.eps
++	$(EPSTOPDF) $<
+ 
+ html/%/index.html: src/%.tex
+ 	$(INSTALL_DIR) $(@D)
+--- a/docs/src/interface.tex
++++ b/docs/src/interface.tex
+@@ -13,7 +13,7 @@
+ \pagestyle{empty}
+ \begin{center}
+ \vspace*{\fill}
+-\includegraphics{figs/xenlogo.eps}
++\includegraphics{figs/xenlogo}
+ \vfill
+ \vfill
+ \vfill
+--- a/docs/src/user.tex
++++ b/docs/src/user.tex
+@@ -16,7 +16,7 @@
+ \pagestyle{empty}
+ \begin{center}
+ \vspace*{\fill}
+-\includegraphics{figs/xenlogo.eps}
++\includegraphics{figs/xenlogo}
+ \vfill
+ \vfill
+ \vfill
+@@ -2143,7 +2143,7 @@
+ 
+ \begin{figure}
+ \centering
+-\includegraphics[width=13cm]{figs/acm_overview.eps}
++\includegraphics[width=13cm]{figs/acm_overview}
+ \caption{Overview of activating sHype workload protection in Xen.
+   Section numbers point to representative examples.}
+ \label{fig:acmoverview}
+@@ -2309,7 +2309,7 @@
+ 
+ \begin{figure}[htb]
+ \centering
+-\includegraphics[width=13cm]{figs/acm_ezpolicy_gui.eps}
++\includegraphics[width=13cm]{figs/acm_ezpolicy_gui}
+ \caption{Final layout including workload definition and Run-time Exclusion rules.}
+ \label{fig:acmezpolicy}
+ \end{figure}
+--- a/docs/xen-api/Makefile
++++ b/docs/xen-api/Makefile
+@@ -6,35 +6,30 @@
+ 
+ 
+ TEX := $(wildcard *.tex)
+-EPS := $(wildcard *.eps)
+-EPSDOT := $(patsubst %.dot,%.eps,$(wildcard *.dot))
++PDFEPS := $(patsubst %.eps,%.pdf,$(wildcard *.eps))
++PDFDOT := $(patsubst %.dot,%.pdf,$(wildcard *.dot))
+ 
+ .PHONY: all
+ all: build
+ 
+ .PHONY: build
+-build: xenapi.pdf xenapi.ps
++build: xenapi.pdf
+ 
+ install:
+-	$(INSTALL_DIR) $(DESTDIR)$(DOCDIR)/ps
+-	$(INSTALL_DIR) $(DESTDIR)$(DOCDIR)/pdf
++	$(INSTALL_DIR) $(DESTDIR)$(DOCDIR)
+ 
+-	[ -e xenapi.ps ] && cp xenapi.ps $(DESTDIR)$(DOCDIR)/ps || true
+-	[ -e xenapi.pdf ] && cp xenapi.pdf $(DESTDIR)$(DOCDIR)/pdf || true
++	[ -e xenapi.pdf ] && cp xenapi.pdf $(DESTDIR)$(DOCDIR) || true
+ 
+-xenapi.dvi: $(TEX) $(EPS) $(EPSDOT)
+-	$(LATEX) xenapi.tex
+-	$(LATEX) xenapi.tex
++xenapi.pdf: $(TEX) $(PDFEPS) $(PDFDOT)
++	$(PDFLATEX) xenapi.tex
++	$(PDFLATEX) xenapi.tex
+ 	rm -f *.aux *.log
+ 
+-%.pdf: %.ps
+-	$(PS2PDF) $< $@
++%.pdf: %.eps
++	$(EPSTOPDF) $<
+ 
+-%.ps: %.dvi
+-	$(DVIPS) $< -o $@
+-
+-%.eps: %.dot
+-	$(DOT) -Tps $< >$@
++%.pdf: %.dot
++	$(DOT) -Tpdf $< >$@
+ 
+ xenapi-datamodel-graph.eps: xenapi-datamodel-graph.dot
+ 	$(NEATO) -Goverlap=false -Tps $< >$@
+--- a/docs/xen-api/xenapi-coversheet.tex
++++ b/docs/xen-api/xenapi-coversheet.tex
+@@ -14,7 +14,7 @@
+ %% Document title
+ \newcommand{\doctitle}{Xen Management API}
+ 
+-\newcommand{\coversheetlogo}{xen.eps}
++\newcommand{\coversheetlogo}{xen}
+ 
+ %% Document date
+ \newcommand{\datestring}{20th November 2009}
