@@ -9,6 +9,7 @@ Build-Depends:
  gcc-multilib,
  e2fslibs-dev,
  iasl,
+ libaio-dev,
  libncurses5-dev,
  uuid-dev,
  zlib1g-dev
