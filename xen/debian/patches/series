@@ -32,6 +32,7 @@ tools-xentrace-rpath.diff
 tools-flask-abiname.diff
 tools-libfsimage-abiname.diff
 tools-libxc-abiname.diff
+tools-libxl-link.diff
 
 tools-python-xen-relative-path.diff
 tools-misc-xend-startup.diff
