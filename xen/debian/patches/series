@@ -7,12 +7,10 @@ tools-rpath.diff
 tools-blktap2-libs.patch
 tools-blktap2-prefix.patch
 tools-console-prefix.diff
-tools-console-rpath.diff
 tools-flask-prefix.diff
 tools-libfsimage-prefix.diff
 tools-libfsimage-rpath.diff
 tools-libxc-prefix.diff
-tools-libxc-rpath.diff
 tools-libxl-prefix.diff
 tools-misc-prefix.diff
 tools-misc-rpath.diff
