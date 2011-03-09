@@ -1,0 +1,13 @@
+--- a/tools/xenpaging/Makefile
++++ b/tools/xenpaging/Makefile
+@@ -30,8 +30,8 @@
+ 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+ 
+ install: all
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) $(IBINS) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
++	$(INSTALL_PROG) $(IBINS) $(DESTDIR)$(PRIVATE_BINDIR)
+ 
+ clean:
+ 	rm -f *.o *~ $(DEPS) xen TAGS $(IBINS) $(LIB)

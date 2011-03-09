@@ -8,10 +8,12 @@ tools-console-prefix.diff
 tools-flask-prefix.diff
 tools-libfsimage-prefix.diff
 tools-libxc-prefix.diff
+tools-libxl-prefix.diff
 tools-misc-prefix.diff
 tools-pygrub-prefix.diff
 tools-python-prefix.diff
 tools-xenmon-prefix.diff
+tools-xenpaging-prefix.diff
 tools-xenstat-prefix.diff
 tools-xenstore-prefix.diff
 tools-xentrace-prefix.diff
