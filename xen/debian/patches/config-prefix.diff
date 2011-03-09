@@ -45,7 +45,7 @@
  LDFLAGS_DIRECT += -melf_x86_64_obsd
 --- a/Config.mk
 +++ b/Config.mk
-@@ -32,14 +32,14 @@
+@@ -33,14 +33,14 @@
  
  ifneq ($(EXTRA_PREFIX),)
  EXTRA_INCLUDES += $(EXTRA_PREFIX)/include

@@ -2,6 +2,13 @@ version.patch
 
 docs-pdflatex.patch
 
+tools-blktap2-link.diff
+tools-blktap2-optimize.diff
+tools-flask-abiname.diff
+tools-libfsimage-abiname.diff
+tools-libxc-abiname.diff
+tools-libxl-link.diff
+
 config-prefix.diff
 tools-rpath.diff
 tools-blktap2-prefix.diff
@@ -26,13 +33,6 @@ tools-xenstore-prefix.diff
 tools-xenstore-rpath.diff
 tools-xentrace-prefix.diff
 tools-xentrace-rpath.diff
-
-tools-blktap2-link.diff
-tools-blktap2-optimize.diff
-tools-flask-abiname.diff
-tools-libfsimage-abiname.diff
-tools-libxc-abiname.diff
-tools-libxl-link.diff
 
 tools-python-xen-relative-path.diff
 tools-misc-xend-startup.diff

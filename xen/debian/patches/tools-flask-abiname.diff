@@ -18,13 +18,13 @@
  all: build
 @@ -34,10 +31,8 @@
  install: build
- 	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
--	$(INSTALL_PROG) libflask.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
-+	$(INSTALL_PROG) libflask.so $(DESTDIR)$(PRIVATE_LIBDIR)
- 	$(INSTALL_DATA) libflask.a $(DESTDIR)$(PRIVATE_LIBDIR)
--	ln -sf libflask.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libflask.so.$(MAJOR)
--	ln -sf libflask.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libflask.so
+-	$(INSTALL_PROG) libflask.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
++	$(INSTALL_PROG) libflask.so $(DESTDIR)$(LIBDIR)
+ 	$(INSTALL_DATA) libflask.a $(DESTDIR)$(LIBDIR)
+-	ln -sf libflask.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libflask.so.$(MAJOR)
+-	ln -sf libflask.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libflask.so
  	$(INSTALL_DATA) include/libflask.h $(DESTDIR)$(INCLUDEDIR)/xen/xsm
  
  .PHONY: TAGS

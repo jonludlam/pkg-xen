@@ -1,46 +1,37 @@
 --- a/tools/libxc/Makefile
 +++ b/tools/libxc/Makefile
-@@ -97,18 +97,18 @@
+@@ -94,13 +94,14 @@
  
  .PHONY: install
  install: build
--	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
--	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
-+	$(INSTALL_PROG) libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
+-	$(INSTALL_PROG) libxenctrl.so $(DESTDIR)$(LIBDIR)
++	$(INSTALL_PROG) libxenctrl.so $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DATA) libxenctrl.a $(DESTDIR)$(LIBDIR)
--	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libxenctrl.so.$(MAJOR)
--	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libxenctrl.so
-+	ln -sf libxenctrl.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenctrl.so.$(MAJOR)
-+	ln -sf libxenctrl.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenctrl.so
  	$(INSTALL_DATA) xenctrl.h $(DESTDIR)$(INCLUDEDIR)
  
--	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
-+	$(INSTALL_PROG) libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
+-	$(INSTALL_PROG) libxenguest.so $(DESTDIR)$(LIBDIR)
++	$(INSTALL_PROG) libxenguest.so $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DATA) libxenguest.a $(DESTDIR)$(LIBDIR)
--	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libxenguest.so.$(MAJOR)
--	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libxenguest.so
-+	ln -sf libxenguest.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenguest.so.$(MAJOR)
-+	ln -sf libxenguest.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenguest.so
  	$(INSTALL_DATA) xenguest.h $(DESTDIR)$(INCLUDEDIR)
  
- .PHONY: TAGS
-@@ -142,7 +142,7 @@
- 	ln -sf $< $@
+@@ -130,7 +131,7 @@
+ 	$(AR) rc $@ $^
  
- libxenctrl.so.$(MAJOR).$(MINOR): $(CTRL_PIC_OBJS)
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^ $(PTHREAD_LIBS)
-+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenctrl.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $^ $(PTHREAD_LIBS)
+ libxenctrl.so: $(CTRL_PIC_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^ $(PTHREAD_LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $^ $(PTHREAD_LIBS)
  
  # libxenguest
  
-@@ -174,7 +174,7 @@
+@@ -157,7 +158,7 @@
  
- libxenguest.so.$(MAJOR).$(MINOR): LDFLAGS += $(call zlib-options,l)
- libxenguest.so.$(MAJOR).$(MINOR): $(GUEST_PIC_OBJS) libxenctrl.so
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
-+	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenguest.so.$(MAJOR) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
+ libxenguest.so: LDFLAGS += $(call zlib-options,l)
+ libxenguest.so: $(GUEST_PIC_OBJS) libxenctrl.so
+-	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) $(call LDFLAGS_RPATH) -o $@ $(GUEST_PIC_OBJS) -lz -lxenctrl $(PTHREAD_LIBS)
  
  -include $(DEPS)
  

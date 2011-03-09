@@ -1,15 +1,17 @@
 --- a/tools/libxl/Makefile
 +++ b/tools/libxl/Makefile
-@@ -15,7 +15,7 @@
+@@ -15,8 +15,8 @@
  CFLAGS += -I. -fPIC
  CFLAGS += $(CFLAGS_libxenctrl) $(CFLAGS_libxenguest) $(CFLAGS_libxenstore)
  
--LIBS = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore)
-+LIBS = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib)
+-LDFLAGS_XL =  -Wl,-rpath-link,$(XEN_LIBXC),-rpath-link,$(XEN_XENSTORE)
+-LDFLAGS_LIBXL = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore)
++LDFLAGS_XL =  -Wl,-rpath-link,$(XEN_LIBXC),-rpath-link,$(XEN_XENSTORE) $(call LDFLAGS_RPATH,../lib)
++LDFLAGS_LIBXL = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH)
  
  LIBXL_OBJS-y = osdeps.o libxl_paths.o
  LIBXL_OBJS = flexarray.o libxl.o libxl_dom.o libxl_exec.o libxl_xshelp.o libxl_device.o libxl_internal.o xenguest.o libxl_utils.o $(LIBXL_OBJS-y)
-@@ -90,18 +90,19 @@
+@@ -89,18 +89,19 @@
  
  .PHONY: install
  install: all
