@@ -1,5 +1,14 @@
 --- a/tools/xenpaging/Makefile
 +++ b/tools/xenpaging/Makefile
+@@ -4,7 +4,7 @@
+ CFLAGS   += -I $(XEN_XC)
+ CFLAGS   += -I ./
+ CFLAGS   += $(CFLAGS_libxenctrl) $(CFLAGS_libxenstore)
+-LDFLAGS  += $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore)
++LDFLAGS  += $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib)
+ 
+ POLICY    = default
+ 
 @@ -30,8 +30,8 @@
  	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
  
