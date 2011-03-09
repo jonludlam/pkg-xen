@@ -4,8 +4,7 @@ docs-pdflatex.patch
 
 config-prefix.diff
 tools-rpath.diff
-tools-blktap2-libs.patch
-tools-blktap2-prefix.patch
+tools-blktap2-prefix.diff
 tools-console-prefix.diff
 tools-flask-prefix.diff
 tools-libfsimage-prefix.diff
