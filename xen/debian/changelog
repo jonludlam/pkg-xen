@@ -5,6 +5,9 @@ xen (4.0.2~rc2-1) UNRELEASED; urgency=low
   * Use python 2.6. (closes: #596545)
   * Fix lintian override.
   * Install new tools: xl, xenpaging.
+  * Enable blktap2.
+    - Use own md5 implementation.
+    - Fix includes.
 
  -- Bastian Blank <waldi@debian.org>  Tue, 08 Mar 2011 13:21:34 +0100
 

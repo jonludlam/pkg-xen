@@ -44,3 +44,6 @@ tools-include-install.diff
 tools-xenmon-install.diff
 
 tools-python-shebang.diff
+
+upstream-21547:ca2738f258f8
+upstream-22765:0dbad563a659
