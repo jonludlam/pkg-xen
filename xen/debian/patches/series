@@ -3,7 +3,6 @@ version.patch
 docs-pdflatex.patch
 
 config-prefix.diff
-tools-blktap-prefix.diff
 tools-blktap2-prefix.patch
 tools-console-prefix.diff
 tools-flask-prefix.diff
@@ -18,7 +17,6 @@ tools-xenstore-prefix.diff
 tools-xentrace-prefix.diff
 
 tools-rpath.diff
-tools-blktap-rpath.diff
 tools-blktap2-libs.patch
 tools-console-rpath.diff
 tools-libfsimage-rpath.diff
@@ -32,7 +30,6 @@ tools-xenstat-rpath.diff
 tools-xenstore-rpath.diff
 tools-xentrace-rpath.diff
 
-tools-blktap-abiname.diff
 tools-flask-abiname.diff
 tools-libfsimage-abiname.diff
 tools-libxc-abiname.diff
@@ -43,7 +40,6 @@ tools-misc-xend-startup.diff
 tools-disable.diff
 
 tools-pygrub-remove-static-solaris-support.patch
-tools-blktap-crypto.patch
 
 tools-include-install.diff
 tools-xenmon-install.diff
