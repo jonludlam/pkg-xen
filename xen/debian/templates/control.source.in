@@ -4,7 +4,7 @@ Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
 Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Build-Depends:
  debhelper (>> 7), lsb-release, quilt,
- python2.5-dev, python-support,
+ python2.6-dev, python-support,
  bcc,
  gcc-multilib,
  e2fslibs-dev,
@@ -14,5 +14,5 @@ Build-Depends:
  zlib1g-dev
 Build-Depends-Indep: graphviz, gs-common, texlive-fonts-recommended, texlive-latex-recommended, texlive-font-utils
 Standards-Version: 3.8.4
-XS-Python-Version: 2.5
+XS-Python-Version: 2.6
 
