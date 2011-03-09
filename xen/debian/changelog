@@ -8,6 +8,8 @@ xen (4.0.2~rc2-1) UNRELEASED; urgency=low
   * Enable blktap2.
     - Use own md5 implementation.
     - Fix includes.
+    - Fix linking of blktap2 binaries.
+    - Remove optimization setting.
 
  -- Bastian Blank <waldi@debian.org>  Tue, 08 Mar 2011 13:21:34 +0100
 

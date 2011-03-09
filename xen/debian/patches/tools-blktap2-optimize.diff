@@ -1,0 +1,10 @@
+--- a/tools/blktap2/drivers/Makefile
++++ b/tools/blktap2/drivers/Makefile
+@@ -9,7 +9,6 @@
+ LOCK_UTIL  = lock-util
+ INST_DIR   = $(SBINDIR)
+ 
+-CFLAGS    += -Werror -g -O0
+ CFLAGS    += -Wno-unused
+ CFLAGS    += -fno-strict-aliasing
+ CFLAGS    += -I../lib -I../../libxc

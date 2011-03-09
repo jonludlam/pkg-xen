@@ -28,6 +28,8 @@ tools-xenstore-rpath.diff
 tools-xentrace-prefix.diff
 tools-xentrace-rpath.diff
 
+tools-blktap2-link.diff
+tools-blktap2-optimize.diff
 tools-flask-abiname.diff
 tools-libfsimage-abiname.diff
 tools-libxc-abiname.diff

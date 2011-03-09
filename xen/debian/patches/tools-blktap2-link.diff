@@ -1,0 +1,29 @@
+--- a/tools/blktap2/drivers/Makefile
++++ b/tools/blktap2/drivers/Makefile
+@@ -15,7 +15,6 @@
+ CFLAGS    += -I../lib -I../../libxc
+ CFLAGS    += -I../include -I../../include
+ CFLAGS    += $(CFLAGS_libxenctrl)
+-CFLAGS    += -I $(LIBAIO_DIR)
+ CFLAGS    += -I $(MEMSHR_DIR)
+ CFLAGS    += -D_GNU_SOURCE
+ CFLAGS    += -DUSE_NFS_LOCKS
+@@ -53,7 +52,6 @@
+ 
+ $(REMUS-OBJS): CFLAGS += -I$(XEN_XENSTORE)
+ 
+-LIBAIO_DIR = $(XEN_ROOT)/tools/libaio/src
+ MEMSHR_DIR = $(XEN_ROOT)/tools/memshr
+ 
+ MEMSHRLIBS :=
+@@ -62,8 +60,8 @@
+ MEMSHRLIBS += $(MEMSHR_DIR)/libmemshr.a
+ endif
+ 
+-tapdisk2 tapdisk-stream tapdisk-diff $(QCOW_UTIL): AIOLIBS := $(LIBAIO_DIR)/libaio.a 
+-tapdisk-client tapdisk-stream tapdisk-diff $(QCOW_UTIL): CFLAGS  += -I$(LIBAIO_DIR) -I$(XEN_LIBXC)
++tapdisk2 tapdisk-stream tapdisk-diff $(QCOW_UTIL): AIOLIBS := -laio
++tapdisk-client tapdisk-stream tapdisk-diff $(QCOW_UTIL): CFLAGS  += -I$(XEN_LIBXC)
+ 
+ ifeq ($(VHD_STATIC),y)
+ td-util: CFLAGS += -static

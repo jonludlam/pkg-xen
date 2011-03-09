@@ -42,7 +42,7 @@
  ifeq ($(CONFIG_Linux),y)
  LIBS            := -luuid
  endif
-+LDFLAGS += $(LDFLAGS_libxenctrl)
++LDFLAGS += $(LDFLAGS_libxenctrl) $(call LDFLAGS_RPATH)
  
  # Get gcc to generate the dependencies for us.
  CFLAGS          += -Wp,-MD,.$(@F).d
