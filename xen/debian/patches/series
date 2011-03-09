@@ -14,7 +14,6 @@ tools-libxl-prefix.diff
 tools-misc-prefix.diff
 tools-misc-rpath.diff
 tools-pygrub-prefix.diff
-tools-pygrub-rpath.diff
 tools-python-prefix.diff
 tools-python-rpath.diff
 tools-xcutils-rpath.diff
