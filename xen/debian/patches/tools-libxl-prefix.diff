@@ -1,6 +1,6 @@
 --- a/tools/libxl/Makefile
 +++ b/tools/libxl/Makefile
-@@ -15,8 +15,8 @@
+@@ -9,8 +9,8 @@
  CFLAGS += -I. -fPIC
  CFLAGS += $(CFLAGS_libxenctrl) $(CFLAGS_libxenguest) $(CFLAGS_libxenstore)
  
@@ -11,31 +11,20 @@
  
  LIBXL_OBJS-y = osdeps.o libxl_paths.o
  LIBXL_OBJS = flexarray.o libxl.o libxl_dom.o libxl_exec.o libxl_xshelp.o libxl_device.o libxl_internal.o xenguest.o libxl_utils.o $(LIBXL_OBJS-y)
-@@ -89,18 +89,19 @@
- 
+@@ -72,13 +72,14 @@
  .PHONY: install
  install: all
--	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
-+	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(BASH_COMPLETION_DIR)
--	$(INSTALL_PROG) xl $(DESTDIR)$(SBINDIR)
--	$(INSTALL_PROG) libxenlight.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)
--	ln -sf libxenlight.so.$(MAJOR).$(MINOR) $(DESTDIR)$(LIBDIR)/libxenlight.so.$(MAJOR)
--	ln -sf libxenlight.so.$(MAJOR) $(DESTDIR)$(LIBDIR)/libxenlight.so
-+	$(INSTALL_PROG) xl $(DESTDIR)$(PRIVATE_BINDIR)
-+	$(INSTALL_PROG) libxenlight.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
-+	ln -sf libxenlight.so.$(MAJOR).$(MINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenlight.so.$(MAJOR)
-+	ln -sf libxenlight.so.$(MAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxenlight.so
+ 	$(INSTALL_PROG) xl $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) libxenlight.so $(DESTDIR)$(LIBDIR)
++	$(INSTALL_PROG) libxenlight.so $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DATA) libxenlight.a $(DESTDIR)$(LIBDIR)
--	$(INSTALL_PROG) libxlutil.so.$(XLUMAJOR).$(XLUMINOR) $(DESTDIR)$(LIBDIR)
--	ln -sf libxlutil.so.$(XLUMAJOR).$(XLUMINOR) $(DESTDIR)$(LIBDIR)/libxlutil.so.$(XLUMAJOR)
--	ln -sf libxlutil.so.$(XLUMAJOR) $(DESTDIR)$(LIBDIR)/libxlutil.so
-+	$(INSTALL_PROG) libxlutil.so.$(XLUMAJOR).$(XLUMINOR) $(DESTDIR)$(PRIVATE_LIBDIR)
-+	ln -sf libxlutil.so.$(XLUMAJOR).$(XLUMINOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxlutil.so.$(XLUMAJOR)
-+	ln -sf libxlutil.so.$(XLUMAJOR) $(DESTDIR)$(PRIVATE_LIBDIR)/libxlutil.so
+-	$(INSTALL_PROG) libxlutil.so $(DESTDIR)$(LIBDIR)
++	$(INSTALL_PROG) libxlutil.so $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DATA) libxlutil.a $(DESTDIR)$(LIBDIR)
  	$(INSTALL_DATA) libxl.h $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) bash-completion $(DESTDIR)$(BASH_COMPLETION_DIR)/xl.sh

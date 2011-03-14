@@ -7,6 +7,7 @@ tools-blktap2-optimize.diff
 tools-flask-abiname.diff
 tools-libfsimage-abiname.diff
 tools-libxc-abiname.diff
+tools-libxl-abiname.diff
 tools-libxl-link.diff
 
 config-prefix.diff
