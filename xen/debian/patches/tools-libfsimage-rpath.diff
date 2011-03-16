@@ -1,8 +1,8 @@
 --- a/tools/libfsimage/Rules.mk
 +++ b/tools/libfsimage/Rules.mk
-@@ -2,6 +2,7 @@
- 
- CFLAGS += -I$(XEN_ROOT)/tools/libfsimage/common/ -Werror
+@@ -3,6 +3,7 @@
+ CFLAGS += -Wno-unknown-pragmas -I$(XEN_ROOT)/tools/libfsimage/common/
+ CFLAGS += -Werror -D_GNU_SOURCE
  LDFLAGS += -L../common/
 +LDFLAGS += $(call LDFLAGS_RPATH,../..)
  

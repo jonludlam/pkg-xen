@@ -1,15 +1,3 @@
---- a/tools/blktap2/Makefile
-+++ b/tools/blktap2/Makefile
-@@ -1,9 +1,6 @@
- XEN_ROOT = ../..
- include $(XEN_ROOT)/tools/Rules.mk
- 
--CFLAGS  += $(CFLAGS_libxenctrl)
--LDFLAGS += $(LDFLAGS_libxenctrl)
--
- SUBDIRS-y :=
- SUBDIRS-y += include
- SUBDIRS-y += lvm
 --- a/tools/blktap2/vhd/Makefile
 +++ b/tools/blktap2/vhd/Makefile
 @@ -12,6 +12,7 @@
@@ -22,8 +10,14 @@
  CFLAGS            += -fPIC
 --- a/tools/blktap2/vhd/lib/Makefile
 +++ b/tools/blktap2/vhd/lib/Makefile
-@@ -8,9 +8,7 @@
+@@ -2,15 +2,9 @@
+ BLKTAP_ROOT := ../..
+ include $(XEN_ROOT)/tools/Rules.mk
  
+-LIBVHD-MAJOR     = 1.0
+-LIBVHD-MINOR     = 0
+-LIBVHD-SONAME    = libvhd.so.$(LIBVHD-MAJOR)
+-
  LVM-UTIL-OBJ    := $(BLKTAP_ROOT)/lvm/lvm-util.o
  
 -LIBVHD-BUILD    := libvhd.a
@@ -33,7 +27,7 @@
  
  CFLAGS          += -Werror
  CFLAGS          += -Wno-unused
-@@ -18,10 +16,12 @@
+@@ -18,10 +12,12 @@
  CFLAGS          += -D_GNU_SOURCE
  CFLAGS          += -fPIC
  CFLAGS          += -g
@@ -46,34 +40,91 @@
  
  # Get gcc to generate the dependencies for us.
  CFLAGS          += -Wp,-MD,.$(@F).d
-@@ -48,24 +48,19 @@
+@@ -48,24 +44,22 @@
  LIB-OBJS         = $(patsubst %.c,%.o,$(LIB-SRCS))
  LIB-OBJS        += $(LVM-UTIL-OBJ)
  
 -LIBVHD           = libvhd.a libvhd.so.$(LIBVHD-MAJOR).$(LIBVHD-MINOR)
-+LIBVHD           = libvhd.so
++LIBVHD           = libvhd.a libvhd.so
  
  all: build
  
- build: $(LIBVHD-BUILD)
+-build: $(LIBVHD-BUILD)
++build: $(LIBVHD)
++
++libvhd.so: $(LIB-OBJS)
++	$(CC) $(CFLAGS) $(SHLIB_LDFLAGS) \
++		$(LDFLAGS) -o $@ $(LIBS) $^
  
--libvhd.a: $(LIB-OBJS)
--	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG),$(LIBVHD-SONAME) $(SHLIB_CFLAGS) \
+ libvhd.a: $(LIB-OBJS)
+-	$(CC) $(CFLAGS) -Wl,$(SONAME_LDFLAG),$(LIBVHD-SONAME) $(SHLIB_LDFLAGS) \
 -		$(LDFLAGS) -o libvhd.so.$(LIBVHD-MAJOR).$(LIBVHD-MINOR) $(LIBS) $^
 -	ln -sf libvhd.so.$(LIBVHD-MAJOR).$(LIBVHD-MINOR) libvhd.so.$(LIBVHD-MAJOR)
 -	ln -sf libvhd.so.$(LIBVHD-MAJOR) libvhd.so
--	$(AR) rc $@ $^
-+libvhd.so: $(LIB-OBJS)
-+	$(CC) $(CFLAGS) $(SHLIB_CFLAGS) \
-+		$(LDFLAGS) -o $@ $(LIBS) $^
+ 	$(AR) rc $@ $^
  
  install: all
--	$(INSTALL_DIR) -p $(DESTDIR)$(INST-DIR)
--	$(INSTALL_DATA) $(LIBVHD) $(DESTDIR)$(INST-DIR)
+ 	$(INSTALL_DIR) -p $(DESTDIR)$(INST-DIR)
+ 	$(INSTALL_PROG) $(LIBVHD) $(DESTDIR)$(INST-DIR)
 -	ln -sf libvhd.so.$(LIBVHD-MAJOR).$(LIBVHD-MINOR) $(DESTDIR)$(INST-DIR)/libvhd.so.$(LIBVHD-MAJOR)
 -	ln -sf libvhd.so.$(LIBVHD-MAJOR) $(DESTDIR)$(INST-DIR)/libvhd.so
-+	$(INSTALL_DIR) -p $(DESTDIR)$(PRIVATE_LIBDIR)
-+	$(INSTALL_DATA) $(LIBVHD) $(DESTDIR)$(PRIVATE_LIBDIR)
  
  clean:
  	rm -rf *.a *.so* *.o *~ $(DEPS) $(LIBVHD)
+--- a/tools/blktap2/control/Makefile
++++ b/tools/blktap2/control/Makefile
+@@ -1,10 +1,7 @@
+ XEN_ROOT := ../../../
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+-MAJOR              = 1.0
+-MINOR              = 0
+ LIBNAME            = libblktapctl
+-LIBSONAME          = $(LIBNAME).so.$(MAJOR)
+ 
+ IBIN               = tap-ctl
+ 
+@@ -41,35 +38,29 @@
+ PICS = $(CTL_PICS)
+ 
+ LIB_STATIC = $(LIBNAME).a
+-LIB_SHARED = $(LIBSONAME).$(MINOR)
++LIB_SHARED = $(LIBNAME).so
+ IBIN = tap-ctl
+ 
+ all: build
+ 
+ build: $(IBIN) $(LIB_STATIC) $(LIB_SHARED)
+ 
+-$(LIBNAME).so: $(LIBSONAME)
+-	ln -sf $< $@
+-
+-$(LIBSONAME): $(LIB_SHARED)
+-	ln -sf $< $@
+-
+ tap-ctl: tap-ctl.o $(LIBNAME).so
+-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
++	$(CC) $(CFLAGS) $(LDFLAGS) $(call LDFLAGS_RPATH,../lib) -o $@ $^
+ 
+ $(LIB_STATIC): $(CTL_OBJS)
+ 	$(AR) r $@ $^
+ 
+ $(LIB_SHARED): $(CTL_PICS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC  -Wl,$(SONAME_LDFLAG) -Wl,$(LIBSONAME) $(SHLIB_LDFLAGS) -rdynamic $^ -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) -fPIC $(SHLIB_LDFLAGS) -rdynamic $^ -o $@
+ 
+ install: $(IBIN) $(LIB_STATIC) $(LIB_SHARED)
+-	$(INSTALL_DIR) -p $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) $(IBIN) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
++	$(INSTALL_PROG) $(IBIN) $(DESTDIR)$(PRIVATE_BINDIR)
+ 	$(INSTALL_DATA) $(LIB_STATIC) $(DESTDIR)$(LIBDIR)
+-	$(INSTALL_PROG) $(LIB_SHARED) $(DESTDIR)$(LIBDIR)
+-	ln -sf $(LIBSONAME) $(DESTDIR)$(LIBDIR)/$(LIBNAME).so
+-	ln -sf $(LIB_SHARED) $(DESTDIR)$(LIBDIR)/$(LIBSONAME)
++	$(INSTALL_PROG) $(LIB_SHARED) $(DESTDIR)$(PRIVATE_LIBDIR)
+ 
+ clean:
+ 	rm -f $(OBJS) $(PICS) $(DEPS) $(IBIN) $(LIB_STATIC) $(LIB_SHARED)

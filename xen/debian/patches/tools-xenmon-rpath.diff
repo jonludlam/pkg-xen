@@ -3,7 +3,7 @@
 @@ -17,6 +17,7 @@
  CFLAGS  += -I $(XEN_XC)
  CFLAGS  += $(CFLAGS_libxenctrl)
- LDFLAGS += $(LDFLAGS_libxenctrl)
+ LDLIBS  += $(LDLIBS_libxenctrl)
 +LDFLAGS += $(call LDFLAGS_RPATH,../lib)
  
  BIN = xentrace_setmask xenbaked

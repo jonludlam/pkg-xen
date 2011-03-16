@@ -1,14 +1,14 @@
 --- a/tools/blktap2/drivers/Makefile
 +++ b/tools/blktap2/drivers/Makefile
-@@ -15,7 +15,6 @@
- CFLAGS    += -I../lib -I../../libxc
- CFLAGS    += -I../include -I../../include
+@@ -14,7 +14,6 @@
+ CFLAGS    += -fno-strict-aliasing
+ CFLAGS    += -I$(BLKTAP_ROOT)/include -I$(BLKTAP_ROOT)/drivers
  CFLAGS    += $(CFLAGS_libxenctrl)
 -CFLAGS    += -I $(LIBAIO_DIR)
  CFLAGS    += -I $(MEMSHR_DIR)
  CFLAGS    += -D_GNU_SOURCE
  CFLAGS    += -DUSE_NFS_LOCKS
-@@ -53,7 +52,6 @@
+@@ -40,7 +39,6 @@
  
  $(REMUS-OBJS): CFLAGS += -I$(XEN_XENSTORE)
  
@@ -16,7 +16,7 @@
  MEMSHR_DIR = $(XEN_ROOT)/tools/memshr
  
  MEMSHRLIBS :=
-@@ -62,8 +60,8 @@
+@@ -49,8 +47,8 @@
  MEMSHRLIBS += $(MEMSHR_DIR)/libmemshr.a
  endif
  
@@ -27,3 +27,13 @@
  
  ifeq ($(VHD_STATIC),y)
  td-util: CFLAGS += -static
+--- a/tools/Rules.mk
++++ b/tools/Rules.mk
+@@ -35,6 +35,7 @@
+ ifeq ($(LIBXL_BLKTAP),y)
+ CFLAGS_libblktapctl = -I$(XEN_BLKTAP2)/control -I$(XEN_BLKTAP2)/include $(CFLAGS_include)
+ LDLIBS_libblktapctl = -L$(XEN_BLKTAP2)/control -lblktapctl
++LDRPATH_libblktapctl = -Wl,-rpath-link,$(XEN_BLKTAP2)/control
+ else
+ CFLAGS_libblktapctl =
+ LDLIBS_libblktapctl =

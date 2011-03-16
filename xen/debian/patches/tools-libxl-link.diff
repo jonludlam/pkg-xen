@@ -1,53 +1,60 @@
 --- a/tools/libxl/Makefile
 +++ b/tools/libxl/Makefile
-@@ -9,7 +9,8 @@
+@@ -9,9 +9,12 @@
  CFLAGS += -I. -fPIC
- CFLAGS += $(CFLAGS_libxenctrl) $(CFLAGS_libxenguest) $(CFLAGS_libxenstore)
+ CFLAGS += $(CFLAGS_libxenctrl) $(CFLAGS_libxenguest) $(CFLAGS_libxenstore) $(CFLAGS_libblktapctl)
  
--LIBS = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore)
-+LDFLAGS_XL =  -Wl,-rpath-link,$(XEN_LIBXC),-rpath-link,$(XEN_XENSTORE)
-+LDFLAGS_LIBXL = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore)
+-LIBS = $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest) $(LDLIBS_libxenstore) $(LDLIBS_libblktapctl) $(UTIL_LIBS)
++LDLIBS_XL =  $(LDLIBS_libxenctrl)
++LDLIBS_XL += -Wl,-rpath-link,$(XEN_LIBXC),-rpath-link,$(XEN_XENSTORE) $(LDRPATH_libblktapctl)
++LDLIBS_LIBXL = $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest) $(LDLIBS_libxenstore) $(LDLIBS_libblktapctl)
+ ifeq ($(CONFIG_Linux),y)
+-LIBS += -luuid
++LDLIBS_XL += -luuid
++LDLIBS_LIBXL += -lutil
+ endif
  
- LIBXL_OBJS-y = osdeps.o libxl_paths.o
- LIBXL_OBJS = flexarray.o libxl.o libxl_dom.o libxl_exec.o libxl_xshelp.o libxl_device.o libxl_internal.o xenguest.o libxl_utils.o $(LIBXL_OBJS-y)
-@@ -18,10 +19,8 @@
+ LIBXL_OBJS-y = osdeps.o libxl_paths.o libxl_bootloader.o flexarray.o
+@@ -32,12 +35,10 @@
  AUTOSRCS= libxlu_cfg_y.c libxlu_cfg_l.c
  LIBXLU_OBJS = libxlu_cfg_y.o libxlu_cfg_l.o libxlu_cfg.o
  
 -CLIENTS = xl
 -
+ XL_OBJS = xl.o xl_cmdimpl.o xl_cmdtable.o
+ 
  .PHONY: all
 -all: $(CLIENTS) libxenlight.so libxenlight.a libxlutil.so libxlutil.a \
 +all: xl libxenlight.so libxenlight.a libxlutil.so libxlutil.a \
  	$(AUTOSRCS) $(AUTOINCS)
  
- $(AUTOINCS): $(AUTOSRCS)
-@@ -47,7 +46,7 @@
- libxl_paths.c: _libxl_paths.h
+ $(LIBXLU_OBJS): $(AUTOINCS)
+@@ -69,7 +70,7 @@
+ 	mv __libxl_$*.c _libxl_$*.c
  
  libxenlight.so: $(LIBXL_OBJS)
--	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_LIBXL) $(SHLIB_CFLAGS) -o $@ $^
+-	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_LDFLAGS) -o $@ $^
++	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS_LIBXL) $(SHLIB_LDFLAGS) -o $@ $^
  
  libxenlight.a: $(LIBXL_OBJS)
  	$(AR) rcs libxenlight.a $^
-@@ -67,8 +66,8 @@
- xl_cmdtable.o: xl_cmdtable.c
- 	$(CC) $(CFLAGS) -c xl_cmdtable.c
+@@ -80,8 +81,8 @@
+ libxlutil.a: $(LIBXLU_OBJS)
+ 	$(AR) rcs libxlutil.a $^
  
--$(CLIENTS): xl.o xl_cmdimpl.o xl_cmdtable.o libxlutil.so libxenlight.so
+-$(CLIENTS): $(XL_OBJS) libxlutil.so libxenlight.so
 -	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-+xl: xl.o xl_cmdimpl.o xl_cmdtable.o libxlutil.so libxenlight.so
-+	$(CC) $(LDFLAGS) -o $@ $^ $(LDFLAGS_XL)
++xl: $(XL_OBJS) libxlutil.so libxenlight.so
++	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS_XL)
  
  .PHONY: install
  install: all
-@@ -86,7 +85,7 @@
+@@ -99,7 +100,7 @@
  
  .PHONY: clean
  clean:
 -	$(RM) -f _*.h *.o *.so* *.a $(CLIENTS) $(DEPS)
 +	$(RM) -f _*.h *.o *.so* *.a xl $(DEPS)
+ 	$(RM) -f _*.c *.pyc _libxl_paths.*.tmp
  #	$(RM) -f $(AUTOSRCS) $(AUTOINCS)
  
- distclean: clean

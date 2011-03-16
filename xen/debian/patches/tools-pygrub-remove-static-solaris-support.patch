@@ -8,7 +8,7 @@
  
  import curses, _curses, curses.wrapper, curses.textpad, curses.ascii
  import getopt
-@@ -578,48 +577,6 @@
+@@ -585,48 +584,6 @@
  
      return grubcfg
  
@@ -57,15 +57,15 @@
  def sniff_netware(fs, cfg):
      if not fs.file_exists("/nwserver/xnloader.sys"):
          return cfg
-@@ -706,10 +663,7 @@
-     else:
-         fs = fsimage.open(file, get_fs_offset(file))
+@@ -751,10 +708,7 @@
+         try:
+             fs = fsimage.open(file, offset, bootfsoptions)
  
--    chosencfg = sniff_solaris(fs, incfg)
+-            chosencfg = sniff_solaris(fs, incfg)
 -
--    if not chosencfg["kernel"]:
--        chosencfg = sniff_netware(fs, incfg)
-+    chosencfg = sniff_netware(fs, incfg)
+-            if not chosencfg["kernel"]:
+-                chosencfg = sniff_netware(fs, incfg)
++            chosencfg = sniff_netware(fs, incfg)
  
-     if not chosencfg["kernel"]:
-         chosencfg = run_grub(file, entry, fs, incfg["args"])
+             if not chosencfg["kernel"]:
+                 chosencfg = run_grub(file, entry, fs, incfg["args"])

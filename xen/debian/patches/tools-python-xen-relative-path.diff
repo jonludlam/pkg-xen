@@ -1,6 +1,6 @@
 --- a/tools/python/xen/xm/create.py
 +++ b/tools/python/xen/xm/create.py
-@@ -704,45 +704,39 @@
+@@ -708,45 +708,39 @@
          return None
      config_image = [ vals.builder ]
      if vals.kernel:
@@ -56,7 +56,7 @@
          else:
              raise ValueError('Cannot find loader "%s"' % vals.loader)
      if vals.cmdline_ip:
-@@ -1072,7 +1066,7 @@
+@@ -1076,7 +1070,7 @@
      args = [ 'acpi', 'apic',
               'boot',
               'cpuid', 'cpuid_check',
@@ -65,7 +65,7 @@
               'fda', 'fdb',
               'gfx_passthru', 'guest_os_type',
               'hap', 'hpet',
-@@ -1094,6 +1088,8 @@
+@@ -1098,6 +1092,8 @@
      for a in args:
          if a in vals.__dict__ and vals.__dict__[a] is not None:
              config_image.append([a, vals.__dict__[a]])
@@ -74,7 +74,7 @@
      if vals.vncpasswd is not None:
          config_image.append(['vncpasswd', vals.vncpasswd])
  
-@@ -1160,10 +1156,9 @@
+@@ -1166,10 +1162,9 @@
  
      config_image = configure_image(vals)
      if vals.bootloader:
@@ -109,7 +109,7 @@
          log.debug("[xc_restore]: %s", string.join(cmd))
 --- a/tools/python/xen/xend/XendConfig.py
 +++ b/tools/python/xen/xend/XendConfig.py
-@@ -480,11 +480,11 @@
+@@ -493,11 +493,11 @@
  
          if self.is_hvm() or self.has_rfb():
              if 'device_model' not in self['platform']:
@@ -120,10 +120,10 @@
                  self['platform']['device_model'] = \
 -                    auxbin.pathTo(self['platform']['device_model'])
 +                    auxbin.path_bin(self['platform']['device_model'])
-             if not os.path.exists(self['platform']['device_model']):
-                 raise VmError("device model '%s' not found" % str(self['platform']['device_model']))
- 
-@@ -511,14 +511,14 @@
+             # If the device_model is not set the os.path.exists() would raise
+             # an exception so we return our error message instead if applicable
+             if not self['platform']['device_model']:
+@@ -528,14 +528,14 @@
                  # Old configs may have hvmloader set as PV_kernel param
                  if self.has_key('PV_kernel') and self['PV_kernel'] != '':
                      if self['PV_kernel'] == 'hvmloader':
@@ -141,7 +141,7 @@
              if not os.path.exists(self['platform']['loader']):
                  raise VmError("kernel '%s' not found" % str(self['platform']['loader']))
  
-@@ -1638,7 +1638,7 @@
+@@ -1662,7 +1662,7 @@
                      # is invoked for pvfb services
                      if 'device_model' not in target['platform']:
                          target['platform']['device_model'] = \
@@ -152,7 +152,7 @@
                      # as well that is not really exposed to Xen API
 --- a/tools/python/xen/xend/XendDomainInfo.py
 +++ b/tools/python/xen/xend/XendDomainInfo.py
-@@ -3215,7 +3215,7 @@
+@@ -3233,7 +3233,7 @@
          else:
              # Boot using bootloader
              if not blexec or blexec == 'pygrub':

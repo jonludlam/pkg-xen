@@ -4,15 +4,15 @@
  CFLAGS   += -I $(XEN_XC)
  CFLAGS   += -I ./
  CFLAGS   += $(CFLAGS_libxenctrl) $(CFLAGS_libxenstore)
--LDFLAGS  += $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore)
-+LDFLAGS  += $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH,../lib)
+-LDLIBS  += $(LDLIBS_libxenctrl) $(LDLIBS_libxenstore)
++LDLIBS  += $(LDLIBS_libxenctrl) $(LDLIBS_libxenstore) $(call LDFLAGS_RPATH,../lib)
  
  POLICY    = default
  
-@@ -30,8 +30,8 @@
- 	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^
+@@ -28,8 +28,8 @@
  
  install: all
+ 	$(INSTALL_DIR) $(DESTDIR)/var/lib/xen/xenpaging
 -	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
 -	$(INSTALL_PROG) $(IBINS) $(DESTDIR)$(SBINDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)

@@ -1,14 +1,14 @@
 --- a/tools/console/Makefile
 +++ b/tools/console/Makefile
-@@ -8,6 +8,7 @@
- CFLAGS  += $(CFLAGS_libxenstore)
- LDFLAGS += $(LDFLAGS_libxenctrl)
- LDFLAGS += $(LDFLAGS_libxenstore)
+@@ -11,6 +11,7 @@
+ LDLIBS += $(UTIL_LIBS)
+ LDLIBS += $(SOCKET_LIBS)
+ LDLIBS += -lrt
 +LDFLAGS += $(call LDFLAGS_RPATH,../lib)
  
  BIN      = xenconsoled xenconsole
  
-@@ -29,9 +30,7 @@
+@@ -30,9 +31,7 @@
  
  .PHONY: install
  install: $(BIN)

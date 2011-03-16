@@ -36,9 +36,9 @@ tools-xentrace-prefix.diff
 tools-xentrace-rpath.diff
 
 tools-python-xen-relative-path.diff
-tools-misc-xend-startup.diff
 
 tools-disable.diff
+tools-firmware-etherboot-packaged.diff
 
 tools-pygrub-remove-static-solaris-support.patch
 
@@ -46,6 +46,3 @@ tools-include-install.diff
 tools-xenmon-install.diff
 
 tools-python-shebang.diff
-
-upstream-21547:ca2738f258f8
-upstream-22765:0dbad563a659

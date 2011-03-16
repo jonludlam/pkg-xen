@@ -1,6 +1,13 @@
 --- a/tools/Makefile
 +++ b/tools/Makefile
-@@ -20,9 +20,7 @@
+@@ -12,28 +12,19 @@
+ SUBDIRS-y += hotplug
+ SUBDIRS-y += xentrace
+ SUBDIRS-$(CONFIG_XCUTILS) += xcutils
+-SUBDIRS-$(CONFIG_X86) += firmware
+ SUBDIRS-$(ACM_SECURITY) += security
+ SUBDIRS-y += console
+ SUBDIRS-y += xenmon
  SUBDIRS-$(VTPM_TOOLS) += vtpm_manager
  SUBDIRS-$(VTPM_TOOLS) += vtpm
  SUBDIRS-y += xenstat
@@ -10,11 +17,15 @@
  SUBDIRS-$(CONFIG_Linux) += blktap2
  SUBDIRS-$(CONFIG_NetBSD) += libaio
  SUBDIRS-$(CONFIG_NetBSD) += blktap2
-@@ -31,7 +29,6 @@
+ SUBDIRS-$(CONFIG_NetBSD) += xenbackendd
+ SUBDIRS-y += libfsimage
  SUBDIRS-$(LIBXENAPI_BINDINGS) += libxen
- SUBDIRS-$(CONFIG_Linux) += fs-back
- SUBDIRS-$(CONFIG_NetBSD) += fs-back
+-
+-# do not recurse in to a dir we are about to delete
+-ifneq "$(MAKECMDGOALS)" "distclean"
 -SUBDIRS-$(CONFIG_IOEMU) += ioemu-dir
+-endif
+-
  SUBDIRS-y += xenpmd
  SUBDIRS-y += libxl
  SUBDIRS-y += remus

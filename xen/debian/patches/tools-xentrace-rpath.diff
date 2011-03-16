@@ -3,7 +3,7 @@
 @@ -5,6 +5,7 @@
  
  CFLAGS  += $(CFLAGS_libxenctrl)
- LDFLAGS += $(LDFLAGS_libxenctrl)
+ LDLIBS += $(LDLIBS_libxenctrl)
 +LDFLAGS += $(call LDFLAGS_RPATH,../lib)
  
  HDRS     = $(wildcard *.h)

@@ -1,30 +1,45 @@
 --- a/tools/libxl/Makefile
 +++ b/tools/libxl/Makefile
-@@ -9,8 +9,8 @@
- CFLAGS += -I. -fPIC
- CFLAGS += $(CFLAGS_libxenctrl) $(CFLAGS_libxenguest) $(CFLAGS_libxenstore)
+@@ -16,6 +16,8 @@
+ LDLIBS_XL += -luuid
+ LDLIBS_LIBXL += -lutil
+ endif
++LDFLAGS_XL = $(call LDFLAGS_RPATH,../lib)
++LDFLAGS_LIBXL = $(call LDFLAGS_RPATH)
  
--LDFLAGS_XL =  -Wl,-rpath-link,$(XEN_LIBXC),-rpath-link,$(XEN_XENSTORE)
--LDFLAGS_LIBXL = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore)
-+LDFLAGS_XL =  -Wl,-rpath-link,$(XEN_LIBXC),-rpath-link,$(XEN_XENSTORE) $(call LDFLAGS_RPATH,../lib)
-+LDFLAGS_LIBXL = $(LDFLAGS_libxenctrl) $(LDFLAGS_libxenguest) $(LDFLAGS_libxenstore) $(call LDFLAGS_RPATH)
+ LIBXL_OBJS-y = osdeps.o libxl_paths.o libxl_bootloader.o flexarray.o
+ ifeq ($(LIBXL_BLKTAP),y)
+@@ -70,7 +72,7 @@
+ 	mv __libxl_$*.c _libxl_$*.c
  
- LIBXL_OBJS-y = osdeps.o libxl_paths.o
- LIBXL_OBJS = flexarray.o libxl.o libxl_dom.o libxl_exec.o libxl_xshelp.o libxl_device.o libxl_internal.o xenguest.o libxl_utils.o $(LIBXL_OBJS-y)
-@@ -72,13 +72,14 @@
+ libxenlight.so: $(LIBXL_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS_LIBXL) $(SHLIB_LDFLAGS) -o $@ $^
++	$(CC) $(CFLAGS) $(LDFLAGS) $(LDFLAGS_LIBXL) $(LDLIBS_LIBXL) $(SHLIB_LDFLAGS) -o $@ $^
+ 
+ libxenlight.a: $(LIBXL_OBJS)
+ 	$(AR) rcs libxenlight.a $^
+@@ -82,18 +84,19 @@
+ 	$(AR) rcs libxlutil.a $^
+ 
+ xl: $(XL_OBJS) libxlutil.so libxenlight.so
+-	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS_XL)
++	$(CC) $(LDFLAGS) $(LDFLAGS_XL) -o $@ $^ $(LDLIBS_XL)
+ 
  .PHONY: install
  install: all
- 	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
++	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(LIBDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(BASH_COMPLETION_DIR)
- 	$(INSTALL_PROG) xl $(DESTDIR)$(SBINDIR)
+-	$(INSTALL_PROG) xl $(DESTDIR)$(SBINDIR)
 -	$(INSTALL_PROG) libxenlight.so $(DESTDIR)$(LIBDIR)
++	$(INSTALL_PROG) xl $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_PROG) libxenlight.so $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DATA) libxenlight.a $(DESTDIR)$(LIBDIR)
 -	$(INSTALL_PROG) libxlutil.so $(DESTDIR)$(LIBDIR)
 +	$(INSTALL_PROG) libxlutil.so $(DESTDIR)$(PRIVATE_LIBDIR)
  	$(INSTALL_DATA) libxlutil.a $(DESTDIR)$(LIBDIR)
- 	$(INSTALL_DATA) libxl.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) libxl.h _libxl_types.h libxl_uuid.h $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) bash-completion $(DESTDIR)$(BASH_COMPLETION_DIR)/xl.sh

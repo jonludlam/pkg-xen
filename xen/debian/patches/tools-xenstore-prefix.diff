@@ -1,21 +1,28 @@
 --- a/tools/xenstore/Makefile
 +++ b/tools/xenstore/Makefile
-@@ -95,18 +95,19 @@
+@@ -47,7 +47,7 @@
+ endif
+  
+ xenstored: $(XENSTORED_OBJS)
+-	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS_libxenctrl) $(SOCKET_LIBS) -o $@
++	$(CC) $(CFLAGS) $(LDFLAGS) $^ $(LDLIBS_libxenctrl) $(call LDFLAGS_RPATH,../lib) $(SOCKET_LIBS) -o $@
+ 
+ $(CLIENTS): xenstore
+ 	ln -f xenstore $@
+@@ -92,16 +92,16 @@
  
  .PHONY: install
  install: all
+-	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
 +	$(INSTALL_DIR) $(DESTDIR)$(PRIVATE_BINDIR)
- ifneq ($(CONFIG_OCAML_XENSTORED),y)
+ 	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
+ 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DIR) $(DESTDIR)/var/run/xenstored
  	$(INSTALL_DIR) $(DESTDIR)/var/lib/xenstored
 -	$(INSTALL_PROG) xenstored $(DESTDIR)$(SBINDIR)
-+	$(INSTALL_PROG) xenstored $(DESTDIR)$(PRIVATE_BINDIR)
- endif
- 	$(INSTALL_DIR) $(DESTDIR)$(BINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)$(SBINDIR)
- 	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
 -	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(BINDIR)
 -	$(INSTALL_PROG) xenstore $(DESTDIR)$(BINDIR)
++	$(INSTALL_PROG) xenstored $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_PROG) xenstore-control $(DESTDIR)$(PRIVATE_BINDIR)
 +	$(INSTALL_PROG) xenstore $(DESTDIR)$(SBINDIR)
  	set -e ; for c in $(CLIENTS) ; do \

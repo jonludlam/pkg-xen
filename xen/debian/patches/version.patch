@@ -31,7 +31,7 @@
  include/asm-$(TARGET_ARCH)/asm-offsets.h: arch/$(TARGET_ARCH)/asm-offsets.s
 --- a/xen/common/kernel.c
 +++ b/xen/common/kernel.c
-@@ -177,8 +177,8 @@
+@@ -226,8 +226,8 @@
      {
          struct xen_compile_info info;
          safe_strcpy(info.compiler,       xen_compiler());
@@ -85,7 +85,7 @@
 -}
 --- a/xen/drivers/char/console.c
 +++ b/xen/drivers/char/console.c
-@@ -572,14 +572,11 @@
+@@ -573,14 +573,11 @@
      serial_set_rx_handler(sercon_handle, serial_rx);
  
      /* HELLO WORLD --- start-of-day banner text. */

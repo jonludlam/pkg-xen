@@ -10,12 +10,12 @@
 -XLUMAJOR = 1.0
 -XLUMINOR = 0
 -
- CFLAGS += -Werror
+ CFLAGS += -Werror -Wno-format-zero-length -Wmissing-declarations
  CFLAGS += -I. -fPIC
- CFLAGS += $(CFLAGS_libxenctrl) $(CFLAGS_libxenguest) $(CFLAGS_libxenstore)
-@@ -52,26 +46,14 @@
- 
- libxl_paths.c: _libxl_paths.h
+ CFLAGS += $(CFLAGS_libxenctrl) $(CFLAGS_libxenguest) $(CFLAGS_libxenstore) $(CFLAGS_libblktapctl)
+@@ -74,26 +68,14 @@
+ 	mv __libxl_$*.h _libxl_$*.h
+ 	mv __libxl_$*.c _libxl_$*.c
  
 -libxenlight.so: libxenlight.so.$(MAJOR)
 -	ln -sf $< $@
@@ -24,9 +24,9 @@
 -	ln -sf $< $@
 -
 -libxenlight.so.$(MAJOR).$(MINOR): $(LIBXL_OBJS)
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenlight.so.$(MAJOR) $(SHLIB_CFLAGS) -o $@ $^
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxenlight.so.$(MAJOR) $(SHLIB_LDFLAGS) -o $@ $^
 +libxenlight.so: $(LIBXL_OBJS)
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_LDFLAGS) -o $@ $^
  
  libxenlight.a: $(LIBXL_OBJS)
  	$(AR) rcs libxenlight.a $^
@@ -38,13 +38,13 @@
 -	ln -sf $< $@
 -
 -libxlutil.so.$(XLUMAJOR).$(XLUMINOR): $(LIBXLU_OBJS)
--	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxlutil.so.$(XLUMAJOR) $(SHLIB_CFLAGS) -o $@ $^
+-	$(CC) $(CFLAGS) $(LDFLAGS) -Wl,$(SONAME_LDFLAG) -Wl,libxlutil.so.$(XLUMAJOR) $(SHLIB_LDFLAGS) -o $@ $^
 +libxlutil.so: $(LIBXLU_OBJS)
-+	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_CFLAGS) -o $@ $^
++	$(CC) $(CFLAGS) $(LDFLAGS) $(SHLIB_LDFLAGS) -o $@ $^
  
  libxlutil.a: $(LIBXLU_OBJS)
  	$(AR) rcs libxlutil.a $^
-@@ -95,13 +77,9 @@
+@@ -108,13 +90,9 @@
  	$(INSTALL_DIR) $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DIR) $(DESTDIR)$(BASH_COMPLETION_DIR)
  	$(INSTALL_PROG) xl $(DESTDIR)$(SBINDIR)
@@ -58,5 +58,5 @@
 -	ln -sf libxlutil.so.$(XLUMAJOR) $(DESTDIR)$(LIBDIR)/libxlutil.so
 +	$(INSTALL_PROG) libxlutil.so $(DESTDIR)$(LIBDIR)
  	$(INSTALL_DATA) libxlutil.a $(DESTDIR)$(LIBDIR)
- 	$(INSTALL_DATA) libxl.h $(DESTDIR)$(INCLUDEDIR)
+ 	$(INSTALL_DATA) libxl.h _libxl_types.h libxl_uuid.h $(DESTDIR)$(INCLUDEDIR)
  	$(INSTALL_DATA) bash-completion $(DESTDIR)$(BASH_COMPLETION_DIR)/xl.sh

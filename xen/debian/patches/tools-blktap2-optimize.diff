@@ -7,4 +7,4 @@
 -CFLAGS    += -Werror -g -O0
  CFLAGS    += -Wno-unused
  CFLAGS    += -fno-strict-aliasing
- CFLAGS    += -I../lib -I../../libxc
+ CFLAGS    += -I$(BLKTAP_ROOT)/include -I$(BLKTAP_ROOT)/drivers
