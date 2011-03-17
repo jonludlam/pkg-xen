@@ -66,6 +66,7 @@ $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/setup-hyperviso
 
 $(STAMPS_DIR)/build-utils_$(ARCH) \
 $(STAMPS_DIR)/install-utils_$(ARCH): CONFIG = \
+		debug=n \
 		XEN_COMPILE_ARCH=$(XEN_ARCH) \
 		XEN_TARGET_ARCH=$(XEN_ARCH) \
 		XEN_VERSION=$(VERSION) \
