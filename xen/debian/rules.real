@@ -27,13 +27,9 @@ build-flavour: $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
 setup-arch: $(STAMPS_DIR)/setup-utils_$(ARCH)
 setup-flavour: $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR)
 
-$(STAMPS_DIR)/source:
-	QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
-	@$(stamp)
-
 $(STAMPS_DIR)/setup-docs: SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-docs: DIR=$(BUILD_DIR)/build-docs
-$(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/source
+$(STAMPS_DIR)/setup-docs:
 	@rm -rf $(DIR)
 	mkdir -p $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
@@ -41,7 +37,7 @@ $(STAMPS_DIR)/setup-docs: $(STAMPS_DIR)/source
 
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): DIR=$(BUILD_DIR)/build-hypervisor_$(ARCH)_$(FLAVOUR)
-$(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
+$(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR):
 	@rm -rf $(DIR)
 	mkdir -p $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
@@ -50,7 +46,7 @@ $(STAMPS_DIR)/setup-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/source
 
 $(STAMPS_DIR)/setup-utils_$(ARCH): SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup-utils_$(ARCH): DIR=$(BUILD_DIR)/build-utils_$(ARCH)
-$(STAMPS_DIR)/setup-utils_$(ARCH): $(STAMPS_DIR)/source
+$(STAMPS_DIR)/setup-utils_$(ARCH):
 	@rm -rf $(DIR)
 	mkdir -p $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
