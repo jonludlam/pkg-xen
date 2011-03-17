@@ -1,4 +1,4 @@
-xen (4.1.0~rc6-1) UNRELEASED; urgency=low
+xen (4.1.0~rc6-1) unstable; urgency=low
 
   * New upstream release candidate.
   * Build documentation using pdflatex.
@@ -11,8 +11,9 @@ xen (4.1.0~rc6-1) UNRELEASED; urgency=low
     - Fix linking of blktap2 binaries.
     - Remove optimization setting.
   * Temporarily disable hvmloader, wants to download ipxe.
+  * Remove xenstored pid check from xl.
 
- -- Bastian Blank <waldi@debian.org>  Tue, 08 Mar 2011 13:21:34 +0100
+ -- Bastian Blank <waldi@debian.org>  Thu, 17 Mar 2011 16:12:45 +0100
 
 xen (4.0.1-2) unstable; urgency=low
 
