@@ -37,6 +37,7 @@ tools-xentrace-rpath.diff
 
 tools-python-xen-relative-path.diff
 tools-misc-xend-startup.diff
+tools-libxl-nopidfile.diff
 
 tools-disable.diff
 tools-firmware-etherboot-packaged.diff
