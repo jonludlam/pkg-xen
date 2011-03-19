@@ -1,3 +1,9 @@
+xen-common (4.0.0-2) UNRELEASED; urgency=low
+
+  * Use /var/run for xenstore db.
+
+ -- Bastian Blank <waldi@debian.org>  Sat, 19 Mar 2011 12:15:03 +0100
+
 xen-common (4.0.0-1) unstable; urgency=low
 
   * New upstream version.

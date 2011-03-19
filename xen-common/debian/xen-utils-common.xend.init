@@ -90,6 +90,7 @@ xenstored_start()
 	start-stop-daemon --start --quiet --pidfile "$XENSTORED_PIDFILE" --exec "$XENSTORED" --test > /dev/null \
 		|| return 1
 	[ -d "$XENSTORED_DIR" ] || mkdir -p "$XENSTORED_DIR"
+	export XENSTORED_ROOTDIR="$XENSTORED_DIR"
 	start-stop-daemon --start --quiet --pidfile "$XENSTORED_PIDFILE" --exec "$XENSTORED" -- \
 		$XENSTORED_ARGS --pid-file="$XENSTORED_PIDFILE" \
 		|| return 2
