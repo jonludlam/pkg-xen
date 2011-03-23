@@ -2,6 +2,7 @@ xen-common (4.1.0~rc6-1) UNRELEASED; urgency=low
 
   * New upstream release candidate.
   * Use /var/run for xenstore db.
+  * Install common hotplug scripts. (closes: #591456)
 
  -- Bastian Blank <waldi@debian.org>  Sat, 19 Mar 2011 12:15:03 +0100
 
