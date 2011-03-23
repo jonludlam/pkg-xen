@@ -4,7 +4,7 @@ Priority: optional
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
 Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Standards-Version: 3.8.4
-Build-Depends: debhelper (>> 7), quilt
+Build-Depends: debhelper (>> 7)
 
 Package: xen-utils-common
 Architecture: all

@@ -12,19 +12,16 @@ VERSION := $(shell echo "$(VERSION_DEBIAN)" | sed -e 's,-[^-]*$$,,')
 BUILD_DIR = debian/build
 STAMPS_DIR = debian/stamps
 
-$(STAMPS_DIR)/source:
-	@mkdir -p $(STAMPS_DIR)
-	QUILT_PATCHES=$(CURDIR)/debian/patches quilt --quiltrc /dev/null push -a || test $$? = 2
-	touch $@
+stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
 
 $(STAMPS_DIR)/setup: SOURCE_FILES = $(filter-out debian, $(wildcard *))
 $(STAMPS_DIR)/setup: DIR=$(BUILD_DIR)
-$(STAMPS_DIR)/setup: $(STAMPS_DIR)/source
+$(STAMPS_DIR)/setup:
 	@rm -rf $(DIR)
 	mkdir $(DIR)
 	cp -al $(SOURCE_FILES) $(DIR)
 	cp -al debian/scripts $(DIR)
-	touch $@
+	$(stamp)
 
 build: $(STAMPS_DIR)/setup
 	make -C $(BUILD_DIR)/docs man-pages
@@ -55,7 +52,7 @@ maintainerclean:
 	rm -rf $(filter-out $(NO_ORIG), $(wildcard * .[^.]*))
 
 install: export DESTDIR=$(CURDIR)/debian/tmp
-install: $(STAMPS_DIR)/source
+install:
 	dh_testdir
 	dh_testroot
 	dh_prep
