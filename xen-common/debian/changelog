@@ -1,5 +1,6 @@
-xen-common (4.0.0-2) UNRELEASED; urgency=low
+xen-common (4.1.0~rc6-1) UNRELEASED; urgency=low
 
+  * New upstream release candidate.
   * Use /var/run for xenstore db.
 
  -- Bastian Blank <waldi@debian.org>  Sat, 19 Mar 2011 12:15:03 +0100
