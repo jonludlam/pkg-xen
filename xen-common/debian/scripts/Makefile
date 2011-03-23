@@ -12,6 +12,7 @@ GLOBAL_SCRIPTS = \
 	xentrace_format \
 	xentrace_setmask \
 	xentrace_setsize \
+	xl \
 	xm
 
 PRIVATE_SCRIPTS = \
