@@ -11,6 +11,7 @@ import subprocess
 from debian_xen.debian import VersionXen
 from debian_linux.debian import Changelog
 
+
 class Main(object):
     log = sys.stdout.write
 
@@ -19,6 +20,11 @@ class Main(object):
 
         self.changelog_entry = Changelog(version=VersionXen)[0]
         self.source = self.changelog_entry.source
+
+        if os.path.exists(os.path.join(repo, '.hg')):
+            self.repo_type = 'hg'
+        else:
+            raise NotImplementedError
 
     def __call__(self):
         import tempfile
@@ -68,6 +74,7 @@ class Main(object):
         p = subprocess.Popen(('tar', '-C', self.temp_dir, '-czf', out, self.orig_dir))
         if p.wait():
             raise RuntimeError
+
 
 if __name__ == '__main__':
     from optparse import OptionParser
