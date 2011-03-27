@@ -12,17 +12,30 @@ from debian_xen.debian import VersionXen
 from debian_linux.debian import Changelog
 
 
+class RepoHg(object):
+    def __init__(self, repo):
+        self.repo = repo
+
+    def do_archive(self, info):
+        orig_dir = os.path.join(info.temp_dir, info.orig_dir)
+        args = ('hg', 'archive', '-r', info.options.tag, os.path.realpath(orig_dir))
+        subprocess.check_call(args, cwd=self.repo)
+
+    def do_changelog(self, info, log):
+        args = ('hg', 'log', '-r', '%s:0' % info.options.tag)
+        subprocess.check_call(args, cwd=self.repo, stdout=log)
+
 class Main(object):
     log = sys.stdout.write
 
     def __init__(self, options, repo):
-        self.options, self.repo = options, repo
+        self.options = options
 
         self.changelog_entry = Changelog(version=VersionXen)[0]
         self.source = self.changelog_entry.source
 
         if os.path.exists(os.path.join(repo, '.hg')):
-            self.repo_type = 'hg'
+            self.repo = RepoHg(repo)
         else:
             raise NotImplementedError
 
@@ -49,17 +62,12 @@ class Main(object):
 
     def do_archive(self):
         self.log("Create archive.\n")
-
-        orig_dir = os.path.join(self.temp_dir, self.orig_dir)
-        args = ('hg', 'archive', '-r', self.options.tag, os.path.realpath(orig_dir))
-        subprocess.check_call(args, cwd=self.repo)
+        self.repo.do_archive(self)
 
     def do_changelog(self):
         self.log("Exporting changelog.\n")
-
         log = open(os.path.join(self.temp_dir, self.orig_dir, 'Changelog'), 'w')
-        args = ('hg', 'log', '-r', '%s:0' % self.options.tag)
-        subprocess.check_call(args, cwd=self.repo, stdout=log)
+        self.repo.do_changelog(self, log)
         log.close()
 
     def do_tar(self):
