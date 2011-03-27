@@ -22,7 +22,7 @@ class Main(object):
 
     def __call__(self):
         import tempfile
-        self.dir = tempfile.mkdtemp(prefix = 'genorig', dir = 'debian')
+        self.temp_dir = tempfile.mkdtemp(prefix='genorig', dir='debian')
         try:
             self.do_version()
 
@@ -33,7 +33,7 @@ class Main(object):
             self.do_changelog()
             self.do_tar()
         finally:
-            shutil.rmtree(self.dir)
+            shutil.rmtree(self.temp_dir)
 
     def do_version(self):
         if self.options.version:
@@ -44,7 +44,7 @@ class Main(object):
     def do_archive(self):
         self.log("Create archive.\n")
 
-        arg_dir = os.path.join(os.path.realpath(self.dir), self.orig_dir)
+        arg_dir = os.path.join(os.path.realpath(self.temp_dir), self.orig_dir)
         args = ('hg', 'archive', '-r', self.options.tag, arg_dir)
         p = subprocess.Popen(args, cwd=self.repo)
         if p.wait():
@@ -53,7 +53,7 @@ class Main(object):
     def do_changelog(self):
         self.log("Exporting changelog.\n")
 
-        log = open("%s/%s/Changelog" % (self.dir, self.orig_dir), 'w')
+        log = open("%s/%s/Changelog" % (self.temp_dir, self.orig_dir), 'w')
         args = ('hg', 'log', '-r', '%s:0' % self.options.tag)
         p = subprocess.Popen(args, cwd=self.repo, stdout=log)
         if p.wait():
@@ -65,7 +65,7 @@ class Main(object):
         out = "../orig/%s" % self.orig_tar
         self.log("Generate tarball %s\n" % out)
 
-        p = subprocess.Popen(('tar', '-C', self.dir, '-czf', out, self.orig_dir))
+        p = subprocess.Popen(('tar', '-C', self.temp_dir, '-czf', out, self.orig_dir))
         if p.wait():
             raise RuntimeError
 
