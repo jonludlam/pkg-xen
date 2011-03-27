@@ -25,6 +25,7 @@ class RepoHg(object):
         args = ('hg', 'log', '-r', '%s:0' % info.options.tag)
         subprocess.check_call(args, cwd=self.repo, stdout=log)
 
+
 class Main(object):
     log = sys.stdout.write
 
@@ -34,31 +35,28 @@ class Main(object):
         self.changelog_entry = Changelog(version=VersionXen)[0]
         self.source = self.changelog_entry.source
 
+        if self.options.version:
+            self.version = self.options.version
+        else:
+            raise NotImplementedError
+
         if os.path.exists(os.path.join(repo, '.hg')):
             self.repo = RepoHg(repo)
         else:
             raise NotImplementedError
 
+        self.orig_dir = "%s-%s" % (self.source, self.version)
+        self.orig_tar = "%s_%s.orig.tar.gz" % (self.source, self.version)
+
     def __call__(self):
         import tempfile
         self.temp_dir = tempfile.mkdtemp(prefix='genorig', dir='debian')
         try:
-            self.do_version()
-
-            self.orig_dir = "%s-%s" % (self.source, self.version)
-            self.orig_tar = "%s_%s.orig.tar.gz" % (self.source, self.version)
-
             self.do_archive()
             self.do_changelog()
             self.do_tar()
         finally:
             shutil.rmtree(self.temp_dir)
-
-    def do_version(self):
-        if self.options.version:
-            self.version = self.options.version
-            return
-        raise NotImplementedError
 
     def do_archive(self):
         self.log("Create archive.\n")
