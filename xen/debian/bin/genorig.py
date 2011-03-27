@@ -13,16 +13,17 @@ from debian_linux.debian import Changelog
 
 
 class RepoHg(object):
-    def __init__(self, repo):
+    def __init__(self, repo, options):
         self.repo = repo
+        self.tag = options.tag or 'tip'
 
     def do_archive(self, info):
         orig_dir = os.path.join(info.temp_dir, info.orig_dir)
-        args = ('hg', 'archive', '-r', info.options.tag, os.path.realpath(orig_dir))
+        args = ('hg', 'archive', '-r', self.tag, os.path.realpath(orig_dir))
         subprocess.check_call(args, cwd=self.repo)
 
     def do_changelog(self, info, log):
-        args = ('hg', 'log', '-r', '%s:0' % info.options.tag)
+        args = ('hg', 'log', '-r', '%s:0' % self.tag)
         subprocess.check_call(args, cwd=self.repo, stdout=log)
 
 
@@ -35,13 +36,13 @@ class Main(object):
         self.changelog_entry = Changelog(version=VersionXen)[0]
         self.source = self.changelog_entry.source
 
-        if self.options.version:
-            self.version = self.options.version
+        if options.version:
+            self.version = options.version
         else:
             raise NotImplementedError
 
         if os.path.exists(os.path.join(repo, '.hg')):
-            self.repo = RepoHg(repo)
+            self.repo = RepoHg(repo, options)
         else:
             raise NotImplementedError
 
@@ -78,8 +79,8 @@ class Main(object):
 if __name__ == '__main__':
     from optparse import OptionParser
     p = OptionParser(prog=sys.argv[0], usage='%prog [OPTION]... DIR')
-    p.add_option("-t", "--tag", dest="tag", default='tip')
-    p.add_option("-v", "--version", dest="version")
+    p.add_option('-t', '--tag', dest='tag')
+    p.add_option('-v', '--version', dest='version')
     options, args = p.parse_args()
     if len(args) != 1:
         raise RuntimeError
