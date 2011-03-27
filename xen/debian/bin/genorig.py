@@ -23,6 +23,18 @@ class RepoHg(object):
         subprocess.check_call(args, cwd=self.repo)
 
 
+class RepoGit(object):
+    def __init__(self, repo, options):
+        self.repo = repo
+        self.tag = options.tag or 'HEAD'
+
+    def do_archive(self, info):
+        temp_tar = os.path.join(info.temp_dir, 'orig.tar')
+        args = ('git', 'archive', '--prefix', '%s/' % info.orig_dir, '-o', os.path.realpath(temp_tar), self.tag)
+        subprocess.check_call(args, cwd=self.repo)
+        subprocess.check_call(('tar', '-C', info.temp_dir, '-xf', temp_tar))
+
+
 class Main(object):
     log = sys.stdout.write
 
@@ -39,6 +51,8 @@ class Main(object):
 
         if os.path.exists(os.path.join(repo, '.hg')):
             self.repo = RepoHg(repo, options)
+        elif os.path.exists(os.path.join(repo, '.git')):
+            self.repo = RepoGit(repo, options)
         else:
             raise NotImplementedError
 
