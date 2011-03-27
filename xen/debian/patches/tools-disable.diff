@@ -1,6 +1,6 @@
 --- a/tools/Makefile
 +++ b/tools/Makefile
-@@ -12,28 +12,19 @@
+@@ -12,16 +12,13 @@
  SUBDIRS-y += hotplug
  SUBDIRS-y += xentrace
  SUBDIRS-$(CONFIG_XCUTILS) += xcutils
@@ -17,15 +17,15 @@
  SUBDIRS-$(CONFIG_Linux) += blktap2
  SUBDIRS-$(CONFIG_NetBSD) += libaio
  SUBDIRS-$(CONFIG_NetBSD) += blktap2
- SUBDIRS-$(CONFIG_NetBSD) += xenbackendd
- SUBDIRS-y += libfsimage
- SUBDIRS-$(LIBXENAPI_BINDINGS) += libxen
--
--# do not recurse in to a dir we are about to delete
--ifneq "$(MAKECMDGOALS)" "distclean"
--SUBDIRS-$(CONFIG_IOEMU) += ioemu-dir
--endif
--
+@@ -31,8 +28,11 @@
+ 
+ # do not recurse in to a dir we are about to delete
+ ifneq "$(MAKECMDGOALS)" "distclean"
++CONFIG_QEMU = $(CURDIR)/../qemu
++ifneq ($(wildcard $(CONFIG_QEMU)),)
+ SUBDIRS-$(CONFIG_IOEMU) += ioemu-dir
+ endif
++endif
+ 
  SUBDIRS-y += xenpmd
  SUBDIRS-y += libxl
- SUBDIRS-y += remus
