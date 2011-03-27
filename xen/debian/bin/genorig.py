@@ -22,10 +22,6 @@ class RepoHg(object):
         args = ('hg', 'archive', '-r', self.tag, os.path.realpath(orig_dir))
         subprocess.check_call(args, cwd=self.repo)
 
-    def do_changelog(self, info, log):
-        args = ('hg', 'log', '-r', '%s:0' % self.tag)
-        subprocess.check_call(args, cwd=self.repo, stdout=log)
-
 
 class Main(object):
     log = sys.stdout.write
@@ -58,7 +54,6 @@ class Main(object):
         self.temp_dir = tempfile.mkdtemp(prefix='genorig', dir='debian')
         try:
             self.do_archive()
-            self.do_changelog()
             self.do_tar()
         finally:
             shutil.rmtree(self.temp_dir)
@@ -66,12 +61,6 @@ class Main(object):
     def do_archive(self):
         self.log("Create archive.\n")
         self.repo.do_archive(self)
-
-    def do_changelog(self):
-        self.log("Exporting changelog.\n")
-        log = open(os.path.join(self.temp_dir, self.orig_dir, 'Changelog'), 'w')
-        self.repo.do_changelog(self, log)
-        log.close()
 
     def do_tar(self):
         out = "../orig/%s" % self.orig_tar
