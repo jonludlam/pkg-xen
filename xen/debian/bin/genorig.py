@@ -50,30 +50,23 @@ class Main(object):
     def do_archive(self):
         self.log("Create archive.\n")
 
-        arg_dir = os.path.join(os.path.realpath(self.temp_dir), self.orig_dir)
-        args = ('hg', 'archive', '-r', self.options.tag, arg_dir)
-        p = subprocess.Popen(args, cwd=self.repo)
-        if p.wait():
-            raise RuntimeError
+        orig_dir = os.path.join(self.temp_dir, self.orig_dir)
+        args = ('hg', 'archive', '-r', self.options.tag, os.path.realpath(orig_dir))
+        subprocess.check_call(args, cwd=self.repo)
 
     def do_changelog(self):
         self.log("Exporting changelog.\n")
 
-        log = open("%s/%s/Changelog" % (self.temp_dir, self.orig_dir), 'w')
+        log = open(os.path.join(self.temp_dir, self.orig_dir, 'Changelog'), 'w')
         args = ('hg', 'log', '-r', '%s:0' % self.options.tag)
-        p = subprocess.Popen(args, cwd=self.repo, stdout=log)
-        if p.wait():
-            raise RuntimeError
-
+        subprocess.check_call(args, cwd=self.repo, stdout=log)
         log.close()
 
     def do_tar(self):
         out = "../orig/%s" % self.orig_tar
         self.log("Generate tarball %s\n" % out)
 
-        p = subprocess.Popen(('tar', '-C', self.temp_dir, '-czf', out, self.orig_dir))
-        if p.wait():
-            raise RuntimeError
+        subprocess.check_call(('tar', '-C', self.temp_dir, '-czf', out, self.orig_dir))
 
 
 if __name__ == '__main__':
