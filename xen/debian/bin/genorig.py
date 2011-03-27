@@ -46,8 +46,12 @@ class Main(object):
         else:
             raise NotImplementedError
 
-        self.orig_dir = "%s-%s" % (self.source, self.version)
-        self.orig_tar = "%s_%s.orig.tar.gz" % (self.source, self.version)
+        if options.component:
+            self.orig_dir = options.component
+            self.orig_tar = '%s_%s.orig-%s.tar.gz' % (self.source, self.version, options.component)
+        else:
+            self.orig_dir = '%s-%s' % (self.source, self.version)
+            self.orig_tar = '%s_%s.orig.tar.gz' % (self.source, self.version)
 
     def __call__(self):
         import tempfile
@@ -79,6 +83,7 @@ class Main(object):
 if __name__ == '__main__':
     from optparse import OptionParser
     p = OptionParser(prog=sys.argv[0], usage='%prog [OPTION]... DIR')
+    p.add_option('-c', '--component', dest='component')
     p.add_option('-t', '--tag', dest='tag')
     p.add_option('-v', '--version', dest='version')
     options, args = p.parse_args()
