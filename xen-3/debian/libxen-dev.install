@@ -1,5 +1,0 @@
-usr/lib/{libxenctrl.a,libxenguest.a}
-usr/lib/libxenstore.{a,so}
-usr/include/{xenctrl.h,xenguest.h}
-usr/include/{xs.h,xs_lib.h}
-usr/include/xen
