@@ -47,18 +47,25 @@ binary-arch:
 binary:	binary-indep binary-arch
 
 DIR_ORIG = ../orig/$(SOURCE)-$(VERSION_UPSTREAM)
-TAR_ORIG_NAME = $(SOURCE)_$(VERSION_UPSTREAM).orig.tar.gz
-TAR_ORIG = $(firstword $(wildcard ../$(TAR_ORIG_NAME)) $(wildcard ../orig/$(TAR_ORIG_NAME)))
+TAR_ORIG_MAIN_NAME = $(SOURCE)_$(VERSION_UPSTREAM).orig.tar.gz
+TAR_ORIG_MAIN = $(firstword $(wildcard ../$(TAR_ORIG_MAIN_NAME)) $(wildcard ../orig/$(TAR_ORIG_MAIN_NAME)))
+TAR_ORIG_QEMU_NAME = $(SOURCE)_$(VERSION_UPSTREAM).orig-qemu.tar.gz
+TAR_ORIG_QEMU = $(firstword $(wildcard ../$(TAR_ORIG_QEMU_NAME)) $(wildcard ../orig/$(TAR_ORIG_QEMU_NAME)))
 
 orig: $(DIR_ORIG)
 	rsync --delete --exclude debian --exclude .svk --exclude .svn -a $(DIR_ORIG)/ .
 
 $(DIR_ORIG):
-ifeq ($(TAR_ORIG),)
-	$(error Cannot find orig tarball $(TAR_ORIG_NAME))
+ifeq ($(TAR_ORIG_MAIN),)
+	$(error Cannot find main orig tarball $(TAR_ORIG_MAIN_NAME))
 else
 	mkdir -p ../orig
-	tar -C ../orig -xzf $(TAR_ORIG)
+	tar -C ../orig -xzf $(TAR_ORIG_MAIN)
+endif
+ifeq ($(TAR_ORIG_QEMU),)
+	$(warning Cannot find qemu orig tarball $(TAR_ORIG_QEMU_NAME))
+else
+	tar -C $@ -xzf $(TAR_ORIG_QEMU)
 endif
 
 CONTROL_FILES += debian/changelog debian/bin/gencontrol.py $(wildcard debian/templates/*.in) 
