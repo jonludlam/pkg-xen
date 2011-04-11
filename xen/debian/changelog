@@ -1,3 +1,10 @@
+xen (4.1.0-2) UNRELEASED; urgency=low
+
+  * Reenable hvmloader:
+    - Use packaged ipxe.
+
+ -- Bastian Blank <waldi@debian.org>  Mon, 11 Apr 2011 15:07:42 +0000
+
 xen (4.1.0-1) unstable; urgency=low
 
   * New upstream release.

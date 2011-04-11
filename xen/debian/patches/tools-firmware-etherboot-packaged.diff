@@ -54,3 +54,12 @@
  .PHONY: distclean
  distclean: clean
 -	rm -rf $T
+--- a/tools/firmware/etherboot/Config
++++ b/tools/firmware/etherboot/Config
+@@ -1,5 +1,5 @@
+ 
+-NICS = rtl8139 8086100e
++NICS = rtl8139 e1000_82540
+ 
+ CFLAGS += -UPXE_DHCP_STRICT
+ CFLAGS += -DPXE_DHCP_STRICT
