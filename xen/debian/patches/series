@@ -48,3 +48,5 @@ tools-include-install.diff
 tools-xenmon-install.diff
 
 tools-python-shebang.diff
+
+tools-xenstore-compatibility.diff
