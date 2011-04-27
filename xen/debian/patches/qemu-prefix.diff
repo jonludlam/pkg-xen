@@ -1,0 +1,11 @@
+--- a/qemu/xen-hooks.mak
++++ b/qemu/xen-hooks.mak
+@@ -20,7 +20,7 @@
+ LIBS += -L$(XEN_ROOT)/tools/libxc -lxenctrl -lxenguest
+ LIBS += -L$(XEN_ROOT)/tools/xenstore -lxenstore
+ 
+-LDFLAGS := $(CFLAGS) $(LDFLAGS)
++LDFLAGS := $(CFLAGS) $(LDFLAGS) -Wl,-rpath,'$${ORIGIN}/../lib'
+ 
+ OBJS += piix4acpi.o
+ OBJS += xenstore.o
