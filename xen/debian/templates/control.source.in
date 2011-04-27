@@ -14,7 +14,12 @@ Build-Depends:
  libncurses5-dev,
  uuid-dev,
  zlib1g-dev
-Build-Depends-Indep: graphviz, gs-common, texlive-fonts-recommended, texlive-latex-recommended, texlive-font-utils
+Build-Depends-Indep:
+ graphviz,
+ ghostscript,
+ texlive-fonts-recommended,
+ texlive-font-utils,
+ texlive-latex-recommended
 Standards-Version: 3.8.4
 XS-Python-Version: 2.6
 

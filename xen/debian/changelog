@@ -1,3 +1,9 @@
+xen (4.1.0-3) UNRELEASED; urgency=low
+
+  * Add ghostscript to build-deps.
+
+ -- Bastian Blank <waldi@debian.org>  Wed, 27 Apr 2011 14:37:40 +0200
+
 xen (4.1.0-2) unstable; urgency=low
 
   * Re-enable hvmloader:
