@@ -1,0 +1,65 @@
+--- a/qemu/xen-hooks.mak
++++ b/qemu/xen-hooks.mak
+@@ -46,9 +46,6 @@
+ CONFIG_AUDIO=
+ OBJS += xenfbfront.o
+ else
+-CPPFLAGS+= -I$(XEN_ROOT)/tools/blktap/lib
+-LIBS += -L$(XEN_ROOT)/tools/blktap/lib -lblktap
+-OBJS += xen_blktap.o
+ OBJS += tpm_tis.o
+ endif
+ 
+--- a/qemu/Makefile
++++ b/qemu/Makefile
+@@ -47,13 +47,9 @@
+ recurse-all: $(SUBDIR_RULES)
+ 
+ CPPFLAGS += -I$(XEN_ROOT)/tools/libxc
+-CPPFLAGS += -I$(XEN_ROOT)/tools/blktap/lib
+ CPPFLAGS += -I$(XEN_ROOT)/tools/xenstore
+ CPPFLAGS += -I$(XEN_ROOT)/tools/include
+ 
+-tapdisk-ioemu: tapdisk-ioemu.c cutils.c block.c block-raw.c block-cow.c block-qcow.c aes.c block-vmdk.c block-cloop.c block-dmg.c block-bochs.c block-vpc.c block-vvfat.c block-qcow2.c hw/xen_blktap.c osdep.c
+-	$(CC) -DQEMU_TOOL $(CFLAGS) $(CPPFLAGS) $(BASE_CFLAGS) $(LDFLAGS) $(BASE_LDFLAGS) -o $@ $^ -lz $(LIBS)
+-
+ #######################################################################
+ # BLOCK_OBJS is code used by both qemu system emulation and qemu-img
+ 
+--- a/qemu/hw/xen_machine_pv.c
++++ b/qemu/hw/xen_machine_pv.c
+@@ -29,10 +29,6 @@
+ #include "xen_backend.h"
+ #include "qemu-xen.h"
+ 
+-#ifndef CONFIG_STUBDOM
+-#include <hw/xen_blktap.h>
+-#endif
+-
+ uint32_t xen_domid;
+ enum xen_mode xen_mode = XEN_EMULATE;
+ 
+@@ -47,11 +43,6 @@
+     CPUState *env;
+     uint32_t domid_target;
+ 
+-#ifndef CONFIG_STUBDOM
+-    /* Initialize tapdisk client */
+-    init_blktap();
+-#endif
+-
+     /* Initialize a dummy CPU */
+     if (cpu_model == NULL) {
+ #ifdef TARGET_X86_64
+--- a/qemu/xen-config-host.h
++++ b/qemu/xen-config-host.h
+@@ -18,9 +18,6 @@
+ 
+ #include "xenctrl.h"
+ #include "xs.h"
+-#ifndef CONFIG_STUBDOM
+-#include "blktaplib.h"
+-#endif
+ 
+ #define BIOS_SIZE ((256 + 64) * 1024)
+ 
