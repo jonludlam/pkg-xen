@@ -1,4 +1,4 @@
-xen (4.1.0-3) UNRELEASED; urgency=low
+xen (4.1.0-3) unstable; urgency=low
 
   * Add ghostscript to build-deps.
   * Enable qemu-dm build.
@@ -6,7 +6,7 @@ xen (4.1.0-3) UNRELEASED; urgency=low
     - Remove blktap1, bluetooth and sdl support from qemu.
     - Recommend qemu-keymaps and qemu-utils.
 
- -- Bastian Blank <waldi@debian.org>  Wed, 27 Apr 2011 14:37:40 +0200
+ -- Bastian Blank <waldi@debian.org>  Thu, 28 Apr 2011 15:20:45 +0200
 
 xen (4.1.0-2) unstable; urgency=low
 
