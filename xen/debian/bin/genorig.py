@@ -80,6 +80,11 @@ class Main(object):
         out = "../orig/%s" % self.orig_tar
         self.log("Generate tarball %s\n" % out)
 
+        try:
+            os.stat(out)
+            raise RuntimeError("Destination already exists")
+        except OSError: pass
+
         subprocess.check_call(('tar', '-C', self.temp_dir, '-czf', out, self.orig_dir))
 
 
