@@ -63,3 +63,39 @@
  
  #define BIOS_SIZE ((256 + 64) * 1024)
  
+--- a/qemu/configure
++++ b/qemu/configure
+@@ -185,7 +185,7 @@
+ kvm="yes"
+ kerneldir=""
+ aix="no"
+-blobs="yes"
++blobs="no"
+ fdt="yes"
+ sdl_x11="no"
+ 
+--- a/tools/Makefile
++++ b/tools/Makefile
+@@ -120,7 +120,13 @@
+ 		$(GIT) reset --hard $(QEMU_TAG); \
+ 	fi
+ 
+-subdir-all-ioemu-dir subdir-install-ioemu-dir: ioemu-dir-find
++subdir-all-ioemu-dir: ioemu-dir-find
++
++subdir-install-ioemu-dir:
++	true
++
++install-ioemu-dir: ioemu-dir-find
++	$(MAKE) -C ioemu-dir install
+ 
+ subdir-clean-ioemu-dir:
+ 	set -e; if test -d ioemu-dir/.; then \
+--- a/qemu/rules.mak
++++ b/qemu/rules.mak
+@@ -16,4 +16,4 @@
+ %.a:
+ 	$(call quiet-command,rm -f $@ && $(AR) rcs $@ $^,"  AR    $(TARGET_DIR)$@")
+ 
+-quiet-command = $(if $(V),$1,$(if $(2),@echo $2 && $1, @$1))
++quiet-command = $(if $(2),@echo $2 && $1, @$1)
