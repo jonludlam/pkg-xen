@@ -7,8 +7,3 @@ Description: XEN administrative tools
  The userspace tools to manage a system virtualized through the XEN virtual
  machine monitor.
 
-Package: xen-qemu-dm-@version@
-Depends: ${shlibs:Depends}, ${misc:Depends}, xen-utils-@version@ (= ${binary:Version}), qemu-keymaps, qemu-utils
-Description: Xen Qemu Device Model virtual machine hardware emulator
- This package contains the Xen version of the Qemu emulator.
-

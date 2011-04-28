@@ -15,9 +15,6 @@ stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
 
 binary-arch-arch: install-lib-dev_$(ARCH)
 binary-arch-arch: install-libxenstore_$(ARCH)
-ifneq ($(wildcard qemu),)
-  binary-arch-arch: install-qemu_$(ARCH)
-endif
 binary-arch-arch: install-utils_$(ARCH)
 binary-arch-arch: install-xenstore-utils_$(ARCH)
 binary-arch-flavour: install-hypervisor_$(ARCH)_$(FLAVOUR)
@@ -87,13 +84,6 @@ $(STAMPS_DIR)/install-utils_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
 	+$(MAKE_CLEAN) -C $(DIR)/tools install DESTDIR=$(CURDIR)/$(INSTALL_DIR) $(CONFIG)
 	# hvmloader
 	#strip --remove-section=.comment --remove-section=.note $(INSTALL_DIR)/usr/lib/xen*/boot/*
-	touch $@
-
-$(STAMPS_DIR)/install-qemu_$(ARCH): DIR = $(BUILD_DIR)/build-utils_$(ARCH)
-$(STAMPS_DIR)/install-qemu_$(ARCH): INSTALL_DIR = $(BUILD_DIR)/install-qemu_$(ARCH)
-$(STAMPS_DIR)/install-qemu_$(ARCH): $(STAMPS_DIR)/build-utils_$(ARCH)
-	@rm -rf $(INSTALL_DIR)
-	+$(MAKE_CLEAN) -C $(DIR)/tools install-ioemu-dir DESTDIR=$(CURDIR)/$(INSTALL_DIR) XEN_VERSION=$(VERSION)
 	touch $@
 
 install-base:
@@ -168,20 +158,6 @@ install-utils_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH) install-libxenstore_$
 	install -D -m644 debian/xen-utils-$(VERSION).lintian-overrides $(PACKAGE_DIR)/usr/share/lintian/overrides/$(PACKAGE_NAME)
 	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)
 	dh_pysupport -V$(shell pyversions -rv) /usr/lib/xen-$(VERSION)
-	dh_strip
-	dh_makeshlibs -V
-	dh_shlibdeps
-	+$(MAKE_SELF) install-base
-
-install-qemu_$(ARCH): DIR = $(BUILD_DIR)/install-qemu_$(ARCH)
-install-qemu_$(ARCH): PACKAGE_NAME = xen-qemu-dm-$(VERSION)
-install-qemu_$(ARCH): PACKAGE_DIR = debian/$(PACKAGE_NAME)
-install-qemu_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
-install-qemu_$(ARCH): $(STAMPS_DIR)/install-qemu_$(ARCH) install-libxenstore_$(ARCH)
-	dh_testdir
-	dh_testroot
-	dh_prep
-	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)
 	dh_strip
 	dh_makeshlibs -V
 	dh_shlibdeps

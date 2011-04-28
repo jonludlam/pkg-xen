@@ -65,7 +65,7 @@
  
 --- a/qemu/configure
 +++ b/qemu/configure
-@@ -185,7 +185,7 @@
+@@ -185,9 +185,11 @@
  kvm="yes"
  kerneldir=""
  aix="no"
@@ -73,24 +73,11 @@
 +blobs="no"
  fdt="yes"
  sdl_x11="no"
++sdl="no"
++brlapi="no"
  
---- a/tools/Makefile
-+++ b/tools/Makefile
-@@ -120,7 +120,13 @@
- 		$(GIT) reset --hard $(QEMU_TAG); \
- 	fi
- 
--subdir-all-ioemu-dir subdir-install-ioemu-dir: ioemu-dir-find
-+subdir-all-ioemu-dir: ioemu-dir-find
-+
-+subdir-install-ioemu-dir:
-+	true
-+
-+install-ioemu-dir: ioemu-dir-find
-+	$(MAKE) -C ioemu-dir install
- 
- subdir-clean-ioemu-dir:
- 	set -e; if test -d ioemu-dir/.; then \
+ # OS specific
+ if check_define __linux__ ; then
 --- a/qemu/rules.mak
 +++ b/qemu/rules.mak
 @@ -16,4 +16,4 @@
