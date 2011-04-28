@@ -11,7 +11,9 @@ Build-Depends:
  iasl,
  ipxe,
  libaio-dev,
+ libgnutls-dev,
  libncurses5-dev,
+ libpci-dev,
  uuid-dev,
  zlib1g-dev
 Build-Depends-Indep:
