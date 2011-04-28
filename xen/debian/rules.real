@@ -181,8 +181,6 @@ install-qemu_$(ARCH): $(STAMPS_DIR)/install-qemu_$(ARCH) install-libxenstore_$(A
 	dh_testdir
 	dh_testroot
 	dh_prep
-	# XXX: No good idea
-	dh_install --sourcedir=$(DIR) etc/xen
 	dh_install --sourcedir=$(DIR) usr/lib/xen-$(VERSION)
 	dh_strip
 	dh_makeshlibs -V
