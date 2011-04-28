@@ -1,6 +1,9 @@
 xen (4.1.0-3) UNRELEASED; urgency=low
 
   * Add ghostscript to build-deps.
+  * Add xen-qemu-dm-4.1 binary package.
+    - Add qemu as another orig tar.
+    - Remove blktap1 support from qemu.
 
  -- Bastian Blank <waldi@debian.org>  Wed, 27 Apr 2011 14:37:40 +0200
 
