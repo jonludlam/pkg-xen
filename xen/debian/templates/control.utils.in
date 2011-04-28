@@ -1,6 +1,6 @@
 Package: xen-utils-@version@
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, xen-utils-common (>= 3.4.2-4), iproute, udev (>> 0.060)
-Recommends: bridge-utils, libc6-xen [i386], xen-hypervisor-@version@
+Recommends: bridge-utils, libc6-xen [i386], xen-hypervisor-@version@, qemu-keymaps, qemu-utils
 Provides: xen-utils
 Suggests: xen-docs-@version@
 Description: XEN administrative tools

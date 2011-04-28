@@ -3,7 +3,8 @@ xen (4.1.0-3) UNRELEASED; urgency=low
   * Add ghostscript to build-deps.
   * Enable qemu-dm build.
     - Add qemu as another orig tar.
-    - Remove blktap1 support from qemu.
+    - Remove blktap1, bluetooth and sdl support from qemu.
+    - Recommend qemu-keymaps and qemu-utils.
 
  -- Bastian Blank <waldi@debian.org>  Wed, 27 Apr 2011 14:37:40 +0200
 
