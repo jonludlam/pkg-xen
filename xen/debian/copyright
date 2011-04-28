@@ -28,6 +28,103 @@ License:
 On Debian systems, the complete text of the GNU General
 Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
 
+The bundled qemu is:
+
+    Copyright (C) 2007 Alexander Graf
+                  2005,2007 Alex Beregszaszi
+                  2005-2008 Andrzej Zaborowski <balrog@zabor.org>
+                  2005-2007 Anthony Liguori <anthony@codemonkey.ws>
+                  2004 Antony T Curtis
+                  2007 Arastra, Inc.
+                  2007 Armin Kuster <akuster@kama-aina.net> or
+                  1999 AT&T Laboratories Cambridge
+                  2006,2007 Aurelien Jarno
+                  2007-2008 AXIS Communications AB
+                  2007-2008 Bull S.A.S.
+                  2006 Christian Limpach
+                  2008 Citrix Systems, Inc.
+                  2005-2008 CodeSourcery
+                  2007 Dan Aloni
+                  1995,1996 Danny Gasparovski
+                  2000-2003 David McCullough <davidm@snapgear.com>
+                  2008 Dmitry Baryshkov
+                  2007-2009 Edgar E. Iglesias, Axis Communications AB.
+                  1996-1999 Eduardo Horvath
+                  1998,2003-2008 Fabrice Bellard
+                  2005 Filip Navara
+                  2006 Frederick Reeve
+                  2009 Freescale Semiconductor
+                  1986-2007 Free Software Foundation, Inc.
+                  2004 Gianni Tedesco
+                  2008 Gleb Natapov
+                  2002 Greg Ungerer <gerg@snapgear.com>
+                  2007-2009 Hervé Poussineau
+                  2005,2007,2008 IBM Corporation
+                  2008 IBM Corporation
+                  2006 Igor Kovalenko
+                  2006 InnoTek Systemberatung GmbH
+                  1999-2008 Intel Corporation
+                  2009 Isaku Yamahata
+                  2003-2004 James Yonan
+                  2008 Jan Kiszka
+                  2006 Joachim Henke
+                  2003-2007 Jocelyn Mayer
+                  2004,2005 Johannes E. Schindelin
+                  2005 Julian Chesterfield and Andrew Warfield.
+                  2008 Kamala Narasimhan
+                  1998 Kenneth Albanowski <kjahds@kjahds.com>
+                  2008 Kevin Wolf
+                  2009 Kevin Wolf <kwolf@suse.de>
+                  2009 Laurent Vivier
+                  2007-2008 Lauro Ramos Venancio  <lauro.venancio@indt.org.br>
+                  2000,2001 Lineo, by David McCullough <davidm@lineo.com>
+                  1991,1992,1996 Linus Torvalds
+                  2006 Lonnie Mendez
+                  2008 Lubomir Rintel
+                  2004,2007 Magnus Damm
+                  2004 Makoto Suzuki (suzu)
+                  2002-2006  Marcel Holtmann <marcel@holtmann.org>
+                  2006 Marius Groeger (FPU operations)
+                  2007 Marko Kohtala
+                  2002-2003  Maxim Krasnyansky <maxk@qualcomm.com>
+                  2008 Max Krasnyansky
+                  2005,2008 Mike Kronenberg
+                  2007 MontaVista Software, Inc
+                  2007 Neocleus Corporation.
+                  2007-2008 Nokia Corporation
+                  2001 OKTET Ltd., St.-Petersburg, Russia
+                  2006-2008 Openedhand Ltd.
+                  2007-2008 OpenMoko, Inc.
+                  1996 Paul Mackerras.
+                  2008 Paul Mundt
+                  2006 Pierre d'Herbemont
+                  2000-2001 Qualcomm Incorporated
+                  2006-2008 Qumranet Technologies
+                  1997-1999,2001,2009 Red Hat, Inc.
+                  1988,1989,1990,1991,1992 Richard Outerbridge
+                  2007 Robert Reif
+                  1998-2004 Samuel Rydh (samuel@ibrium.se)
+                  2005 Samuel Tardieu
+                  2007,2008 Samuel Thibault
+                  2008 Semihalf
+                  2008 Shin-ichiro KAWASAKI
+                  2002 SnapGear, by Paul Dale <pauli@snapgear.com>
+                  2006-2007 Stefan Weil
+                  2008 Takashi YOSHII
+                  1999,2000 Tatsuyuki Satoh , MultiArcadeMachineEmurator development
+                  1993 Theodore Ts'o
+                  2006,2007 Thiemo Seufer
+                  2003 Thomas M. Ogrisegg <tom@fnord.at>
+                  2006 Thomas Sailer
+                  1998-2001,2003 Thomas Sailer (t.sailer@alumni.ethz.ch)
+                  2006,2007 Thorsten Zitterell
+                  2000-2007 Tibor "TS" Schütz
+                  2008 TJ <linux@tjworld.net>
+                  2002-2005 Vassili Karpov (malc)
+                  2005 Vassili Karpov (malc)
+                  2007 Vladimir Ananiev <vovan888@gmail.com>
+                  2006 XenSource
+
 The Debian packaging is:
 
     Copyright (C) 2008-2010 Bastian Blank <waldi@debian.org>
