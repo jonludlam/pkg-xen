@@ -34,6 +34,7 @@ tools-xenstore-prefix.diff
 tools-xenstore-rpath.diff
 tools-xentrace-prefix.diff
 tools-xentrace-rpath.diff
+qemu-prefix.diff
 
 tools-python-xen-relative-path.diff
 tools-misc-xend-startup.diff
@@ -41,6 +42,7 @@ tools-libxl-nopidfile.diff
 
 tools-disable.diff
 tools-firmware-etherboot-packaged.diff
+qemu-disable.diff
 
 tools-pygrub-remove-static-solaris-support.patch
 
