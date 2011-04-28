@@ -9,3 +9,22 @@
  
  OBJS += piix4acpi.o
  OBJS += xenstore.o
+@@ -77,7 +77,6 @@
+ 
+ EXESUF=-xen
+ 
+-datadir := $(subst qemu,xen/qemu,$(datadir))
+ docdir :=  $(subst qemu,xen/qemu,$(docdir))
+ mandir :=  $(subst share/man,share/xen/man,$(mandir))
+ 
+--- a/qemu/xen-setup
++++ b/qemu/xen-setup
+@@ -28,7 +28,7 @@
+ ln -sf ${QEMU_ROOT:-..}/xen-config.mak $target/config.mak
+ cat ${QEMU_ROOT:-.}/xen-config-host.mak >>config-host.mak
+ 
+-sed -e 's,qemu,xen/qemu,' config-host.h >config-host.h.new
++cat config-host.h >config-host.h.new
+ echo "#define DEFAULT_NETWORK_SCRIPT      \"${XEN_SCRIPT_DIR}/qemu-ifup\"" >>config-host.h.new
+ echo "#define DEFAULT_NETWORK_DOWN_SCRIPT \"${XEN_SCRIPT_DIR}/qemu-ifdown\"" >>config-host.h.new
+ echo '#include "xen-config-host.h"' >>config-host.h.new
