@@ -52,3 +52,4 @@ tools-xenmon-install.diff
 tools-python-shebang.diff
 
 tools-xenstore-compatibility.diff
+upstream-23044:d4ca456c0c25
