@@ -1,3 +1,9 @@
+xen-common (4.1.1-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+
+ -- Bastian Blank <waldi@debian.org>  Fri, 24 Jun 2011 19:55:01 +0200
+
 xen-common (4.1.0~rc6-1) unstable; urgency=low
 
   * New upstream release candidate.
