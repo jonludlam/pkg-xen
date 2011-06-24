@@ -1,7 +1,7 @@
 ETC_SCRIPTS = \
 	qemu-ifup
 
-GLOBAL_SCRIPTS = \
+GLOBAL_WRAPPER_SCRIPTS = \
 	cpuperf-perfcntr \
 	cpuperf-xen \
 	xend \
@@ -29,7 +29,7 @@ install:
 	install -d $(DESTDIR)$(ETC_SCRIPTS_DIR)
 	install $(ETC_SCRIPTS) $(DESTDIR)$(ETC_SCRIPTS_DIR)
 	install -d $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)
-	@for i in $(GLOBAL_SCRIPTS); do \
+	@for i in $(GLOBAL_WRAPPER_SCRIPTS); do \
 	    echo ln -s $(PRIVATE_SCRIPTS_DIR)/$(WRAPPER) $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)/$$i; \
 	    ln -s $(PRIVATE_SCRIPTS_DIR)/$(WRAPPER) $(DESTDIR)$(GLOBAL_SCRIPTS_DIR)/$$i || exit 1; \
 	done
