@@ -4,7 +4,7 @@ Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
 Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Build-Depends:
  debhelper (>> 7), lsb-release,
- python2.6-dev, python-support,
+ python-dev,
  bcc,
  gcc-multilib,
  e2fslibs-dev,
