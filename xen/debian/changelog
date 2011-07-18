@@ -1,10 +1,10 @@
-xen (4.1.1-1) UNRELEASED; urgency=low
+xen (4.1.1-1) unstable; urgency=low
 
   * New upstream release.
   * Don't use qemu-dm if it is not needed. (Backport from xen-unstable.)
   * Use dh_python2.
 
- -- Bastian Blank <waldi@debian.org>  Fri, 24 Jun 2011 17:19:44 +0000
+ -- Bastian Blank <waldi@debian.org>  Mon, 18 Jul 2011 19:38:38 +0200
 
 xen (4.1.0-3) unstable; urgency=low
 
