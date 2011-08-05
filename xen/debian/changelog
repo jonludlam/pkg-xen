@@ -1,8 +1,8 @@
-xen (4.1.1-2) UNRELEASED; urgency=low
+xen (4.1.1-2) unstable; urgency=low
 
   * Fix hvmloader with gcc 4.6.
 
- -- Bastian Blank <waldi@debian.org>  Fri, 05 Aug 2011 23:49:39 +0200
+ -- Bastian Blank <waldi@debian.org>  Fri, 05 Aug 2011 23:58:36 +0200
 
 xen (4.1.1-1) unstable; urgency=low
 
