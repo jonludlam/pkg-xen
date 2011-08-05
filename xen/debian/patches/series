@@ -53,3 +53,4 @@ tools-python-shebang.diff
 
 tools-xenstore-compatibility.diff
 upstream-23044:d4ca456c0c25
+upstream-23104:1976adbf2b80
