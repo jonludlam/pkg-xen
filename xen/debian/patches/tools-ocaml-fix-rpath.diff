@@ -1,0 +1,20 @@
+--- a/tools/ocaml/Makefile.rules
++++ b/tools/ocaml/Makefile.rules
+@@ -58,14 +58,9 @@
+ 
+ # define a library target <name>.cmxa and <name>.cma
+ define OCAML_LIBRARY_template
+- $(1).cmxa: lib$(1)_stubs.a $(foreach obj,$($(1)_OBJS),$(obj).cmx)
+-	$(call mk-caml-lib-native,$$@, -cclib -l$(1)_stubs $(foreach lib,$(LIBS_$(1)),-cclib $(lib)), $(foreach obj,$($(1)_OBJS),$(obj).cmx))
+- $(1).cma: $(foreach obj,$($(1)_OBJS),$(obj).cmo)
+-	$(call mk-caml-lib-bytecode,$$@, -dllib dll$(1)_stubs.so -cclib -l$(1)_stubs, $$+)
+- $(1)_stubs.a: $(foreach obj,$$($(1)_C_OBJS),$(obj).o)
+-	$(call mk-caml-stubs,$$@, $$+)
+- lib$(1)_stubs.a: $(foreach obj,$($(1)_C_OBJS),$(obj).o)
+-	$(call mk-caml-lib-stubs,$$@, $$+, $(LIBS_$(1)))
++ $(1).cma: $(foreach obj,$($(1)_OBJS),$(obj).cmx $(obj).cmo) $(foreach obj,$($(1)_C_OBJS),$(obj).o) 
++	$(OCAMLMKLIB) -o $1 -oc $(1)_stubs $(foreach obj,$($(1)_OBJS),$(obj).cmx $(obj).cmo) -L/usr/lib/xen-4.1/lib -ccopt -Wl,-R/usr/lib/xen-4.1/lib/ocaml/stublibs -ccopt -Wl,-R/usr/lib/xen-4.1/lib $(foreach obj,$($(1)_C_OBJS),$(obj).o) $(LIBS_$(1))
++	gcc -shared -o ./dll$(1)_stubs.so $(foreach obj,$($(1)_C_OBJS),$(obj).o) -L/usr/lib/xen-4.1/lib -L../../../../tools/libxc  $(LIBS_$(1)) -Wl,-R/usr/lib/xen-4.1/lib
+ endef
+ 
+ define OCAML_NOC_LIBRARY_template

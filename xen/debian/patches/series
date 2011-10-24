@@ -59,3 +59,4 @@ tools-ocaml-fix-xc-dependencies.diff
 tools-ocaml-remove-uuid.diff
 tools-ocaml-remove-log.diff
 tools-ocaml-fix-xc.diff
+tools-ocaml-fix-rpath.diff
