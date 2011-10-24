@@ -1,0 +1,14 @@
+@ocaml_dll_dir@/dll*_stubs.so*
+@ocaml_stdlib_dir@/xenlight/META
+@ocaml_stdlib_dir@/xenlight/*.cma
+@ocaml_stdlib_dir@/xenbus/META
+@ocaml_stdlib_dir@/xenbus/*.cma
+@ocaml_stdlib_dir@/xenctrl/META
+@ocaml_stdlib_dir@/xenctrl/*.cma
+@ocaml_stdlib_dir@/xenstore/META
+@ocaml_stdlib_dir@/xenstore/*.cma
+@ocaml_stdlib_dir@/xeneventchn/META
+@ocaml_stdlib_dir@/xeneventchn/*.cma
+@ocaml_stdlib_dir@/xenmmap/META
+@ocaml_stdlib_dir@/xenmmap/*.cma
+

@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, sys
+import os, sys, subprocess
 sys.path.append(os.path.join(sys.path[0], "../lib/python"))
 
 from debian_xen.debian import VersionXen, PackageFieldList
@@ -48,6 +48,11 @@ class Gencontrol(Base):
         for i in ('postinst', 'prerm', 'lintian-overrides'):
             j = self.substitute(self.templates["xen-utils.%s" % i], vars)
             file("debian/%s.%s" % (package_utils_name, i), 'w').write(j)
+
+	for (i,j) in (('libxen-ocaml.install','libxen-%s-ocaml' % self.version.xen_version), 
+		      ('libxen-ocaml-dev.install','libxen-%s-ocaml-dev' % self.version.xen_version)):
+	    k = self.substitute(self.templates[i], vars)
+	    file("debian/%s.install" % j, 'w').write(k)
 
         cmds_binary_arch = ["$(MAKE) -f debian/rules.real binary-arch-arch %s" % makeflags]
         cmds_build = ["$(MAKE) -f debian/rules.real build-arch %s" % makeflags]
@@ -103,8 +108,13 @@ class Gencontrol(Base):
     def process_changelog(self):
         changelog = Changelog(version = VersionXen)
         self.version = changelog[0].version
+        # Nb. Check /usr/share/ocaml/ocamlvars.mk for OCAML_STDLIB_DIR and OCAML_DLL_DIR
+        ocaml_stdlib_dir = subprocess.check_output(["ocamlc", "-where"]).rstrip()
+        ocaml_dll_dir = ocaml_stdlib_dir + "/stublibs"
         self.vars = {
             'version': self.version.xen_version,
+            'ocaml_stdlib_dir': ocaml_stdlib_dir,
+            'ocaml_dll_dir': ocaml_dll_dir,
         }
 
 if __name__ == '__main__':
