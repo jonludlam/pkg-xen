@@ -14,6 +14,11 @@ VERSION_BINNMU := $(shell echo "$(VERSION)" | sed -ne 's,.*\+b\(.*\)$$,\1,p')
 stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
 
 include debian/rules.defs
+ifneq ($(wildcard /usr/share/ocaml/ocamlvars.mk),/usr/share/ocaml/ocamlvars.mk)
+  $(error /usr/share/ocaml/ocamlvars.mk not found - please install dh-ocaml)
+else
+  include /usr/share/ocaml/ocamlvars.mk
+endif
 
 setup: debian/control $(STAMPS_DIR)/setup-base
 $(STAMPS_DIR)/setup-base:

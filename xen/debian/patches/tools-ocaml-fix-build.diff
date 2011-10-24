@@ -1,0 +1,81 @@
+Fix the build of the ocaml libraries 
+
+Signed-off-by: Jon Ludlam <jonathan.ludlam@eu.citrix.com>
+
+--- a/tools/ocaml/Makefile.rules
++++ b/tools/ocaml/Makefile.rules
+@@ -58,14 +58,8 @@
+ 
+ # define a library target <name>.cmxa and <name>.cma
+ define OCAML_LIBRARY_template
+- $(1).cmxa: lib$(1)_stubs.a $(foreach obj,$($(1)_OBJS),$(obj).cmx)
+-	$(call mk-caml-lib-native,$$@, -cclib -l$(1)_stubs $(foreach lib,$(LIBS_$(1)),-cclib $(lib)), $(foreach obj,$($(1)_OBJS),$(obj).cmx))
+- $(1).cma: $(foreach obj,$($(1)_OBJS),$(obj).cmo)
+-	$(call mk-caml-lib-bytecode,$$@, -dllib dll$(1)_stubs.so -cclib -l$(1)_stubs, $$+)
+- $(1)_stubs.a: $(foreach obj,$$($(1)_C_OBJS),$(obj).o)
+-	$(call mk-caml-stubs,$$@, $$+)
+- lib$(1)_stubs.a: $(foreach obj,$($(1)_C_OBJS),$(obj).o)
+-	$(call mk-caml-lib-stubs,$$@, $$+, $(LIBS_$(1)))
++ $(1).cma: $(foreach obj,$($(1)_OBJS),$(obj).cmx $(obj).cmo) $(foreach obj,$($(1)_C_OBJS),$(obj).o)
++	$(OCAMLMKLIB) -o $1 -oc $(1)_stubs $(foreach obj,$($(1)_OBJS),$(obj).cmx $(obj).cmo) $(foreach obj,$($(1)_C_OBJS),$(obj).o) $(foreach lib, $(LIBS_$(1)_SYSTEM), -cclib $(lib)) $(foreach arg,$(LIBS_$(1)),-ldopt $(arg))
+ endef
+ 
+ define OCAML_NOC_LIBRARY_template
+--- a/tools/ocaml/libs/xc/Makefile
++++ b/tools/ocaml/libs/xc/Makefile
+@@ -9,7 +9,8 @@
+ INTF = xenctrl.cmi
+ LIBS = xenctrl.cma xenctrl.cmxa
+ 
+-LIBS_xenctrl = -L$(XEN_ROOT)/tools/libxc -lxenctrl -lxenguest
++LIBS_xenctrl = $(LDLIBS_libxenctrl) $(LDLIBS_libxenguest)
++LIBS_xenctrl_SYSTEM = $(LDLIBS_libxenctrl_SYSTEM) $(LDLIBS_libxenguest_SYSTEM)
+ 
+ xenctrl_OBJS = $(OBJS)
+ xenctrl_C_OBJS = xenctrl_stubs
+--- a/tools/ocaml/xenstored/Makefile
++++ b/tools/ocaml/xenstored/Makefile
+@@ -36,7 +36,9 @@
+ 	-ccopt -L -ccopt $(OCAML_TOPLEVEL)/libs/eventchn $(OCAML_TOPLEVEL)/libs/eventchn/xeneventchn.cmxa \
+ 	-ccopt -L -ccopt $(OCAML_TOPLEVEL)/libs/xc $(OCAML_TOPLEVEL)/libs/xc/xenctrl.cmxa \
+ 	-ccopt -L -ccopt $(OCAML_TOPLEVEL)/libs/xb $(OCAML_TOPLEVEL)/libs/xb/xenbus.cmxa \
+-	-ccopt -L -ccopt $(XEN_ROOT)/tools/libxc
++	-ccopt -L -ccopt $(XEN_ROOT)/tools/libxc \
++	$(foreach obj, $(LDLIBS_libxenctrl), -ccopt $(obj)) \
++        $(foreach obj, $(LDLIBS_libxenguest), -ccopt $(obj))
+ 
+ PROGRAMS = oxenstored
+ 
+--- a/tools/ocaml/libs/eventchn/Makefile
++++ b/tools/ocaml/libs/eventchn/Makefile
+@@ -7,6 +7,7 @@
+ LIBS = xeneventchn.cma xeneventchn.cmxa
+ 
+ LIBS_xeneventchn = $(LDLIBS_libxenctrl)
++LIBS_xeneventchn_SYSTEM = $(LDLIBS_libxenctrl_SYSTEM)
+ 
+ all: $(INTF) $(LIBS) $(PROGRAMS)
+ 
+--- a/tools/Rules.mk
++++ b/tools/Rules.mk
+@@ -21,9 +21,11 @@
+ 
+ CFLAGS_libxenctrl = -I$(XEN_LIBXC) $(CFLAGS_include)
+ LDLIBS_libxenctrl = $(XEN_LIBXC)/libxenctrl-$(XEN_VERSION).so $(DLOPEN_LIBS)
++LDLIBS_libxenctrl_SYSTEM = -lxenctrl-$(XEN_VERSION)
+ 
+ CFLAGS_libxenguest = -I$(XEN_LIBXC) $(CFLAGS_include)
+ LDLIBS_libxenguest = $(XEN_LIBXC)/libxenguest-$(XEN_VERSION).so
++LDLIBS_libxenguest_SYSTEM = -lxenguest-$(XEN_VERSION)
+ 
+ CFLAGS_libxenstore = -I$(XEN_XENSTORE) $(CFLAGS_include)
+ LDLIBS_libxenstore = -L$(XEN_XENSTORE) -lxenstore
+@@ -58,7 +60,7 @@
+ LDFLAGS += $(shell getconf LFS_LDFLAGS)
+ endif
+ 
+-# Xen tools build is currently incompatible with ld --as-needed
++
+ LDFLAGS += -Wl,--no-as-needed
+ 
+ # 32-bit x86 does not perform well with -ve segment accesses on Xen.
