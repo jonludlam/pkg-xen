@@ -1,0 +1,321 @@
+# HG changeset patch
+# User Jon Ludlam <jonathan.ludlam@eu.citrix.com>
+# Date 1317295879 -3600
+# Node ID 6c87e9dc5331096e8bfbad60a4f560cae05c4034
+# Parent c5df5f625ee2a0339b2a6785f99a5a0f9727f836
+[OCAML] Remove the uuid library
+
+This patch has the same effect as xen-unstable.hg c/s
+23938:fa04fbd56521
+
+The library was only minimally used, and was really rather redundant.
+
+Signed-off-by: Zheng Li <zheng.li@eu.citrix.com>
+Acked-by: Jon Ludlam <jonathan.ludlam@eu.citrix.com>
+
+--- a/tools/ocaml/libs/Makefile
++++ b/tools/ocaml/libs/Makefile
+@@ -2,7 +2,7 @@
+ include $(XEN_ROOT)/tools/Rules.mk
+ 
+ SUBDIRS= \
+-	uuid mmap \
++	mmap \
+ 	log xc eventchn \
+ 	xb xs xl
+ 
+--- a/tools/ocaml/libs/uuid/META.in
++++ /dev/null
+@@ -1,4 +0,0 @@
+-version = "@VERSION@"
+-description = "Uuid - universal identifer"
+-archive(byte) = "uuid.cma"
+-archive(native) = "uuid.cmxa"
+--- a/tools/ocaml/libs/uuid/uuid.ml
++++ /dev/null
+@@ -1,100 +0,0 @@
+-(*
+- * Copyright (C) 2006-2010 Citrix Systems Inc.
+- * Author Vincent Hanquez <vincent.hanquez@eu.citrix.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU Lesser General Public License as published
+- * by the Free Software Foundation; version 2.1 only. with the special
+- * exception on linking described in file LICENSE.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU Lesser General Public License for more details.
+- *)
+-
+-(* Internally, a UUID is simply a string. *)
+-type 'a t = string
+-
+-type cookie = string
+-
+-let of_string s = s
+-let to_string s = s
+-
+-let null = ""
+-
+-(* deprecated: we don't need to duplicate the uuid prefix/suffix *)
+-let uuid_of_string = of_string
+-let string_of_uuid = to_string
+-
+-let string_of_cookie s = s
+-
+-let cookie_of_string s = s
+-
+-let dev_random = "/dev/random"
+-let dev_urandom = "/dev/urandom"
+-
+-let rnd_array n =
+-	let fstbyte i = 0xff land i in
+-	let sndbyte i = fstbyte (i lsr 8) in
+-	let thdbyte i = sndbyte (i lsr 8) in
+-	let rec rnd_list n acc = match n with
+-		| 0 -> acc
+-		| 1 ->
+-			let b = fstbyte (Random.bits ()) in
+-			b :: acc
+-		| 2 ->
+-			let r = Random.bits () in
+-			let b1 = fstbyte r in
+-			let b2 = sndbyte r in
+-			b1 :: b2 :: acc
+-		| n -> 
+-			let r = Random.bits () in
+-			let b1 = fstbyte r in
+-			let b2 = sndbyte r in
+-			let b3 = thdbyte r in
+-			rnd_list (n - 3) (b1 :: b2 :: b3 :: acc)
+-	in
+-	Array.of_list (rnd_list n [])
+-
+-let read_array dev n = 
+-  let ic = open_in_bin dev in
+-  try
+-    let result = Array.init n (fun _ -> input_byte ic) in
+-    close_in ic;
+-    result
+-  with e ->
+-    close_in ic;
+-    raise e
+-
+-let uuid_of_int_array uuid =
+-  Printf.sprintf "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x"
+-    uuid.(0) uuid.(1) uuid.(2) uuid.(3) uuid.(4) uuid.(5)
+-    uuid.(6) uuid.(7) uuid.(8) uuid.(9) uuid.(10) uuid.(11)
+-    uuid.(12) uuid.(13) uuid.(14) uuid.(15)
+-
+-let make_uuid_prng () = uuid_of_int_array (rnd_array 16)
+-let make_uuid_urnd () = uuid_of_int_array (read_array dev_urandom 16)
+-let make_uuid_rnd () = uuid_of_int_array (read_array dev_random 16)
+-let make_uuid = make_uuid_urnd
+-
+-let make_cookie() =
+-  let bytes = Array.to_list (read_array dev_urandom 64) in
+-  String.concat "" (List.map (Printf.sprintf "%1x") bytes)
+-
+-let int_array_of_uuid s =
+-  try
+-    let l = ref [] in
+-    Scanf.sscanf s "%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x"
+-      (fun a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15 ->
+-      l := [ a0; a1; a2; a3; a4; a5; a6; a7; a8; a9;
+-             a10; a11; a12; a13; a14; a15; ]);
+-    Array.of_list !l
+-  with _ -> invalid_arg "Uuid.int_array_of_uuid"
+-
+-let is_uuid str =
+-	try
+-		Scanf.sscanf str
+-			"%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x"
+-			(fun _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ -> true)
+-	with _ -> false
+--- a/tools/ocaml/libs/uuid/uuid.mli
++++ /dev/null
+@@ -1,67 +0,0 @@
+-(*
+- * Copyright (C) 2006-2010 Citrix Systems Inc.
+- * Author Vincent Hanquez <vincent.hanquez@eu.citrix.com>
+- *
+- * This program is free software; you can redistribute it and/or modify
+- * it under the terms of the GNU Lesser General Public License as published
+- * by the Free Software Foundation; version 2.1 only. with the special
+- * exception on linking described in file LICENSE.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU Lesser General Public License for more details.
+- *)
+-(** Type-safe UUIDs.
+-    Probably need to refactor this; UUIDs are used in two places:
+-    + to uniquely name things across the cluster
+-    + as secure session IDs
+-
+-    There is the additional constraint that current Xen tools use 
+-    a particular format of UUID (the 16 byte variety generated by fresh ())
+-
+-	Also, cookies aren't UUIDs and should be put somewhere else.
+-*)
+-
+-(** A 128-bit UUID.  Using phantom types ('a) to achieve the requires type-safety. *)
+-type 'a t
+-
+-(** Create a fresh UUID *)
+-val make_uuid : unit -> 'a t
+-val make_uuid_prng : unit -> 'a t
+-val make_uuid_urnd : unit -> 'a t
+-val make_uuid_rnd : unit -> 'a t
+-
+-(** Create a UUID from a string. *)
+-val of_string : string -> 'a t
+-
+-(** Marshal a UUID to a string. *)
+-val to_string : 'a t -> string
+-
+-(** A null UUID, as if such a thing actually existed.  It turns out to be
+- * useful though. *)
+-val null : 'a t
+-
+-(** Deprecated alias for {! Uuid.of_string} *)
+-val uuid_of_string : string -> 'a t
+-
+-(** Deprecated alias for {! Uuid.to_string} *)
+-val string_of_uuid : 'a t -> string
+-
+-(** Convert an array to a UUID. *)
+-val uuid_of_int_array : int array -> 'a t
+-
+-(** Convert a UUID to an array. *)
+-val int_array_of_uuid : 'a t -> int array
+-
+-(** Check whether a string is a UUID. *)
+-val is_uuid : string -> bool
+-
+-(** A 512-bit cookie. *)
+-type cookie
+-
+-val make_cookie : unit -> cookie
+-
+-val cookie_of_string : string -> cookie
+-
+-val string_of_cookie : cookie -> string
+--- a/tools/ocaml/libs/xc/META.in
++++ b/tools/ocaml/libs/xc/META.in
+@@ -1,5 +1,5 @@
+ version = "@VERSION@"
+ description = "Xen Control Interface"
+-requires = "unix,xenmmap,uuid"
++requires = "unix,xenmmap"
+ archive(byte) = "xenctrl.cma"
+ archive(native) = "xenctrl.cmxa"
+--- a/tools/ocaml/libs/xc/Makefile
++++ b/tools/ocaml/libs/xc/Makefile
+@@ -3,7 +3,7 @@
+ include $(TOPLEVEL)/common.make
+ 
+ CFLAGS += -I../mmap -I./ -I$(XEN_ROOT)/tools/libxc
+-OCAMLINCLUDE += -I ../mmap -I ../uuid -I $(XEN_ROOT)/tools/libxc
++OCAMLINCLUDE += -I ../mmap -I $(XEN_ROOT)/tools/libxc
+ 
+ OBJS = xenctrl
+ INTF = xenctrl.cmi
+--- a/tools/ocaml/libs/xc/xenctrl.ml
++++ b/tools/ocaml/libs/xc/xenctrl.ml
+@@ -118,14 +118,23 @@
+ external _domain_create: handle -> int32 -> domain_create_flag list -> int array -> domid
+        = "stub_xc_domain_create"
+ 
++let int_array_of_uuid_string s =
++	try
++		Scanf.sscanf s
++			"%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x"
++			(fun a0 a1 a2 a3 a4 a5 a6 a7 a8 a9 a10 a11 a12 a13 a14 a15 ->
++				[| a0; a1; a2; a3; a4; a5; a6; a7;
++				   a8; a9; a10; a11; a12; a13; a14; a15 |])
++	with _ -> invalid_arg ("Xc.int_array_of_uuid_string: " ^ s)
++
+ let domain_create handle n flags uuid =
+-	_domain_create handle n flags (Uuid.int_array_of_uuid uuid)
++	_domain_create handle n flags (int_array_of_uuid_string uuid)
+ 
+ external _domain_sethandle: handle -> domid -> int array -> unit
+                           = "stub_xc_domain_sethandle"
+ 
+ let domain_sethandle handle n uuid =
+-	_domain_sethandle handle n (Uuid.int_array_of_uuid uuid)
++	_domain_sethandle handle n (int_array_of_uuid_string uuid)
+ 
+ external domain_max_vcpus: handle -> domid -> int -> unit
+        = "stub_xc_domain_max_vcpus"
+--- a/tools/ocaml/libs/xc/xenctrl.mli
++++ b/tools/ocaml/libs/xc/xenctrl.mli
+@@ -74,12 +74,8 @@
+ external is_fake : unit -> bool = "stub_xc_interface_is_fake"
+ external interface_close : handle -> unit = "stub_xc_interface_close"
+ val with_intf : (handle -> 'a) -> 'a
+-external _domain_create : handle -> int32 -> domain_create_flag list -> int array -> domid
+-  = "stub_xc_domain_create"
+-val domain_create : handle -> int32 -> domain_create_flag list -> 'a Uuid.t -> domid
+-external _domain_sethandle : handle -> domid -> int array -> unit
+-  = "stub_xc_domain_sethandle"
+-val domain_sethandle : handle -> domid -> 'a Uuid.t -> unit
++val domain_create : handle -> int32 -> domain_create_flag list -> string -> domid
++val domain_sethandle : handle -> domid -> string -> unit
+ external domain_max_vcpus : handle -> domid -> int -> unit
+   = "stub_xc_domain_max_vcpus"
+ external domain_pause : handle -> domid -> unit = "stub_xc_domain_pause"
+--- a/tools/ocaml/xenstored/Makefile
++++ b/tools/ocaml/xenstored/Makefile
+@@ -5,7 +5,6 @@
+ OCAMLINCLUDE += \
+ 	-I $(OCAML_TOPLEVEL)/libs/log \
+ 	-I $(OCAML_TOPLEVEL)/libs/xb \
+-	-I $(OCAML_TOPLEVEL)/libs/uuid \
+ 	-I $(OCAML_TOPLEVEL)/libs/mmap \
+ 	-I $(OCAML_TOPLEVEL)/libs/xc \
+ 	-I $(OCAML_TOPLEVEL)/libs/eventchn
+@@ -34,7 +33,6 @@
+ INTF = symbol.cmi trie.cmi
+ XENSTOREDLIBS = \
+ 	unix.cmxa \
+-	$(OCAML_TOPLEVEL)/libs/uuid/uuid.cmxa \
+ 	-ccopt -L -ccopt $(OCAML_TOPLEVEL)/libs/mmap $(OCAML_TOPLEVEL)/libs/mmap/xenmmap.cmxa \
+ 	-ccopt -L -ccopt $(OCAML_TOPLEVEL)/libs/log $(OCAML_TOPLEVEL)/libs/log/log.cmxa \
+ 	-ccopt -L -ccopt $(OCAML_TOPLEVEL)/libs/eventchn $(OCAML_TOPLEVEL)/libs/eventchn/xeneventchn.cmxa \
+--- a/tools/ocaml/libs/uuid/Makefile
++++ /dev/null
+@@ -1,29 +0,0 @@
+-TOPLEVEL=$(CURDIR)/../..
+-XEN_ROOT=$(TOPLEVEL)/../..
+-include $(TOPLEVEL)/common.make
+-
+-OBJS = uuid
+-INTF = $(foreach obj, $(OBJS),$(obj).cmi)
+-LIBS = uuid.cma uuid.cmxa
+-
+-all: $(INTF) $(LIBS) $(PROGRAMS)
+-
+-bins: $(PROGRAMS)
+-
+-libs: $(LIBS)
+-
+-uuid_OBJS = $(OBJS)
+-OCAML_NOC_LIBRARY = uuid
+-
+-.PHONY: install
+-install: $(LIBS) META
+-	mkdir -p $(OCAMLDESTDIR)
+-	ocamlfind remove -destdir $(OCAMLDESTDIR) uuid
+-	ocamlfind install -destdir $(OCAMLDESTDIR) -ldconf ignore uuid META $(INTF) $(LIBS) *.a *.cmx
+-
+-.PHONY: uninstall
+-uninstall:
+-	ocamlfind remove -destdir $(OCAMLDESTDIR) uuid
+-
+-include $(TOPLEVEL)/Makefile.rules
+-
