@@ -51,3 +51,5 @@ tools-xenmon-install.diff
 tools-python-shebang.diff
 
 tools-xenstore-compatibility.diff
+
+tools-ocaml-rename-ocamlfind-packages.diff
