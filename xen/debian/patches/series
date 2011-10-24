@@ -51,3 +51,6 @@ tools-xenmon-install.diff
 tools-python-shebang.diff
 
 tools-xenstore-compatibility.diff
+
+upstream-23936:cdb34816a40a-rework
+
