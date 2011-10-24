@@ -1,3 +1,7 @@
+Fix the ocaml libraries such that they can be installed under /usr/lib/xen-4.1/lib/ocaml
+
+Signed-off-by: Jon Ludlam <jonathan.ludlam@eu.citrix.com>
+
 --- a/tools/ocaml/Makefile.rules
 +++ b/tools/ocaml/Makefile.rules
 @@ -58,14 +58,9 @@
