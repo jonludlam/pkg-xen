@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 # Uncomment this to turn on verbose mode.
-#export DH_VERBOSE=1
+export DH_VERBOSE=1
 
 DEB_HOST_ARCH  := $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_BUILD_ARCH := $(shell dpkg-architecture -qDEB_BUILD_ARCH)

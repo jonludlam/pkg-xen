@@ -1,0 +1,2 @@
+/usr/lib/xen-4.1/lib/ocaml/{xenlight,xenbus,xenctrl,xenstore,xeneventchn,xenmmap}/*.cm{i,x,xa}
+/usr/lib/xen-4.1/lib/ocaml/{xenlight,xenbus,xenctrl,xenstore,xeneventchn,xenmmap}/*.a
