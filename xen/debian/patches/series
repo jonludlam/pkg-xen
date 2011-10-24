@@ -56,3 +56,4 @@ upstream-23044:d4ca456c0c25
 upstream-23104:1976adbf2b80
 tools-ocaml-rename-ocamlfind-packages.diff
 tools-ocaml-fix-xc-dependencies.diff
+tools-ocaml-remove-uuid.diff
