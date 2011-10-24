@@ -1,0 +1,14 @@
+/usr/lib/ocaml/stublibs/dll*_stubs.so*
+/usr/lib/ocaml/xenlight/META
+/usr/lib/ocaml/xenlight/*.cma
+/usr/lib/ocaml/xenbus/META
+/usr/lib/ocaml/xenbus/*.cma
+/usr/lib/ocaml/xenctrl/META
+/usr/lib/ocaml/xenctrl/*.cma
+/usr/lib/ocaml/xenstore/META
+/usr/lib/ocaml/xenstore/*.cma
+/usr/lib/ocaml/xeneventchn/META
+/usr/lib/ocaml/xeneventchn/*.cma
+/usr/lib/ocaml/xenmmap/META
+/usr/lib/ocaml/xenmmap/*.cma
+
