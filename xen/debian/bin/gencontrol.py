@@ -49,6 +49,11 @@ class Gencontrol(Base):
             j = self.substitute(self.templates["xen-utils.%s" % i], vars)
             file("debian/%s.%s" % (package_utils_name, i), 'w').write(j)
 
+	for (i,j) in (('libxen-ocaml.install','libxen-%s-ocaml.install' % self.version.xen_version), 
+		      ('libxen-ocaml-dev.install','libxen-%s-ocaml-dev.install' % self.version.xen_version)):
+	    k = self.substitute(self.templates[i], vars)
+	    file("debian/%s" % j, 'w').write(k)
+
         cmds_binary_arch = ["$(MAKE) -f debian/rules.real binary-arch-arch %s" % makeflags]
         cmds_build = ["$(MAKE) -f debian/rules.real build-arch %s" % makeflags]
         cmds_setup = ["$(MAKE) -f debian/rules.real setup-arch %s" % makeflags]
@@ -105,6 +110,8 @@ class Gencontrol(Base):
         self.version = changelog[0].version
         self.vars = {
             'version': self.version.xen_version,
+            'ocaml_stdlib_dir': sys.argv[1], 
+            'ocaml_dll_dir': sys.argv[2],
         }
 
 if __name__ == '__main__':

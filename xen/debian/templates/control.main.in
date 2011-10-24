@@ -33,3 +33,19 @@ Replaces: xen-utils-common (<= 3.1.0-1)
 Description: Xenstore utilities for Xen
  This package contains the Xenstore utilities.
 
+Package: libxen-@version@-ocaml
+Section: ocaml
+Depends: ocaml-base-nox-${F:OCamlABI}, ${shlibs:Depends}, ${misc:Depends}, ${ocaml:Depends}
+Provides: ${ocaml:Provides}
+Description: OCaml libraries for controlling Xen 
+ This package contains the runtime libraries required for the ocaml bindings
+ to the Xen control libraries.
+
+Package: libxen-@version@-ocaml-dev
+Section: ocaml
+Depends: libxen-@version@-ocaml (= ${binary:Version}), ${shlibs:Depends}, ocaml-findlib (>= 1.1), ${misc:Depends}, ${ocaml:Depends}, libxen-dev
+Provides: ${ocaml:Provides}
+Description: OCaml libraries for controlling Xen (devel package)
+ This package contains the ocaml findlib packages for compiling applications
+ that are designed to control the Xen hypervisor.
+

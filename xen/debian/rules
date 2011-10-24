@@ -14,6 +14,11 @@ VERSION_BINNMU := $(shell echo "$(VERSION)" | sed -ne 's,.*\+b\(.*\)$$,\1,p')
 stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
 
 include debian/rules.defs
+ifneq ($(wildcard /usr/share/ocaml/ocamlvars.mk),/usr/share/ocaml/ocamlvars.mk)
+  $(error /usr/share/ocaml/ocamlvars.mk not found - please install dh-ocaml)
+else
+  include /usr/share/ocaml/ocamlvars.mk
+endif
 
 setup: debian/control $(STAMPS_DIR)/setup-base
 $(STAMPS_DIR)/setup-base:
@@ -28,7 +33,7 @@ $(STAMPS_DIR)/build-base: $(STAMPS_DIR)/setup-base
 	@$(stamp)
 
 maintainerclean:
-	rm -f debian/control* debian/rules.gen debian/xen-hypervisor-* debian/xen-utils-*
+	rm -f debian/control* debian/rules.gen debian/xen-hypervisor-* debian/xen-utils-* debian/libxen-*ocaml*.install
 	rm -rf $(filter-out .svn debian, $(wildcard * .[^.]*))
 
 clean: debian/control
@@ -83,7 +88,7 @@ else
 endif
 
 debian/control-real: $(CONTROL_FILES)
-	debian/bin/gencontrol.py
+	debian/bin/gencontrol.py $(OCAML_STDLIB_DIR) $(OCAML_DLL_DIR)
 	md5sum $^ > debian/control.md5sum
 	@echo
 	@echo This target is made to fail intentionally, to make sure
