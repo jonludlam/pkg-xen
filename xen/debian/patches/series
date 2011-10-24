@@ -54,3 +54,4 @@ tools-xenstore-compatibility.diff
 
 tools-ocaml-rename-ocamlfind-packages.diff
 tools-ocaml-fix-xc-dependencies.diff
+tools-ocaml-remove-uuid.diff
