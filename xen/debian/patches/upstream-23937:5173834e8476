@@ -1,0 +1,20 @@
+# HG changeset patch
+# User Jon Ludlam <jonathan.ludlam@eu.citrix.com>
+# Date 1318261088 -3600
+# Node ID 5173834e8476074afceb5c0124126e74a3954e97
+# Parent  cdb34816a40a2dd3aaf324f7dcba83a122cf9146
+tools/ocaml: Add a missing dependency to the xenctrl ocaml package
+
+Signed-off-by: Jon Ludlam <jonathan.ludlam@eu.citrix.com>
+Acked-by: Ian Campbell <ian.campbell.com>
+Committed-by: Ian Jackson <ian.jackson.citrix.com>
+
+--- a/tools/ocaml/libs/xc/META.in
++++ b/tools/ocaml/libs/xc/META.in
+@@ -1,5 +1,5 @@
+ version = "@VERSION@"
+ description = "Xen Control Interface"
+-requires = "xenmmap,uuid"
++requires = "unix,xenmmap,uuid"
+ archive(byte) = "xenctrl.cma"
+ archive(native) = "xenctrl.cmxa"
