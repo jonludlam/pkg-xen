@@ -1,7 +1,4 @@
-#!/bin/sh
-set -e
-
-VERBOSE=
+#!/bin/sh -e
 
 while getopts "v" OPT; do
     case "$OPT" in
