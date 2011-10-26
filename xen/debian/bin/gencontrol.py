@@ -42,7 +42,6 @@ class Gencontrol(Base):
             arches = package.setdefault('Architecture', PackageFieldList())
             if 'all' not in arches:
                 arches.append(arch)
-            print name, arches
 
         package_utils_name = packages_utils[0]['Package']
 
