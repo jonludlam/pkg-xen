@@ -1,4 +1,4 @@
-xen (4.1.1-3) UNRELEASED; urgency=low
+xen (4.1.1-3) unstable; urgency=low
 
   [ Julien Danjou ]
   * Remove Julien Danjou from the Uploaders field. (closes: #590439)
@@ -10,7 +10,7 @@ xen (4.1.1-3) UNRELEASED; urgency=low
   * Update Standards-Version to 3.9.2. No changes.
   * Don't use brace-expansion in debhelper install files.
 
- -- Julien Danjou <acid@debian.org>  Wed, 26 Oct 2011 09:53:52 +0200
+ -- Bastian Blank <waldi@debian.org>  Wed, 26 Oct 2011 14:42:33 +0200
 
 xen (4.1.1-2) unstable; urgency=low
 
