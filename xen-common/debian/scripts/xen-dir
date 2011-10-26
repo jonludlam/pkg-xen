@@ -1,0 +1,14 @@
+#!/bin/sh
+set -e
+
+VERSION=$($(dirname $0)/xen-version -v)
+
+if [ -d "/usr/lib/xen-$VERSION" ]; then
+    echo "/usr/lib/xen-$VERSION"
+elif [ -d "/usr/lib/xen-default" ]; then
+    echo "WARING:  Can't find version $VERSION of xen utils, fallback to default version!" >&2
+    echo "/usr/lib/xen-default"
+else
+    echo "ERROR:  Can't find default version of xen utils, bailing out!" >&2
+    exit 127
+fi

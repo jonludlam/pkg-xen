@@ -22,6 +22,7 @@ GLOBAL_UTILS_LINKS = \
 GLOBAL_UTILS_WRAPPER = xen-utils-wrapper
 
 PRIVATE_SCRIPTS = \
+	xen-dir \
 	xen-version \
 	$(GLOBAL_UTILS_WRAPPER)
 
