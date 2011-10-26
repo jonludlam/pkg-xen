@@ -8,6 +8,7 @@ xen (4.1.1-3) UNRELEASED; urgency=low
   * Build-depend against liblzma-dev, it is used if available.
     (closes: #646694)
   * Update Standards-Version to 3.9.2. No changes.
+  * Don't use brace-expansion in debhelper install files.
 
  -- Julien Danjou <acid@debian.org>  Wed, 26 Oct 2011 09:53:52 +0200
 
