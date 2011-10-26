@@ -1,0 +1,34 @@
+#!/bin/sh -e
+
+configfile=/etc/defaults/xen
+
+dir=$(. /usr/lib/xen-common/bin/xen-dir); ret=$?; [ $ret -eq 0 ] || exit $ret
+
+export PATH="$dir:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+if [ -e $configfile ]; then
+    . $configfile || true
+fi
+
+if [ "$TOOLSTACK" ]; then
+    cmd=$(command -v "$TOOLSTACK")
+    if [ "$cmd" ]; then
+        echo "$cmd"
+    else
+        echo "WARING:  Can't find toolstack $TOOLSTACK, fallback to default!" >&2
+        TOOLSTACK=
+    fi
+fi
+
+if [ -z "$TOOLSTACK" ]; then
+    cmd_xm=$(command -v xm)
+    cmd_xl=$(command -v xl)
+    if [ "$cmd_xm" ]; then
+        echo "$cmd_xm"
+    elif [ "$cmd_xl" ]; then
+        echo "$cmd_xl"
+    else
+        echo "ERROR:  Toolstack not specifed and nothing detected, bailing out!" >&2
+        exit 127
+    fi
+fi
