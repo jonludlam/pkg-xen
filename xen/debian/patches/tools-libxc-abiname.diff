@@ -1,7 +1,7 @@
 --- a/tools/libxc/Makefile
 +++ b/tools/libxc/Makefile
 @@ -1,9 +1,6 @@
- XEN_ROOT = ../..
+ XEN_ROOT = $(CURDIR)/../..
  include $(XEN_ROOT)/tools/Rules.mk
  
 -MAJOR    = 4.0

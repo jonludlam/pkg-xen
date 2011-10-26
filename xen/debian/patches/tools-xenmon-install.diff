@@ -1,7 +1,7 @@
 --- a/tools/xenmon/Makefile
 +++ b/tools/xenmon/Makefile
 @@ -13,6 +13,10 @@
- XEN_ROOT=../..
+ XEN_ROOT=$(CURDIR)/../..
  include $(XEN_ROOT)/tools/Rules.mk
  
 +DEFAULT_PYTHON_PATH := $(shell $(XEN_ROOT)/tools/python/get-path)

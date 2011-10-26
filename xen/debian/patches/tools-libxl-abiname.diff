@@ -1,7 +1,7 @@
 --- a/tools/libxl/Makefile
 +++ b/tools/libxl/Makefile
 @@ -5,12 +5,6 @@
- XEN_ROOT = ../..
+ XEN_ROOT = $(CURDIR)/../..
  include $(XEN_ROOT)/tools/Rules.mk
  
 -MAJOR = 1.0

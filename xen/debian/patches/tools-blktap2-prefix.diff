@@ -74,7 +74,7 @@
 --- a/tools/blktap2/control/Makefile
 +++ b/tools/blktap2/control/Makefile
 @@ -1,10 +1,7 @@
- XEN_ROOT := ../../../
+ XEN_ROOT := $(CURDIR)/../../../
  include $(XEN_ROOT)/tools/Rules.mk
  
 -MAJOR              = 1.0

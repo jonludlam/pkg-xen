@@ -1,6 +1,6 @@
 --- a/tools/libfsimage/Rules.mk
 +++ b/tools/libfsimage/Rules.mk
-@@ -5,12 +5,7 @@
+@@ -6,12 +6,7 @@
  
  PIC_OBJS := $(patsubst %.c,%.opic,$(LIB_SRCS-y))
  
@@ -17,7 +17,7 @@
 --- a/tools/libfsimage/common/Makefile
 +++ b/tools/libfsimage/common/Makefile
 @@ -1,6 +1,8 @@
- XEN_ROOT = ../../..
+ XEN_ROOT = $(CURDIR)/../../..
  include $(XEN_ROOT)/tools/Rules.mk
  
 +CFLAGS += -DFSDIR="\"$(PRIVATE_LIBDIR)/fs\""
