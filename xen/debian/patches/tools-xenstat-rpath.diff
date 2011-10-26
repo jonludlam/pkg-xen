@@ -1,10 +1,34 @@
 --- a/tools/xenstat/xentop/Makefile
 +++ b/tools/xenstat/xentop/Makefile
-@@ -20,6 +20,7 @@
+@@ -19,8 +19,9 @@
+ else
  
  CFLAGS += -DGCC_PRINTF -Wall -Werror -I$(XEN_LIBXENSTAT)
- LDFLAGS += -L$(XEN_LIBXENSTAT)
+-LDFLAGS += -L$(XEN_LIBXENSTAT)
+-LDLIBS += -lxenstat $(CURSES_LIBS) $(SOCKET_LIBS)
 +LDFLAGS += $(call LDFLAGS_RPATH,../lib)
- LDLIBS += -lxenstat $(CURSES_LIBS) $(SOCKET_LIBS)
++LDLIBS += ../libxenstat/src/libxenstat.a $(CURSES_LIBS) $(SOCKET_LIBS)
++LDLIBS += $(LDLIBS_libxenctrl) $(LDLIBS_libxenstore)
  CFLAGS += -DHOST_$(XEN_OS)
  
+ .PHONY: all
+--- a/tools/xenstat/libxenstat/Makefile
++++ b/tools/xenstat/libxenstat/Makefile
+@@ -40,16 +40,12 @@
+ LDFLAGS+=-Lsrc -L$(XEN_XENSTORE)/ -L$(XEN_LIBXC)/
+ LDLIBS-y = -lxenstore -lxenctrl
+ LDLIBS-$(CONFIG_SunOS) += -lkstat
+-ARLIBS-y = $(XEN_XENSTORE)/libxenstore.so $(XEN_LIBXC)/libxenctrl.so
+-ARLIBS-x86_64 = /usr/lib/amd64/libkstat.so
+-ARLIBS-x86_32 = /usr/lib/libkstat.so
+-ARLIBS-$(CONFIG_SunOS) += $(ARLIBS-$(XEN_TARGET_ARCH))
+ 
+ .PHONY: all
+ all: $(LIB)
+ 
+ $(LIB): $(OBJECTS-y)
+-	$(AR) rc $@ $^ $(ARLIBS-y)
++	$(AR) rc $@ $^
+ 	$(RANLIB) $@
+ 
+ $(SHLIB): $(OBJECTS-y)
