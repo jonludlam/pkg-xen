@@ -1,7 +1,7 @@
 Section: kernel
 Priority: optional
 Maintainer: Debian Xen Team <pkg-xen-devel@lists.alioth.debian.org>
-Uploaders: Julien Danjou <acid@debian.org>, Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
+Uploaders: Guido Trotter <ultrotter@debian.org>, Bastian Blank <waldi@debian.org>
 Build-Depends:
  debhelper (>> 7), lsb-release,
  python-dev,
