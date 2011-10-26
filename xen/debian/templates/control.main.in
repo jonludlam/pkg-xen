@@ -9,21 +9,18 @@ Description: Documentation for Xen
 
 Package: libxenstore3.0
 Section: libs
-Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Xenstore communications library for Xen
  This package contains the public libxenstore.
 
 Package: libxen-dev
 Section: libdevel
-Architecture: any
 Depends: libxenstore3.0 (= ${binary:Version}), ${misc:Depends}
 Description: Public headers and libs for Xen
  This package contains the public headers and static libraries for Xen.
 
 Package: xenstore-utils
 Section: admin
-Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Conflicts: xen-utils-common (<= 3.1.0-1)
 Replaces: xen-utils-common (<= 3.1.0-1)

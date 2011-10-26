@@ -3,7 +3,7 @@
 import os, sys
 sys.path.append(os.path.join(sys.path[0], "../lib/python"))
 
-from debian_xen.debian import VersionXen
+from debian_xen.debian import VersionXen, PackageFieldList
 from debian_linux.config import ConfigCoreHierarchy
 from debian_linux.debian import Changelog
 from debian_linux.gencontrol import Gencontrol as Base
@@ -19,9 +19,6 @@ class Gencontrol(Base):
             'VERSION': self.version.xen_version,
         })
 
-    def do_main_packages(self, packages, vars, makeflags, extra):
-        packages.extend(self.process_packages(self.templates["control.main"], vars))
-
     def do_arch_setup(self, vars, makeflags, arch, extra):
         config_entry = self.config.merge('base', arch)
         config_entry_description = self.config.merge('description', arch)
@@ -32,17 +29,20 @@ class Gencontrol(Base):
             makeflags[i[1]] = config_entry[i[0]]
 
     def do_arch_packages(self, packages, makefile, arch, vars, makeflags, extra):
-        utils = self.templates["control.utils"]
-        packages_utils = self.process_packages(utils, vars)
+        packages_main = self.process_packages(self.templates["control.main"], vars)
+        packages_utils = self.process_packages(self.templates["control.utils"], vars)
 
-        for package in packages_utils:
+        for package in packages_main + packages_utils:
             name = package['Package']
-            if packages.has_key(name):
+            if name in packages:
                 package = packages.get(name)
-                package['Architecture'].append(arch)
             else:
-                package['Architecture'] = [arch]
                 packages.append(package)
+
+            arches = package.setdefault('Architecture', PackageFieldList())
+            if 'all' not in arches:
+                arches.append(arch)
+            print name, arches
 
         package_utils_name = packages_utils[0]['Package']
 
