@@ -4,14 +4,20 @@ configfile=/etc/defaults/xen
 
 dir=$(. /usr/lib/xen-common/bin/xen-dir); ret=$?; [ $ret -eq 0 ] || exit $ret
 
-export PATH="$dir:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+check() {
+    if [ "$1" = xm ] || [ "$1" = xl ]; then
+        PATH="$dir/bin" command -v "$1"
+    else
+        PATH="$dir/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin" command -v "$1"
+    fi
+}
 
 if [ -e $configfile ]; then
     . $configfile || true
 fi
 
 if [ "$TOOLSTACK" ]; then
-    cmd=$(command -v "$TOOLSTACK")
+    cmd=$(check "$TOOLSTACK")
     if [ "$cmd" ]; then
         echo "$cmd"
     else
@@ -21,8 +27,8 @@ if [ "$TOOLSTACK" ]; then
 fi
 
 if [ -z "$TOOLSTACK" ]; then
-    cmd_xm=$(command -v xm)
-    cmd_xl=$(command -v xl)
+    cmd_xm=$(check xm)
+    cmd_xl=$(check xl)
     if [ "$cmd_xm" ]; then
         echo "$cmd_xm"
     elif [ "$cmd_xl" ]; then
