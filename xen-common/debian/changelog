@@ -1,3 +1,9 @@
+xen-common (4.1.2-2) UNRELEASED; urgency=low
+
+  * Remove xend wrapper, it should not be called by users.
+
+ -- Bastian Blank <waldi@debian.org>  Thu, 27 Oct 2011 01:36:30 +0200
+
 xen-common (4.1.2-1) unstable; urgency=low
 
   [ Julien Danjou ]
