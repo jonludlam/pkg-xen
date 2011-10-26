@@ -15,6 +15,7 @@ Build-Depends:
  liblzma-dev,
  libncurses5-dev,
  libpci-dev,
+ pkg-config,
  uuid-dev,
  zlib1g-dev
 Build-Depends-Indep:
