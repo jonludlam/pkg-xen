@@ -1,0 +1,6 @@
+# Configuration for Xen system
+# ----------------------------
+
+# There exists several tool stacks to configure a Xen system.
+# …
+TOOLSTACK=
