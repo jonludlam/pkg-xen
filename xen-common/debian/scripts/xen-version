@@ -1,17 +1,7 @@
 #!/bin/sh -e
 
-while getopts "v" OPT; do
-    case "$OPT" in
-	v)
-	VERBOSE=1
-	;;
-    esac
-done
-
 error() {
-    if [ "$VERBOSE" ]; then
-        echo "ERROR: " "$@" >&2
-    fi
+    echo "ERROR: " "$@" >&2
     exit 1
 }
 

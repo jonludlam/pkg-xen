@@ -1,5 +1,4 @@
 #!/bin/sh -e
-VERBOSE=1
 
 VERSION=$(. /usr/lib/xen-common/bin/xen-version); RET=$?; [ $RET -eq 0 ] || exit $RET
 
