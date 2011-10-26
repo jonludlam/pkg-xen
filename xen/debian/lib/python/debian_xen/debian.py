@@ -1,5 +1,7 @@
 import re
-from debian_linux.debian import Version
+from debian_linux.debian import Version, PackageFieldList
+from debian_linux.debian import PackageFieldList as _PackageFieldList
+
 
 class VersionXen(Version):
     _version_xen_rules = ur"""
@@ -27,5 +29,8 @@ $
         d = match.groupdict()
         self.xen_version = d['version']
 
-if __name__ == '__main__':
-    gencontrol()()
+
+class PackageFieldList(_PackageFieldList):
+    def __init__(self, value=None):
+        if value:
+            super(self, PackageFieldList).__init__(value)
