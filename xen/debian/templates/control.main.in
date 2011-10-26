@@ -7,6 +7,12 @@ Description: Documentation for Xen
  includes a description interface (both the API, and a nice explanation of
  how XEN works).
 
+Package: libxen-@version@
+Section: libs
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Public libs for Xen
+ This package contains the shared libraries for Xen.
+
 Package: libxenstore3.0
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -15,7 +21,7 @@ Description: Xenstore communications library for Xen
 
 Package: libxen-dev
 Section: libdevel
-Depends: libxenstore3.0 (= ${binary:Version}), ${misc:Depends}
+Depends: libxen-@version@ (= ${binary:Version}), libxenstore3.0 (= ${binary:Version}), ${misc:Depends}
 Description: Public headers and libs for Xen
  This package contains the public headers and static libraries for Xen.
 

@@ -17,7 +17,6 @@ tools-console-prefix.diff
 tools-flask-prefix.diff
 tools-libfsimage-prefix.diff
 tools-libfsimage-rpath.diff
-tools-libxc-prefix.diff
 tools-libxl-prefix.diff
 tools-misc-prefix.diff
 tools-misc-rpath.diff

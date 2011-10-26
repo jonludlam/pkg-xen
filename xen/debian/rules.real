@@ -13,7 +13,8 @@ include debian/rules.defs
 
 stamp = [ -d $(dir $@) ] || mkdir $(dir $@); touch $@
 
-binary-arch-arch: install-lib-dev_$(ARCH)
+binary-arch-arch: install-libxen_$(ARCH)
+binary-arch-arch: install-libxen-dev_$(ARCH)
 binary-arch-arch: install-libxenstore_$(ARCH)
 binary-arch-arch: install-utils_$(ARCH)
 binary-arch-arch: install-xenstore-utils_$(ARCH)
@@ -119,10 +120,22 @@ install-hypervisor_$(ARCH)_$(FLAVOUR): $(STAMPS_DIR)/build-hypervisor_$(ARCH)_$(
 	cp $(DIR)/xen/xen.gz debian/$(PACKAGE_NAME)/boot/xen-$(VERSION)-$(FLAVOUR).gz
 	+$(MAKE_SELF) install-base
 
-install-lib-dev_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
-install-lib-dev_$(ARCH): PACKAGE_NAME = libxen-dev
-install-lib-dev_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
-install-lib-dev_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
+install-libxen_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
+install-libxen_$(ARCH): DH_OPTIONS = -plibxen-$(VERSION)
+install-libxen_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
+	dh_testdir
+	dh_testroot
+	dh_prep
+	dh_install --sourcedir=$(DIR) usr/lib/libxen*-$(VERSION).so
+	dh_strip
+	dh_makeshlibs -V
+	dh_shlibdeps
+	+$(MAKE_SELF) install-base
+
+install-libxen-dev_$(ARCH): DIR = $(BUILD_DIR)/install-utils_$(ARCH)
+install-libxen-dev_$(ARCH): PACKAGE_NAME = libxen-dev
+install-libxen-dev_$(ARCH): DH_OPTIONS = -p$(PACKAGE_NAME)
+install-libxen-dev_$(ARCH): $(STAMPS_DIR)/install-utils_$(ARCH)
 	dh_testdir
 	dh_testroot
 	dh_prep
