@@ -10,16 +10,18 @@ while getopts "v" OPT; do
     esac
 done
 
-warn() {
+error() {
     if [ "$VERBOSE" ]; then
-        echo "WARNING! " "$@" >&2
+        echo "ERROR: " "$@" >&2
     fi
+    exit 1
 }
 
 if [ -e "/sys/hypervisor/type" ]; then
-    if [ "$(cat /sys/hypervisor/type)" = xen ]; then
+    type="$(cat /sys/hypervisor/type)"
+    if [ "$type" = xen ]; then
         DIR=/sys/hypervisor/version
-	VERSION_EXTRA="$(cat $DIR/extra)"
+        VERSION_EXTRA="$(cat $DIR/extra)"
         if [ "$VERSION_EXTRA" = "-unstable" ]; then
             # Old xen-unstable
             VERSION=unstable
@@ -29,12 +31,13 @@ if [ -e "/sys/hypervisor/type" ]; then
         else
             VERSION="$(cat $DIR/major).$(cat $DIR/minor)"
         fi
+    elif [ -z "$type" ]; then
+        error "Can't read hypervisor type from sysfs!"
     else
-        warn "Can't read type from sysfs!"
+        error "Hypervisor is not xen but '$type'!"
     fi
 else
-    warn "Can't find hypervisor information in sysfs!"
+    error "Can't find hypervisor information in sysfs!"
 fi
 
 echo "$VERSION"
-exit 0
