@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-configfile=/etc/defaults/xen
+configfile=/etc/default/xen
 
 dir=$(. /usr/lib/xen-common/bin/xen-dir); ret=$?; [ $ret -eq 0 ] || exit $ret
 
