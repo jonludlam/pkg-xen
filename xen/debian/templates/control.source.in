@@ -23,6 +23,6 @@ Build-Depends-Indep:
  texlive-fonts-recommended,
  texlive-font-utils,
  texlive-latex-recommended
-Standards-Version: 3.8.4
+Standards-Version: 3.9.2
 XS-Python-Version: current
 
