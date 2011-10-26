@@ -1,6 +1,10 @@
 xen (4.1.1-3) UNRELEASED; urgency=low
 
+  [ Julien Danjou ]
   * Remove Julien Danjou from the Uploaders field. (closes: #590439)
+
+  [ Bastian Blank ]
+  * Use current version of python. (closes: #646660)
 
  -- Julien Danjou <acid@debian.org>  Wed, 26 Oct 2011 09:53:52 +0200
 
