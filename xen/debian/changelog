@@ -5,6 +5,8 @@ xen (4.1.1-3) UNRELEASED; urgency=low
 
   [ Bastian Blank ]
   * Use current version of python. (closes: #646660)
+  * Build-depend against liblzma-dev, it is used if available.
+    (closes: #646694)
 
  -- Julien Danjou <acid@debian.org>  Wed, 26 Oct 2011 09:53:52 +0200
 

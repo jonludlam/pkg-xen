@@ -12,6 +12,7 @@ Build-Depends:
  ipxe,
  libaio-dev,
  libgnutls-dev,
+ liblzma-dev,
  libncurses5-dev,
  libpci-dev,
  uuid-dev,
