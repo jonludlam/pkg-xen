@@ -8,4 +8,6 @@ usr/include/xenctrl.h
 usr/include/xenguest.h
 usr/include/xs.h
 usr/include/xs_lib.h
+usr/include/xentoollog.h
+usr/include/xenctrlosdep.h
 usr/include/xen
