@@ -9,26 +9,31 @@
 # Description:       XEN control daemon
 ### END INIT INFO
 
-PATH=/usr/lib/xen-common/bin:/sbin:/bin:/usr/sbin:/usr/bin
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
 DESC="Xen daemons"
 
-VERSION=$(xen-version)
-ROOT=/usr/lib/xen-$VERSION
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
 
-XEND="$ROOT"/bin/xend
+ROOT=$(/usr/lib/xen-common/bin/xen-dir 2>/dev/null)
+if [ $? -ne 0 ]; then
+	log_warning_msg "Not running within Xen or no compatible utils"
+	exit 0
+fi
+TOOLSTACK=$(/usr/lib/xen-common/bin/xen-toolstack 2>/dev/null)
+if [ $? -ne 0 ]; then
+	log_warning_msg "No usable Xen toolstack selected"
+	exit 0
+fi
+
+[ -e "$ROOT"/bin/xend ] && XEND="$ROOT"/bin/xend
 XENCONSOLED="$ROOT"/bin/xenconsoled
 XENCONSOLED_PIDFILE="/var/run/xenconsoled.pid"
 XENSTORED="$ROOT"/bin/xenstored
 XENSTORED_DIR="/var/run/xenstored"
 XENSTORED_PIDFILE="/var/run/xenstore.pid"
 
-[ "$VERSION" ] || exit 0
-[ -x "$XEND" ] || exit 0
-
 [ -r /etc/default/xend ] && . /etc/default/xend
-
-. /lib/init/vars.sh
-. /lib/lsb/init-functions
 
 modules_setup()
 {
@@ -54,6 +59,10 @@ capability_check()
 
 xend_start()
 {
+	if [ -z "$XEND" ] || [ "$(basename "$TOOLSTACK")" != xm ]; then
+		return 0
+	fi
+
 	log_progress_msg "xend"
 	$XEND status && return 1
 	$XEND start || return 2
@@ -69,6 +78,7 @@ xend_start()
 
 xend_stop()
 {
+	[ -z "$XEND" ] && return 0
 	log_progress_msg "xend"
 	$XEND status || return 0
 	$XEND stop || return 1
