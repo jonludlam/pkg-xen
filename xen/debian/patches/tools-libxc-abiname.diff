@@ -99,18 +99,3 @@
  
  -include $(DEPS)
  
---- a/tools/Rules.mk
-+++ b/tools/Rules.mk
-@@ -18,10 +18,10 @@
- CFLAGS_include = -I$(XEN_INCLUDE)
- 
- CFLAGS_libxenctrl = -I$(XEN_LIBXC) $(CFLAGS_include)
--LDLIBS_libxenctrl = -L$(XEN_LIBXC) -lxenctrl $(DLOPEN_LIBS)
-+LDLIBS_libxenctrl = $(XEN_LIBXC)/libxenctrl-$(XEN_VERSION).so $(DLOPEN_LIBS)
- 
- CFLAGS_libxenguest = -I$(XEN_LIBXC) $(CFLAGS_include)
--LDLIBS_libxenguest = -L$(XEN_LIBXC) -lxenguest
-+LDLIBS_libxenguest = $(XEN_LIBXC)/libxenguest-$(XEN_VERSION).so
- 
- CFLAGS_libxenstore = -I$(XEN_XENSTORE) $(CFLAGS_include)
- LDLIBS_libxenstore = -L$(XEN_XENSTORE) -lxenstore
